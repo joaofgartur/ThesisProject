@@ -1,6 +1,6 @@
 from datasets import Dataset, remove_invalid_columns, convert_categorical_into_numerical
 from ucimlrepo import fetch_ucirepo
-from constants import PRIVILEGED, UNPRIVILEGED
+from constants import PRIVILEGED, UNPRIVILEGED, NEGATIVE_OUTCOME
 
 
 class GermanCredit(Dataset):
@@ -20,13 +20,14 @@ class GermanCredit(Dataset):
                                                               removed_indexes)
 
         # transform attributes
-        self._derive_sex()
+        self.__derive_sex__()
+        self.__derive__classes__()
 
         # convert categorical into numerical
         self.dataset.data.features, self.features_mapping = convert_categorical_into_numerical(self.dataset.data.features)
         self.dataset.data.targets, self.target_mapping = convert_categorical_into_numerical(self.dataset.data.targets)
 
-    def _derive_sex(self):
+    def __derive_sex__(self):
         # replace attribute 9 values by either "male" or "female"
         male_values = ["A91", "A93", "A94"]
         female_values = ["A92", "A95"]
@@ -36,6 +37,11 @@ class GermanCredit(Dataset):
 
         for v in female_values:
             self.dataset.data.features['Attribute9'] = self.dataset.data.features['Attribute9'].replace(v, UNPRIVILEGED)
+
+    def __derive__classes__(self):
+        # set the unfavoured classification to zero
+        self.dataset.data.targets = self.dataset.data.targets.rename(columns={"class": "label"})
+        self.dataset.data.targets = self.dataset.data.targets.replace(2, NEGATIVE_OUTCOME)
 
     def get_features(self):
         return self.dataset.data.features
@@ -50,7 +56,7 @@ class GermanCredit(Dataset):
         return self.target_mapping
 
     def get_sensitive_attributes(self):
-        return self.dataset.data.features.loc[:, ["Attribute9", "Attribute13"]]
+        return self.dataset.data.features.loc[:, ["Attribute9"]]
 
     def print_metadata(self):
         print(self.dataset.metadata)

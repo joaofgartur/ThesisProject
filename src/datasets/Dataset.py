@@ -51,5 +51,21 @@ class Dataset(metaclass=abc.ABCMeta):
         """"""
 
     @abc.abstractmethod
-    def print_dataset(self):
+    def get_features(self):
+        """"""
+
+    @abc.abstractmethod
+    def get_features_mapping(self):
+        """"""
+
+    @abc.abstractmethod
+    def get_target(self):
+        """"""
+
+    @abc.abstractmethod
+    def get_target_mapping(self):
+       """"""
+
+    @abc.abstractmethod
+    def get_sensitive_attributes(self):
         """"""
