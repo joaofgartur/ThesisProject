@@ -1,19 +1,31 @@
 import abc
-from datasets import convert_categorical_into_numerical, remove_invalid_columns
+import numpy as np
+from datasets import remove_invalid_columns, convert_categorical_into_numerical
 
 
 class Dataset(metaclass=abc.ABCMeta):
     @abc.abstractmethod
-    def __init__(self, dataset_name, sensitive_attributes_labels=None):
+    def __init__(self, dataset_info: dict):
         """Initializes class instance"""
-        if sensitive_attributes_labels is None:
-            sensitive_attributes_labels = []
-        self.dataset_name = dataset_name
-        self.sensitive_attributes = sensitive_attributes_labels
+        self.__parse_dataset_info__(dataset_info)
         self.features = None
         self.targets = None
         self.features_mapping = None
         self.target_mapping = None
+
+    def __parse_dataset_info__(self, dataset_info: dict):
+        dataset_name_key = "dataset_name"
+        sensitive_attributes_key = "sensitive_attributes"
+
+        if dataset_name_key in dataset_info.keys():
+            self.dataset_name = dataset_info[dataset_name_key]
+        else:
+            raise Error("Missing dataset name.")
+
+        if sensitive_attributes_key in dataset_info.keys():
+            self.sensitive_attributes_info = dataset_info[sensitive_attributes_key]
+        else:
+            raise Error("Missing dataset sensitive attributes information.")
 
     @abc.abstractmethod
     def get_sensitive_attributes(self):
@@ -38,6 +50,17 @@ class Dataset(metaclass=abc.ABCMeta):
         # convert categorical into numerical
         self.features, self.features_mapping = convert_categorical_into_numerical(self.features)
         self.targets, self.target_mapping = convert_categorical_into_numerical(self.targets)
+
+        # transform indexes
+        new_indexes = np.arange(0, len(self.features), 1, dtype=int)
+        self.features.index = new_indexes
+        self.targets.index = new_indexes
+
+    def get_privileged_and_unprivileged_value_for_attribute(self, attribute: str) -> int:
+        unprivileged_label = self.sensitive_attributes_info[attribute]["unprivileged_value"]
+        print(self.features_mapping[attribute].keys())
+        print(self.features_mapping[attribute])
+        return self.features_mapping[attribute][unprivileged_label]
 
     def print_dataset(self):
         """Prints the dataset"""

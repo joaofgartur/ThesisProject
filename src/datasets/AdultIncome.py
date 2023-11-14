@@ -1,5 +1,5 @@
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
-from datasets import Dataset, remove_invalid_columns, convert_categorical_into_numerical
+from datasets import Dataset
 from ucimlrepo import fetch_ucirepo
 
 
