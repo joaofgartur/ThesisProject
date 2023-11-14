@@ -1,2 +1,2 @@
 from .plots import barplot
-from .diagnostics import pre_correction_diagnostics, post_pre_correction_diagnostics
+from .diagnostics import *

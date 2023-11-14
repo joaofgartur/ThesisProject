@@ -31,7 +31,7 @@ def compute_class_probabilities(dataset: Dataset, learning_settings: dict):
                                                         train_size=learning_settings["train_size"])
     # learn ranker
     model = GaussianNB()
-    model.fit(x_train, y_train)
+    model.fit(x_train, y_train.values.ravel())
 
     # calculate class probabilities
     class_probabilities = model.predict_proba(dataset.features)

@@ -1,27 +1,24 @@
 from datasets import GermanCredit, AdultIncome, Compas, Dataset
-from metrics import compute_metrics_suite
+from diagnostics import diagnostics
 from algorithms import massaging
 
 
 def bias_correction(dataset: Dataset, learning_settings: dict):
     # pre-correction diagnostics stage
 
-    pre_diagnostics = {}
-    for sensitive_attribute in dataset.sensitive_attributes_info.keys():
-        metrics = compute_metrics_suite(dataset, sensitive_attribute)
-        pre_diagnostics.update({sensitive_attribute: metrics})
-    print(pre_diagnostics)
+    results = diagnostics(dataset, learning_settings)
+    print(results)
 
     # correction stage
-    results = {}
+    post_results = {}
     for sensitive_attribute in dataset.sensitive_attributes_info.keys():
         new_dataset = massaging(dataset=dataset, sensitive_attribute=sensitive_attribute,
                                 learning_settings=learning_settings)
-        metrics = compute_metrics_suite(new_dataset, sensitive_attribute)
-        results.update({sensitive_attribute: metrics})
+        results = diagnostics(new_dataset, learning_settings)
+        post_results.update({sensitive_attribute: results})
 
     # post-correction diagnostics stage
-    print(results)
+    print(post_results)
 
     # classifier training stage
 
