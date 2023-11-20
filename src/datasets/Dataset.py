@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 
 from datasets import remove_invalid_columns, convert_categorical_into_numerical
-
+from constants import PRIVILEGED, UNPRIVILEGED
 
 class Dataset(metaclass=abc.ABCMeta):
     @abc.abstractmethod
@@ -22,16 +22,18 @@ class Dataset(metaclass=abc.ABCMeta):
         if dataset_name_key in dataset_info.keys():
             self.dataset_name = dataset_info[dataset_name_key]
         else:
-            raise Error("Missing dataset name.")
+            raise ValueError("Missing dataset name.")
 
         if sensitive_attributes_key in dataset_info.keys():
             self.sensitive_attributes_info = dataset_info[sensitive_attributes_key]
         else:
-            raise Error("Missing dataset sensitive attributes information.")
+            raise ValueError("Missing dataset sensitive attributes information.")
 
-    @abc.abstractmethod
-    def get_sensitive_attributes(self):
-        """"""
+    def __define_privileged_and_unprivileged__(self):
+        for sensitive_attribute in self.sensitive_attributes_info.keys():
+            unprivileged_value = self.sensitive_attributes_info[sensitive_attribute]["unprivileged_value"]
+            self.features[sensitive_attribute] = np.where(self.features[sensitive_attribute] == unprivileged_value,
+                                                          UNPRIVILEGED, PRIVILEGED)
 
     @abc.abstractmethod
     def _load_dataset(self):
@@ -60,8 +62,6 @@ class Dataset(metaclass=abc.ABCMeta):
 
     def get_privileged_and_unprivileged_value_for_attribute(self, attribute: str) -> int:
         unprivileged_label = self.sensitive_attributes_info[attribute]["unprivileged_value"]
-        print(self.features_mapping[attribute].keys())
-        print(self.features_mapping[attribute])
         return self.features_mapping[attribute][unprivileged_label]
 
     def merge_features_and_targets(self) -> (pd.DataFrame, str):

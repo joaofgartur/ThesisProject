@@ -4,7 +4,7 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 
-from datasets import GermanCredit, AdultIncome, Compas, Dataset
+from datasets import GermanCredit, AdultIncome, Compas
 from algorithms import massaging, reweighing, bias_correction_algorithm
 
 
@@ -24,7 +24,32 @@ if __name__ == '__main__':
             }
         }
     }
-
     compas = Compas(compas_info)
 
-    bias_correction_algorithm(compas, _learning_settings, reweighing)
+    german_info = {
+        "dataset_name": "german",
+        "sensitive_attributes": {
+            "Attribute9": {
+                "values": ["Female", "Male"],
+                "unprivileged_value": "Female",
+            }
+        }
+    }
+    german = GermanCredit(german_info)
+
+    adult_info = {
+        "dataset_name": "adult",
+        "sensitive_attributes": {
+            "race": {
+                "values": ["White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"],
+                "unprivileged_value": "Black",
+            },
+            "sex": {
+                "values": ["Female", "Male"],
+                "unprivileged_value": "Male",
+            }
+        }
+    }
+    adult = AdultIncome(adult_info)
+
+    bias_correction_algorithm(german, _learning_settings, massaging)

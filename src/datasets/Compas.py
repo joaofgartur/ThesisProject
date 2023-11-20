@@ -1,25 +1,31 @@
-from datasets import Dataset, remove_invalid_columns, convert_categorical_into_numerical
 import pandas as pd
-from constants import POSITIVE_OUTCOME, UNPRIVILEGED, PRIVILEGED
-import numpy as np
+
+from datasets import Dataset
+from constants import POSITIVE_OUTCOME
 
 
 class Compas(Dataset):
+    _LOCAL_DATA_FILE = "datasets/local_storage/compas/compas-scores-two-years.csv"
 
-    def __init__(self, dataset_name):
-        Dataset.__init__(self, dataset_name)
+    def __init__(self, dataset_info: dict):
+        Dataset.__init__(self, dataset_info)
         self._load_dataset()
         self._prepare_dataset()
 
     def _load_dataset(self):
-        # load data
-        dataset_url = ("https://raw.githubusercontent.com/propublica/compas-analysis/master/compas-scores-two-years.csv")
-        data = pd.read_csv(dataset_url)
+        try:
+            dataset_url = ("https://raw.githubusercontent.com/propublica/compas-analysis/"
+                           "master/compas-scores-two-years.csv")
+            data = pd.read_csv(dataset_url)
+        except Exception:
+            data = pd.read_csv(self._LOCAL_DATA_FILE)
+
         data = self.__filter_data__(data)
 
         # select target and features
         self.targets = pd.DataFrame(data["two_year_recid"])
         self.features = data.drop(columns={"two_year_recid"})
+
 
     def _transform_dataset(self):
         self.__define_privileged_and_unprivileged__()
@@ -46,12 +52,3 @@ class Compas(Dataset):
     def __derive_classes__(self):
         """Convert target values into positive and negative outcomes."""
         self.targets = POSITIVE_OUTCOME - self.targets
-
-    def __define_privileged_and_unprivileged__(self):
-        for sensitive_attribute in self.sensitive_attributes_info.keys():
-            unprivileged_value = self.sensitive_attributes_info[sensitive_attribute]["unprivileged_value"]
-            self.features[sensitive_attribute] = np.where(self.features[sensitive_attribute] == unprivileged_value,
-                                                          UNPRIVILEGED, PRIVILEGED)
-
-    def get_sensitive_attributes(self):
-        pass
