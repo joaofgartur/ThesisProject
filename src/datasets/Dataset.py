@@ -1,5 +1,7 @@
 import abc
 import numpy as np
+import pandas as pd
+
 from datasets import remove_invalid_columns, convert_categorical_into_numerical
 
 
@@ -61,6 +63,12 @@ class Dataset(metaclass=abc.ABCMeta):
         print(self.features_mapping[attribute].keys())
         print(self.features_mapping[attribute])
         return self.features_mapping[attribute][unprivileged_label]
+
+    def merge_features_and_targets(self) -> (pd.DataFrame, str):
+        data = pd.concat([self.features, self.targets], axis="columns")
+        outcome_column = self.targets.columns[0]
+
+        return data, outcome_column
 
     def print_dataset(self):
         """Prints the dataset"""

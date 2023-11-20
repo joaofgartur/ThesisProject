@@ -1,3 +1,9 @@
+"""
+Author: João Artur
+Project: Master's Thesis
+Last edited: 20-11-2023
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 
