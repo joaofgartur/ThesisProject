@@ -8,6 +8,7 @@ import inspect
 import logging
 from typing import Callable
 
+from algorithms.DisparateImpactRemover import DisparateImpactRemover
 from datasets import Dataset
 from diagnostics import diagnostics
 from errors import error_check_dataset, error_check_parameters
@@ -66,7 +67,9 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
 
             error_check_parameters(algorithm, [_DATASET, _SENSITIVE_ATTRIBUTE])
 
-            new_dataset = algorithm(dataset=dataset, sensitive_attribute=sensitive_attribute, **kwargs)
+            # new_dataset = algorithm(dataset=dataset, sensitive_attribute=sensitive_attribute, **kwargs)
+            _algorithm = DisparateImpactRemover(repair_level=1.0)
+            new_dataset = _algorithm.repair(dataset, sensitive_attribute, learning_settings=learning_settings)
 
             results = diagnostics(new_dataset, learning_settings)
             post_results.update({sensitive_attribute: results})

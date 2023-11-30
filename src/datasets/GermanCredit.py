@@ -28,7 +28,7 @@ class GermanCredit(Dataset):
 
             dataset = dataset.set_axis(labels=labels, axis="columns")
             self.targets = pd.DataFrame(dataset["class"])
-            self.features = dataset.drop(columns={"class"})
+            self.features = dataset.drop(columns=["class"])
 
     def _transform_dataset(self):
         self.__define_privileged_and_unprivileged__()

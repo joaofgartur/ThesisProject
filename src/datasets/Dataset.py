@@ -5,6 +5,7 @@ import pandas as pd
 from datasets import remove_invalid_columns, convert_categorical_into_numerical
 from constants import PRIVILEGED, UNPRIVILEGED
 
+
 class Dataset(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self, dataset_info: dict):
@@ -64,11 +65,17 @@ class Dataset(metaclass=abc.ABCMeta):
         unprivileged_label = self.sensitive_attributes_info[attribute]["unprivileged_value"]
         return self.features_mapping[attribute][unprivileged_label]
 
+    def get_sensitive_attributes(self) -> pd.DataFrame:
+        columns_names = list(self.sensitive_attributes_info.keys())
+        return self.features.loc[:, columns_names]
+
     def merge_features_and_targets(self) -> (pd.DataFrame, str):
         data = pd.concat([self.features, self.targets], axis="columns")
         outcome_column = self.targets.columns[0]
 
         return data, outcome_column
+
+
 
     def print_dataset(self):
         """Prints the dataset"""

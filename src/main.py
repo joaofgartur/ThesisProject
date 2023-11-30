@@ -46,10 +46,12 @@ if __name__ == '__main__':
             },
             "sex": {
                 "values": ["Female", "Male"],
-                "unprivileged_value": "Male",
+                "unprivileged_value": "Female",
             }
         }
     }
     adult = AdultIncome(adult_info)
 
+    bias_correction_algorithm(compas, _learning_settings, massaging)
     bias_correction_algorithm(german, _learning_settings, massaging)
+    bias_correction_algorithm(adult, _learning_settings, massaging)
