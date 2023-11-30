@@ -3,7 +3,8 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-
+from algorithms.DisparateImpactRemover import DisparateImpactRemover
+from algorithms.LearningFairRepresentations import LearningFairRepresentations
 from datasets import GermanCredit, AdultIncome, Compas
 from algorithms import massaging, reweighing, bias_correction_algorithm
 
@@ -39,19 +40,13 @@ if __name__ == '__main__':
 
     adult_info = {
         "dataset_name": "adult",
-        "sensitive_attributes": {
-            "race": {
-                "values": ["White", "Asian-Pac-Islander", "Amer-Indian-Eskimo", "Other", "Black"],
-                "unprivileged_value": "Black",
-            },
-            "sex": {
-                "values": ["Female", "Male"],
-                "unprivileged_value": "Female",
-            }
-        }
+        "sensitive_attributes": {"race": "White", "sex": "Male"}
     }
     adult = AdultIncome(adult_info)
 
-    bias_correction_algorithm(compas, _learning_settings, massaging)
-    bias_correction_algorithm(german, _learning_settings, massaging)
-    bias_correction_algorithm(adult, _learning_settings, massaging)
+    #_dir = DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings)
+    lfr = LearningFairRepresentations(learning_settings=_learning_settings)
+
+    #bias_correction_algorithm(compas, _learning_settings, massaging)
+    #bias_correction_algorithm(german, _learning_settings, lfr)
+    bias_correction_algorithm(adult, _learning_settings, lfr)

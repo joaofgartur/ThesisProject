@@ -14,7 +14,7 @@ from diagnostics import diagnostics
 from errors import error_check_dataset, error_check_parameters
 
 
-def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorithm: Callable, **kwargs) -> None:
+def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorithm) -> None:
     """
     Apply a bias correction algorithm to a dataset and display pre- and post-correction diagnostics.
 
@@ -50,9 +50,6 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
     try:
         error_check_dataset(dataset)
 
-        if not callable(algorithm):
-            raise ValueError("The provided 'algorithm' is not a callable function.")
-
         # pre-correction diagnostics stage
         results = diagnostics(dataset, learning_settings)
         print(results)
@@ -61,15 +58,7 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
         post_results = {}
         for sensitive_attribute in dataset.sensitive_attributes_info.keys():
 
-            algorithm_signature = inspect.signature(algorithm)
-            if 'learning_settings' in algorithm_signature.parameters:
-                kwargs['learning_settings'] = learning_settings
-
-            error_check_parameters(algorithm, [_DATASET, _SENSITIVE_ATTRIBUTE])
-
-            # new_dataset = algorithm(dataset=dataset, sensitive_attribute=sensitive_attribute, **kwargs)
-            _algorithm = DisparateImpactRemover(repair_level=1.0)
-            new_dataset = _algorithm.repair(dataset, sensitive_attribute, learning_settings=learning_settings)
+            new_dataset = algorithm.repair(dataset, sensitive_attribute)
 
             results = diagnostics(new_dataset, learning_settings)
             post_results.update({sensitive_attribute: results})

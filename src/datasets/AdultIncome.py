@@ -1,7 +1,7 @@
 import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
-from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
+from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 from datasets import Dataset
 
 
@@ -26,13 +26,18 @@ class AdultIncome(Dataset):
             dataset = dataset.set_axis(labels=labels, axis="columns")
 
             self.targets = pd.DataFrame(dataset["income"])
-            self.features = dataset.drop(columns={"income"})
+            self.features = dataset.drop(columns=["income"])
 
     def _transform_dataset(self):
-        self.__derive_classes__()
 
-    def __derive_classes__(self):
-        self.targets = (self.targets
-                        .replace("<=", NEGATIVE_OUTCOME, regex=True)
+        def binarize_attribute(x, y):
+            if x == y:
+                return PRIVILEGED
+            return UNPRIVILEGED
+
+        for attribute, value in self.sensitive_attributes_info.items():
+            self.features[attribute] = self.features[attribute].apply(lambda x: binarize_attribute(x, value))
+
+        self.targets = (self.targets.replace("<=", NEGATIVE_OUTCOME, regex=True)
                         .replace(">", POSITIVE_OUTCOME, regex=True)
                         .astype('int64'))
