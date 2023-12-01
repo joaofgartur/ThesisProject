@@ -23,8 +23,8 @@ def convert_to_standard_dataset(dataset: Dataset, sensitive_attribute: str):
     return aif_dataset
 
 
-def split_dataset(dataset: StandardDataset, split_ratio: float):
-    train, test = dataset.split([split_ratio])
+def split_dataset(dataset: StandardDataset, split_ratio: float, shuffle: bool):
+    train, test = dataset.split([split_ratio], shuffle=shuffle)
     return train, test
 
 

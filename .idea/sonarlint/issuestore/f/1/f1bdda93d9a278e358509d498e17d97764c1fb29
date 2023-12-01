@@ -1,3 +1,11 @@
 
-Bpython:S125/"Remove this commented out code.(‘€±μϊÿÿÿÿ8„Ωκ‹Β1
-;python:S1252"Remove this commented out code.(ΨΝC8±θΓ‹Β1
+spython:S117C"URename this local variable "aNew" to match the regular expression ^[_a-z][a-z0-9_]*$.(ΆξύΠ8®ιε§Β1
+spython:S117B"URename this local variable "aOld" to match the regular expression ^[_a-z][a-z0-9_]*$.(μΘΠή8®ιε§Β1
+xpython:S117;"URename this local variable "eNew" to match the regular expression ^[_a-z][a-z0-9_]*$.(­»»·ύÿÿÿÿ8®ιε§Β1
+spython:S117:"URename this local variable "eOld" to match the regular expression ^[_a-z][a-z0-9_]*$.(μ΅ΗΉ8®ιε§Β1
+upython:S117O"WRename this local variable "incNew" to match the regular expression ^[_a-z][a-z0-9_]*$.(βΚΥσ8®ιε§Β1
+upython:S117N"WRename this local variable "incOld" to match the regular expression ^[_a-z][a-z0-9_]*$.(Γί°8®ιε§Β1
+xpython:S3776"TRefactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.(ΔΕ®ύÿÿÿÿ8®ιε§Β1
+spython:S1542 "ORename function "adjustEdu" to match the regular expression ^[a-z_][a-z0-9_]*$.(ΆΎΣΚϊÿÿÿÿ8®ιε§Β1
+spython:S1542("ORename function "adjustAge" to match the regular expression ^[a-z_][a-z0-9_]*$.(Ψρή‚ύÿÿÿÿ8®ιε§Β1
+npython:S1542."ORename function "adjustInc" to match the regular expression ^[a-z_][a-z0-9_]*$.(ήΛΝΈ8®ιε§Β1

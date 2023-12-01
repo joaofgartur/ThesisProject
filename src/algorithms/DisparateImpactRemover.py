@@ -19,7 +19,7 @@ class DisparateImpactRemover(Algorithm):
         standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
         scaler = MinMaxScaler(copy=False)
-        train, test = split_dataset(standard_dataset, self.learning_settings["train_size"])
+        train, test = split_dataset(standard_dataset, self.learning_settings["train_size"], False)
         train.features = scaler.fit_transform(train.features)
         test.features = scaler.fit_transform(test.features)
 

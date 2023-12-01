@@ -16,7 +16,7 @@ class LearningFairRepresentations(Algorithm):
         standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
         scaler = StandardScaler()
-        train_dataset, test_dataset = split_dataset(standard_dataset, self.learning_settings["train_size"])
+        train_dataset, test_dataset = split_dataset(standard_dataset, self.learning_settings["train_size"], shuffle=True)
         train_dataset.features = scaler.fit_transform(train_dataset.features)
         test_dataset.features = scaler.transform(test_dataset.features)
 

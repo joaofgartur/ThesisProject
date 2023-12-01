@@ -1,6 +1,7 @@
 import abc
 import numpy as np
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 from datasets import remove_invalid_columns, convert_categorical_into_numerical
 from constants import PRIVILEGED, UNPRIVILEGED
@@ -61,6 +62,11 @@ class Dataset(metaclass=abc.ABCMeta):
         self.features.index = new_indexes
         self.targets.index = new_indexes
 
+        # normalize dataset
+        scaler = MinMaxScaler(copy=False)
+        normalized_features = scaler.fit_transform(self.features)
+        self.features = pd.DataFrame(normalized_features, columns=self.features.columns)
+
     def get_privileged_and_unprivileged_value_for_attribute(self, attribute: str) -> int:
         unprivileged_label = self.sensitive_attributes_info[attribute]["unprivileged_value"]
         return self.features_mapping[attribute][unprivileged_label]
@@ -74,8 +80,6 @@ class Dataset(metaclass=abc.ABCMeta):
         outcome_column = self.targets.columns[0]
 
         return data, outcome_column
-
-
 
     def print_dataset(self):
         """Prints the dataset"""
