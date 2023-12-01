@@ -4,11 +4,9 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 
-import inspect
-import logging
-from typing import Callable
 
-from algorithms.DisparateImpactRemover import DisparateImpactRemover
+import logging
+
 from datasets import Dataset
 from diagnostics import diagnostics
 from errors import error_check_dataset, error_check_parameters
@@ -28,8 +26,6 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
         Bias correction algorithm to be applied. It should accept 'dataset', 'sensitive_attribute',
         and 'learning_settings'
         as parameters.
-    **kwargs :
-        Additional keyword arguments to be passed to the bias correction algorithm.
 
     Returns
     -------
@@ -51,14 +47,19 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
         error_check_dataset(dataset)
 
         # pre-correction diagnostics stage
+        print("Computing pre-correction diagnostics stage.")
         results = diagnostics(dataset, learning_settings)
         print(results)
+
 
         # correction stage
         post_results = {}
         for sensitive_attribute in dataset.sensitive_attributes_info.keys():
+            print(f"Applying bias correction for attribute {sensitive_attribute}")
 
             new_dataset = algorithm.repair(dataset, sensitive_attribute)
+
+            print("Computing post-correction diagnostics stage.")
 
             results = diagnostics(new_dataset, learning_settings)
             post_results.update({sensitive_attribute: results})

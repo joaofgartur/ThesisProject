@@ -15,7 +15,7 @@ class DisparateImpactRemover(Algorithm):
         self.repair_level = repair_level
         self.learning_settings = learning_settings
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str):
+    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
         standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
         scaler = MinMaxScaler(copy=False)

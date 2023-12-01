@@ -12,11 +12,12 @@ class LearningFairRepresentations(Algorithm):
     def __init__(self, learning_settings: dict):
         self.learning_settings = learning_settings
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str):
+    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
         standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
         scaler = StandardScaler()
-        train_dataset, test_dataset = split_dataset(standard_dataset, self.learning_settings["train_size"], shuffle=True)
+        train_dataset, test_dataset = split_dataset(standard_dataset, self.learning_settings["train_size"],
+                                                    shuffle=True)
         train_dataset.features = scaler.fit_transform(train_dataset.features)
         test_dataset.features = scaler.transform(test_dataset.features)
 

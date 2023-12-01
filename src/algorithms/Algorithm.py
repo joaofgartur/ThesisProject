@@ -10,5 +10,5 @@ class Algorithm(metaclass=abc.ABCMeta):
         """"""
 
     @abc.abstractmethod
-    def repair(self, dataset: Dataset, sensitive_attribute: str):
+    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
         """"""

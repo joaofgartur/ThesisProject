@@ -6,6 +6,8 @@ Last edited: 30-11-2023
 from algorithms.DisparateImpactRemover import DisparateImpactRemover
 from algorithms.LearningFairRepresentations import LearningFairRepresentations
 from algorithms.OptimizedPreprocessing import OptimizedPreprocessing
+from algorithms.Massaging import Massaging
+from algorithms.Reweighting import Reweighing
 from datasets import GermanCredit, AdultIncome, Compas
 from algorithms import bias_correction_algorithm
 
@@ -125,12 +127,15 @@ if __name__ == '__main__':
         "sensitive_attributes": {"race": "White", "sex": "Male"}
     }
     adult = AdultIncome(adult_info)
-
     algorithms = [
-        DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
-        LearningFairRepresentations(learning_settings=_learning_settings),
+        # Massaging(learning_settings=_learning_settings),
+        Reweighing(),
+        # DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
+        # LearningFairRepresentations(learning_settings=_learning_settings),
         # OptimizedPreprocessing(learning_settings=_learning_settings, optimization_parameters=optim_options, features_to_keep=["age", "race", "sex", "education"]),
+
     ]
+
 
     for algorithm in algorithms:
         bias_correction_algorithm(adult, _learning_settings, algorithm)
