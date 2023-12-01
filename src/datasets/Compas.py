@@ -1,7 +1,7 @@
 import pandas as pd
 
 from datasets import Dataset
-from constants import POSITIVE_OUTCOME
+from constants import POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 
 
 class Compas(Dataset):
@@ -26,10 +26,19 @@ class Compas(Dataset):
         self.targets = pd.DataFrame(data["two_year_recid"])
         self.features = data.drop(columns={"two_year_recid"})
 
-
     def _transform_dataset(self):
-        self.__define_privileged_and_unprivileged__()
-        self.__derive_classes__()
+
+        def binarize_attribute(x, y):
+            if x == y:
+                return PRIVILEGED
+            return UNPRIVILEGED
+
+        def derive_class(x):
+            return POSITIVE_OUTCOME - x
+
+        for attribute, value in self.sensitive_attributes_info.items():
+            self.features[attribute] = self.features[attribute].apply(lambda x, y=value: binarize_attribute(x, y))
+        self.targets = self.targets.apply(lambda x: derive_class(x))
 
     def __filter_data__(self, data):
         """
@@ -48,7 +57,3 @@ class Compas(Dataset):
                                       (filtered_data['score_text'] != 'N/A')]
 
         return filtered_data
-
-    def __derive_classes__(self):
-        """Convert target values into positive and negative outcomes."""
-        self.targets = POSITIVE_OUTCOME - self.targets

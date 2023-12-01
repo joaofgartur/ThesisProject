@@ -9,4 +9,5 @@ qpython:S3776"TRefactor this function to reduce its Cognitive Complexity fro
 lpython:S1542""ORename function "adjustEdu" to match the regular expression ^[a-z_][a-z0-9_]*$.(¢¾ÓÊúÿÿÿÿ
 lpython:S1542*"ORename function "adjustAge" to match the regular expression ^[a-z_][a-z0-9_]*$.(ØñŞ‚ıÿÿÿÿ
 gpython:S15420"ORename function "adjustInc" to match the regular expression ^[a-z_][a-z0-9_]*$.(ŞËÍ¸
->python:S125…"Remove this commented out code.(İ‚‰8¨‚¸Â1
+Bpython:S125g"Remove this commented out code.(ı¿¬èıÿÿÿÿ8ßµö¹Â1
+Bpython:S125m"Remove this commented out code.(µÂá‘ûÿÿÿÿ8ïÏø¹Â1

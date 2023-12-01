@@ -36,7 +36,7 @@ class AdultIncome(Dataset):
             return UNPRIVILEGED
 
         for attribute, value in self.sensitive_attributes_info.items():
-            self.features[attribute] = self.features[attribute].apply(lambda x: binarize_attribute(x, value))
+            self.features[attribute] = self.features[attribute].apply(lambda x, y=value: binarize_attribute(x, y))
 
         self.targets = (self.targets.replace("<=", NEGATIVE_OUTCOME, regex=True)
                         .replace(">", POSITIVE_OUTCOME, regex=True)

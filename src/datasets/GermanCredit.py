@@ -2,7 +2,7 @@ import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
 from datasets import Dataset
-from constants import NEGATIVE_OUTCOME
+from constants import NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME
 
 
 class GermanCredit(Dataset):
@@ -25,31 +25,32 @@ class GermanCredit(Dataset):
                       'Attribute11', 'Attribute12', 'Attribute13', 'Attribute14', 'Attribute15',
                       'Attribute16', 'Attribute17', 'Attribute18', 'Attribute19', 'Attribute20',
                       'class']
-
             dataset = dataset.set_axis(labels=labels, axis="columns")
+
             self.targets = pd.DataFrame(dataset["class"])
             self.features = dataset.drop(columns=["class"])
 
     def _transform_dataset(self):
-        self.__define_privileged_and_unprivileged__()
-        self.__derive_sex__()
-        self.__derive_classes__()
 
-    def __derive_sex__(self):
-        _MALE = "Male"
-        _FEMALE = "Female"
-        _SEX_LABEL = "Attribute9"
+        def binarize_attribute(x, y):
+            if x == y:
+                return PRIVILEGED
+            return UNPRIVILEGED
 
-        male_values = ["A91", "A93", "A94"]
-        female_values = ["A92", "A95"]
+        def derive_sex(x):
+            male_values = ["A91", "A93", "A94"]
+            if x in male_values:
+                return "Male"
+            return "Female"
 
-        for v in male_values:
-            self.features[_SEX_LABEL] = self.features[_SEX_LABEL].replace(v, _MALE)
+        def derive_class(x):
+            if x == 2:
+                return NEGATIVE_OUTCOME
+            return POSITIVE_OUTCOME
 
-        for v in female_values:
-            self.features[_SEX_LABEL] = self.features[_SEX_LABEL].replace(v, _FEMALE)
+        self.features["Attribute9"] = self.features["Attribute9"].apply(lambda x: derive_sex(x))
+        for attribute, value in self.sensitive_attributes_info.items():
+            self.features[attribute] = self.features[attribute].apply(lambda x, y=value: binarize_attribute(x, y))
 
-    def __derive_classes__(self):
-        # set the unfavoured classification to zero
         self.targets = self.targets.rename(columns={"class": "label"})
-        self.targets = self.targets.replace(2, NEGATIVE_OUTCOME)
+        self.targets["label"] = self.targets["label"].apply(lambda x: derive_class(x))

@@ -98,44 +98,30 @@ if __name__ == '__main__':
 
     compas_info = {
         "dataset_name": "compas",
-        "sensitive_attributes": {
-            "race": {
-                "values": ["African-American", 'Asian', 'Caucasian', 'Hispanic', 'Native American', 'Other'],
-                "unprivileged_value": "African-American",
-            },
-            "sex": {
-                "values": ["Female", "Male"],
-                "unprivileged_value": "Male",
-            }
-        }
+        "sensitive_attributes": {"race": "Caucasian", "sex": "Male"}
     }
-    compas = Compas(compas_info)
+    # dataset = Compas(compas_info)
 
     german_info = {
         "dataset_name": "german",
-        "sensitive_attributes": {
-            "Attribute9": {
-                "values": ["Female", "Male"],
-                "unprivileged_value": "Female",
-            }
-        }
+        "sensitive_attributes": {"Attribute9": "Male"},
     }
-    german = GermanCredit(german_info)
+    # dataset = GermanCredit(german_info)
 
     adult_info = {
         "dataset_name": "adult",
         "sensitive_attributes": {"race": "White", "sex": "Male"}
     }
-    adult = AdultIncome(adult_info)
+    dataset = AdultIncome(adult_info)
     algorithms = [
-        # Massaging(learning_settings=_learning_settings),
+        Massaging(learning_settings=_learning_settings),
         Reweighing(),
-        # DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
-        # LearningFairRepresentations(learning_settings=_learning_settings),
+        DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
+        LearningFairRepresentations(learning_settings=_learning_settings),
         # OptimizedPreprocessing(learning_settings=_learning_settings, optimization_parameters=optim_options, features_to_keep=["age", "race", "sex", "education"]),
 
     ]
 
 
     for algorithm in algorithms:
-        bias_correction_algorithm(adult, _learning_settings, algorithm)
+        bias_correction_algorithm(dataset, _learning_settings, algorithm)
