@@ -17,6 +17,7 @@ from algorithms.Algorithm import Algorithm
 from datasets import Dataset
 from constants import PRIVILEGED, UNPRIVILEGED, NEGATIVE_OUTCOME, POSITIVE_OUTCOME
 from errors import error_check_dataset, error_check_sensitive_attribute
+from helpers import logger
 
 
 class Massaging(Algorithm):
@@ -144,6 +145,7 @@ class Massaging(Algorithm):
             - If the dataset does not contain both features and targets.
             - If the sensitive attribute is not present in the dataset.
         """
+
         _INDEX = "index"
         _CLASS_PROBABILITY = "class_probability"
 
@@ -195,6 +197,8 @@ class Massaging(Algorithm):
                 - If the dataset does not contain both features and targets.
                 - If the sensitive attribute is not present in the dataset.
                 """
+        logger.info(f"Repairing dataset {dataset.name} via Massaging...")
+
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
@@ -213,5 +217,7 @@ class Massaging(Algorithm):
 
             promotion_candidates = promotion_candidates.drop(index=pr_index)
             demotion_candidates = demotion_candidates.drop(index=dem_index)
+
+        logger.info(f"Dataset {dataset.name} repaired.")
 
         return new_dataset

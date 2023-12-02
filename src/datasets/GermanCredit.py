@@ -1,6 +1,7 @@
 import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
+from helpers import logger
 from datasets import Dataset
 from constants import NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME
 
@@ -9,9 +10,11 @@ class GermanCredit(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/german_credit/german.data"
 
     def __init__(self, dataset_info: dict):
+        logger.info("Loading German Credit dataset...")
         Dataset.__init__(self, dataset_info)
         self._load_dataset()
         self._prepare_dataset()
+        logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
@@ -19,6 +22,9 @@ class GermanCredit(Dataset):
             self.features = dataset.data.features
             self.targets = dataset.data.targets
         except ConnectionError:
+            logger.error("Failed to load from online source!")
+            logger.info("Loading dataset from local storage...")
+
             dataset = pd.read_csv(self._LOCAL_DATA_FILE, header=None, sep=" ")
             labels = ['Attribute1', 'Attribute2', 'Attribute3', 'Attribute4', 'Attribute5',
                       'Attribute6', 'Attribute7', 'Attribute8', 'Attribute9', 'Attribute10',

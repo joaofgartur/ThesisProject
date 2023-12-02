@@ -11,6 +11,7 @@ import numpy as np
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
+from helpers import logger
 from metrics import simple_probability, joint_probability
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from errors import error_check_dataset, error_check_sensitive_attribute
@@ -98,6 +99,8 @@ class Reweighing(Algorithm):
             - If the dataset does not contain both features and targets.
             - If the sensitive attribute is not present in the dataset.
         """
+        logger.info(f"Repairing dataset {dataset.name} via Reweighing...")
+
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
@@ -115,5 +118,7 @@ class Reweighing(Algorithm):
         weights_array = np.concatenate(weights_dataset)
         n_rows = dataset.features.shape[0]
         new_dataset.features = dataset.features.sample(n=n_rows, weights=weights_array, replace=True).reset_index()
+
+        logger.info(f"Dataset {dataset.name} repaired.")
 
         return new_dataset

@@ -6,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
-from helpers import convert_to_standard_dataset, split_dataset, concatenate_ndarrays, modify_dataset
+from helpers import convert_to_standard_dataset, split_dataset, concatenate_ndarrays, modify_dataset, logger
 
 
 class DisparateImpactRemover(Algorithm):
@@ -16,6 +16,7 @@ class DisparateImpactRemover(Algorithm):
         self.learning_settings = learning_settings
 
     def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
+        logger.info(f"Repairing dataset {dataset.name} via DisparateImpactRemover...")
         standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
         scaler = MinMaxScaler(copy=False)
@@ -43,5 +44,7 @@ class DisparateImpactRemover(Algorithm):
         features = concatenate_ndarrays(train_repd.features, test_repd_pred.features)
         labels = concatenate_ndarrays(train_repd.labels, test_repd_pred.labels)
         new_dataset = modify_dataset(dataset, features, labels)
+
+        logger.info(f"Dataset {dataset.name} repaired.")
 
         return new_dataset

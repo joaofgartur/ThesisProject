@@ -8,6 +8,7 @@ from datasets import Dataset
 from classifiers.classifiers import train_all_classifiers
 from metrics import compute_metrics_suite
 from errors import error_check_dataset, error_check_sensitive_attribute
+from helpers import logger
 
 
 def diagnostics(dataset: Dataset, learning_settings: dict) -> dict:
@@ -38,15 +39,19 @@ def diagnostics(dataset: Dataset, learning_settings: dict) -> dict:
 
     metrics_results = {}
     for sensitive_attribute in dataset.sensitive_attributes_info.keys():
+        logger.info(f"Computing fairness metrics for attribute \'{sensitive_attribute}\'...")
+
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
         metrics = compute_metrics_suite(dataset, sensitive_attribute)
         metrics_results.update({sensitive_attribute: metrics})
 
+        logger.info(f"Fairness metrics for attribute \'{sensitive_attribute}\' computed.")
+
+    logger.info("Training classifiers...")
+
     classifiers_results = train_all_classifiers(dataset, learning_settings)
 
+    logger.info("Classifiers trained.")
+
     return {"metrics": metrics_results, "classifiers": classifiers_results}
-
-
-def post_pre_correction_diagnostics(pre_correction_diagnostics: dict, dataset: Dataset):
-    raise NotImplementedError

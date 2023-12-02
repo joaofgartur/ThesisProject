@@ -3,15 +3,18 @@ from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 from datasets import Dataset
+from helpers import logger
 
 
 class AdultIncome(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/adult_income/adult.data"
 
     def __init__(self, dataset_info: dict):
+        logger.info("Loading Adult Income dataset...")
         Dataset.__init__(self, dataset_info)
         self._load_dataset()
         self._prepare_dataset()
+        logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
@@ -19,6 +22,9 @@ class AdultIncome(Dataset):
             self.features = dataset.data.features
             self.targets = dataset.data.targets
         except ConnectionError:
+            logger.error("Failed to load from online source!")
+            logger.info("Loading dataset from local storage...")
+
             dataset = pd.read_csv(self._LOCAL_DATA_FILE, header=None)
             labels = ["age", "workclass", "fnlwgt", "education", "education-num",
                       "marital-status", "occupation", "relationship", "race", "sex",

@@ -4,7 +4,7 @@ from sklearn.preprocessing import StandardScaler
 from algorithms.Algorithm import Algorithm
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
-from helpers import (convert_to_standard_dataset, split_dataset, concatenate_ndarrays, modify_dataset)
+from helpers import (convert_to_standard_dataset, split_dataset, concatenate_ndarrays, modify_dataset, logger)
 
 
 class LearningFairRepresentations(Algorithm):
@@ -13,6 +13,7 @@ class LearningFairRepresentations(Algorithm):
         self.learning_settings = learning_settings
 
     def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
+        logger.info(f"Repairing dataset {dataset.name} via Massaging...")
         standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
         scaler = StandardScaler()
@@ -38,5 +39,7 @@ class LearningFairRepresentations(Algorithm):
         features = concatenate_ndarrays(dataset_transf_train.features, dataset_transf_test.features)
         labels = concatenate_ndarrays(dataset_transf_train.labels, dataset_transf_test.labels)
         new_dataset = modify_dataset(dataset, features, labels)
+
+        logger.info(f"Dataset {dataset.name} repaired.")
 
         return new_dataset

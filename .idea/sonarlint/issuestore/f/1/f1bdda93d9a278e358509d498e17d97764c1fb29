@@ -1,13 +1,3 @@
 
-lpython:S117E"URename this local variable "aNew" to match the regular expression ^[_a-z][a-z0-9_]*$.(¢îýÐ
-lpython:S117D"URename this local variable "aOld" to match the regular expression ^[_a-z][a-z0-9_]*$.(ìÈÐÞ
-qpython:S117="URename this local variable "eNew" to match the regular expression ^[_a-z][a-z0-9_]*$.(­»»·ýÿÿÿÿ
-lpython:S117<"URename this local variable "eOld" to match the regular expression ^[_a-z][a-z0-9_]*$.(ì¡Ç¹
-npython:S117Q"WRename this local variable "incNew" to match the regular expression ^[_a-z][a-z0-9_]*$.(âÊÕó
-npython:S117P"WRename this local variable "incOld" to match the regular expression ^[_a-z][a-z0-9_]*$.(ÃßŽ°
-qpython:S3776"TRefactor this function to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÅ®ýÿÿÿÿ
-lpython:S1542""ORename function "adjustEdu" to match the regular expression ^[a-z_][a-z0-9_]*$.(¢¾ÓÊúÿÿÿÿ
-lpython:S1542*"ORename function "adjustAge" to match the regular expression ^[a-z_][a-z0-9_]*$.(ØñÞ‚ýÿÿÿÿ
-gpython:S15420"ORename function "adjustInc" to match the regular expression ^[a-z_][a-z0-9_]*$.(ÞËÍ¸
-Bpython:S125g"Remove this commented out code.(ý¿¬èýÿÿÿÿ8ßµö¹Â1
-Bpython:S125m"Remove this commented out code.(µÂá‘ûÿÿÿÿ8ïÏø¹Â1
+Bpython:S125"Remove this commented out code.(ý¿¬èýÿÿÿÿ8„ÐžäÂ1
+=python:S125#"Remove this commented out code.(ÿ¦¡¬8ƒêžäÂ1

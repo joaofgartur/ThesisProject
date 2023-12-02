@@ -4,12 +4,10 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 
-
-import logging
-
 from datasets import Dataset
 from diagnostics import diagnostics
-from errors import error_check_dataset, error_check_parameters
+from errors import error_check_dataset
+from helpers import logger
 
 
 def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorithm) -> None:
@@ -47,27 +45,28 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
         error_check_dataset(dataset)
 
         # pre-correction diagnostics stage
-        print("Computing pre-correction diagnostics stage.")
-        results = diagnostics(dataset, learning_settings)
-        print(results)
-
+        logger.info("Computing pre-correction diagnostics stage...")
+        print(diagnostics(dataset, learning_settings))
+        logger.info("Pre-correction diagnostics computed.")
 
         # correction stage
         post_results = {}
         for sensitive_attribute in dataset.sensitive_attributes_info.keys():
-            print(f"Applying bias correction for attribute {sensitive_attribute}")
+            logger.info(f"Applying bias correction for attribute {sensitive_attribute}...")
 
             new_dataset = algorithm.repair(dataset, sensitive_attribute)
 
-            print("Computing post-correction diagnostics stage.")
+            logger.info(f"Finished correcting bias. Computing post-correction diagnostics "
+                        f"for attribute{sensitive_attribute}...")
 
             results = diagnostics(new_dataset, learning_settings)
-            post_results.update({sensitive_attribute: results})
 
-        # post-correction diagnostics stage
-        print(post_results)
+            logger.info("Post-correction diagnostics computed.")
+
+            print(results)
+            post_results.update({sensitive_attribute: results})
 
         # Rest of the code
     except Exception as e:
-        logging.error(f"An error occurred during bias correction algorithm execution: {e}")
+        logger.error(f"An error occurred during bias correction algorithm execution: {e}")
         raise

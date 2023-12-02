@@ -2,15 +2,18 @@ import pandas as pd
 
 from datasets import Dataset
 from constants import POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
+from helpers import logger
 
 
 class Compas(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/compas/compas-scores-two-years.csv"
 
     def __init__(self, dataset_info: dict):
+        logger.info("Loading COMPAS dataset...")
         Dataset.__init__(self, dataset_info)
         self._load_dataset()
         self._prepare_dataset()
+        logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
@@ -18,6 +21,9 @@ class Compas(Dataset):
                            "master/compas-scores-two-years.csv")
             data = pd.read_csv(dataset_url)
         except Exception:
+            logger.error("Failed to load dataset from online source!")
+            logger.info("Loading dataset from local storage...")
+
             data = pd.read_csv(self._LOCAL_DATA_FILE)
 
         data = self.__filter_data__(data)
@@ -42,7 +48,7 @@ class Compas(Dataset):
 
     def __filter_data__(self, data):
         """
-            Method that filter the dataset according to the approach taken by ProPublica.
+        Method that filter the dataset according to the approach taken by ProPublica.
         :return:
         """
         selected_columns = ['age', 'c_charge_degree', 'race', 'age_cat', 'score_text', 'sex', 'priors_count',

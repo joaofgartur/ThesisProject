@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 from datasets import remove_invalid_columns, convert_categorical_into_numerical
-from constants import PRIVILEGED, UNPRIVILEGED
+from helpers import logger
 
 
 class Dataset(metaclass=abc.ABCMeta):
@@ -22,20 +22,16 @@ class Dataset(metaclass=abc.ABCMeta):
         sensitive_attributes_key = "sensitive_attributes"
 
         if dataset_name_key in dataset_info.keys():
-            self.dataset_name = dataset_info[dataset_name_key]
+            self.name = dataset_info[dataset_name_key]
         else:
-            raise ValueError("Missing dataset name.")
+            logger.error("Missing dataset name.")
+            raise ValueError
 
         if sensitive_attributes_key in dataset_info.keys():
             self.sensitive_attributes_info = dataset_info[sensitive_attributes_key]
         else:
-            raise ValueError("Missing dataset sensitive attributes information.")
-
-    def __define_privileged_and_unprivileged__(self):
-        for sensitive_attribute in self.sensitive_attributes_info.keys():
-            unprivileged_value = self.sensitive_attributes_info[sensitive_attribute]["unprivileged_value"]
-            self.features[sensitive_attribute] = np.where(self.features[sensitive_attribute] == unprivileged_value,
-                                                          UNPRIVILEGED, PRIVILEGED)
+            logger.error("Missing dataset sensitive attributes information.")
+            raise ValueError
 
     @abc.abstractmethod
     def _load_dataset(self):
@@ -46,6 +42,8 @@ class Dataset(metaclass=abc.ABCMeta):
         """"""
 
     def _prepare_dataset(self):
+        logger.info("Pre-processing dataset...")
+
         # drop any instances with empty values
         self.features, removed_indexes = remove_invalid_columns(self.features, [])
         self.targets, _ = remove_invalid_columns(self.targets, removed_indexes)
@@ -66,10 +64,6 @@ class Dataset(metaclass=abc.ABCMeta):
         scaler = MinMaxScaler(copy=False)
         normalized_features = scaler.fit_transform(self.features)
         self.features = pd.DataFrame(normalized_features, columns=self.features.columns)
-
-    def get_privileged_and_unprivileged_value_for_attribute(self, attribute: str) -> int:
-        unprivileged_label = self.sensitive_attributes_info[attribute]["unprivileged_value"]
-        return self.features_mapping[attribute][unprivileged_label]
 
     def get_sensitive_attributes(self) -> pd.DataFrame:
         columns_names = list(self.sensitive_attributes_info.keys())
