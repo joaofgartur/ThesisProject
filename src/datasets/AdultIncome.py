@@ -2,7 +2,7 @@ import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
-from datasets import Dataset
+from datasets import Dataset, is_privileged
 from helpers import logger
 
 
@@ -12,15 +12,12 @@ class AdultIncome(Dataset):
     def __init__(self, dataset_info: dict):
         logger.info("Loading Adult Income dataset...")
         Dataset.__init__(self, dataset_info)
-        self._load_dataset()
-        self._prepare_dataset()
         logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
             dataset = fetch_ucirepo(id=2)
-            self.features = dataset.data.features
-            self.targets = dataset.data.targets
+            return dataset.data.features, dataset.data.targets
         except ConnectionError:
             logger.error("Failed to load from online source!")
             logger.info("Loading dataset from local storage...")
@@ -31,18 +28,16 @@ class AdultIncome(Dataset):
                       "capital-gain", "capital-loss", "hours-per-week", "native-country", "income"]
             dataset = dataset.set_axis(labels=labels, axis="columns")
 
-            self.targets = pd.DataFrame(dataset["income"])
-            self.features = dataset.drop(columns=["income"])
+            targets = pd.DataFrame(dataset["income"])
+            features = dataset.drop(columns=["income"])
 
-    def _transform_dataset(self):
+            return features, targets
 
-        def binarize_attribute(x, y):
-            if x == y:
-                return PRIVILEGED
-            return UNPRIVILEGED
+    def _transform_protected_attributes(self):
 
-        for attribute, value in self.sensitive_attributes_info.items():
-            self.features[attribute] = self.features[attribute].apply(lambda x, y=value: binarize_attribute(x, y))
+        # binarize attribute
+        for feature, value in zip(self.protected_features, self.privileged_classes):
+            self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
 
         self.targets = (self.targets.replace("<=", NEGATIVE_OUTCOME, regex=True)
                         .replace(">", POSITIVE_OUTCOME, regex=True)

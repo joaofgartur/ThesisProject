@@ -56,7 +56,7 @@ class Reweighing(Algorithm):
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
-        data, outcome_column = dataset.merge_features_and_targets()
+        data, outcome_column = dataset.merge_features_and_labels()
         weights_data = []
 
         list_values = data[sensitive_attribute].unique()
@@ -107,7 +107,7 @@ class Reweighing(Algorithm):
         new_dataset = copy.deepcopy(dataset)
         weights = self.__compute_weights__(dataset, sensitive_attribute)
 
-        data, outcome_column = dataset.merge_features_and_targets()
+        data, outcome_column = dataset.merge_features_and_labels()
 
         weights_dataset = []
         for __, instance in data.iterrows():

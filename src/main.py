@@ -4,10 +4,52 @@ Project: Master's Thesis
 Last edited: 30-11-2023
 """
 
-from algorithms import Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations
+from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations,
+                        AttributeRemoval, DoNothing)
 from datasets import GermanCredit, AdultIncome, Compas
 from algorithms import bias_correction_algorithm
 from helpers import logger, logger_levels, config_logger
+from enum import Enum
+
+
+class DatasetOptions(Enum):
+    COMPAS = 0
+    ADULT = 1
+    GERMAN = 2
+
+
+def load_dataset(dataset_option: Enum):
+    match dataset_option:
+        case DatasetOptions.COMPAS:
+            compas_info = {
+                'dataset_name': 'COMPAS',
+                'target': 'two_year_recid',
+                'protected_attributes': ['race', 'sex'],
+                'explanatory_attributes': [],
+                'privileged_classes': ['Caucasian', 'Male'],
+
+            }
+            return Compas(compas_info)
+        case DatasetOptions.GERMAN:
+            german_info = {
+                'dataset_name': 'German Credit',
+                'target': 'class',
+                'protected_attributes': ['Attribute9'],
+                'explanatory_attributes': [],
+                'privileged_classes': ['Male'],
+
+            }
+            return GermanCredit(german_info)
+        case DatasetOptions.ADULT:
+            adult_info = {
+                'dataset_name': 'Adult Income',
+                'target': 'income',
+                'protected_attributes': ['race', 'sex'],
+                'explanatory_attributes': [],
+                'privileged_classes': ['White', 'Male'],
+
+            }
+            return AdultIncome(adult_info)
 
 
 if __name__ == '__main__':
@@ -16,29 +58,15 @@ if __name__ == '__main__':
 
     logger.info("Initializing...")
 
-    compas_info = {
-        "dataset_name": "COMPAS",
-        "sensitive_attributes": {"race": "Caucasian", "sex": "Male"}
-    }
-    # dataset = Compas(compas_info)
-
-    german_info = {
-        "dataset_name": "German Credit",
-        "sensitive_attributes": {"Attribute9": "Male"},
-    }
-    dataset = GermanCredit(german_info)
-
-    adult_info = {
-        "dataset_name": "Adult Income",
-        "sensitive_attributes": {"race": "White", "sex": "Male"}
-    }
-    # dataset = AdultIncome(adult_info)
+    dataset = load_dataset(DatasetOptions.COMPAS)
 
     algorithms = [
-        Massaging(learning_settings=_learning_settings),
-        Reweighing(),
-        DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
-        LearningFairRepresentations(learning_settings=_learning_settings),
+        # Massaging(learning_settings=_learning_settings),
+        # Reweighing(),
+        # DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
+        # LearningFairRepresentations(learning_settings=_learning_settings),
+        # AttributeRemoval(),
+        # DoNothing(),
     ]
 
     for algorithm in algorithms:

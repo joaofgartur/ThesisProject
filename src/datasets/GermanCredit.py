@@ -2,8 +2,8 @@ import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
 from helpers import logger
-from datasets import Dataset
-from constants import NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME
+from datasets import Dataset, is_privileged
+from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
 
 
 class GermanCredit(Dataset):
@@ -12,51 +12,49 @@ class GermanCredit(Dataset):
     def __init__(self, dataset_info: dict):
         logger.info("Loading German Credit dataset...")
         Dataset.__init__(self, dataset_info)
-        self._load_dataset()
-        self._prepare_dataset()
         logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
             dataset = fetch_ucirepo(id=144)
-            self.features = dataset.data.features
-            self.targets = dataset.data.targets
+            return dataset.data.features, dataset.data.targets
         except ConnectionError:
             logger.error("Failed to load from online source!")
             logger.info("Loading dataset from local storage...")
 
             dataset = pd.read_csv(self._LOCAL_DATA_FILE, header=None, sep=" ")
-            labels = ['Attribute1', 'Attribute2', 'Attribute3', 'Attribute4', 'Attribute5',
-                      'Attribute6', 'Attribute7', 'Attribute8', 'Attribute9', 'Attribute10',
-                      'Attribute11', 'Attribute12', 'Attribute13', 'Attribute14', 'Attribute15',
-                      'Attribute16', 'Attribute17', 'Attribute18', 'Attribute19', 'Attribute20',
-                      'class']
-            dataset = dataset.set_axis(labels=labels, axis="columns")
+            column_labels = ['Attribute1', 'Attribute2', 'Attribute3', 'Attribute4', 'Attribute5',
+                             'Attribute6', 'Attribute7', 'Attribute8', 'Attribute9', 'Attribute10',
+                             'Attribute11', 'Attribute12', 'Attribute13', 'Attribute14', 'Attribute15',
+                             'Attribute16', 'Attribute17', 'Attribute18', 'Attribute19', 'Attribute20',
+                             'class']
+            dataset = dataset.set_axis(labels=column_labels, axis="columns")
 
-            self.targets = pd.DataFrame(dataset["class"])
-            self.features = dataset.drop(columns=["class"])
+            targets = pd.DataFrame(dataset[self.target])
+            features = dataset.drop(columns=[self.target])
 
-    def _transform_dataset(self):
+            return features, targets
 
-        def binarize_attribute(x, y):
-            if x == y:
-                return PRIVILEGED
-            return UNPRIVILEGED
+    def _transform_protected_attributes(self):
 
         def derive_sex(x):
-            male_values = ["A91", "A93", "A94"]
-            if x in male_values:
-                return "Male"
-            return "Female"
+            return 'Male' if x in ['A91', 'A93', 'A94'] else 'Female'
 
         def derive_class(x):
             if x == 2:
                 return NEGATIVE_OUTCOME
             return POSITIVE_OUTCOME
 
-        self.features["Attribute9"] = self.features["Attribute9"].apply(lambda x: derive_sex(x))
-        for attribute, value in self.sensitive_attributes_info.items():
-            self.features[attribute] = self.features[attribute].apply(lambda x, y=value: binarize_attribute(x, y))
+        # derive sex values
+        sex_column = 'Attribute9'
+        self.features[sex_column] = self.features[sex_column].apply(lambda x: derive_sex(x))
 
-        self.targets = self.targets.rename(columns={"class": "label"})
-        self.targets["label"] = self.targets["label"].apply(lambda x: derive_class(x))
+        # binarize attribute
+        for feature, value in zip(self.protected_features, self.privileged_classes):
+            self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
+
+        # rename target column
+        self.targets = self.targets.rename(columns={self.target: 'target'})
+        self.target = 'target'
+
+        self.targets[self.target] = self.targets[self.target].apply(lambda x: derive_class(x))

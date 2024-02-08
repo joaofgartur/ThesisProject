@@ -53,7 +53,7 @@ class Massaging(Algorithm):
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
-        data, outcome_label = dataset.merge_features_and_targets()
+        data, outcome_label = dataset.merge_features_and_labels()
 
         count_unprivileged = data[data[sensitive_attribute] == UNPRIVILEGED].shape[0]
         count_unprivileged_positive = data[(data[sensitive_attribute] == UNPRIVILEGED) &
@@ -156,7 +156,7 @@ class Massaging(Algorithm):
         class_probabilities = self.__compute_class_probabilities__(dataset)
         positive_class_probabilities = class_probabilities[:, 0]
 
-        data, outcome_label = dataset.merge_features_and_targets()
+        data, outcome_label = dataset.merge_features_and_labels()
 
         # select candidates for promotion
         pr_candidates_indexes = data.index[
