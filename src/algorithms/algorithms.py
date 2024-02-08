@@ -10,7 +10,7 @@ from errors import error_check_dataset
 from helpers import logger
 
 
-def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorithm) -> None:
+def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> None:
     """
     Apply a bias correction algorithm to a dataset and display pre- and post-correction diagnostics.
 
@@ -38,8 +38,6 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
         - If the provided algorithm is not a callable function.
         - If the provided algorithm does not receive the correct parameters.
     """
-    _DATASET = "dataset"
-    _SENSITIVE_ATTRIBUTE = "sensitive_attribute"
 
     try:
         error_check_dataset(dataset)
@@ -51,20 +49,20 @@ def bias_correction_algorithm(dataset: Dataset, learning_settings: dict, algorit
 
         # correction stage
         post_results = {}
-        for sensitive_attribute in dataset.sensitive_attributes_info.keys():
-            logger.info(f"Applying bias correction for attribute {sensitive_attribute}...")
+        for feature in dataset.protected_features:
+            logger.info(f"Applying bias correction for attribute {feature}...")
 
-            new_dataset = algorithm.repair(dataset, sensitive_attribute)
+            new_dataset = algorithm.repair(dataset, feature)
 
             logger.info(f"Finished correcting bias. Computing post-correction diagnostics "
-                        f"for attribute{sensitive_attribute}...")
+                        f"for attribute {feature}...")
 
             results = diagnostics(new_dataset, learning_settings)
 
             logger.info("Post-correction diagnostics computed.")
 
             print(results)
-            post_results.update({sensitive_attribute: results})
+            post_results.update({feature: results})
 
         # Rest of the code
     except Exception as e:

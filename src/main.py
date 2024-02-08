@@ -4,10 +4,9 @@ Project: Master's Thesis
 Last edited: 30-11-2023
 """
 
-from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations,
-                        AttributeRemoval, DoNothing)
+from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
 from datasets import GermanCredit, AdultIncome, Compas
-from algorithms import bias_correction_algorithm
+from algorithms import bias_correction
 from helpers import logger, logger_levels, config_logger
 from enum import Enum
 
@@ -50,6 +49,31 @@ def load_dataset(dataset_option: Enum):
 
             }
             return AdultIncome(adult_info)
+        case _:
+            logger.error('Dataset option unknown!')
+            raise NotImplementedError
+
+
+class AlgorithmOptions(Enum):
+    Massaging = 0
+    Reweighing = 1
+    DisparateImpactRemover = 2
+    LearningFairRepresentations = 3
+
+
+def load_algorithm(option: Enum, learning_settings: dict):
+    match option:
+        case AlgorithmOptions.Massaging:
+            return Massaging(learning_settings=learning_settings)
+        case AlgorithmOptions.Reweighing:
+            return Reweighing()
+        case AlgorithmOptions.DisparateImpactRemover:
+            return DisparateImpactRemover(repair_level=1.0, learning_settings=learning_settings)
+        case AlgorithmOptions.LearningFairRepresentations:
+            return LearningFairRepresentations(learning_settings=learning_settings)
+        case _:
+            logger.error('Algorithm option unknown!')
+            raise NotImplementedError
 
 
 if __name__ == '__main__':
@@ -60,17 +84,10 @@ if __name__ == '__main__':
 
     dataset = load_dataset(DatasetOptions.COMPAS)
 
-    algorithms = [
-        # Massaging(learning_settings=_learning_settings),
-        # Reweighing(),
-        # DisparateImpactRemover(repair_level=1.0, learning_settings=_learning_settings),
-        # LearningFairRepresentations(learning_settings=_learning_settings),
-        # AttributeRemoval(),
-        # DoNothing(),
-    ]
+    algorithm = load_algorithm(AlgorithmOptions.Massaging, _learning_settings)
 
-    for algorithm in algorithms:
-        logger.info(f"Applying bias correction method {algorithm.__module__} to dataset {dataset.name}.")
-        bias_correction_algorithm(dataset, _learning_settings, algorithm)
+    logger.info(f"Applying bias correction method {algorithm.__module__} to dataset {dataset.name}.")
+
+    bias_correction(dataset, _learning_settings, algorithm)
 
     logger.info("End of program.")

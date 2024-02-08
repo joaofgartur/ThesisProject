@@ -72,7 +72,7 @@ class Dataset(metaclass=abc.ABCMeta):
         return self.features.loc[:, self.protected_features]
 
     def merge_features_and_targets(self) -> (pd.DataFrame, str):
-        data = pd.concat([self.features, self.target], axis='columns')
+        data = pd.concat([self.features, self.targets], axis='columns')
         outcome = self.targets.columns[0]
 
         return data, outcome

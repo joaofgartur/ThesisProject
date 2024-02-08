@@ -38,7 +38,7 @@ def diagnostics(dataset: Dataset, learning_settings: dict) -> dict:
     error_check_dataset(dataset)
 
     metrics_results = {}
-    for sensitive_attribute in dataset.sensitive_attributes_info.keys():
+    for sensitive_attribute in dataset.protected_features:
         logger.info(f"Computing fairness metrics for attribute \'{sensitive_attribute}\'...")
 
         error_check_sensitive_attribute(dataset, sensitive_attribute)

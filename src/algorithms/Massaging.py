@@ -25,7 +25,7 @@ class Massaging(Algorithm):
     def __init__(self, learning_settings: dict):
         self.learning_settings = learning_settings
 
-    def __compute_m__(self, dataset: Dataset, sensitive_attribute: str) -> int:
+    def __compute_m(self, dataset: Dataset, sensitive_attribute: str) -> int:
         """
         Function that computes the number of necessary modifications to the target values.
 
@@ -53,7 +53,7 @@ class Massaging(Algorithm):
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
-        data, outcome_label = dataset.merge_features_and_labels()
+        data, outcome_label = dataset.merge_features_and_targets()
 
         count_unprivileged = data[data[sensitive_attribute] == UNPRIVILEGED].shape[0]
         count_unprivileged_positive = data[(data[sensitive_attribute] == UNPRIVILEGED) &
@@ -156,7 +156,7 @@ class Massaging(Algorithm):
         class_probabilities = self.__compute_class_probabilities__(dataset)
         positive_class_probabilities = class_probabilities[:, 0]
 
-        data, outcome_label = dataset.merge_features_and_labels()
+        data, outcome_label = dataset.merge_features_and_targets()
 
         # select candidates for promotion
         pr_candidates_indexes = data.index[
@@ -204,7 +204,7 @@ class Massaging(Algorithm):
 
         new_dataset = copy.deepcopy(dataset)
         promotion_candidates, demotion_candidates = self.__ranking__(dataset, sensitive_attribute)
-        m = self.__compute_m__(dataset, sensitive_attribute)
+        m = self.__compute_m(dataset, sensitive_attribute)
 
         for __ in range(m):
             top_promotion = promotion_candidates.iloc[0]

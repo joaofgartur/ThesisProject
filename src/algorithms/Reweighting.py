@@ -29,7 +29,7 @@ class Reweighing(Algorithm):
         """
         pass
 
-    def __compute_weights__(self, dataset: Dataset, sensitive_attribute: str) -> pd.DataFrame:
+    def __compute_weights(self, dataset: Dataset, sensitive_attribute: str) -> pd.DataFrame:
         """
         Compute weights based on probabilities of sensitive attribute-outcome combinations.
 
@@ -56,7 +56,7 @@ class Reweighing(Algorithm):
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
-        data, outcome_column = dataset.merge_features_and_labels()
+        data, outcome_column = dataset.merge_features_and_targets()
         weights_data = []
 
         list_values = data[sensitive_attribute].unique()
@@ -105,9 +105,9 @@ class Reweighing(Algorithm):
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
         new_dataset = copy.deepcopy(dataset)
-        weights = self.__compute_weights__(dataset, sensitive_attribute)
+        weights = self.__compute_weights(dataset, sensitive_attribute)
 
-        data, outcome_column = dataset.merge_features_and_labels()
+        data, outcome_column = dataset.merge_features_and_targets()
 
         weights_dataset = []
         for __, instance in data.iterrows():

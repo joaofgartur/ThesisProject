@@ -83,7 +83,7 @@ def compute_metrics_suite(dataset: Dataset, sensitive_attribute: str) -> dict:
     -------
     - The current implemented metrics are Disparate Impact and Discrimination Score.
     """
-    data, outcome_label = dataset.merge_features_and_labels()
+    data, outcome_label = dataset.merge_features_and_targets()
 
     di = disparate_impact(data, outcome_label, sensitive_attribute)
     ds = discrimination_score(data, outcome_label, sensitive_attribute)
