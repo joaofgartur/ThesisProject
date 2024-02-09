@@ -9,7 +9,7 @@ from datasets import Dataset
 
 
 def convert_to_standard_dataset(dataset: Dataset, sensitive_attribute: str):
-    dataframe, label_name = dataset.merge_features_and_labels()
+    dataframe, label_name = dataset.merge_features_and_targets()
     favorable_classes = [POSITIVE_OUTCOME]
     privileged_classes = [PRIVILEGED]
     features_to_keep = dataset.features.columns.tolist()

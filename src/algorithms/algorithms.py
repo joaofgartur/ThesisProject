@@ -3,11 +3,17 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
+from aif360.datasets import StandardDataset
 
 from datasets import Dataset
 from diagnostics import diagnostics
 from errors import error_check_dataset
 from helpers import logger
+
+
+def scale_dataset(scaler, dataset: StandardDataset) -> StandardDataset:
+    dataset.features = scaler.fit_transform(dataset.features)
+    return dataset
 
 
 def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> None:

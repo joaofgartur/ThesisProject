@@ -66,9 +66,9 @@ def load_algorithm(option: Enum, learning_settings: dict):
         case AlgorithmOptions.Massaging:
             return Massaging(learning_settings=learning_settings)
         case AlgorithmOptions.Reweighing:
-            return Reweighing()
+            return Reweighing(learning_settings=learning_settings)
         case AlgorithmOptions.DisparateImpactRemover:
-            return DisparateImpactRemover(repair_level=1.0, learning_settings=learning_settings)
+            return DisparateImpactRemover(repair_level=0.9, learning_settings=learning_settings)
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations(learning_settings=learning_settings)
         case _:
@@ -82,9 +82,9 @@ if __name__ == '__main__':
 
     logger.info("Initializing...")
 
-    dataset = load_dataset(DatasetOptions.COMPAS)
+    dataset = load_dataset(DatasetOptions.ADULT)
 
-    algorithm = load_algorithm(AlgorithmOptions.Massaging, _learning_settings)
+    algorithm = load_algorithm(AlgorithmOptions.Reweighing, _learning_settings)
 
     logger.info(f"Applying bias correction method {algorithm.__module__} to dataset {dataset.name}.")
 

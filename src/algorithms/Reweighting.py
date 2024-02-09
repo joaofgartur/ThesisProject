@@ -3,15 +3,16 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-import copy
 import itertools
 
 import pandas as pd
-import numpy as np
+from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
+from sklearn.preprocessing import StandardScaler
 
 from algorithms.Algorithm import Algorithm
+from algorithms.algorithms import scale_dataset
 from datasets import Dataset
-from helpers import logger
+from helpers import logger, convert_to_standard_dataset, modify_dataset
 from metrics import simple_probability, joint_probability
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from errors import error_check_dataset, error_check_sensitive_attribute
@@ -23,11 +24,8 @@ WEIGHT = "weight"
 
 class Reweighing(Algorithm):
 
-    def __init__(self):
-        """
-
-        """
-        pass
+    def __init__(self, learning_settings: dict):
+        super().__init__(learning_settings)
 
     def __compute_weights(self, dataset: Dataset, sensitive_attribute: str) -> pd.DataFrame:
         """
@@ -104,20 +102,25 @@ class Reweighing(Algorithm):
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
-        new_dataset = copy.deepcopy(dataset)
-        weights = self.__compute_weights(dataset, sensitive_attribute)
+        # convert dataset into aif360 dataset
+        standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
 
-        data, outcome_column = dataset.merge_features_and_targets()
+        # standardize features
+        scaler = StandardScaler()
+        standard_dataset = scale_dataset(scaler, standard_dataset)
 
-        weights_dataset = []
-        for __, instance in data.iterrows():
-            instance_weight = weights[(weights[SENSITIVE_ATTRIBUTE] == instance[sensitive_attribute]) &
-                                      (weights[OUTCOME] == instance[outcome_column])][WEIGHT].values
-            weights_dataset.append(instance_weight)
+        # define privileged and unprivileged group
+        privileged_groups = [{sensitive_attribute: POSITIVE_OUTCOME}]
+        unprivileged_groups = [{sensitive_attribute: NEGATIVE_OUTCOME}]
 
-        weights_array = np.concatenate(weights_dataset)
-        n_rows = dataset.features.shape[0]
-        new_dataset.features = dataset.features.sample(n=n_rows, weights=weights_array, replace=True).reset_index()
+        # transform dataset
+        transformer = Aif360Reweighing(unprivileged_groups=unprivileged_groups,
+                        privileged_groups=privileged_groups)
+        transformer.fit(standard_dataset)
+        transformed_dataset = transformer.transform(standard_dataset)
+
+        # convert into regular dataset
+        new_dataset = modify_dataset(dataset, transformed_dataset.features, transformed_dataset.labels)
 
         logger.info(f"Dataset {dataset.name} repaired.")
 

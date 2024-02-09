@@ -33,7 +33,7 @@ def disparate_impact(data: pd.DataFrame, label: str, sensitive_attribute: str):
     unprivileged_cp = conditional_probability(data, label, POSITIVE_OUTCOME, sensitive_attribute, UNPRIVILEGED)
     privileged_cp = conditional_probability(data, label, POSITIVE_OUTCOME, sensitive_attribute, PRIVILEGED)
 
-    return np.round_(unprivileged_cp / privileged_cp, decimals=4)
+    return unprivileged_cp / privileged_cp
 
 
 def discrimination_score(data: pd.DataFrame, label: str, sensitive_attribute: str):

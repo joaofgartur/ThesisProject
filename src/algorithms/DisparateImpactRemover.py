@@ -1,8 +1,11 @@
 import numpy as np
 
 from aif360.algorithms.preprocessing import DisparateImpactRemover as DIR
+from aif360.metrics import BinaryLabelDatasetMetric
+from matplotlib import pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MinMaxScaler
+from tqdm import tqdm
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
@@ -41,9 +44,13 @@ class DisparateImpactRemover(Algorithm):
         test_repd_pred.labels = lmod.predict(X_te)
         test_repd_pred.labels.resize((len(test_repd_pred.labels), 1))
 
+        p = [{sensitive_attribute: 1}]
+        u = [{sensitive_attribute: 0}]
+
         features = concatenate_ndarrays(train_repd.features, test_repd_pred.features)
-        labels = concatenate_ndarrays(train_repd.labels, test_repd_pred.labels)
-        new_dataset = modify_dataset(dataset, features, labels)
+        targets = concatenate_ndarrays(train_repd.labels, test_repd_pred.labels)
+
+        new_dataset = modify_dataset(dataset, features, targets)
 
         logger.info(f"Dataset {dataset.name} repaired.")
 

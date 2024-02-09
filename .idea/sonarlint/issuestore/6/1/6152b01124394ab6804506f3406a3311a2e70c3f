@@ -1,3 +1,5 @@
 
-lpython:S117""URename this local variable "X_te" to match the regular expression ^[_a-z][a-z0-9_]*$.(å®ßã
-lpython:S117!"URename this local variable "X_tr" to match the regular expression ^[_a-z][a-z0-9_]*$.(£áüý
+spython:S117%"URename this local variable "X_te" to match the regular expression ^[_a-z][a-z0-9_]*$.(å®ßã8¾¨ËÔØ1
+spython:S117$"URename this local variable "X_tr" to match the regular expression ^[_a-z][a-z0-9_]*$.(£áüý8¿¨ËÔØ1
+Ipython:S1481/"%Remove the unused local variable "p".(ñ–¦¿ýÿÿÿÿ8ò’¸ëØ1
+Cpython:S14810"%Remove the unused local variable "u".(”ß™F8ò’¸ëØ1
