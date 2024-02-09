@@ -67,7 +67,7 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> Non
 
             logger.info("Post-correction diagnostics computed.")
 
-            print(results)
+            print(f'{feature}: {results}')
             post_results.update({feature: results})
 
         # Rest of the code

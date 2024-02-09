@@ -68,7 +68,7 @@ def load_algorithm(option: Enum, learning_settings: dict):
         case AlgorithmOptions.Reweighing:
             return Reweighing(learning_settings=learning_settings)
         case AlgorithmOptions.DisparateImpactRemover:
-            return DisparateImpactRemover(repair_level=0.9, learning_settings=learning_settings)
+            return DisparateImpactRemover(repair_level=0.2, learning_settings=learning_settings)
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations(learning_settings=learning_settings)
         case _:
@@ -82,7 +82,7 @@ if __name__ == '__main__':
 
     logger.info("Initializing...")
 
-    dataset = load_dataset(DatasetOptions.ADULT)
+    dataset = load_dataset(DatasetOptions.COMPAS)
 
     algorithm = load_algorithm(AlgorithmOptions.Reweighing, _learning_settings)
 
