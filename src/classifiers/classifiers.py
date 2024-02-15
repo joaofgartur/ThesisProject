@@ -3,6 +3,7 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
+from typing import Tuple, Any
 
 from datasets import Dataset
 from sklearn.pipeline import Pipeline
@@ -13,13 +14,13 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, cross_validate
+from sklearn.model_selection import train_test_split, cross_validate, cross_val_predict
 from sklearn.preprocessing import StandardScaler
 
 from errors import error_check_dataset, error_check_dictionary_keys
 
 
-def train_classifier(dataset: Dataset, classifier: object, learning_settings: dict) -> float:
+def train_classifier(dataset: Dataset, classifier: object, learning_settings: dict) -> tuple[Any, Any]:
     """
     Train a classifier on the specified dataset and return the mean test score.
 
@@ -46,6 +47,7 @@ def train_classifier(dataset: Dataset, classifier: object, learning_settings: di
     """
     _TRAIN_SIZE_KEY = "test_size"
     _TEST_SIZE_KEY = "train_size"
+    _CROSS_VALIDATION = 'cross_validation'
 
     error_check_dataset(dataset)
     error_check_dictionary_keys(learning_settings, [_TRAIN_SIZE_KEY, _TEST_SIZE_KEY])
@@ -56,12 +58,17 @@ def train_classifier(dataset: Dataset, classifier: object, learning_settings: di
     ])
 
     x_train, __, y_train, __ = train_test_split(dataset.features, dataset.targets,
-                                                test_size=learning_settings[_TEST_SIZE_KEY],
-                                                train_size=learning_settings[_TRAIN_SIZE_KEY])
+                                                        test_size=learning_settings[_TEST_SIZE_KEY],
+                                                        train_size=learning_settings[_TRAIN_SIZE_KEY])
 
+    # Perform cross-validated predictions
+    predictions = cross_val_predict(pipeline, x_train, y_train.values.ravel(), cv=learning_settings[_CROSS_VALIDATION])
+
+    # Compute mean test score
     scores = cross_validate(pipeline, x_train, y_train.values.ravel())
+    accuracy = scores['test_score'].mean()
 
-    return scores['test_score'].mean()
+    return predictions, accuracy
 
 
 def train_all_classifiers(dataset: Dataset, learning_settings: dict) -> dict:

@@ -5,8 +5,8 @@ from datasets import Dataset
 
 class Algorithm(metaclass=abc.ABCMeta):
 
-    def __init__(self, learning_settings: dict):
-        self.learning_settings = learning_settings
+    @abc.abstractmethod
+    def __init__(self):
         """"""
 
     @abc.abstractmethod

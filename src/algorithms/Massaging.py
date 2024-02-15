@@ -23,6 +23,7 @@ from helpers import logger
 class Massaging(Algorithm):
 
     def __init__(self, learning_settings: dict):
+        super().__init__()
         self.learning_settings = learning_settings
 
     def __compute_m(self, dataset: Dataset, sensitive_attribute: str) -> int:

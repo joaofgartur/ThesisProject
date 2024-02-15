@@ -5,4 +5,4 @@ Last edited: 20-11-2023
 """
 
 from .plots import barplot
-from .diagnostics import *
+from .assessment import *

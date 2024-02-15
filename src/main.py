@@ -3,12 +3,12 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 30-11-2023
 """
+from enum import Enum
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
-from datasets import GermanCredit, AdultIncome, Compas
 from algorithms import bias_correction
+from datasets import GermanCredit, AdultIncome, Compas
 from helpers import logger, logger_levels, config_logger
-from enum import Enum
 
 
 class DatasetOptions(Enum):
@@ -17,8 +17,8 @@ class DatasetOptions(Enum):
     GERMAN = 2
 
 
-def load_dataset(dataset_option: Enum):
-    match dataset_option:
+def load_dataset(option: Enum):
+    match option:
         case DatasetOptions.COMPAS:
             compas_info = {
                 'dataset_name': 'COMPAS',
@@ -59,6 +59,7 @@ class AlgorithmOptions(Enum):
     Reweighing = 1
     DisparateImpactRemover = 2
     LearningFairRepresentations = 3
+    OptimizedPreprocessing = 4
 
 
 def load_algorithm(option: Enum, learning_settings: dict):
@@ -66,11 +67,13 @@ def load_algorithm(option: Enum, learning_settings: dict):
         case AlgorithmOptions.Massaging:
             return Massaging(learning_settings=learning_settings)
         case AlgorithmOptions.Reweighing:
-            return Reweighing(learning_settings=learning_settings)
+            return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
-            return DisparateImpactRemover(repair_level=0.2, learning_settings=learning_settings)
+            return DisparateImpactRemover(repair_level=0.1)
         case AlgorithmOptions.LearningFairRepresentations:
-            return LearningFairRepresentations(learning_settings=learning_settings)
+            return LearningFairRepresentations()
+        case AlgorithmOptions.OptimizedPreprocessing:
+            raise NotImplementedError
         case _:
             logger.error('Algorithm option unknown!')
             raise NotImplementedError
@@ -78,7 +81,7 @@ def load_algorithm(option: Enum, learning_settings: dict):
 
 if __name__ == '__main__':
     config_logger(level=logger_levels.INFO.value)
-    _learning_settings = {"train_size": 0.7, "test_size": 0.3, "seed": 125}
+    _learning_settings = {"train_size": 0.7, "test_size": 0.3, "seed": 125, 'cross_validation': 5}
 
     logger.info("Initializing...")
 

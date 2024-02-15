@@ -32,9 +32,23 @@ def concatenate_ndarrays(a: np.ndarray, b: np.ndarray):
     return np.concatenate((a, b), axis=0)
 
 
-def modify_dataset(dataset: Dataset, features: np.ndarray, labels: np.ndarray):
+def set_dataset_features_and_labels(dataset: Dataset, features: np.ndarray, labels: np.ndarray):
     new_dataset = copy.deepcopy(dataset)
     new_dataset.features = pd.DataFrame(features, columns=dataset.features.columns)
+    new_dataset.targets = pd.DataFrame(labels, columns=dataset.targets.columns)
+
+    return new_dataset
+
+
+def set_dataset_features(dataset: Dataset, features: np.ndarray):
+    new_dataset = copy.deepcopy(dataset)
+    new_dataset.features = pd.DataFrame(features, columns=dataset.features.columns)
+
+    return new_dataset
+
+
+def set_dataset_labels(dataset: Dataset, labels: np.ndarray):
+    new_dataset = copy.deepcopy(dataset)
     new_dataset.targets = pd.DataFrame(labels, columns=dataset.targets.columns)
 
     return new_dataset

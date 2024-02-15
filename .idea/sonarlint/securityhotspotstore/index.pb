@@ -41,11 +41,17 @@ L
 src/datasets/GermanCredit.py,9\4\94413888708506ccc98818a7c7408ae21c95a8ab
 K
 src/algorithms/Massaging.py,0\4\0453dbec9e5f7fc542b2b0af462bc272f66b0362
-N
-src/diagnostics/diagnostics.py,d\5\d5c9434b6514f23c7945a16b6641550da3a09a9d
 F
 src/metrics/metrics.py,0\6\069a8e503d6141ddcc0359752a13a3ee31319cc7
 ]
 -src/algorithms/LearningFairRepresentations.py,e\3\e359cafcd842eb17255a4b8e8c49eb03a8e2fce7
 L
 src/metrics/probabilities.py,f\e\fe59279f065edf2700876036a522c446f9f535c0
+N
+src/classifiers/classifiers.py,8\f\8fbce380fb3aa75e7de3ece7e1ee47456ce8d220
+L
+src/assessment/assessment.py,e\b\ebbacfe284ffaad40d1b7cd6ae93de7330b484e6
+F
+src/helpers/logging.py,6\d\6dae6ffd28b18daac2e23f1fb508bee153a53e5d
+D
+src/errors/errors.py,0\7\0783a82d97662978d80027780abd2aca9879eefb
