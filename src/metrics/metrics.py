@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from datasets import Dataset
-from metrics import joint_probability
+from metrics import joint_probability, safe_division
 from constants import PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 
 Y = 'y'
@@ -32,13 +32,14 @@ def disparate_impact(data: pd.DataFrame, sensitive_attribute: str):
         The disparate impact.
     """
 
-    unprivileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: UNPRIVILEGED}) /
-                       joint_probability(data, {sensitive_attribute: UNPRIVILEGED}))
+    unprivileged_cp = safe_division(
+        joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: UNPRIVILEGED}),
+        joint_probability(data, {sensitive_attribute: UNPRIVILEGED}))
 
-    privileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: PRIVILEGED}) /
-                     joint_probability(data, {sensitive_attribute: PRIVILEGED}))
+    privileged_cp = safe_division(joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: PRIVILEGED}),
+                                  joint_probability(data, {sensitive_attribute: PRIVILEGED}))
 
-    return unprivileged_cp / privileged_cp
+    return safe_division(unprivileged_cp, privileged_cp)
 
 
 def discrimination_score(data: pd.DataFrame, sensitive_attribute: str):
@@ -59,23 +60,25 @@ def discrimination_score(data: pd.DataFrame, sensitive_attribute: str):
 
     """
 
-    unprivileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: UNPRIVILEGED}) /
-                       joint_probability(data, {sensitive_attribute: UNPRIVILEGED}))
+    unprivileged_cp = safe_division(
+        joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: UNPRIVILEGED}),
+        joint_probability(data, {sensitive_attribute: UNPRIVILEGED}))
 
-    privileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: PRIVILEGED}) /
-                     joint_probability(data, {sensitive_attribute: PRIVILEGED}))
+    privileged_cp = safe_division(
+        joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: PRIVILEGED}),
+        joint_probability(data, {sensitive_attribute: PRIVILEGED}))
 
     return np.round_(unprivileged_cp - privileged_cp, decimals=4)
 
 
 def false_positive_rate_diff(data: pd.DataFrame, sensitive_attribute: str):
-    fpr_privileged = (
-            joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: NEGATIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
-            / joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: NEGATIVE_OUTCOME}))
+    fpr_privileged = safe_division(
+        joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: NEGATIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME}),
+        joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: NEGATIVE_OUTCOME}))
 
-    fpr_unprivileged = (
-            joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: NEGATIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
-            / joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: NEGATIVE_OUTCOME}))
+    fpr_unprivileged = safe_division(
+        joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: NEGATIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME}),
+        joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: NEGATIVE_OUTCOME}))
 
     fpr_difference = fpr_privileged - fpr_unprivileged
 
@@ -83,13 +86,13 @@ def false_positive_rate_diff(data: pd.DataFrame, sensitive_attribute: str):
 
 
 def true_positive_rate_diff(data: pd.DataFrame, sensitive_attribute: str):
-    tpr_privileged = (
-            joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: POSITIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
-            / joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: POSITIVE_OUTCOME}))
+    tpr_privileged = safe_division(
+        joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: POSITIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME}),
+        joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: POSITIVE_OUTCOME}))
 
-    tpr_unprivileged = (
-            joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: POSITIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
-            / joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: POSITIVE_OUTCOME}))
+    tpr_unprivileged = safe_division(
+        joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: POSITIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME}),
+        joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: POSITIVE_OUTCOME}))
 
     return tpr_privileged - tpr_unprivileged
 

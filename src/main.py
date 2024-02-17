@@ -8,7 +8,7 @@ from enum import Enum
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
 from algorithms import bias_correction
 from datasets import GermanCredit, AdultIncome, Compas
-from helpers import logger, logger_levels, config_logger
+from helpers import logger, logger_levels, config_logger, write_dataframe_to_csv
 
 
 class DatasetOptions(Enum):
@@ -59,21 +59,18 @@ class AlgorithmOptions(Enum):
     Reweighing = 1
     DisparateImpactRemover = 2
     LearningFairRepresentations = 3
-    OptimizedPreprocessing = 4
 
 
-def load_algorithm(option: Enum, learning_settings: dict):
+def load_algorithm(option: Enum):
     match option:
         case AlgorithmOptions.Massaging:
-            return Massaging(learning_settings=learning_settings)
+            return Massaging(learning_settings={'train_size': 0.7, 'test_size': 0.3})
         case AlgorithmOptions.Reweighing:
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
             return DisparateImpactRemover(repair_level=0.1)
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations()
-        case AlgorithmOptions.OptimizedPreprocessing:
-            raise NotImplementedError
         case _:
             logger.error('Algorithm option unknown!')
             raise NotImplementedError
@@ -81,16 +78,22 @@ def load_algorithm(option: Enum, learning_settings: dict):
 
 if __name__ == '__main__':
     config_logger(level=logger_levels.INFO.value)
+    results_path = 'results'
     _learning_settings = {"train_size": 0.7, "test_size": 0.3, "seed": 125, 'cross_validation': 5}
 
     logger.info("Initializing...")
 
     dataset = load_dataset(DatasetOptions.COMPAS)
 
-    algorithm = load_algorithm(AlgorithmOptions.Reweighing, _learning_settings)
+    for algo in AlgorithmOptions:
 
-    logger.info(f"Applying bias correction method {algorithm.__module__} to dataset {dataset.name}.")
+        algorithm = load_algorithm(algo)
 
-    bias_correction(dataset, _learning_settings, algorithm)
+        logger.info(f"Applying bias correction method {algorithm.__module__} to dataset {dataset.name}.")
+
+        results = bias_correction(dataset, _learning_settings, algorithm)
+
+        write_dataframe_to_csv(df=results, dataset_name=dataset.name, algorithm_name=algorithm.__class__.__name__,
+                               path=results_path)
 
     logger.info("End of program.")

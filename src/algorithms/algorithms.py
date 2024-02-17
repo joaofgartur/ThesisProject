@@ -3,6 +3,7 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
+import pandas as pd
 from aif360.datasets import StandardDataset
 
 from datasets import Dataset
@@ -16,7 +17,7 @@ def scale_dataset(scaler, dataset: StandardDataset) -> StandardDataset:
     return dataset
 
 
-def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> None:
+def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> pd.DataFrame:
     """
     Apply a bias correction algorithm to a dataset and display pre- and post-correction assessment.
 
@@ -33,7 +34,7 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> Non
 
     Returns
     -------
-    None
+    pd.DataFrame
 
     Raises
     ------
@@ -50,7 +51,7 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> Non
 
         # pre-correction assessment stage
         logger.info("Computing pre-correction assessment stage...")
-        print(bias_assessment(dataset, learning_settings).to_string())
+        correction_results = bias_assessment(dataset, learning_settings)
         logger.info("Pre-correction assessment computed.")
 
         # correction stage
@@ -63,9 +64,11 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> Non
                         f"for attribute {feature}...")
 
             results = bias_assessment(new_dataset, learning_settings, feature)
-            print(results.to_string())
+            correction_results = pd.concat([correction_results, results])
 
             logger.info("Post-correction assessment computed.")
+
+        return correction_results
 
         # Rest of the code
     except Exception as e:

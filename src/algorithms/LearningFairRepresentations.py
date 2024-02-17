@@ -32,6 +32,8 @@ class LearningFairRepresentations(Algorithm):
         transformer = transformer.fit(standard_dataset, maxiter=5000, maxfun=5000)
         transformed_dataset = transformer.transform(standard_dataset)
 
+        print(transformed_dataset.labels)
+
         # convert into regular dataset
         new_dataset = set_dataset_features_and_labels(dataset, transformed_dataset.features, transformed_dataset.labels)
 

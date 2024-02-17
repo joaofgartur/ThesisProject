@@ -1,0 +1,24 @@
+import os
+import pandas as pd
+from datetime import datetime
+
+
+def create_directory(directory: str) -> None:
+    mode = 0o666
+    os.mkdir(directory, mode)
+
+
+def write_dataframe_to_csv(df: pd.DataFrame, dataset_name: str, algorithm_name, path: str) -> None:
+    # use date and time to create path
+    c = datetime.now()
+    time = c.strftime('%d_%m_%y-%H_%M_%S')
+
+    filename = time + f'-{dataset_name}-{algorithm_name}.csv'
+
+    if os.path.exists(path) & os.path.isdir(path):
+        path = os.path.join(path, filename)
+    else:
+        create_directory(path)
+        path = os.path.join(path, filename)
+
+    df.to_csv(path, sep=',', index=False, encoding='utf-8')
