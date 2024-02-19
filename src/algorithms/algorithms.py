@@ -6,6 +6,7 @@ Last edited: 20-11-2023
 import pandas as pd
 from aif360.datasets import StandardDataset
 
+from algorithms.Algorithm import Algorithm
 from datasets import Dataset
 from assessment import bias_assessment
 from errors import error_check_dataset
@@ -17,7 +18,7 @@ def scale_dataset(scaler, dataset: StandardDataset) -> StandardDataset:
     return dataset
 
 
-def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> pd.DataFrame:
+def bias_correction(dataset: Dataset, learning_settings: dict, algorithms: [Algorithm]) -> pd.DataFrame:
     """
     Apply a bias correction algorithm to a dataset and display pre- and post-correction assessment.
 
@@ -54,19 +55,21 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithm) -> pd.
         correction_results = bias_assessment(dataset, learning_settings)
         logger.info("Pre-correction assessment computed.")
 
-        # correction stage
-        for feature in dataset.protected_features:
-            logger.info(f"Applying bias correction for attribute {feature}...")
+        for algorithm in algorithms:
 
-            new_dataset = algorithm.repair(dataset, feature)
+            # correction stage
+            for feature in dataset.protected_features:
+                logger.info(f"Applying bias correction for attribute {feature}...")
 
-            logger.info(f"Finished correcting bias. Computing post-correction assessment "
-                        f"for attribute {feature}...")
+                new_dataset = algorithm.repair(dataset, feature)
 
-            results = bias_assessment(new_dataset, learning_settings, feature)
-            correction_results = pd.concat([correction_results, results])
+                logger.info(f"Finished correcting bias. Computing post-correction assessment "
+                            f"for attribute {feature}...")
 
-            logger.info("Post-correction assessment computed.")
+                results = bias_assessment(new_dataset, learning_settings, feature, algorithm, dataset.features[feature])
+                correction_results = pd.concat([correction_results, results])
+
+                logger.info("Post-correction assessment computed.")
 
         return correction_results
 

@@ -57,17 +57,15 @@ D
 src/errors/errors.py,0\7\0783a82d97662978d80027780abd2aca9879eefb
 D
 src/helpers/files.py,1\d\1d2fdddcc99a9f52fc041a0537dfcf6f548574cb
-c
-3src/results/16_02_24-10_02_51-COMPAS-Reweighing.csv,4\b\4b90a389e66b05f7fa8bd9e7d1d88ce98e1d8e43
 b
-2src/results/16_02_24-10_31_14-COMPAS-Massaging.csv,6\a\6a38aa6b84709a007d40a83a8b1a423a13007573
-c
-3src/results/16_02_24-10_31_31-COMPAS-Reweighing.csv,4\1\41823ea1a52e8da20917f0463f61bd7638d65556
-o
-?src/results/16_02_24-10_31_50-COMPAS-DisparateImpactRemover.csv,f\1\f1ddd34e3423482368daf566a330444aa879caeb
-{
-Ksrc/results/16_02_24-11_21_25-German Credit-LearningFairRepresentations.csv,6\a\6a78cc3efece9423b316857d052bf32f6f037635
-z
-Jsrc/results/16_02_24-11_58_03-Adult Income-LearningFairRepresentations.csv,7\6\76042965206e4c4a52c887b6a8a01d67bf0f8dac
-v
-Fsrc/results/16_02_24-11_21_13-German Credit-DisparateImpactRemover.csv,9\7\9745b42dacf3911c95107180bf6a5fca35b65019
+2src/datasets/local_storage/adult_income/adult.data,d\1\d15c00c9dc1bd5142fed3c88ee957605a47ffc3c
+d
+4src/datasets/local_storage/german_credit/german.data,3\f\3ffe8fda61f5a1da419ee2db65ca203c15474f6c
+G
+src/assessment/plots.py,6\a\6acc1ba0a15439842f3dbcd2b9179ac6da9404ef
+X
+(src/results/19_02_24-14_15_18-COMPAS.csv,f\3\f3ad97ab31e19bea34af6a699fdde758d7965af0
+X
+(src/results/19_02_24-14_23_52-COMPAS.csv,c\7\c7f573136e600d497d1c026237300780785cdfda
+^
+.src/results/19_02_24-14_25_50-Adult Income.csv,e\7\e79fc08d2928731657a8c8e40e24b982cb61d7b3

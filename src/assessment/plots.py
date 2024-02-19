@@ -14,7 +14,6 @@ def barplot(data: dict):
     width = 0.35  # the width of the bars
 
     for i, (attribute, measurement) in enumerate(data.items()):
-        print(attribute + " ->" + str(measurement))
         rects = ax.bar(x + i * width, measurement, width, label=attribute)
         ax.bar_label(rects, padding=3, fontsize=8, color='white')  # Adjusted bar_label parameters
 

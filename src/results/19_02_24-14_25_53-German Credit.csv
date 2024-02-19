@@ -1,0 +1,6 @@
+Dataset,Protected Attribute,Intervention Attribute,Algorithm,Classifier,Accuracy,Disparate Impact,Discrimination Score,True Positive Rate Diff,False Positive Rate Diff
+German Credit,Attribute9,NA,str,DecisionTreeClassifier,0.6533333333333333,0.8994697304463102,-0.0213,0.011485657882930045,0.03251837264037655
+German Credit,Attribute9,Attribute9,Massaging,DecisionTreeClassifier,0.7233333333333334,0.8275434243176178,-0.039,0.031656982568623565,0.056100981767180924
+German Credit,Attribute9,Attribute9,Reweighing,DecisionTreeClassifier,0.6433333333333333,0.9155799588194922,-0.0173,0.017358099283143413,0.015466641049041718
+German Credit,Attribute9,Attribute9,DisparateImpactRemover,DecisionTreeClassifier,0.67,0.9583333333333335,-0.0087,0.0025025174727564825,0.014169748787165537
+German Credit,Attribute9,Attribute9,LearningFairRepresentations,DecisionTreeClassifier,0.6933333333333332,0.9019607843137254,-0.0217,0.022542597633077116,0.00893414669292475

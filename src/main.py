@@ -83,17 +83,15 @@ if __name__ == '__main__':
 
     logger.info("Initializing...")
 
-    dataset = load_dataset(DatasetOptions.COMPAS)
+    for dataset in DatasetOptions:
 
-    for algo in AlgorithmOptions:
+        dataset = load_dataset(dataset)
 
-        algorithm = load_algorithm(algo)
+        algorithms = [load_algorithm(algo) for algo in AlgorithmOptions]
 
-        logger.info(f"Applying bias correction method {algorithm.__module__} to dataset {dataset.name}.")
+        results = bias_correction(dataset, _learning_settings, algorithms)
 
-        results = bias_correction(dataset, _learning_settings, algorithm)
-
-        write_dataframe_to_csv(df=results, dataset_name=dataset.name, algorithm_name=algorithm.__class__.__name__,
+        write_dataframe_to_csv(df=results, dataset_name=dataset.name,
                                path=results_path)
 
     logger.info("End of program.")

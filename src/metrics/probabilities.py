@@ -13,8 +13,10 @@ def safe_division(a: float, b: float) -> float:
 
 def joint_probability(data: pd.DataFrame, variables: dict) -> float:
     n_total = len(data)
+
     for var, value in variables.items():
         data = data[data[var] == value]
 
     n_target = len(data)
+
     return n_target / n_total if n_total != 0 else 0.0
