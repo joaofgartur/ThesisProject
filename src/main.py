@@ -83,11 +83,10 @@ if __name__ == '__main__':
 
     logger.info("Initializing...")
 
-    for dataset in DatasetOptions:
+    for i in DatasetOptions:
+        dataset = load_dataset(i)
 
-        dataset = load_dataset(dataset)
-
-        algorithms = [load_algorithm(AlgorithmOptions.DisparateImpactRemover)]
+        algorithms = [load_algorithm(algo) for algo in AlgorithmOptions]
 
         results = bias_correction(dataset, _learning_settings, algorithms)
 

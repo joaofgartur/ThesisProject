@@ -25,6 +25,7 @@ def filter_data(data):
 
 
 class Compas(Dataset):
+
     _LOCAL_DATA_FILE = "datasets/local_storage/compas/compas-scores-two-years.csv"
 
     def __init__(self, dataset_info: dict):
@@ -51,6 +52,9 @@ class Compas(Dataset):
         features = data.drop(columns={self.target})
 
         return features, targets
+
+    def _pre_process_dataset(self):
+        pass
 
     def _transform_protected_attributes(self):
 

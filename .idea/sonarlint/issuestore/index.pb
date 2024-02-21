@@ -63,13 +63,38 @@ d
 4src/datasets/local_storage/german_credit/german.data,3\f\3ffe8fda61f5a1da419ee2db65ca203c15474f6c
 G
 src/assessment/plots.py,6\a\6acc1ba0a15439842f3dbcd2b9179ac6da9404ef
+m
+=src/datasets/local_storage/compas/compas-scores-two-years.csv,9\0\90d12a6812b49d484cc83d4102f04bbf58bd2379
+^
+.src/results/21_02_24-15_01_11-Adult Income.csv,d\0\d00c09bcd5562f5e447dcc56fc3a23316db5bb38
+:
+
+.gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
+^
+.src/results/21_02_24-15_13_36-Adult Income.csv,5\3\5317c7356d587ca2a80114552bfa3b96afd2ea30
 X
-(src/results/20_02_24-17_01_23-COMPAS.csv,4\6\4664aa3b05e62daf15fe9a56df72231b037f8ca5
+(src/results/21_02_24-15_26_12-COMPAS.csv,c\1\c1c55f47d0b5d000a82d17ccaeddc92b4bce6204
 ^
-.src/results/20_02_24-17_02_50-Adult Income.csv,5\5\55d6444457539bc2b400c3d09dd34a3a5489892b
+.src/results/21_02_24-15_30_21-Adult Income.csv,b\a\ba3d9e2568a15af28b0e1721d42f2e41e1edbf1a
 _
-/src/results/20_02_24-17_02_54-German Credit.csv,d\1\d177ed533162d9920ab8ffd59726d4abedf618d7
-_
-/src/results/20_02_24-17_36_04-German Credit.csv,a\7\a76dab9b8669141b9baceb182599295c9fa8b71d
+/src/results/21_02_24-15_30_27-German Credit.csv,3\d\3d74c1bb359c63dd3899ac0d835124c06f5239ee
+X
+(src/results/21_02_24-15_38_09-COMPAS.csv,0\f\0feac9efe46ce20c12c2aa27b2d618a05a90652b
 ^
-.src/results/20_02_24-17_36_03-Adult Income.csv,3\e\3e874a12188027a3e170e0893a301b8e5c12a0da
+.src/results/21_02_24-15_43_27-Adult Income.csv,b\0\b0e7adc9c1d50200bab32d7d83cac3a4b84d5abb
+_
+/src/results/21_02_24-15_43_33-German Credit.csv,4\a\4a556df524de6bcfb91bc08d21d549329bfa00d2
+X
+(src/results/21_02_24-16_24_47-COMPAS.csv,3\4\34220ad8499aa628299a9b58c43364db156166b2
+^
+.src/results/21_02_24-16_25_00-Adult Income.csv,9\7\972b28f780714ae2cd8d4447ebaa9483fff1e464
+_
+/src/results/21_02_24-16_25_02-German Credit.csv,e\c\ecd4d157065d712efc9bef7631c26a83189a26b0
+^
+.src/results/21_02_24-15_18_30-Adult Income.csv,8\b\8b2ec2bcbe646b065e71d5d5f11b070683c3a212
+X
+(src/results/21_02_24-16_27_46-COMPAS.csv,8\0\80e1a3a4be3784f08c5f5386c30a17d70144be93
+^
+.src/results/21_02_24-16_31_03-Adult Income.csv,e\a\ea5babd01cca8d4b5b053f88ec0910dbdcbc27ee
+_
+/src/results/21_02_24-16_31_08-German Credit.csv,6\c\6c15289a1d471ae113f2b9a67224a786b8d21a22

@@ -2,7 +2,7 @@ import abc
 
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler, Binarizer
 
 from datasets import drop_invalid_instances, convert_categorical_into_numerical
 from helpers import logger, extract_value
@@ -41,6 +41,10 @@ class Dataset(metaclass=abc.ABCMeta):
         self.target = extract_value(target, dataset_info)
 
     @abc.abstractmethod
+    def _pre_process_dataset(self):
+        """Pre-processes the dataset"""
+
+    @abc.abstractmethod
     def _load_dataset(self):
         """Loads the dataset"""
 
@@ -59,6 +63,9 @@ class Dataset(metaclass=abc.ABCMeta):
         new_indexes = np.arange(0, len(self.features), 1, dtype=int)
         self.features.index = new_indexes
         self.targets.index = new_indexes
+
+        # apply pre_processing
+        self._pre_process_dataset()
 
         # transform protected attributes
         self._transform_protected_attributes()
@@ -80,6 +87,15 @@ class Dataset(metaclass=abc.ABCMeta):
         outcome = self.targets.columns[0]
 
         return data, outcome
+
+    def get_train_sample_weights(self, train_set: np.ndarray) -> np.ndarray:
+        if self.instance_weights is None:
+            raise ValueError('Instance weights are none.')
+
+        indexes = self.features.index[self.features.isin(train_set).any(axis=1)]
+        print(f'indexes: {indexes}')
+
+        return self.instance_weights[indexes]
 
     def print_dataset(self):
         """Prints the dataset"""

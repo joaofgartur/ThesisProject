@@ -20,7 +20,7 @@ from sklearn.preprocessing import StandardScaler
 from errors import error_check_dataset, error_check_dictionary_keys
 
 
-def train_classifier(dataset: Dataset, classifier: object, learning_settings: dict) -> float:
+def train_classifier(dataset: Dataset, classifier: object, learning_settings: dict) -> tuple[Any, Any]:
     """
     Train a classifier on the specified dataset and return the mean test score.
 
@@ -45,8 +45,8 @@ def train_classifier(dataset: Dataset, classifier: object, learning_settings: di
         - If the dataset does not contain both features and targets.
         - If 'test_size' and 'train_size' are not provided in the learning settings.
     """
-    _TRAIN_SIZE_KEY = "test_size"
-    _TEST_SIZE_KEY = "train_size"
+    _TRAIN_SIZE_KEY = "train_size"
+    _TEST_SIZE_KEY = "test_size"
     _CROSS_VALIDATION = 'cross_validation'
 
     error_check_dataset(dataset)
@@ -54,18 +54,27 @@ def train_classifier(dataset: Dataset, classifier: object, learning_settings: di
 
     pipeline = Pipeline([
         ('normalizer', StandardScaler()),
-        ('clf', classifier)
+        ('classifier', classifier)
     ])
 
     x_train, __, y_train, __ = train_test_split(dataset.features, dataset.targets,
-                                                        test_size=learning_settings[_TEST_SIZE_KEY],
-                                                        train_size=learning_settings[_TRAIN_SIZE_KEY])
+                                                test_size=learning_settings[_TEST_SIZE_KEY],
+                                                train_size=learning_settings[_TRAIN_SIZE_KEY])
+
+    if dataset.instance_weights is not None:
+        train_sample_weights = dataset.get_train_sample_weights(x_train)
+        predictions = cross_val_predict(pipeline, x_train, y_train.values.ravel(),
+                                        cv=learning_settings[_CROSS_VALIDATION],
+                                        fit_params={'classifier__sample_weight': train_sample_weights})
+    else:
+        predictions = cross_val_predict(pipeline, x_train, y_train.values.ravel(),
+                                        cv=learning_settings[_CROSS_VALIDATION])
 
     # Compute mean test score
     scores = cross_validate(pipeline, x_train, y_train.values.ravel())
     accuracy = scores['test_score'].mean()
 
-    return accuracy
+    return predictions, accuracy
 
 
 def train_all_classifiers(dataset: Dataset, learning_settings: dict) -> dict:

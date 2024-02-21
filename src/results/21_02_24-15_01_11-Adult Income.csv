@@ -1,0 +1,7 @@
+Dataset,Protected Attribute,Intervention Attribute,Algorithm,Classifier,Accuracy,Disparate Impact,Discrimination Score
+Adult Income,race,NA,NA,LogisticRegression,0.8058438977241057,0.60099115,-0.1025746
+Adult Income,sex,NA,NA,LogisticRegression,0.8048538797182554,0.36052834,-0.19632463
+Adult Income,race,race,LearningFairRepresentations,LogisticRegression,0.9998500029994,1.80234627,0.01927866
+Adult Income,sex,race,LearningFairRepresentations,LogisticRegression,0.99987999699925,0.0,-0.03995366
+Adult Income,race,sex,LearningFairRepresentations,LogisticRegression,0.9999699969997,0.0,-0.00120139
+Adult Income,sex,sex,LearningFairRepresentations,LogisticRegression,0.9999400029998501,0.0,0.0031242

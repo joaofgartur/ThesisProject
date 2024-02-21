@@ -7,6 +7,7 @@ from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
 
 
 class GermanCredit(Dataset):
+
     _LOCAL_DATA_FILE = "datasets/local_storage/german_credit/german.data"
 
     def __init__(self, dataset_info: dict):
@@ -34,6 +35,9 @@ class GermanCredit(Dataset):
             features = dataset.drop(columns=[self.target])
 
             return features, targets
+
+    def _pre_process_dataset(self):
+        pass
 
     def _transform_protected_attributes(self):
 

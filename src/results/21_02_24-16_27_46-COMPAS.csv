@@ -1,0 +1,19 @@
+Dataset,Protected Attribute,Intervention Attribute,Algorithm,Classifier,Accuracy,Disparate Impact,Discrimination Score
+COMPAS,race,NA,NA,LogisticRegression,0.9703703703703704,1.02740032,0.00966764
+COMPAS,sex,NA,NA,LogisticRegression,0.9701388888888889,1.00134378,0.0004854
+COMPAS,race,race,Massaging,LogisticRegression,0.9377314814814814,0.99511896,-0.0018359
+COMPAS,sex,race,Massaging,LogisticRegression,0.9354166666666666,0.95241858,-0.01772996
+COMPAS,race,sex,Massaging,LogisticRegression,0.9680555555555556,1.00495617,0.00178168
+COMPAS,sex,sex,Massaging,LogisticRegression,0.969675925925926,1.04067127,0.01460161
+COMPAS,race,race,Reweighing,LogisticRegression,0.9729166666666667,0.98360931,-0.00595458
+COMPAS,sex,race,Reweighing,LogisticRegression,0.9726851851851851,1.00459038,0.00163332
+COMPAS,race,sex,Reweighing,LogisticRegression,0.9722222222222221,0.97452558,-0.00931518
+COMPAS,sex,sex,Reweighing,LogisticRegression,0.9722222222222221,0.95531476,-0.01648087
+COMPAS,race,race,DisparateImpactRemover,LogisticRegression,0.968287037037037,0.98064332,-0.00708733
+COMPAS,sex,race,DisparateImpactRemover,LogisticRegression,0.9710648148148149,1.0107682,0.00388965
+COMPAS,race,sex,DisparateImpactRemover,LogisticRegression,0.9710648148148147,0.94873715,-0.01913521
+COMPAS,sex,sex,DisparateImpactRemover,LogisticRegression,0.9706018518518518,1.02741946,0.00994827
+COMPAS,race,race,LearningFairRepresentations,LogisticRegression,1.0,0.96931626,-0.01124925
+COMPAS,sex,race,LearningFairRepresentations,LogisticRegression,1.0,0.89912954,-0.03675908
+COMPAS,race,sex,LearningFairRepresentations,LogisticRegression,1.0,0.98272312,-0.00633403
+COMPAS,sex,sex,LearningFairRepresentations,LogisticRegression,1.0,0.9960363,-0.00141906

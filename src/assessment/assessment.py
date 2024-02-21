@@ -3,8 +3,6 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-import copy
-
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
@@ -18,14 +16,15 @@ from datasets import Dataset
 from classifiers.classifiers import train_classifier
 from metrics import compute_metrics_suite
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger
+from helpers import logger, set_dataset_labels
 
 
 def assess_classifier(classifier: object, dataset: Dataset, sensitive_attribute: str, settings: dict):
     classifier_name = classifier.__class__.__name__
 
     # obtain classifier performance
-    accuracy = train_classifier(dataset, classifier, settings)
+    predictions, accuracy = train_classifier(dataset, classifier, settings)
+    dataset = set_dataset_labels(dataset, predictions)
 
     # compute fairness metrics
     metrics = compute_metrics_suite(dataset, sensitive_attribute)
@@ -67,12 +66,12 @@ def bias_assessment(dataset: Dataset, settings: dict, intervention_attribute: st
     error_check_dataset(dataset)
 
     classifiers = {
-        #"Logistic Regression": LogisticRegression(),
+        "Logistic Regression": LogisticRegression(),
         #"Support Vector Machine": SVC(),
         #"Naive Bayes": GaussianNB(),
         #"Stochastic Gradient": SGDClassifier(),
         #"K-Nearest Neighbours": KNeighborsClassifier(),
-        "Decision Tree": DecisionTreeClassifier(),
+        #"Decision Tree": DecisionTreeClassifier(),
         #"Random Forest": RandomForestClassifier()
     }
 

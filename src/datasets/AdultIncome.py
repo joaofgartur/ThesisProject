@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.preprocessing import KBinsDiscretizer
 from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
@@ -32,6 +33,33 @@ class AdultIncome(Dataset):
             features = dataset.drop(columns=["income"])
 
             return features, targets
+
+    def _pre_process_dataset(self):
+        """
+        Pre-processing method based on 'Three naive Bayes approaches for discrimination-free
+        classification'
+        Returns
+        -------
+
+        """
+        numerical_data = self.features.select_dtypes(include='number')
+        categorical_data = self.features.drop(numerical_data, axis=1)
+
+        # discretize numerical attributes
+        discretizer = KBinsDiscretizer(n_bins=4, encode='ordinal', strategy='quantile')
+        numerical_data_discretized = pd.DataFrame(discretizer.fit_transform(numerical_data),
+                                                  columns=numerical_data.columns)
+
+        # Combine discretized numerical attributes with categorical attributes
+        data_preprocessed = pd.concat([categorical_data, numerical_data_discretized], axis=1)
+
+        # Handling low frequency counts (pooling)
+        for column in data_preprocessed.columns:
+            counts = data_preprocessed[column].value_counts()
+            infrequent_values = counts[counts < 50].index
+            data_preprocessed.loc[data_preprocessed[column].isin(infrequent_values), column] = 'pool'
+
+        self.features = data_preprocessed
 
     def _transform_protected_attributes(self):
 
