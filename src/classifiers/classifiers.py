@@ -20,7 +20,7 @@ from sklearn.preprocessing import StandardScaler
 from errors import error_check_dataset, error_check_dictionary_keys
 
 
-def train_classifier(dataset: Dataset, classifier: object, learning_settings: dict) -> tuple[Any, Any]:
+def train_classifier(dataset: Dataset, classifier: object, learning_settings: dict) -> float:
     """
     Train a classifier on the specified dataset and return the mean test score.
 
@@ -61,14 +61,11 @@ def train_classifier(dataset: Dataset, classifier: object, learning_settings: di
                                                         test_size=learning_settings[_TEST_SIZE_KEY],
                                                         train_size=learning_settings[_TRAIN_SIZE_KEY])
 
-    # Perform cross-validated predictions
-    predictions = cross_val_predict(pipeline, x_train, y_train.values.ravel(), cv=learning_settings[_CROSS_VALIDATION])
-
     # Compute mean test score
     scores = cross_validate(pipeline, x_train, y_train.values.ravel())
     accuracy = scores['test_score'].mean()
 
-    return predictions, accuracy
+    return accuracy
 
 
 def train_all_classifiers(dataset: Dataset, learning_settings: dict) -> dict:

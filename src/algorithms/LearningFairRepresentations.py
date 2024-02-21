@@ -5,6 +5,19 @@ from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
 from helpers import (convert_to_standard_dataset, set_dataset_features_and_labels, logger)
 
+def is_dataframe_uniform(df):
+    """
+    Check if all elements in the DataFrame are the same.
+
+    Parameters:
+    df (DataFrame): Input DataFrame.
+
+    Returns:
+    bool: True if all elements are the same, False otherwise.
+    """
+    first_element = df.iloc[0, 0]  # Get the value of the first element
+    return (df == first_element).all().all()
+
 
 class LearningFairRepresentations(Algorithm):
 
@@ -25,13 +38,13 @@ class LearningFairRepresentations(Algorithm):
         transformer = LFR(unprivileged_groups=unprivileged_groups,
                           privileged_groups=privileged_groups,
                           k=10, Ax=0.1, Ay=1.0, Az=2.0,
-                          verbose=1
-                          )
-        transformer = transformer.fit(standard_dataset, maxiter=10, maxfun=5000)
-        transformed_dataset = transformer.transform(standard_dataset)
+                          verbose=1)
+        transformed_dataset = transformer.fit_transform(standard_dataset, maxiter=10)
 
         # convert into regular dataset
-        new_dataset = set_dataset_features_and_labels(dataset, transformed_dataset.features, dataset.targets)
+        new_dataset = set_dataset_features_and_labels(dataset=dataset,
+                                                      features=transformed_dataset.features,
+                                                      labels=transformed_dataset.labels)
 
         logger.info(f"Dataset {dataset.name} repaired.")
 

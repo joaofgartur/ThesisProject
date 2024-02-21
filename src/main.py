@@ -68,7 +68,7 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.Reweighing:
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
-            return DisparateImpactRemover(repair_level=0.1)
+            return DisparateImpactRemover(repair_level=1.0)
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations()
         case _:
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
         dataset = load_dataset(dataset)
 
-        algorithms = [load_algorithm(algo) for algo in AlgorithmOptions]
+        algorithms = [load_algorithm(AlgorithmOptions.DisparateImpactRemover)]
 
         results = bias_correction(dataset, _learning_settings, algorithms)
 

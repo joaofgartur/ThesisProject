@@ -64,8 +64,12 @@ d
 G
 src/assessment/plots.py,6\a\6acc1ba0a15439842f3dbcd2b9179ac6da9404ef
 X
-(src/results/19_02_24-14_15_18-COMPAS.csv,f\3\f3ad97ab31e19bea34af6a699fdde758d7965af0
-X
-(src/results/19_02_24-14_23_52-COMPAS.csv,c\7\c7f573136e600d497d1c026237300780785cdfda
+(src/results/20_02_24-17_01_23-COMPAS.csv,4\6\4664aa3b05e62daf15fe9a56df72231b037f8ca5
 ^
-.src/results/19_02_24-14_25_50-Adult Income.csv,e\7\e79fc08d2928731657a8c8e40e24b982cb61d7b3
+.src/results/20_02_24-17_02_50-Adult Income.csv,5\5\55d6444457539bc2b400c3d09dd34a3a5489892b
+_
+/src/results/20_02_24-17_02_54-German Credit.csv,d\1\d177ed533162d9920ab8ffd59726d4abedf618d7
+_
+/src/results/20_02_24-17_36_04-German Credit.csv,a\7\a76dab9b8669141b9baceb182599295c9fa8b71d
+^
+.src/results/20_02_24-17_36_03-Adult Income.csv,3\e\3e874a12188027a3e170e0893a301b8e5c12a0da

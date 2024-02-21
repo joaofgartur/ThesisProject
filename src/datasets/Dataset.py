@@ -2,7 +2,7 @@ import abc
 
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 from datasets import drop_invalid_instances, convert_categorical_into_numerical
 from helpers import logger, extract_value
@@ -14,6 +14,7 @@ class Dataset(metaclass=abc.ABCMeta):
         """Initializes class instance"""
         self.features_mapping = None
         self.targets_mapping = None
+        self.instance_weights = None
 
         self.__parse_dataset_info(dataset_info)
 
@@ -22,6 +23,9 @@ class Dataset(metaclass=abc.ABCMeta):
 
         # preprocess dataset
         self._preprocessing()
+
+        # save original values for protected attributes
+        self.original_protected_features = self.get_protected_features().add_prefix('orig_')
 
     def __parse_dataset_info(self, dataset_info: dict):
         dataset_name = 'dataset_name'
@@ -67,8 +71,6 @@ class Dataset(metaclass=abc.ABCMeta):
         scaler = MinMaxScaler(copy=False)
         normalized_features = scaler.fit_transform(self.features)
         self.features = pd.DataFrame(normalized_features, columns=self.features.columns)
-
-
 
     def get_protected_features(self) -> pd.DataFrame:
         return self.features.loc[:, self.protected_features]

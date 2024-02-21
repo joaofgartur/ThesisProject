@@ -122,7 +122,7 @@ class Massaging(Algorithm):
             logging.error(f"An error occurred during class probability computation: {e}")
             raise
 
-    def __ranking__(self, dataset: Dataset, sensitive_attribute: str) -> Tuple[np.array, np.array]:
+    def __rank_candidates__(self, dataset: Dataset, sensitive_attribute: str) -> Tuple[np.array, np.array]:
         """
         Rank candidates for promotion and demotion based on class probabilities.
 
@@ -177,34 +177,34 @@ class Massaging(Algorithm):
 
     def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
         """
-            Apply massaging technique to modify dataset targets.
+        Apply massaging technique to modify dataset targets.
 
-            Parameters
-            ----------
-            dataset :
-                Original dataset object containing features and targets.
-            sensitive_attribute :
-                Name of the data column representing the relevant attribute.
+        Parameters
+        ----------
+        dataset :
+            Original dataset object containing features and targets.
+        sensitive_attribute :
+            Name of the data column representing the relevant attribute.
 
-            Returns
-            -------
-            new_dataset :
-                Modified dataset with massaging applied.
+        Returns
+        -------
+        new_dataset :
+            Modified dataset with massaging applied.
 
-            Raises
-            ------
-            ValueError
-                - If an invalid dataset is provided.
-                - If the dataset does not contain both features and targets.
-                - If the sensitive attribute is not present in the dataset.
-                """
-        logger.info(f"Repairing dataset {dataset.name} via Massaging...")
+        Raises
+        ------
+        ValueError
+            - If an invalid dataset is provided.
+            - If the dataset does not contain both features and targets.
+            - If the sensitive attribute is not present in the dataset.
+        """
+        logger.info(f"Repairing dataset {dataset.name} via {self.__class__.__name__}...")
 
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
         new_dataset = copy.deepcopy(dataset)
-        promotion_candidates, demotion_candidates = self.__ranking__(dataset, sensitive_attribute)
+        promotion_candidates, demotion_candidates = self.__rank_candidates__(dataset, sensitive_attribute)
         m = self.__compute_m(dataset, sensitive_attribute)
 
         for __ in range(m):

@@ -18,22 +18,17 @@ from datasets import Dataset
 from classifiers.classifiers import train_classifier
 from metrics import compute_metrics_suite
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger, set_dataset_labels
+from helpers import logger
 
 
-def assess_classifier(classifier: object, dataset: Dataset, sensitive_attribute: str, settings: dict,
-                      original_sensitive_value: pd.DataFrame = None):
+def assess_classifier(classifier: object, dataset: Dataset, sensitive_attribute: str, settings: dict):
     classifier_name = classifier.__class__.__name__
 
-    # obtain predictions
-    predictions, accuracy = train_classifier(dataset, classifier, settings)
-    predicted_dataset = set_dataset_labels(dataset, predictions)
-
-    if original_sensitive_value is not None:
-        dataset.features[sensitive_attribute] = original_sensitive_value
+    # obtain classifier performance
+    accuracy = train_classifier(dataset, classifier, settings)
 
     # compute fairness metrics
-    metrics = compute_metrics_suite(dataset, predicted_dataset, sensitive_attribute)
+    metrics = compute_metrics_suite(dataset, sensitive_attribute)
 
     # save results
     results = [classifier_name, accuracy]
@@ -42,15 +37,14 @@ def assess_classifier(classifier: object, dataset: Dataset, sensitive_attribute:
     return results
 
 
-def bias_assessment(dataset: Dataset, settings: dict, intervention_attribute: str = 'NA', algorithm: str = 'NA',
-                    original_values: pd.DataFrame = None) -> pd.DataFrame:
+def bias_assessment(dataset: Dataset, settings: dict, intervention_attribute: str = 'NA', algorithm: str = 'NA') \
+        -> pd.DataFrame:
     """
     Conduct assessment on a dataset, including fairness metrics and classifier accuracies.
 
     Parameters
     ----------
     algorithm
-    original_values
     intervention_attribute
     dataset : Dataset
         The dataset object containing features, targets, and sensitive attributes.
@@ -92,13 +86,12 @@ def bias_assessment(dataset: Dataset, settings: dict, intervention_attribute: st
 
         # assess classifier performance
         for classifier in classifiers:
-            classifier_results = [dataset.name, sensitive_attribute, intervention_attribute, algorithm.__class__.__name__]
-            classifier_results += assess_classifier(classifiers[classifier], dataset, sensitive_attribute, settings,
-                                                    original_values)
+            classifier_results = [dataset.name, sensitive_attribute, intervention_attribute,
+                                  algorithm]
+            classifier_results += assess_classifier(classifiers[classifier], dataset, sensitive_attribute, settings)
             results.append(classifier_results)
 
     results = pd.DataFrame(results, columns=['Dataset', 'Protected Attribute', 'Intervention Attribute', 'Algorithm',
-                                             'Classifier', 'Accuracy', "Disparate Impact", "Discrimination Score",
-                                             'True Positive Rate Diff', 'False Positive Rate Diff'])
+                                             'Classifier', 'Accuracy', "Disparate Impact", "Discrimination Score"])
 
     return results

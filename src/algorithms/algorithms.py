@@ -66,7 +66,7 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithms: [Algo
                 logger.info(f"Finished correcting bias. Computing post-correction assessment "
                             f"for attribute {feature}...")
 
-                results = bias_assessment(new_dataset, learning_settings, feature, algorithm, dataset.features[feature])
+                results = bias_assessment(new_dataset, learning_settings, feature, algorithm.__class__.__name__)
                 correction_results = pd.concat([correction_results, results])
 
                 logger.info("Post-correction assessment computed.")
