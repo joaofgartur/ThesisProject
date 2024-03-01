@@ -66,8 +66,7 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithms: [Algo
                             f"for attribute {feature}...")
 
                 results = assess_all_surrogates(new_dataset, learning_settings, feature, algorithm.__class__.__name__)
-                print(results)
-                # correction_results = pd.concat([correction_results, results])
+                correction_results = pd.concat([correction_results, results])
 
                 logger.info("Post-protocol assessment computed.")
 

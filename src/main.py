@@ -8,7 +8,7 @@ from enum import Enum
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
-from helpers import logger, logger_levels, config_logger, write_dataframe_to_csv
+from helpers import logger, logger_levels, config_logger
 
 
 class DatasetOptions(Enum):
@@ -89,22 +89,9 @@ if __name__ == '__main__':
     logger.info("Initializing...")
 
     dataset = load_dataset(DatasetOptions.GERMAN)
-    algo = load_algorithm(AlgorithmOptions.Massaging)
 
-    pipeline = Pipeline(dataset, algo, settings)
-    pipeline.run()
-
-    """
-    for i in DatasetOptions:
-        dataset = load_dataset(i)
-
-        algorithms = [load_algorithm(algo) for algo in AlgorithmOptions]
-
-        results = bias_correction(dataset, settings, algorithms)
-
-        write_dataframe_to_csv(df=results, dataset_name=dataset.name,
-                               path=results_path)
-                               
-    """
+    algorithm = load_algorithm(AlgorithmOptions.Reweighing)
+    pipeline = Pipeline(dataset, algorithm, settings)
+    pipeline.run_and_save()
 
     logger.info("End of program.")

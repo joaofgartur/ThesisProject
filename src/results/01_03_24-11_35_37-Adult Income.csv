@@ -1,0 +1,7 @@
+Dataset,Protected Attribute,Intervention Attribute,Algorithm,Classifier,Accuracy,Disparate Impact,Discrimination Score,TPRDiff,FPRDiff
+Adult Income,race,NA,NA,LogisticRegression,0.8020098995050248,0.9583,-1.7093,0.1236,0.0098
+Adult Income,sex,NA,NA,LogisticRegression,0.8020098995050248,0.9513,-2.0158,-0.0238,1.2146
+Adult Income,race,race,Massaging,LogisticRegression,0.7708114594270287,1.0102,0.6533,0.0853,-0.7738
+Adult Income,sex,race,Massaging,LogisticRegression,0.7708114594270287,0.9053,-6.2596,0.0218,2.99
+Adult Income,race,sex,Massaging,LogisticRegression,0.7568621568921554,0.6968,-156.5416,9.3761,33.575
+Adult Income,sex,sex,Massaging,LogisticRegression,0.7568621568921554,0.7754,-119.5465,12.5556,9.4759

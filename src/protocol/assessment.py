@@ -44,11 +44,10 @@ def assess_surrogate_model(model: object, dataset: Dataset, sensitive_attribute:
     predicted_data = set_dataset_targets(validation_data, predictions)
 
     metrics = compute_metrics_suite(validation_data, predicted_data, sensitive_attribute)
-    print(metrics)
 
     # save results
     results = [classifier_name, accuracy]
-    # results += metrics.values()
+    results += metrics.values()
 
     return results
 
@@ -100,10 +99,9 @@ def assess_all_surrogates(dataset: Dataset, settings: dict, intervention_attribu
             local_results = [dataset.name, feature, intervention_attribute, algorithm]
             local_results += assess_surrogate_model(surrogate_classifiers[surrogate], dataset, feature, settings)
 
-            print(local_results)
-            # global_results.append(local_results)
+            global_results.append(local_results)
 
-    # global_results = pd.DataFrame(global_results, columns=['Dataset', 'Protected Attribute', 'Intervention Attribute', 'Algorithm',
-                                             # 'Classifier', 'Accuracy', "Disparate Impact", "Discrimination Score"])
+    global_results = pd.DataFrame(global_results, columns=['Dataset', 'Protected Attribute', 'Intervention Attribute', 'Algorithm',
+                                             'Classifier', 'Accuracy', "Disparate Impact", "Discrimination Score", 'TPRDiff', 'FPRDiff'])
 
     return global_results

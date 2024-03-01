@@ -1,0 +1,7 @@
+Dataset,Protected Attribute,Intervention Attribute,Algorithm,Classifier,Accuracy,Disparate Impact,Discrimination Score,TPRDiff,FPRDiff
+COMPAS,race,NA,NA,LogisticRegression,0.9699074074074074,0.9575,-0.6161,-0.0063,-0.0227
+COMPAS,sex,NA,NA,LogisticRegression,0.9699074074074074,1.0364,0.509,0.0122,0.0418
+COMPAS,race,race,LearningFairRepresentations,LogisticRegression,1.0,0.9575,-0.6161,0.0,-0.0243
+COMPAS,sex,race,LearningFairRepresentations,LogisticRegression,1.0,1.0364,0.509,0.0,0.0447
+COMPAS,race,sex,LearningFairRepresentations,LogisticRegression,1.0,0.9575,-0.6161,0.0,-0.0243
+COMPAS,sex,sex,LearningFairRepresentations,LogisticRegression,1.0,1.0364,0.509,0.0,0.0447
