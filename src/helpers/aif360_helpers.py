@@ -47,8 +47,8 @@ def set_dataset_features(dataset: Dataset, features: np.ndarray):
     return new_dataset
 
 
-def set_dataset_labels(dataset: Dataset, labels: np.ndarray):
+def set_dataset_targets(dataset: Dataset, targets: np.ndarray):
     new_dataset = copy.deepcopy(dataset)
-    new_dataset.targets = pd.DataFrame(labels, columns=dataset.targets.columns)
+    new_dataset.targets = pd.DataFrame(targets, columns=dataset.targets.columns)
 
     return new_dataset

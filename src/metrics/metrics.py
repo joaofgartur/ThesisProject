@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 
 from datasets import Dataset
-from metrics import conditional_probability
+from metrics import conditional_probability, joint_probability
 from constants import PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 
 Y = 'y'
@@ -32,11 +32,14 @@ def disparate_impact(data: pd.DataFrame, sensitive_attribute: str):
         The disparate impact.
     """
 
-    unprivileged_cp = conditional_probability(data, Y, POSITIVE_OUTCOME, sensitive_attribute, UNPRIVILEGED)
-    privileged_cp = conditional_probability(data, Y, POSITIVE_OUTCOME, sensitive_attribute, PRIVILEGED)
+    unprivileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: UNPRIVILEGED}) /
+                       joint_probability(data, {sensitive_attribute: UNPRIVILEGED}))
+
+    privileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: PRIVILEGED}) /
+                     joint_probability(data, {sensitive_attribute: PRIVILEGED}))
 
     try:
-        return np.round_(unprivileged_cp / privileged_cp, decimals=8)
+        return np.round_(unprivileged_cp / privileged_cp, decimals=4)
     except ZeroDivisionError:
         return 0.0
 
@@ -59,21 +62,47 @@ def discrimination_score(data: pd.DataFrame, sensitive_attribute: str):
 
     """
 
-    unprivileged_cp = conditional_probability(data, Y, POSITIVE_OUTCOME, sensitive_attribute,
-                                              UNPRIVILEGED)
-    privileged_cp = conditional_probability(data, Y, POSITIVE_OUTCOME, sensitive_attribute,
-                                            PRIVILEGED)
+    unprivileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: UNPRIVILEGED}) /
+                       joint_probability(data, {sensitive_attribute: UNPRIVILEGED}))
 
-    return np.round_(unprivileged_cp - privileged_cp, decimals=8)
+    privileged_cp = (joint_probability(data, {Y_PRED: POSITIVE_OUTCOME, sensitive_attribute: PRIVILEGED}) /
+                     joint_probability(data, {sensitive_attribute: PRIVILEGED}))
+
+    return np.round_(unprivileged_cp - privileged_cp, decimals=4)
 
 
-def compute_metrics_suite(dataset: Dataset, sensitive_attribute: str) -> dict:
+def false_positive_rate_diff(data: pd.DataFrame, sensitive_attribute: str):
+    fpr_privileged = (
+            joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: NEGATIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
+            / joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: NEGATIVE_OUTCOME}))
+
+    fpr_unprivileged = (
+            joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: NEGATIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
+            / joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: NEGATIVE_OUTCOME}))
+
+    return np.round_(fpr_privileged - fpr_unprivileged, decimals=4)
+
+
+def true_positive_rate_diff(data: pd.DataFrame, sensitive_attribute: str):
+    tpr_privileged = (
+            joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: POSITIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
+            / joint_probability(data, {sensitive_attribute: PRIVILEGED, Y: POSITIVE_OUTCOME}))
+
+    tpr_unprivileged = (
+            joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: POSITIVE_OUTCOME, Y_PRED: POSITIVE_OUTCOME})
+            / joint_probability(data, {sensitive_attribute: UNPRIVILEGED, Y: POSITIVE_OUTCOME}))
+
+    return np.round_(tpr_privileged - tpr_unprivileged, decimals=4)
+
+
+def compute_metrics_suite(original_data: Dataset, predicted_data: Dataset, sensitive_attribute: str) -> dict:
     """
     Compute fairness metrics suite for a given dataset and sensitive attribute.
 
     Parameters
     ----------
-    dataset :
+    predicted_data
+    original_data :
         The dataset object containing features, targets, and sensitive attributes.
     sensitive_attribute :
         The sensitive attribute label.
@@ -89,15 +118,19 @@ def compute_metrics_suite(dataset: Dataset, sensitive_attribute: str) -> dict:
     """
 
     # prepare data
-    y = dataset.targets.squeeze().rename(Y)
-    data = pd.concat([dataset.features, dataset.original_protected_features, y], axis='columns')
+    y = original_data.targets.squeeze().rename(Y)
+    y_pred = predicted_data.targets.squeeze().rename(Y_PRED)
+    data = pd.concat([original_data.features, original_data.original_protected_features, y, y_pred], axis='columns')
 
     # prepare sensitive_attribute
     sensitive_attribute = 'orig_' + sensitive_attribute
 
+    tpr_score = true_positive_rate_diff(data, sensitive_attribute)
+    fpr_score = false_positive_rate_diff(data, sensitive_attribute)
     di = disparate_impact(data, sensitive_attribute)
     ds = discrimination_score(data, sensitive_attribute)
 
-    metrics = {"Disparate Impact": di, "Discrimination Score": ds}
+    metrics = {"Disparate Impact": di, "Discrimination Score": ds, 'True Positive Rate Diff': tpr_score,
+               'False Positive Rate Diff': fpr_score}
 
     return metrics

@@ -17,7 +17,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 from datasets import Dataset
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger
+from helpers import logger, set_dataset_targets
+from metrics import compute_metrics_suite
 
 
 def assess_surrogate_model(model: object, dataset: Dataset, sensitive_attribute: str, settings: dict):
@@ -40,11 +41,10 @@ def assess_surrogate_model(model: object, dataset: Dataset, sensitive_attribute:
     predictions = pipeline.predict(validation_data.features)
     accuracy = accuracy_score(y_val, predictions.ravel())
 
-    # obtain classifier performance
-    # dataset = set_dataset_labels(dataset, predictions)
+    predicted_data = set_dataset_targets(validation_data, predictions)
 
-    # compute fairness metrics
-    # metrics = compute_metrics_suite(dataset, sensitive_attribute)
+    metrics = compute_metrics_suite(validation_data, predicted_data, sensitive_attribute)
+    print(metrics)
 
     # save results
     results = [classifier_name, accuracy]

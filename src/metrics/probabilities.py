@@ -7,6 +7,21 @@ Last edited: 20-11-2023
 import pandas as pd
 
 
+def joint_probability(data: pd.DataFrame, variables: dict) -> float:
+
+    filtered_data = data.copy()
+    for var, value in variables.items():
+        filtered_data = filtered_data[filtered_data[var] == value]
+
+    n_total = len(data)
+    n_target = len(filtered_data)
+
+    try:
+        return n_total * 1.0 / n_target
+    except ZeroDivisionError:
+        return 1.0
+
+
 def conditional_probability(data: pd.DataFrame, a_label: str, a_value: str, b_label: str, b_value: str) -> float:
     """
     Compute the conditional probability P(A=a|B=b).
@@ -40,32 +55,6 @@ def conditional_probability(data: pd.DataFrame, a_label: str, a_value: str, b_la
     except ZeroDivisionError:
         return 0.0
 
-
-def joint_probability(data: pd.DataFrame, a_label: str, a_value: str, b_label: str, b_value: str) -> float:
-    """
-    Compute the joint probability P(A=a & B=b).
-
-    Parameters
-    ----------
-    data :
-        The DataFrame containing the dataset.
-    a_label :
-        The label of variable A.
-    a_value :
-        The value of variable A.
-    b_label :
-        The label of variable B.
-    b_value :
-        The value of variable B.
-
-    Returns
-    -------
-    float
-        The computed joint probability.
-    """
-    n_ab = data[(data[a_label] == a_value) & (data[b_label] == b_value)].shape[0]
-    n = data.shape[0]
-    return n_ab / n
 
 
 def simple_probability(data: pd.DataFrame, a_label: str, a_value: str) -> float:

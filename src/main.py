@@ -88,7 +88,7 @@ if __name__ == '__main__':
 
     logger.info("Initializing...")
 
-    dataset = load_dataset(DatasetOptions.COMPAS)
+    dataset = load_dataset(DatasetOptions.GERMAN)
     algo = load_algorithm(AlgorithmOptions.Massaging)
 
     pipeline = Pipeline(dataset, algo, settings)
