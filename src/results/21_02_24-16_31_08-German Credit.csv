@@ -1,6 +1,0 @@
-Dataset,Protected Attribute,Intervention Attribute,Algorithm,Classifier,Accuracy,Disparate Impact,Discrimination Score
-German Credit,Attribute9,NA,NA,LogisticRegression,0.7371428571428571,1.08844381,0.04665732
-German Credit,Attribute9,Attribute9,Massaging,LogisticRegression,0.7228571428571428,1.01783109,0.01028518
-German Credit,Attribute9,Attribute9,Reweighing,LogisticRegression,0.7814285714285714,0.96219758,-0.02103787
-German Credit,Attribute9,Attribute9,DisparateImpactRemover,LogisticRegression,0.7585714285714287,0.98006332,-0.01089294
-German Credit,Attribute9,Attribute9,LearningFairRepresentations,LogisticRegression,0.9885714285714287,0.99090712,-0.0058906

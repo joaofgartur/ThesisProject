@@ -162,6 +162,7 @@ class Massaging(Algorithm):
         # select candidates for promotion
         pr_candidates_indexes = data.index[
             (data[sensitive_attribute] == UNPRIVILEGED) & (data[outcome_label] == NEGATIVE_OUTCOME)].tolist()
+
         promotion_candidates = pd.DataFrame({_INDEX: data.index, _CLASS_PROBABILITY: positive_class_probabilities})
 
         promotion_candidates = promotion_candidates.iloc[pr_candidates_indexes].sort_values(by=_CLASS_PROBABILITY,

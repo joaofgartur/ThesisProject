@@ -2,7 +2,7 @@ from aif360.algorithms.preprocessing import DisparateImpactRemover as DIR
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
-from helpers import convert_to_standard_dataset, set_dataset_features_and_labels, logger
+from helpers import convert_to_standard_dataset, set_dataset_features_and_targets, logger
 
 
 class DisparateImpactRemover(Algorithm):
@@ -22,9 +22,9 @@ class DisparateImpactRemover(Algorithm):
         transformed_dataset = transformer.fit_transform(standard_dataset)
 
         # convert into regular dataset
-        new_dataset = set_dataset_features_and_labels(dataset=dataset,
-                                                      features=transformed_dataset.features,
-                                                      labels=transformed_dataset.labels)
+        new_dataset = set_dataset_features_and_targets(dataset=dataset,
+                                                       features=transformed_dataset.features,
+                                                       targets=transformed_dataset.labels)
 
         logger.info(f"Dataset {dataset.name} repaired.")
 

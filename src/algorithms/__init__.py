@@ -11,4 +11,3 @@ from .LearningFairRepresentations import LearningFairRepresentations
 from .OptimizedPreprocessing import OptimizedPreprocessing
 from .AttributeRemoval import AttributeRemoval
 from .DoNothing import DoNothing
-from .algorithms import bias_correction

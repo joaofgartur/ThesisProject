@@ -6,7 +6,7 @@ Last edited: 30-11-2023
 from enum import Enum
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
-from algorithms import bias_correction
+from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
 from helpers import logger, logger_levels, config_logger, write_dataframe_to_csv
 
@@ -79,18 +79,32 @@ def load_algorithm(option: Enum):
 if __name__ == '__main__':
     config_logger(level=logger_levels.INFO.value)
     results_path = 'results'
-    _learning_settings = {"train_size": 0.7, "test_size": 0.3, "seed": 125, 'cross_validation': 5}
+    settings = {
+        'seed': 125,
+        'train_size': 0.5,
+        'validation_size': 0.2,
+        "test_size": 0.3,
+    }
 
     logger.info("Initializing...")
 
+    dataset = load_dataset(DatasetOptions.COMPAS)
+    algo = load_algorithm(AlgorithmOptions.Massaging)
+
+    pipeline = Pipeline(dataset, algo, settings)
+    pipeline.run()
+
+    """
     for i in DatasetOptions:
         dataset = load_dataset(i)
 
         algorithms = [load_algorithm(algo) for algo in AlgorithmOptions]
 
-        results = bias_correction(dataset, _learning_settings, algorithms)
+        results = bias_correction(dataset, settings, algorithms)
 
         write_dataframe_to_csv(df=results, dataset_name=dataset.name,
                                path=results_path)
+                               
+    """
 
     logger.info("End of program.")

@@ -3,14 +3,11 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-import numpy as np
 from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
-from sklearn.preprocessing import StandardScaler
 
 from algorithms.Algorithm import Algorithm
-from algorithms.algorithms import scale_dataset
 from datasets import Dataset
-from helpers import logger, convert_to_standard_dataset, set_dataset_features_and_labels
+from helpers import logger, convert_to_standard_dataset, set_dataset_features_and_targets
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from errors import error_check_dataset, error_check_sensitive_attribute
 
@@ -66,9 +63,9 @@ class Reweighing(Algorithm):
         transformed_dataset = transformer.transform(standard_dataset)
 
         # convert into regular dataset
-        new_dataset = set_dataset_features_and_labels(dataset=dataset,
-                                                      features=transformed_dataset.features,
-                                                      labels=transformed_dataset.labels)
+        new_dataset = set_dataset_features_and_targets(dataset=dataset,
+                                                       features=transformed_dataset.features,
+                                                       targets=transformed_dataset.labels)
 
         new_dataset.instance_weights = transformed_dataset.instance_weights
 

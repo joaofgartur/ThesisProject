@@ -7,8 +7,6 @@ M
 src/algorithms/Reweighting.py,5\6\563d32afa6fbf214aeefe94f0fa789f576779e7a
 9
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
-L
-src/algorithms/algorithms.py,3\d\3daa9dcec614fbc21f73373ca7371b3099e08b9b
 K
 src/algorithms/Algorithm.py,9\9\9905d33912199fdccc0e892b1ce47209b0692a27
 K
@@ -47,10 +45,6 @@ F
 -src/algorithms/LearningFairRepresentations.py,e\3\e359cafcd842eb17255a4b8e8c49eb03a8e2fce7
 L
 src/metrics/probabilities.py,f\e\fe59279f065edf2700876036a522c446f9f535c0
-N
-src/classifiers/classifiers.py,8\f\8fbce380fb3aa75e7de3ece7e1ee47456ce8d220
-L
-src/assessment/assessment.py,e\b\ebbacfe284ffaad40d1b7cd6ae93de7330b484e6
 F
 src/helpers/logging.py,6\d\6dae6ffd28b18daac2e23f1fb508bee153a53e5d
 D
@@ -65,36 +59,22 @@ G
 src/assessment/plots.py,6\a\6acc1ba0a15439842f3dbcd2b9179ac6da9404ef
 m
 =src/datasets/local_storage/compas/compas-scores-two-years.csv,9\0\90d12a6812b49d484cc83d4102f04bbf58bd2379
-^
-.src/results/21_02_24-15_01_11-Adult Income.csv,d\0\d00c09bcd5562f5e447dcc56fc3a23316db5bb38
 :
 
 .gitignore,a\5\a5cc2925ca8258af241be7e5b0381edf30266302
-^
-.src/results/21_02_24-15_13_36-Adult Income.csv,5\3\5317c7356d587ca2a80114552bfa3b96afd2ea30
-X
-(src/results/21_02_24-15_26_12-COMPAS.csv,c\1\c1c55f47d0b5d000a82d17ccaeddc92b4bce6204
-^
-.src/results/21_02_24-15_30_21-Adult Income.csv,b\a\ba3d9e2568a15af28b0e1721d42f2e41e1edbf1a
-_
-/src/results/21_02_24-15_30_27-German Credit.csv,3\d\3d74c1bb359c63dd3899ac0d835124c06f5239ee
-X
-(src/results/21_02_24-15_38_09-COMPAS.csv,0\f\0feac9efe46ce20c12c2aa27b2d618a05a90652b
-^
-.src/results/21_02_24-15_43_27-Adult Income.csv,b\0\b0e7adc9c1d50200bab32d7d83cac3a4b84d5abb
-_
-/src/results/21_02_24-15_43_33-German Credit.csv,4\a\4a556df524de6bcfb91bc08d21d549329bfa00d2
-X
-(src/results/21_02_24-16_24_47-COMPAS.csv,3\4\34220ad8499aa628299a9b58c43364db156166b2
-^
-.src/results/21_02_24-16_25_00-Adult Income.csv,9\7\972b28f780714ae2cd8d4447ebaa9483fff1e464
-_
-/src/results/21_02_24-16_25_02-German Credit.csv,e\c\ecd4d157065d712efc9bef7631c26a83189a26b0
-^
-.src/results/21_02_24-15_18_30-Adult Income.csv,8\b\8b2ec2bcbe646b065e71d5d5f11b070683c3a212
-X
-(src/results/21_02_24-16_27_46-COMPAS.csv,8\0\80e1a3a4be3784f08c5f5386c30a17d70144be93
-^
-.src/results/21_02_24-16_31_03-Adult Income.csv,e\a\ea5babd01cca8d4b5b053f88ec0910dbdcbc27ee
-_
-/src/results/21_02_24-16_31_08-German Credit.csv,6\c\6c15289a1d471ae113f2b9a67224a786b8d21a22
+H
+src/protocol/pipeline.py,e\5\e5b3ebec9dfd2676e9394b1d11f40d53e5bc4b42
+H
+src/protocol/__init__.py,2\a\2ad4c2cd1eb488cb5632bcfd473433f9648cf91a
+J
+src/protocol/correction.py,d\c\dc59681269bec81242093996ad587083c14a0c0d
+M
+src/protocol/model_testing.py,0\7\07394d4e786e43cb885782cb6c6ba3e2ef99219f
+J
+src/assessment/__init__.py,5\e\5e30b50f07b2ef237d466d2187eb3a5831e34a9e
+J
+src/protocol/assessment.py,4\3\43ad472073a73c07826d862f8b8ecaf2bcbc1ecb
+I
+src/models/classifiers.py,6\2\623f8774f0225292a84d92b08ff553a185714083
+F
+src/models/__init__.py,2\2\22bfbcdf88b8f6b5ddadabbf681bf91dcfd38091

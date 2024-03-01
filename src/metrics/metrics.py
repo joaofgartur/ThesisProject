@@ -32,8 +32,6 @@ def disparate_impact(data: pd.DataFrame, sensitive_attribute: str):
         The disparate impact.
     """
 
-    print(data[Y].value_counts())
-
     unprivileged_cp = conditional_probability(data, Y, POSITIVE_OUTCOME, sensitive_attribute, UNPRIVILEGED)
     privileged_cp = conditional_probability(data, Y, POSITIVE_OUTCOME, sensitive_attribute, PRIVILEGED)
 

@@ -3,7 +3,7 @@ from aif360.algorithms.preprocessing import LFR
 from algorithms.Algorithm import Algorithm
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
-from helpers import (convert_to_standard_dataset, set_dataset_features_and_labels, logger)
+from helpers import (convert_to_standard_dataset, set_dataset_features_and_targets, logger)
 
 
 class LearningFairRepresentations(Algorithm):
@@ -28,12 +28,10 @@ class LearningFairRepresentations(Algorithm):
                           verbose=1)
         transformed_dataset = transformer.fit_transform(standard_dataset)
 
-        print(f'transformed_labels: {transformed_dataset.labels}')
-
         # convert into regular dataset
-        new_dataset = set_dataset_features_and_labels(dataset=dataset,
-                                                      features=transformed_dataset.features,
-                                                      labels=transformed_dataset.labels)
+        new_dataset = set_dataset_features_and_targets(dataset=dataset,
+                                                       features=transformed_dataset.features,
+                                                       targets=transformed_dataset.labels)
 
         logger.info(f"Dataset {dataset.name} repaired.")
 

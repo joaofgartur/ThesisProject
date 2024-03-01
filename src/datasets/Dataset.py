@@ -2,10 +2,11 @@ import abc
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler, Binarizer
 
 from datasets import drop_invalid_instances, convert_categorical_into_numerical
-from helpers import logger, extract_value
+from helpers import logger, extract_value, set_dataset_features_and_targets
 
 
 class Dataset(metaclass=abc.ABCMeta):
@@ -39,6 +40,10 @@ class Dataset(metaclass=abc.ABCMeta):
         self.explanatory_features = extract_value(explanatory_attributes, dataset_info)
         self.privileged_classes = extract_value(privileged_classes, dataset_info)
         self.target = extract_value(target, dataset_info)
+
+    def __reset_indexes(self):
+        self.features = self.features.reset_index(drop=True)
+        self.targets = self.targets.reset_index(drop=True)
 
     @abc.abstractmethod
     def _pre_process_dataset(self):
@@ -93,9 +98,28 @@ class Dataset(metaclass=abc.ABCMeta):
             raise ValueError('Instance weights are none.')
 
         indexes = self.features.index[self.features.isin(train_set).any(axis=1)]
-        print(f'indexes: {indexes}')
 
         return self.instance_weights[indexes]
+
+    def split(self, settings: dict, test=True):
+        if test:
+            split_ratio = settings['test_size']
+
+        else:
+            split_ratio = settings['validation_size']
+
+        x_train, x_test, y_train, y_test = train_test_split(self.features,
+                                                            self.targets,
+                                                            test_size=split_ratio,
+                                                            random_state=settings['seed'])
+
+        train_set = set_dataset_features_and_targets(self, x_train, y_train)
+        train_set.__reset_indexes()
+
+        test_set = set_dataset_features_and_targets(self, x_test, y_test)
+        test_set.__reset_indexes()
+
+        return train_set, test_set
 
     def print_dataset(self):
         """Prints the dataset"""
