@@ -101,25 +101,29 @@ class Dataset(metaclass=abc.ABCMeta):
 
         return self.instance_weights[indexes]
 
-    def split(self, settings: dict, test=True):
-        if test:
-            split_ratio = settings['test_size']
-
-        else:
-            split_ratio = settings['validation_size']
+    def split(self, settings: dict):
 
         x_train, x_test, y_train, y_test = train_test_split(self.features,
                                                             self.targets,
-                                                            test_size=split_ratio,
+                                                            train_size=settings['train_size'],
                                                             random_state=settings['seed'])
+
+        split_ratio = settings['test_size'] / (settings['validation_size'] + settings['test_size'])
+        x_val, x_test, y_val, y_test = train_test_split(x_test,
+                                                        y_test,
+                                                        test_size=split_ratio,
+                                                        random_state=settings['seed'])
 
         train_set = set_dataset_features_and_targets(self, x_train, y_train)
         train_set.__reset_indexes()
 
+        validation_set = set_dataset_features_and_targets(self, x_val, y_val)
+        validation_set.__reset_indexes()
+
         test_set = set_dataset_features_and_targets(self, x_test, y_test)
         test_set.__reset_indexes()
 
-        return train_set, test_set
+        return train_set, validation_set, test_set
 
     def print_dataset(self):
         """Prints the dataset"""

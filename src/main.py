@@ -9,6 +9,7 @@ from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningF
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
 from helpers import logger, logger_levels, config_logger
+from xgboost import XGBClassifier
 
 
 class DatasetOptions(Enum):
@@ -85,13 +86,35 @@ if __name__ == '__main__':
         'validation_size': 0.2,
         "test_size": 0.3,
     }
+    model = XGBClassifier(random_state=settings['seed'])
 
     logger.info("Initializing...")
 
-    dataset = load_dataset(DatasetOptions.GERMAN)
+    run_all = False
+    run_all_dataset = True
 
-    algorithm = load_algorithm(AlgorithmOptions.Reweighing)
-    pipeline = Pipeline(dataset, algorithm, settings)
-    pipeline.run_and_save()
+    if run_all:
+        for i in DatasetOptions:
+            dataset = load_dataset(i)
+
+            for j in AlgorithmOptions:
+                algorithm = load_algorithm(j)
+
+                pipeline = Pipeline(dataset, algorithm, model, settings)
+                pipeline.run_and_save()
+    elif run_all_dataset:
+        dataset = load_dataset(DatasetOptions.COMPAS)
+
+        for j in AlgorithmOptions:
+            algorithm = load_algorithm(j)
+
+            pipeline = Pipeline(dataset, algorithm, model, settings)
+            pipeline.run_and_save()
+    else:
+        dataset = load_dataset(DatasetOptions.COMPAS)
+        algorithm = load_algorithm(AlgorithmOptions.Massaging)
+
+        pipeline = Pipeline(dataset, algorithm, model, settings)
+        pipeline.run_and_save()
 
     logger.info("End of program.")

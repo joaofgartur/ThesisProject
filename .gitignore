@@ -129,7 +129,7 @@ env.bak/
 venv.bak/
 
 # SonarLint files and project settings
-.sonarlint/
+.idea/sonarlint/
 
 # Spyder project settings
 .spyderproject

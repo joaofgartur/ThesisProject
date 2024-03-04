@@ -18,15 +18,16 @@ def scale_dataset(scaler, dataset: StandardDataset) -> StandardDataset:
     return dataset
 
 
-def bias_correction(dataset: Dataset, learning_settings: dict, algorithms: [Algorithm]) -> pd.DataFrame:
-    """
+"""
+def bias_correction(dataset: Dataset, settings: dict, algorithm: Algorithm) -> (Dataset, pd.DataFrame):
+    
     Apply a bias protocol algorithm to a dataset and display pre- and post-protocol assessment.
 
     Parameters
     ----------
     dataset :
         Original dataset object containing features, targets, and sensitive attributes.
-    learning_settings :
+    settings :
         Dictionary containing learning settings.
     algorithm :
         Bias protocol algorithm to be applied. It should accept 'dataset', 'sensitive_attribute',
@@ -45,34 +46,28 @@ def bias_correction(dataset: Dataset, learning_settings: dict, algorithms: [Algo
         - If the sensitive attribute is not present in the dataset.
         - If the provided algorithm is not a callable function.
         - If the provided algorithm does not receive the correct parameters.
-    """
+    
     try:
+
         error_check_dataset(dataset)
 
-        # pre-protocol assessment stage
-        logger.info("Computing pre-protocol assessment stage...")
-        correction_results = assess_all_surrogates(dataset, learning_settings)
-        logger.info("Pre-protocol assessment computed.")
+        for feature in dataset.protected_features:
+            logger.info(f"Applying bias correction for attribute {feature}...")
 
-        for algorithm in algorithms:
+            dataset = algorithm.repair(dataset, feature)
 
-            # protocol stage
-            for feature in dataset.protected_features:
-                logger.info(f"Applying bias protocol for attribute {feature}...")
+            logger.info(f"Finished correcting bias. Computing post-protocol assessment "
+                        f"for attribute {feature}...")
 
-                new_dataset = algorithm.repair(dataset, feature)
+            results = assess_all_surrogates(dataset, settings, feature, algorithm.__class__.__name__)
+            correction_results = pd.concat([correction_results, results])
 
-                logger.info(f"Finished correcting bias. Computing post-protocol assessment "
-                            f"for attribute {feature}...")
+            logger.info("Post-protocol assessment computed.")
 
-                results = assess_all_surrogates(new_dataset, learning_settings, feature, algorithm.__class__.__name__)
-                correction_results = pd.concat([correction_results, results])
-
-                logger.info("Post-protocol assessment computed.")
-
-        return correction_results
+        return dataset
 
         # Rest of the code
     except Exception as e:
         logger.error(f"An error occurred during bias protocol algorithm execution: {e}")
         raise
+"""

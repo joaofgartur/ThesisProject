@@ -4,6 +4,7 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 import pandas as pd
+from matplotlib import pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
@@ -17,15 +18,15 @@ from sklearn.ensemble import RandomForestClassifier
 
 from datasets import Dataset
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger, set_dataset_targets
+from helpers import logger, set_dataset_targets, barplot
 from metrics import compute_metrics_suite
 
 
-def assess_surrogate_model(model: object, dataset: Dataset, sensitive_attribute: str, settings: dict):
+def assess_surrogate_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str):
     classifier_name = model.__class__.__name__
 
     # split into train and validation sets
-    train_data, validation_data = dataset.split(settings, test=False)
+    # train_data, validation_data = train_set.split(settings, test=False)
 
     pipeline = Pipeline([
         ('normalizer', StandardScaler()),
@@ -35,7 +36,10 @@ def assess_surrogate_model(model: object, dataset: Dataset, sensitive_attribute:
     x_train = train_data.features
     y_train = train_data.targets.to_numpy().ravel()
 
-    pipeline.fit(x_train, y_train)
+    if train_data.instance_weights is not None:
+        pipeline.fit(x_train, y_train, classifier__sample_weight=train_data.instance_weights)
+    else:
+        pipeline.fit(x_train, y_train)
 
     y_val = validation_data.targets.to_numpy().ravel()
     predictions = pipeline.predict(validation_data.features)
@@ -52,15 +56,19 @@ def assess_surrogate_model(model: object, dataset: Dataset, sensitive_attribute:
     return results
 
 
-def assess_all_surrogates(dataset: Dataset, settings: dict, intervention_attribute: str = 'NA', algorithm: str = 'NA'):
+def assess_all_surrogates(train_set: Dataset,
+                          validation_set: Dataset,
+                          intervention_attribute: str = 'NA',
+                          algorithm: str = 'NA'):
     """
     Conduct assessment on a dataset, including fairness metrics and classifier accuracies.
 
     Parameters
     ----------
+    validation_set
     algorithm
     intervention_attribute
-    dataset : Dataset
+    train_set : Dataset
         The dataset object containing features, targets, and sensitive attributes.
     settings : dict
         Dictionary containing learning settings.
@@ -78,7 +86,7 @@ def assess_all_surrogates(dataset: Dataset, settings: dict, intervention_attribu
         - If there are missing sensitive attributes in the dataset.
         - If learning settings are missing required keys.
     """
-    error_check_dataset(dataset)
+    error_check_dataset(train_set)
 
     surrogate_classifiers = {
         'LR': LogisticRegression(),
@@ -90,18 +98,50 @@ def assess_all_surrogates(dataset: Dataset, settings: dict, intervention_attribu
     }
 
     global_results = []
-    for feature in dataset.protected_features:
-        error_check_sensitive_attribute(dataset, feature)
+    for feature in train_set.protected_features:
+        error_check_sensitive_attribute(train_set, feature)
 
         for surrogate in surrogate_classifiers:
             logger.info(f'Assessing surrogate {surrogate} for feature \"{feature}\".')
 
-            local_results = [dataset.name, feature, intervention_attribute, algorithm]
-            local_results += assess_surrogate_model(surrogate_classifiers[surrogate], dataset, feature, settings)
+            local_results = [train_set.name, feature, intervention_attribute, algorithm]
+            local_results += assess_surrogate_model(
+                surrogate_classifiers[surrogate],
+                train_set,
+                validation_set,
+                feature)
 
             global_results.append(local_results)
 
-    global_results = pd.DataFrame(global_results, columns=['Dataset', 'Protected Attribute', 'Intervention Attribute', 'Algorithm',
-                                             'Classifier', 'Accuracy', "Disparate Impact", "Discrimination Score", 'TPRDiff', 'FPRDiff'])
+    global_results = pd.DataFrame(global_results, columns=['Dataset', 'Protected Attribute', 'Intervention Attribute',
+                                                           'Algorithm', 'Classifier', 'Accuracy', "Disparate Impact",
+                                                           "Discrimination Score", 'TPRDiff', 'FPRDiff'])
 
     return global_results
+
+
+def data_description_diff(df: pd.DataFrame, fixed_df: pd.DataFrame) -> pd.DataFrame:
+    df_description = df.describe()
+    fixed_df_description = fixed_df.describe()
+    return df_description.compare(fixed_df_description)
+
+
+def data_value_counts(df: pd.DataFrame) -> pd.Series:
+    return df.value_counts()
+
+
+def data_assessment(dataset: Dataset, fixed_dataset: Dataset, sensitive_attribute: str):
+
+    print(f' --------- Assessment for {sensitive_attribute} --------- ')
+
+    # compare features
+    print('\tFeatures:')
+    print(f'\t\tData Description Differences: \n{data_description_diff(dataset.features, fixed_dataset.features).to_string()}')
+    print(f'\t\tData Value Counts: {data_value_counts(dataset.features)}')
+    print(f'\t\tFixed Data Value Counts: {data_value_counts(fixed_dataset.features)}')
+
+    # compare targets
+    print('\tTargets:')
+    print(f'\t\tData Description Differences: \n{data_description_diff(dataset.targets, fixed_dataset.targets).to_string()}')
+    print(f'\t\tData Value Counts: {data_value_counts(dataset.targets)}')
+    print(f'\t\tFixed Data Value Counts: {data_value_counts(fixed_dataset.targets)}')
