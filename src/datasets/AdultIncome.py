@@ -4,24 +4,23 @@ from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 from datasets import Dataset, is_privileged
-from helpers import logger
+from helpers import logger, extract_filename
 
 
 class AdultIncome(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/adult_income/adult.data"
 
     def __init__(self, dataset_info: dict):
-        logger.info("Loading Adult Income dataset...")
+        logger.info(f'[{extract_filename(__file__)}] Loading...')
         Dataset.__init__(self, dataset_info)
-        logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
             dataset = fetch_ucirepo(id=2)
             return dataset.data.features, dataset.data.targets
         except ConnectionError:
-            logger.error("Failed to load from online source!")
-            logger.info("Loading dataset from local storage...")
+            logger.error(f'[{extract_filename(__file__)}] Failed to load from online source.'
+                         f' Loading from local storage.')
 
             dataset = pd.read_csv(self._LOCAL_DATA_FILE, header=None)
             labels = ["age", "workclass", "fnlwgt", "education", "education-num",
@@ -42,24 +41,7 @@ class AdultIncome(Dataset):
         -------
 
         """
-        numerical_data = self.features.select_dtypes(include='number')
-        categorical_data = self.features.drop(numerical_data, axis=1)
-
-        # discretize numerical attributes
-        discretizer = KBinsDiscretizer(n_bins=4, encode='ordinal', strategy='quantile')
-        numerical_data_discretized = pd.DataFrame(discretizer.fit_transform(numerical_data),
-                                                  columns=numerical_data.columns)
-
-        # Combine discretized numerical attributes with categorical attributes
-        data_preprocessed = pd.concat([categorical_data, numerical_data_discretized], axis=1)
-
-        # Handling low frequency counts (pooling)
-        for column in data_preprocessed.columns:
-            counts = data_preprocessed[column].value_counts()
-            infrequent_values = counts[counts < 50].index
-            data_preprocessed.loc[data_preprocessed[column].isin(infrequent_values), column] = 'pool'
-
-        self.features = data_preprocessed
+        pass
 
     def _transform_protected_attributes(self):
 

@@ -1,9 +1,9 @@
 import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
-from helpers import logger
-from datasets import Dataset, is_privileged
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
+from datasets import Dataset, is_privileged
+from helpers import logger, extract_filename
 
 
 class GermanCredit(Dataset):
@@ -11,17 +11,16 @@ class GermanCredit(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/german_credit/german.data"
 
     def __init__(self, dataset_info: dict):
-        logger.info("Loading German Credit dataset...")
+        logger.info(f'[{extract_filename(__file__)}] Loading...')
         Dataset.__init__(self, dataset_info)
-        logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
             dataset = fetch_ucirepo(id=144)
             return dataset.data.features, dataset.data.targets
         except ConnectionError:
-            logger.error("Failed to load from online source!")
-            logger.info("Loading dataset from local storage...")
+            logger.error(f'[{extract_filename(__file__)}] Failed to load from online source.'
+                         f' Loading from local storage.')
 
             dataset = pd.read_csv(self._LOCAL_DATA_FILE, header=None, sep=" ")
             column_labels = ['Attribute1', 'Attribute2', 'Attribute3', 'Attribute4', 'Attribute5',
@@ -36,26 +35,38 @@ class GermanCredit(Dataset):
 
             return features, targets
 
-    def _pre_process_dataset(self):
-        pass
-
     def _transform_protected_attributes(self):
+
+        def derive_age(x, cutoff=25):
+            return 'Young' if x < cutoff else 'Aged'
 
         def derive_sex(x):
             return 'Male' if x in ['A91', 'A93', 'A94'] else 'Female'
 
         def derive_class(x):
             if x == 2:
-                return NEGATIVE_OUTCOME
-            return POSITIVE_OUTCOME
+                return NEGATIVE_OUTCOME * 1.0
+            return POSITIVE_OUTCOME * 1.0
 
         # derive sex values
         sex_column = 'Attribute9'
+        age_column = 'Attribute13'
+
+        print(self.features[sex_column].value_counts())
+        print(self.features[age_column].value_counts())
+
         self.features[sex_column] = self.features[sex_column].apply(lambda x: derive_sex(x))
+        self.features[age_column] = self.features[age_column].apply(lambda x: derive_age(x))
+
+        print(self.features[sex_column].value_counts())
+        print(self.features[age_column].value_counts())
 
         # binarize attribute
         for feature, value in zip(self.protected_features, self.privileged_classes):
             self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
+
+        print(self.features[sex_column].value_counts())
+        print(self.features[age_column].value_counts())
 
         # rename target column
         self.targets = self.targets.rename(columns={self.target: 'target'})

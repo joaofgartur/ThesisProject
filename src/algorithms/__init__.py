@@ -9,5 +9,3 @@ from .Reweighting import Reweighing
 from .DisparateImpactRemover import DisparateImpactRemover
 from .LearningFairRepresentations import LearningFairRepresentations
 from .OptimizedPreprocessing import OptimizedPreprocessing
-from .AttributeRemoval import AttributeRemoval
-from .DoNothing import DoNothing

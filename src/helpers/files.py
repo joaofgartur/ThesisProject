@@ -3,6 +3,11 @@ import pandas as pd
 from datetime import datetime
 
 
+def extract_filename(filename):
+    filename = filename.split(os.path.sep)[-1]
+    return filename.split('.')[0].upper()
+
+
 def create_directory(directory: str) -> None:
     mode = 0o666
     os.mkdir(directory, mode)

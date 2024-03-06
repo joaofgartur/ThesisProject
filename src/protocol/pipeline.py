@@ -1,4 +1,5 @@
 import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
@@ -21,17 +22,29 @@ class Pipeline:
         try:
             train_set, validation_set, test_set = self.dataset.split(self.settings)
 
-            logger.info("Computing pre-protocol assessment stage...")
+            scaler = MinMaxScaler(copy=False)
+            scaler = scaler.fit(train_set.features)
+            train_set.features = pd.DataFrame(scaler.transform(train_set.features),
+                                              columns=train_set.features.columns)
+            validation_set.features = pd.DataFrame(scaler.transform(validation_set.features),
+                                                   columns=validation_set.features.columns)
+            test_set.features = pd.DataFrame(scaler.transform(test_set.features),
+                                             columns=test_set.features.columns)
+
+            logger.info("[PRE-INTERVENTION] Performing assessment...")
+
             self.results = assess_all_surrogates(train_set, validation_set)
-            logger.info("Pre-protocol assessment computed.")
+
+            logger.info("[PRE-INTERVENTION] Assessment complete.")
 
             for feature in train_set.protected_features:
-                logger.info(f"Applying bias correction for attribute {feature}...")
+                logger.info(f"[INTERVENTION] Correcting bias w.r.t. attribute {feature} with "
+                            f"{self.algorithm.__class__.__name__}")
 
                 fixed_dataset = self.algorithm.repair(train_set, feature)
 
-                logger.info(f"Finished correcting bias. Computing post-protocol assessment "
-                            f"for attribute {feature}...")
+                logger.info('[INTERVENTION] Correction finished.')
+                logger.info("[POST-INTERVENTION] Performing assessment...")
 
                 results = assess_all_surrogates(
                     fixed_dataset,
@@ -41,7 +54,7 @@ class Pipeline:
                 self.results = pd.concat([self.results, results])
                 data_assessment(train_set, fixed_dataset, feature)
 
-                logger.info("Post-correction assessment computed.")
+                logger.info("[POST-INTERVENTION] Assessment complete.")
 
                 decisions = get_model_decisions(self.model, fixed_dataset, test_set)
                 print(decisions)

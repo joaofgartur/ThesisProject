@@ -17,9 +17,9 @@ def joint_probability(data: pd.DataFrame, variables: dict) -> float:
     n_target = len(filtered_data)
 
     try:
-        return n_total * 1.0 / n_target
+        return n_target / n_total
     except ZeroDivisionError:
-        return 1.0
+        return 0.0
 
 
 def conditional_probability(data: pd.DataFrame, a_label: str, a_value: str, b_label: str, b_value: str) -> float:

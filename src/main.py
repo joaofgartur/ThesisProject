@@ -8,7 +8,7 @@ from enum import Enum
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
-from helpers import logger, logger_levels, config_logger
+from helpers import logger, logger_levels, config_logger, extract_filename, write_dataframe_to_csv
 from xgboost import XGBClassifier
 
 
@@ -34,9 +34,9 @@ def load_dataset(option: Enum):
             german_info = {
                 'dataset_name': 'German Credit',
                 'target': 'class',
-                'protected_attributes': ['Attribute9'],
+                'protected_attributes': ['Attribute9', 'Attribute13'],
                 'explanatory_attributes': [],
-                'privileged_classes': ['Male'],
+                'privileged_classes': ['Male', 'Aged'],
 
             }
             return GermanCredit(german_info)
@@ -65,7 +65,7 @@ class AlgorithmOptions(Enum):
 def load_algorithm(option: Enum):
     match option:
         case AlgorithmOptions.Massaging:
-            return Massaging(learning_settings={'train_size': 0.7, 'test_size': 0.3})
+            return Massaging(learning_settings={'train_size': 0.5, 'test_size': 0.5})
         case AlgorithmOptions.Reweighing:
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     }
     model = XGBClassifier(random_state=settings['seed'])
 
-    logger.info("Initializing...")
+    logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
     run_all_dataset = True
@@ -103,7 +103,7 @@ if __name__ == '__main__':
                 pipeline = Pipeline(dataset, algorithm, model, settings)
                 pipeline.run_and_save()
     elif run_all_dataset:
-        dataset = load_dataset(DatasetOptions.COMPAS)
+        dataset = load_dataset(DatasetOptions.ADULT)
 
         for j in AlgorithmOptions:
             algorithm = load_algorithm(j)
@@ -111,10 +111,14 @@ if __name__ == '__main__':
             pipeline = Pipeline(dataset, algorithm, model, settings)
             pipeline.run_and_save()
     else:
-        dataset = load_dataset(DatasetOptions.COMPAS)
-        algorithm = load_algorithm(AlgorithmOptions.Massaging)
+        dataset = load_dataset(DatasetOptions.GERMAN)
+
+        write_dataframe_to_csv(df=dataset.features, dataset_name=dataset.name,
+                               path='experiments')
+
+        algorithm = load_algorithm(AlgorithmOptions.DisparateImpactRemover)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()
 
-    logger.info("End of program.")
+    logger.info(f'[{extract_filename(__file__)}] End of program.')

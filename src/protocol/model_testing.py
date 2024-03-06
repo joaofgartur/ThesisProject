@@ -3,8 +3,6 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
 from datasets import Dataset
-from helpers import set_dataset_targets
-from metrics import compute_metrics_suite
 
 
 def get_model_decisions(model: object, train_data: Dataset, test_data: Dataset):

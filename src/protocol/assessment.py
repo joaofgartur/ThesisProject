@@ -4,7 +4,6 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 import pandas as pd
-from matplotlib import pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
@@ -16,9 +15,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
-from datasets import Dataset
+from datasets import Dataset, update_dataset
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger, set_dataset_targets, barplot
+from helpers import logger, bold
 from metrics import compute_metrics_suite
 
 
@@ -45,7 +44,7 @@ def assess_surrogate_model(model: object, train_data: Dataset, validation_data: 
     predictions = pipeline.predict(validation_data.features)
     accuracy = accuracy_score(y_val, predictions.ravel())
 
-    predicted_data = set_dataset_targets(validation_data, predictions)
+    predicted_data = update_dataset(validation_data, targets=predictions)
 
     metrics = compute_metrics_suite(validation_data, predicted_data, sensitive_attribute)
 
@@ -70,8 +69,6 @@ def assess_all_surrogates(train_set: Dataset,
     intervention_attribute
     train_set : Dataset
         The dataset object containing features, targets, and sensitive attributes.
-    settings : dict
-        Dictionary containing learning settings.
 
     Returns
     -------
@@ -102,7 +99,7 @@ def assess_all_surrogates(train_set: Dataset,
         error_check_sensitive_attribute(train_set, feature)
 
         for surrogate in surrogate_classifiers:
-            logger.info(f'Assessing surrogate {surrogate} for feature \"{feature}\".')
+            logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{feature}\".')
 
             local_results = [train_set.name, feature, intervention_attribute, algorithm]
             local_results += assess_surrogate_model(
@@ -132,16 +129,16 @@ def data_value_counts(df: pd.DataFrame) -> pd.Series:
 
 def data_assessment(dataset: Dataset, fixed_dataset: Dataset, sensitive_attribute: str):
 
-    print(f' --------- Assessment for {sensitive_attribute} --------- ')
+    print(f' --------- Assessment for {bold(sensitive_attribute)} --------- ')
 
     # compare features
-    print('\tFeatures:')
-    print(f'\t\tData Description Differences: \n{data_description_diff(dataset.features, fixed_dataset.features).to_string()}')
-    print(f'\t\tData Value Counts: {data_value_counts(dataset.features)}')
-    print(f'\t\tFixed Data Value Counts: {data_value_counts(fixed_dataset.features)}')
+    print(f'\t{bold("Features")}:')
+    print(f'\t\t{bold("Data Description Differences")}: \n{data_description_diff(dataset.features, fixed_dataset.features).to_string()}')
+    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.features)}')
+    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.features)}')
 
     # compare targets
-    print('\tTargets:')
-    print(f'\t\tData Description Differences: \n{data_description_diff(dataset.targets, fixed_dataset.targets).to_string()}')
-    print(f'\t\tData Value Counts: {data_value_counts(dataset.targets)}')
-    print(f'\t\tFixed Data Value Counts: {data_value_counts(fixed_dataset.targets)}')
+    print(f'\t{bold("Targets")}:')
+    print(f'\t\t{bold("Data Description Differences")}: \n{data_description_diff(dataset.targets, fixed_dataset.targets).to_string()}')
+    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.targets)}')
+    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.targets)}')

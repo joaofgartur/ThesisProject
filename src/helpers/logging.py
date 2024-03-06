@@ -8,4 +8,3 @@ logging.getLogger('matplotlib.font_manager').disabled = True
 
 def config_logger(level: str):
     coloredlogs.install(level=level)
-

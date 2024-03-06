@@ -2,7 +2,7 @@ import pandas as pd
 
 from datasets import Dataset, is_privileged
 from constants import POSITIVE_OUTCOME
-from helpers import logger
+from helpers import logger, extract_filename
 
 
 def filter_data(data):
@@ -29,9 +29,8 @@ class Compas(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/compas/compas-scores-two-years.csv"
 
     def __init__(self, dataset_info: dict):
-        logger.info("Loading COMPAS dataset...")
+        logger.info(f'[{extract_filename(__file__)}] Loading...')
         Dataset.__init__(self, dataset_info)
-        logger.info("Dataset loaded.")
 
     def _load_dataset(self):
         try:
@@ -39,8 +38,8 @@ class Compas(Dataset):
                            "master/compas-scores-two-years.csv")
             data = pd.read_csv(dataset_url)
         except Exception:
-            logger.error("Failed to load dataset from online source!")
-            logger.info("Loading dataset from local storage...")
+            logger.error(f'[{extract_filename(__file__)}] Failed to load from online source.'
+                         f' Loading from local storage.')
 
             data = pd.read_csv(self._LOCAL_DATA_FILE)
 
@@ -52,9 +51,6 @@ class Compas(Dataset):
         features = data.drop(columns={self.target})
 
         return features, targets
-
-    def _pre_process_dataset(self):
-        pass
 
     def _transform_protected_attributes(self):
 
