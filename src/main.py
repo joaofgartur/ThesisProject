@@ -6,6 +6,7 @@ Last edited: 30-11-2023
 from enum import Enum
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
+from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
 from helpers import logger, logger_levels, config_logger, extract_filename, write_dataframe_to_csv
@@ -16,6 +17,7 @@ class DatasetOptions(Enum):
     COMPAS = 0
     ADULT = 1
     GERMAN = 2
+    AIF360ADULT = 3
 
 
 def load_dataset(option: Enum):
@@ -50,6 +52,16 @@ def load_dataset(option: Enum):
 
             }
             return AdultIncome(adult_info)
+        case DatasetOptions.AIF360ADULT:
+            adult_info = {
+                'dataset_name': 'Aif360 Adult Income',
+                'target': 'income',
+                'protected_attributes': ['race', 'sex'],
+                'explanatory_attributes': [],
+                'privileged_classes': ['White', 'Male'],
+
+            }
+            return AIF360AdultIncome(adult_info)
         case _:
             logger.error('Dataset option unknown!')
             raise NotImplementedError
@@ -103,7 +115,7 @@ if __name__ == '__main__':
                 pipeline = Pipeline(dataset, algorithm, model, settings)
                 pipeline.run_and_save()
     elif run_all_dataset:
-        dataset = load_dataset(DatasetOptions.ADULT)
+        dataset = load_dataset(DatasetOptions.AIF360ADULT)
 
         for j in AlgorithmOptions:
             algorithm = load_algorithm(j)
@@ -111,12 +123,9 @@ if __name__ == '__main__':
             pipeline = Pipeline(dataset, algorithm, model, settings)
             pipeline.run_and_save()
     else:
-        dataset = load_dataset(DatasetOptions.GERMAN)
+        dataset = load_dataset(DatasetOptions.AIF360ADULT)
 
-        write_dataframe_to_csv(df=dataset.features, dataset_name=dataset.name,
-                               path='experiments')
-
-        algorithm = load_algorithm(AlgorithmOptions.DisparateImpactRemover)
+        algorithm = load_algorithm(AlgorithmOptions.Reweighing)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

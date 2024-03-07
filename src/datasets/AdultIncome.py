@@ -33,16 +33,6 @@ class AdultIncome(Dataset):
 
             return features, targets
 
-    def _pre_process_dataset(self):
-        """
-        Pre-processing method based on 'Three naive Bayes approaches for discrimination-free
-        classification'
-        Returns
-        -------
-
-        """
-        pass
-
     def _transform_protected_attributes(self):
 
         # binarize attribute

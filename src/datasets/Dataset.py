@@ -70,12 +70,15 @@ class Dataset(metaclass=abc.ABCMeta):
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
         train_set.__reset_indexes()
+        train_set.original_protected_features = train_set.get_protected_features().add_prefix('orig_')
 
         validation_set = update_dataset(self, features=x_val, targets=y_val)
         validation_set.__reset_indexes()
+        validation_set.original_protected_features = validation_set.get_protected_features().add_prefix('orig_')
 
         test_set = update_dataset(self, features=x_test, targets=y_test)
         test_set.__reset_indexes()
+        test_set.original_protected_features = test_set.get_protected_features().add_prefix('orig_')
 
         return train_set, validation_set, test_set
 
@@ -87,11 +90,12 @@ class Dataset(metaclass=abc.ABCMeta):
     def _preprocessing(self):
         logger.info("[DATASET] Pre-processing features and targets.")
 
-        self.__drop_invalid_instances()
-        self.__quantize_numerical_features()
-        self._transform_protected_attributes()
-        self.__one_hot_encode_categorical_features()
-        self.__convert_categorical_targets()
+        if 'Aif' not in self.name:
+            self.__drop_invalid_instances()
+            self.__quantize_numerical_features()
+            self._transform_protected_attributes()
+            self.__one_hot_encode_categorical_features()
+            self.__convert_categorical_targets()
 
         logger.info("[DATASET] Pre-processing complete.")
 
@@ -138,12 +142,14 @@ class Dataset(metaclass=abc.ABCMeta):
         numerical_data = self.features.select_dtypes(include=['number'])
         categorical_data = self.features.drop(numerical_data, axis=1)
 
-        encoded_categorical_data = pd.get_dummies(categorical_data, columns=categorical_data.columns)
-        encoded_categorical_data *= 1.0
+        if categorical_data.shape[1]:
 
-        processed_features = pd.concat([numerical_data, encoded_categorical_data], axis=1)
+            encoded_categorical_data = pd.get_dummies(categorical_data, columns=categorical_data.columns)
+            encoded_categorical_data *= 1.0
 
-        self.features = processed_features
+            processed_features = pd.concat([numerical_data, encoded_categorical_data], axis=1)
+
+            self.features = processed_features
 
     def __convert_categorical_targets(self):
         label_encoder = LabelEncoder()

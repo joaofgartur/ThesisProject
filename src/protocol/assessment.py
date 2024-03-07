@@ -4,6 +4,7 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 import pandas as pd
+from aif360.metrics import BinaryLabelDatasetMetric
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
@@ -15,9 +16,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset, update_dataset
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger, bold
+from helpers import logger, bold, convert_to_standard_dataset
 from metrics import compute_metrics_suite
 
 
@@ -47,6 +49,17 @@ def assess_surrogate_model(model: object, train_data: Dataset, validation_data: 
     predicted_data = update_dataset(validation_data, targets=predictions)
 
     metrics = compute_metrics_suite(validation_data, predicted_data, sensitive_attribute)
+
+    # define privileged and unprivileged group
+    privileged_groups = [{sensitive_attribute: POSITIVE_OUTCOME}]
+    unprivileged_groups = [{sensitive_attribute: NEGATIVE_OUTCOME}]
+
+    aif_dataset = convert_to_standard_dataset(predicted_data, sensitive_attribute)
+    aif_results = BinaryLabelDatasetMetric(aif_dataset,
+                                           unprivileged_groups=unprivileged_groups,
+                                           privileged_groups=privileged_groups)
+    print(f'DI: {metrics["Disparate Impact"]}')
+    print(f'ADI:   {aif_results.disparate_impact()}')
 
     # save results
     results = [classifier_name, accuracy]
