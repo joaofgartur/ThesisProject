@@ -24,6 +24,10 @@ class Massaging(Algorithm):
     def __init__(self, learning_settings: dict):
         super().__init__()
         self.learning_settings = learning_settings
+        self.m = None
+        self.demotion_candidates = None
+        self.promotion_candidates = None
+        self.sensitive_attribute = None
 
     def __compute_m(self, dataset: Dataset, sensitive_attribute: str) -> int:
         """
@@ -175,16 +179,20 @@ class Massaging(Algorithm):
 
         return promotion_candidates, demotion_candidates
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
+    def fit(self, data: Dataset, sensitive_attribute: str):
+        self.sensitive_attribute = sensitive_attribute
+
+        self.promotion_candidates, self.demotion_candidates = self.__rank_candidates__(data, self.sensitive_attribute)
+        self.m = self.__compute_m(data, self.sensitive_attribute)
+
+    def transform(self, data: Dataset) -> Dataset:
         """
         Apply massaging technique to modify dataset targets.
 
         Parameters
         ----------
-        dataset :
+        data :
             Original dataset object containing features and targets.
-        sensitive_attribute :
-            Name of the data column representing the relevant attribute.
 
         Returns
         -------
@@ -199,23 +207,18 @@ class Massaging(Algorithm):
             - If the sensitive attribute is not present in the dataset.
         """
 
-        error_check_dataset(dataset)
-        error_check_sensitive_attribute(dataset, sensitive_attribute)
+        transformed_dataset = copy.deepcopy(data)
 
-        new_dataset = copy.deepcopy(dataset)
-        promotion_candidates, demotion_candidates = self.__rank_candidates__(dataset, sensitive_attribute)
-        m = self.__compute_m(dataset, sensitive_attribute)
-
-        for __ in range(m):
-            top_promotion = promotion_candidates.iloc[0]
+        for __ in range(self.m):
+            top_promotion = self.promotion_candidates.iloc[0]
             pr_index = top_promotion["index"].astype('int32')
-            new_dataset.targets.iloc[pr_index] = POSITIVE_OUTCOME
+            transformed_dataset.targets.iloc[pr_index] = POSITIVE_OUTCOME
 
-            top_demotion = demotion_candidates.iloc[0]
+            top_demotion = self.demotion_candidates.iloc[0]
             dem_index = top_demotion["index"].astype('int32')
-            new_dataset.targets.iloc[dem_index] = NEGATIVE_OUTCOME
+            transformed_dataset.targets.iloc[dem_index] = NEGATIVE_OUTCOME
 
-            promotion_candidates = promotion_candidates.drop(index=pr_index)
-            demotion_candidates = demotion_candidates.drop(index=dem_index)
+            self.promotion_candidates = self.promotion_candidates.drop(index=pr_index)
+            self.demotion_candidates = self.demotion_candidates.drop(index=dem_index)
 
-        return new_dataset
+        return transformed_dataset

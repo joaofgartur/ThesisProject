@@ -11,26 +11,34 @@ from helpers import convert_to_standard_dataset
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from errors import error_check_dataset, error_check_sensitive_attribute
 
-SENSITIVE_ATTRIBUTE = "sensitive_attribute"
-OUTCOME = "outcome"
-WEIGHT = "weight"
-
 
 class Reweighing(Algorithm):
 
     def __init__(self):
         super().__init__()
+        self.transformer = None
+        self.sensitive_attribute = None
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
+    def fit(self, data: Dataset, sensitive_attribute: str):
+        self.sensitive_attribute = sensitive_attribute
+
+        standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
+
+        privileged_groups = [{self.sensitive_attribute: POSITIVE_OUTCOME}]
+        unprivileged_groups = [{self.sensitive_attribute: NEGATIVE_OUTCOME}]
+
+        self.transformer = Aif360Reweighing(unprivileged_groups=unprivileged_groups,
+                                            privileged_groups=privileged_groups)
+        self.transformer.fit(standard_data)
+
+    def transform(self, data: Dataset) -> Dataset:
         """
         Apply reweighing technique to modify dataset features based on computed weights.
 
         Parameters
         ----------
-        dataset :
+        data :
             Original dataset object containing features and targets.
-        sensitive_attribute :
-            Name of the data column representing the relevant attribute.
 
         Returns
         -------
@@ -44,28 +52,14 @@ class Reweighing(Algorithm):
             - If the dataset does not contain both features and targets.
             - If the sensitive attribute is not present in the dataset.
         """
+        standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        error_check_dataset(dataset)
-        error_check_sensitive_attribute(dataset, sensitive_attribute)
+        transformed_data = self.transformer.transform(standard_data)
 
-        # convert dataset into aif360 dataset
-        standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
+        transformed_dataset = update_dataset(dataset=data,
+                                             features=transformed_data.features,
+                                             targets=transformed_data.labels)
 
-        # define privileged and unprivileged group
-        privileged_groups = [{sensitive_attribute: POSITIVE_OUTCOME}]
-        unprivileged_groups = [{sensitive_attribute: NEGATIVE_OUTCOME}]
+        transformed_dataset.instance_weights = transformed_data.instance_weights
 
-        # transform dataset
-        transformer = Aif360Reweighing(unprivileged_groups=unprivileged_groups,
-                                       privileged_groups=privileged_groups)
-        transformer.fit(standard_dataset)
-        transformed_dataset = transformer.transform(standard_dataset)
-
-        # convert into regular dataset
-        new_dataset = update_dataset(dataset=dataset,
-                                     features=transformed_dataset.features,
-                                     targets=transformed_dataset.labels)
-
-        new_dataset.instance_weights = transformed_dataset.instance_weights
-
-        return new_dataset
+        return transformed_dataset

@@ -11,7 +11,7 @@ class OptimizedPreprocessing(Algorithm):
         super().__init__()
         self.optimization_parameters = optimization_parameters
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str):
+    def transform(self, dataset: Dataset, sensitive_attribute: str):
         logger.info(f"Repairing dataset {dataset.name} via Massaging...")
 
         # convert dataset into aif360 dataset

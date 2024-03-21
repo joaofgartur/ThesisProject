@@ -1,0 +1,9 @@
+dataset,sensitive_attribute,intervention_attribute,algorithm,classifier,disparate_impact,discrimination_score,true_positive_rate_diff,false_positive_rate_diff,confusion_matrix,accuracy,f1_score,recall,precision,mathews_cc
+Adult Income,race,NA,NA,LogisticRegression,0.3602,-0.1149,0.1779,0.0612,"[6654, 545, 1318, 1007]",0.8044,0.5195,0.4331,0.6488,0.4157
+Adult Income,sex,NA,NA,LogisticRegression,0.0808,-0.2145,0.4402,0.1002,"[6654, 545, 1318, 1007]",0.8044,0.5195,0.4331,0.6488,0.4157
+Adult Income,race,race,LearningFairRepresentations,LogisticRegression,3.1011,0.2339,-0.4029,-0.2187,"[6434, 765, 1708, 617]",0.7403,0.3329,0.2654,0.4465,0.1941
+Adult Income,sex,race,LearningFairRepresentations,LogisticRegression,0.1999,-0.1575,0.258,0.1104,"[6434, 765, 1708, 617]",0.7403,0.3329,0.2654,0.4465,0.1941
+,,,,XGBClassifier,1.2635,0.0346,-0.0227,-0.0636,"[9909, 881, 2432, 1065]",0.7681,0.3913,0.3045,0.5473,0.2794
+Adult Income,race,sex,LearningFairRepresentations,LogisticRegression,0.047,-0.2803,0.3708,0.2475,"[5615, 1584, 1494, 831]",0.6768,0.3506,0.3574,0.3441,0.1357
+Adult Income,sex,sex,LearningFairRepresentations,LogisticRegression,0.8216,-0.048,0.1569,-0.0017,"[5615, 1584, 1494, 831]",0.6768,0.3506,0.3574,0.3441,0.1357
+,,,,XGBClassifier,0.2661,-0.2143,0.2817,0.1543,"[9080, 1710, 2055, 1442]",0.7365,0.4337,0.4124,0.4575,0.2632

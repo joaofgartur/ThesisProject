@@ -10,19 +10,20 @@ class DisparateImpactRemover(Algorithm):
     def __init__(self, repair_level: float):
         super().__init__()
         self.repair_level = repair_level
+        self.transformer = None
+        self.sensitive_attribute = None
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
+    def fit(self, data: Dataset, sensitive_attribute: str):
+        self.sensitive_attribute = sensitive_attribute
+        self.transformer = DIR(repair_level=self.repair_level)
 
-        # convert dataset into aif360 dataset
-        standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
+    def transform(self, data: Dataset) -> Dataset:
+        standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        # transform dataset
-        transformer = DIR(repair_level=self.repair_level)
-        transformed_dataset = transformer.fit_transform(standard_dataset)
+        transformed_data = self.transformer.fit_transform(standard_data)
 
-        # convert into regular dataset
-        new_dataset = update_dataset(dataset=dataset,
-                                     features=transformed_dataset.features,
-                                     targets=transformed_dataset.labels)
+        transformed_dataset = update_dataset(dataset=data,
+                                             features=transformed_data.features,
+                                             targets=transformed_data.labels)
 
-        return new_dataset
+        return transformed_dataset

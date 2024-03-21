@@ -3,33 +3,37 @@ from aif360.algorithms.preprocessing import LFR
 from algorithms.Algorithm import Algorithm
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset, update_dataset
-from helpers import (convert_to_standard_dataset, logger)
+from helpers import (convert_to_standard_dataset)
 
 
 class LearningFairRepresentations(Algorithm):
 
     def __init__(self):
         super().__init__()
+        self.transformer = None
+        self.sensitive_attribute = None
 
-    def repair(self, dataset: Dataset, sensitive_attribute: str) -> Dataset:
+    def fit(self, data: Dataset, sensitive_attribute: str):
+        self.sensitive_attribute = sensitive_attribute
 
-        # convert dataset into aif360 dataset
-        standard_dataset = convert_to_standard_dataset(dataset, sensitive_attribute)
+        standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        # define privileged and unprivileged group
-        privileged_groups = [{sensitive_attribute: POSITIVE_OUTCOME}]
-        unprivileged_groups = [{sensitive_attribute: NEGATIVE_OUTCOME}]
+        privileged_groups = [{self.sensitive_attribute: POSITIVE_OUTCOME}]
+        unprivileged_groups = [{self.sensitive_attribute: NEGATIVE_OUTCOME}]
 
-        # transform dataset
-        transformer = LFR(unprivileged_groups=unprivileged_groups,
-                          privileged_groups=privileged_groups,
-                          k=10, Ax=0.1, Ay=1.0, Az=2.0,
-                          verbose=1)
-        transformed_dataset = transformer.fit_transform(standard_dataset)
+        self.transformer = LFR(unprivileged_groups=unprivileged_groups,
+                               privileged_groups=privileged_groups,
+                               k=10, Ax=0.1, Ay=1.0, Az=2.0,
+                               verbose=1)
+        self.transformer.fit(standard_data)
 
-        # convert into regular dataset
-        new_dataset = update_dataset(dataset=dataset,
-                                     features=transformed_dataset.features,
-                                     targets=transformed_dataset.labels)
+    def transform(self, data: Dataset, ) -> Dataset:
+        standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        return new_dataset
+        transformed_data = self.transformer.transform(standard_data)
+
+        transformed_dataset = update_dataset(dataset=data,
+                                             features=transformed_data.features,
+                                             targets=transformed_data.labels)
+
+        return transformed_dataset

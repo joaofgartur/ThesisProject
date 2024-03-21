@@ -40,7 +40,8 @@ class Pipeline:
                 logger.info(f"[INTERVENTION] Correcting bias w.r.t. attribute {feature} with "
                             f"{self.algorithm.__class__.__name__}")
 
-                fixed_dataset = self.algorithm.repair(train_set, feature)
+                self.algorithm.fit(train_set, feature)
+                fixed_dataset = self.algorithm.transform(train_set)
 
                 logger.info('[INTERVENTION] Correction finished.')
                 logger.info("[POST-INTERVENTION] Performing assessment...")

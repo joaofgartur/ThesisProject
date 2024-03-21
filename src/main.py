@@ -103,7 +103,7 @@ if __name__ == '__main__':
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
-    run_all_dataset = True
+    run_all_dataset = False
 
     if run_all:
         for i in DatasetOptions:
@@ -125,7 +125,7 @@ if __name__ == '__main__':
     else:
         dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.DisparateImpactRemover)
+        algorithm = load_algorithm(AlgorithmOptions.Massaging)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()
