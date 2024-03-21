@@ -94,8 +94,8 @@ class Dataset(metaclass=abc.ABCMeta):
             self.__drop_invalid_instances()
             self.__quantize_numerical_features()
             self._transform_protected_attributes()
-            self.__one_hot_encode_categorical_features()
-            self.__convert_categorical_targets()
+            # self.__one_hot_encode_categorical_features()
+            self.__label_encode_categorical(features=True, targets=True)
 
         logger.info("[DATASET] Pre-processing complete.")
 
@@ -125,7 +125,6 @@ class Dataset(metaclass=abc.ABCMeta):
         numerical_data = self.features.select_dtypes(include=['number'])
         to_drop = []
         for attribute in self.protected_features:
-            print(attribute)
             if attribute in numerical_data.columns:
                 to_drop.append(attribute)
         numerical_data = numerical_data.drop(columns=to_drop)
@@ -138,30 +137,39 @@ class Dataset(metaclass=abc.ABCMeta):
 
         self.features = processed_features
 
+    """
     def __one_hot_encode_categorical_features(self):
         numerical_data = self.features.select_dtypes(include=['number'])
         categorical_data = self.features.drop(numerical_data, axis=1)
 
         if categorical_data.shape[1]:
-
             encoded_categorical_data = pd.get_dummies(categorical_data, columns=categorical_data.columns)
             encoded_categorical_data *= 1.0
 
             processed_features = pd.concat([numerical_data, encoded_categorical_data], axis=1)
 
             self.features = processed_features
+    """
 
-    def __convert_categorical_targets(self):
-        label_encoder = LabelEncoder()
-        labels_mapping = {}
+    def __label_encode_categorical(self, features=False, targets=True):
 
-        for column in self.targets.columns:
-            if self.targets[column].dtype == object:
-                self.targets[column] = label_encoder.fit_transform(self.targets[column])
-                mapping = dict(zip(label_encoder.classes_, label_encoder.transform(label_encoder.classes_)))
-                labels_mapping.update({column: mapping})
+        def __label_encode(df: pd.DataFrame):
+            encoder = LabelEncoder()
+            mapping = {}
 
-        self.targets_mapping = labels_mapping
+            for column in df.columns:
+                if df[column].dtype == object:
+                    df[column] = encoder.fit_transform(df[column])
+                    mapping = dict(zip(encoder.classes_, encoder.transform(encoder.classes_)))
+                    mapping.update({column: mapping})
+
+            return df, mapping
+
+        if features:
+            self.features, self.features_mapping = __label_encode(self.features)
+
+        if targets:
+            self.targets, self.targets_mapping = __label_encode(self.targets)
 
 
 def update_dataset(dataset: Dataset, features: np.ndarray = None, targets: np.ndarray = None):

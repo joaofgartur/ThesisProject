@@ -4,8 +4,7 @@ from sklearn.preprocessing import MinMaxScaler
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
 from helpers import logger, write_dataframe_to_csv
-from .assessment import assess_all_surrogates, data_assessment
-from .model_testing import get_model_decisions
+from .assessment import assess_all_surrogates, data_assessment, assess_model
 
 
 class Pipeline:
@@ -46,17 +45,27 @@ class Pipeline:
                 logger.info('[INTERVENTION] Correction finished.')
                 logger.info("[POST-INTERVENTION] Performing assessment...")
 
-                results = assess_all_surrogates(
+                surrogate_results = assess_all_surrogates(
                     fixed_dataset,
                     validation_set,
                     feature,
                     self.algorithm.__class__.__name__)
-                self.results = pd.concat([self.results, results])
-                data_assessment(train_set, fixed_dataset, feature)
+
+                # data_assessment(train_set, fixed_dataset, feature)
 
                 logger.info("[POST-INTERVENTION] Assessment complete.")
 
-                decisions = get_model_decisions(self.model, fixed_dataset, test_set)
+                final_model_results, decisions = assess_model(
+                    self.model,
+                    fixed_dataset,
+                    test_set,
+                    feature
+                )
+
+                final_model_results = pd.DataFrame(final_model_results)
+
+                self.results = pd.concat([self.results, surrogate_results, final_model_results])
+
                 print(decisions)
 
         except Exception as e:

@@ -4,7 +4,7 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 import pandas as pd
-from aif360.metrics import BinaryLabelDatasetMetric
+import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.pipeline import Pipeline
@@ -16,18 +16,15 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
-from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset, update_dataset
 from errors import error_check_dataset, error_check_sensitive_attribute
-from helpers import logger, bold, convert_to_standard_dataset
-from metrics import compute_metrics_suite
+from evaluation.ModelEvaluator import ModelEvaluator
+from helpers import logger, bold
+from evaluation import FairnessEvaluator
 
 
-def assess_surrogate_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str):
+def assess_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str):
     classifier_name = model.__class__.__name__
-
-    # split into train and validation sets
-    # train_data, validation_data = train_set.split(settings, test=False)
 
     pipeline = Pipeline([
         ('normalizer', StandardScaler()),
@@ -42,30 +39,20 @@ def assess_surrogate_model(model: object, train_data: Dataset, validation_data: 
     else:
         pipeline.fit(x_train, y_train)
 
-    y_val = validation_data.targets.to_numpy().ravel()
     predictions = pipeline.predict(validation_data.features)
-    accuracy = accuracy_score(y_val, predictions.ravel())
-
     predicted_data = update_dataset(validation_data, targets=predictions)
 
-    metrics = compute_metrics_suite(validation_data, predicted_data, sensitive_attribute)
+    performance_evaluator = ModelEvaluator(validation_data, predicted_data)
+    performance_metrics = performance_evaluator.evaluate()
 
-    # define privileged and unprivileged group
-    privileged_groups = [{sensitive_attribute: POSITIVE_OUTCOME}]
-    unprivileged_groups = [{sensitive_attribute: NEGATIVE_OUTCOME}]
+    fairness_evaluator = FairnessEvaluator(validation_data, predicted_data, sensitive_attribute)
+    fairness_metrics = fairness_evaluator.evaluate()
 
-    aif_dataset = convert_to_standard_dataset(predicted_data, sensitive_attribute)
-    aif_results = BinaryLabelDatasetMetric(aif_dataset,
-                                           unprivileged_groups=unprivileged_groups,
-                                           privileged_groups=privileged_groups)
-    print(f'DI: {metrics["Disparate Impact"]}')
-    print(f'ADI:   {aif_results.disparate_impact()}')
+    results = {'classifier': classifier_name}
+    results.update(fairness_metrics)
+    results.update(performance_metrics)
 
-    # save results
-    results = [classifier_name, accuracy]
-    results += metrics.values()
-
-    return results
+    return results, predictions
 
 
 def assess_all_surrogates(train_set: Dataset,
@@ -73,7 +60,7 @@ def assess_all_surrogates(train_set: Dataset,
                           intervention_attribute: str = 'NA',
                           algorithm: str = 'NA'):
     """
-    Conduct assessment on a dataset, including fairness metrics and classifier accuracies.
+    Conduct assessment on a dataset, including fairness evaluation and classifier accuracies.
 
     Parameters
     ----------
@@ -86,7 +73,7 @@ def assess_all_surrogates(train_set: Dataset,
     Returns
     -------
     pd.DataFrame
-        A dictionary containing fairness metrics and classifier accuracies.
+        A dictionary containing fairness evaluation and classifier accuracies.
 
     Raises
     ------
@@ -107,25 +94,31 @@ def assess_all_surrogates(train_set: Dataset,
         #"RF": RandomForestClassifier()
     }
 
-    global_results = []
+    global_results = pd.DataFrame()
     for feature in train_set.protected_features:
         error_check_sensitive_attribute(train_set, feature)
 
         for surrogate in surrogate_classifiers:
             logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{feature}\".')
 
-            local_results = [train_set.name, feature, intervention_attribute, algorithm]
-            local_results += assess_surrogate_model(
+            local_results = {
+                'dataset': train_set.name,
+                'sensitive_attribute': feature,
+                'intervention_attribute': intervention_attribute,
+                'algorithm': algorithm
+            }
+
+            surrogate_model_results, _ = assess_model(
                 surrogate_classifiers[surrogate],
                 train_set,
                 validation_set,
                 feature)
 
-            global_results.append(local_results)
+            local_results.update(surrogate_model_results)
 
-    global_results = pd.DataFrame(global_results, columns=['Dataset', 'Protected Attribute', 'Intervention Attribute',
-                                                           'Algorithm', 'Classifier', 'Accuracy', "Disparate Impact",
-                                                           "Discrimination Score", 'TPRDiff', 'FPRDiff'])
+            local_results_df = pd.DataFrame(local_results, index=[0])
+
+            global_results = pd.concat([global_results, local_results_df])
 
     return global_results
 

@@ -9,8 +9,6 @@ M
 	README.md,8\e\8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
 K
 src/algorithms/Algorithm.py,9\9\9905d33912199fdccc0e892b1ce47209b0692a27
-K
-src/algorithms/DoNothing.py,0\9\09ae69d2c59a4b0eb90ea218f464d4ba43b5551b
 X
 (src/algorithms/DisparateImpactRemover.py,6\1\6152b01124394ab6804506f3406a3311a2e70c3f
 X
@@ -33,18 +31,12 @@ D
 src/helpers/utils.py,e\5\e59a096e87dc6a3060fa8d752cdc6695b73b1317
 K
 src/datasets/AdultIncome.py,4\9\4931e0c8313bb99806d93428fb9ec1e57584e8af
-Q
-!src/datasets/dataset_utilities.py,0\2\028deee7b267f6f64ea68b1eaa1c77ca7e949599
 L
 src/datasets/GermanCredit.py,9\4\94413888708506ccc98818a7c7408ae21c95a8ab
 K
 src/algorithms/Massaging.py,0\4\0453dbec9e5f7fc542b2b0af462bc272f66b0362
-F
-src/metrics/metrics.py,0\6\069a8e503d6141ddcc0359752a13a3ee31319cc7
 ]
 -src/algorithms/LearningFairRepresentations.py,e\3\e359cafcd842eb17255a4b8e8c49eb03a8e2fce7
-L
-src/metrics/probabilities.py,f\e\fe59279f065edf2700876036a522c446f9f535c0
 F
 src/helpers/logging.py,6\d\6dae6ffd28b18daac2e23f1fb508bee153a53e5d
 D
@@ -68,13 +60,23 @@ H
 src/protocol/__init__.py,2\a\2ad4c2cd1eb488cb5632bcfd473433f9648cf91a
 J
 src/protocol/correction.py,d\c\dc59681269bec81242093996ad587083c14a0c0d
-M
-src/protocol/model_testing.py,0\7\07394d4e786e43cb885782cb6c6ba3e2ef99219f
 J
 src/assessment/__init__.py,5\e\5e30b50f07b2ef237d466d2187eb3a5831e34a9e
 J
 src/protocol/assessment.py,4\3\43ad472073a73c07826d862f8b8ecaf2bcbc1ecb
-I
-src/models/classifiers.py,6\2\623f8774f0225292a84d92b08ff553a185714083
-F
-src/models/__init__.py,2\2\22bfbcdf88b8f6b5ddadabbf681bf91dcfd38091
+Q
+!src/datasets/AIF360AdultIncome.py,6\2\6249ca113b72ac5bfbbd5fe8af7ccc2e9024d686
+S
+#src/evaluation/FairnessEvaluator.py,7\6\7696999961a97a1cb8771953b104c0e37a7ad1fa
+P
+ src/evaluation/ModelEvaluator.py,0\0\00b623ed9c1755f3c5e2bbb69a7706fe4798513b
+^
+.src/results/21_03_24-12_48_33-Adult Income.csv,2\1\21ae35eb351b7ea7056015aacabf0f9e0923a48b
+^
+.src/results/21_03_24-12_48_34-Adult Income.csv,7\2\72087893dba4412e7fda6f7903c997d42a8528ae
+^
+.src/results/21_03_24-12_48_37-Adult Income.csv,9\0\90258dc04b768e3c408de64649ae3d0784d0a1a9
+^
+.src/results/21_03_24-12_50_09-Adult Income.csv,2\9\2970dbc31ad173820d9333abe3905f87105112d2
+f
+6src/results/results-21_03_24-12_48_33-Adult Income.csv,7\1\71499edfb373623ba3e46cd6a1bf648912d8c6d3

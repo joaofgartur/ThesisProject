@@ -9,7 +9,7 @@ from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningF
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
-from helpers import logger, logger_levels, config_logger, extract_filename, write_dataframe_to_csv
+from helpers import logger, logger_levels, config_logger, extract_filename
 from xgboost import XGBClassifier
 
 
@@ -115,7 +115,7 @@ if __name__ == '__main__':
                 pipeline = Pipeline(dataset, algorithm, model, settings)
                 pipeline.run_and_save()
     elif run_all_dataset:
-        dataset = load_dataset(DatasetOptions.AIF360ADULT)
+        dataset = load_dataset(DatasetOptions.ADULT)
 
         for j in AlgorithmOptions:
             algorithm = load_algorithm(j)
@@ -123,9 +123,9 @@ if __name__ == '__main__':
             pipeline = Pipeline(dataset, algorithm, model, settings)
             pipeline.run_and_save()
     else:
-        dataset = load_dataset(DatasetOptions.AIF360ADULT)
+        dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.Reweighing)
+        algorithm = load_algorithm(AlgorithmOptions.DisparateImpactRemover)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

@@ -52,21 +52,12 @@ class GermanCredit(Dataset):
         sex_column = 'Attribute9'
         age_column = 'Attribute13'
 
-        print(self.features[sex_column].value_counts())
-        print(self.features[age_column].value_counts())
-
         self.features[sex_column] = self.features[sex_column].apply(lambda x: derive_sex(x))
         self.features[age_column] = self.features[age_column].apply(lambda x: derive_age(x))
-
-        print(self.features[sex_column].value_counts())
-        print(self.features[age_column].value_counts())
 
         # binarize attribute
         for feature, value in zip(self.protected_features, self.privileged_classes):
             self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
-
-        print(self.features[sex_column].value_counts())
-        print(self.features[age_column].value_counts())
 
         # rename target column
         self.targets = self.targets.rename(columns={self.target: 'target'})
