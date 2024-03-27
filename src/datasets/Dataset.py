@@ -192,3 +192,11 @@ def update_dataset(dataset: Dataset, features: np.ndarray = None, targets: np.nd
 
 def is_privileged(instance: str, privileged: str):
     return PRIVILEGED * 1.0 if instance == privileged else UNPRIVILEGED * 1.0
+
+
+def match_features(dataset_a: Dataset, dataset_b: Dataset):
+    df = copy.deepcopy(dataset_b)
+    common_columns = dataset_a.features.columns.intersection(dataset_b.features.columns)
+    df.features = dataset_b.features.drop(columns=dataset_b.features.columns.difference(common_columns))
+
+    return df

@@ -6,6 +6,7 @@ Last edited: 30-11-2023
 from enum import Enum
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
+from algorithms.LGAFFS import LGAFFS
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
@@ -72,6 +73,7 @@ class AlgorithmOptions(Enum):
     Reweighing = 1
     DisparateImpactRemover = 2
     LearningFairRepresentations = 3
+    LGAFFS = 4
 
 
 def load_algorithm(option: Enum):
@@ -84,6 +86,8 @@ def load_algorithm(option: Enum):
             return DisparateImpactRemover(repair_level=1.0)
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations()
+        case AlgorithmOptions.LGAFFS:
+            return LGAFFS(num_gen=5, pop_size=4)
         case _:
             logger.error('Algorithm option unknown!')
             raise NotImplementedError
@@ -125,7 +129,7 @@ if __name__ == '__main__':
     else:
         dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.Massaging)
+        algorithm = load_algorithm(AlgorithmOptions.LGAFFS)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

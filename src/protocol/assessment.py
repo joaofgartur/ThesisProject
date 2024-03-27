@@ -16,7 +16,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
-from datasets import Dataset, update_dataset
+from datasets import Dataset, update_dataset, match_features
 from errors import error_check_dataset, error_check_sensitive_attribute
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import logger, bold
@@ -30,6 +30,8 @@ def assess_model(model: object, train_data: Dataset, validation_data: Dataset, s
         ('normalizer', StandardScaler()),
         ('classifier', model)
     ])
+
+    validation_data = match_features(train_data, validation_data)
 
     x_train = train_data.features
     y_train = train_data.targets.to_numpy().ravel()
@@ -96,7 +98,6 @@ def assess_all_surrogates(train_set: Dataset,
 
     global_results = pd.DataFrame()
     for feature in train_set.protected_features:
-        error_check_sensitive_attribute(train_set, feature)
 
         for surrogate in surrogate_classifiers:
             logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{feature}\".')

@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, precision_score, matthews_corrcoef
 
-from constants import NUM_DECIMALS
+from constants import NUM_DECIMALS, POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
 
 
@@ -29,6 +29,13 @@ class ModelEvaluator(object):
     def mathews_cc(self):
         return np.round(matthews_corrcoef(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
 
+    def sensitivity(self):
+        return np.round(recall_score(y_true=self.y, y_pred=self.y_pred, pos_label=POSITIVE_OUTCOME), decimals=NUM_DECIMALS)
+
+    def specificity(self):
+        return np.round(recall_score(y_true=self.y, y_pred=self.y_pred, pos_label=NEGATIVE_OUTCOME),
+                        decimals=NUM_DECIMALS)
+
     def evaluate(self):
         return {
             'confusion_matrix': self.confusion_matrix(),
@@ -36,5 +43,7 @@ class ModelEvaluator(object):
             'f1_score': self.f1_score(),
             'recall': self.recall(),
             'precision': self.precision(),
-            'mathews_cc': self.mathews_cc()
+            'mathews_cc': self.mathews_cc(),
+            'sensitivity': self.sensitivity(),
+            'specificity': self.specificity()
         }

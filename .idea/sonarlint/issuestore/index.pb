@@ -70,15 +70,19 @@ S
 #src/evaluation/FairnessEvaluator.py,7\6\7696999961a97a1cb8771953b104c0e37a7ad1fa
 P
  src/evaluation/ModelEvaluator.py,0\0\00b623ed9c1755f3c5e2bbb69a7706fe4798513b
-^
-.src/results/21_03_24-12_48_33-Adult Income.csv,2\1\21ae35eb351b7ea7056015aacabf0f9e0923a48b
-^
-.src/results/21_03_24-12_48_34-Adult Income.csv,7\2\72087893dba4412e7fda6f7903c997d42a8528ae
-^
-.src/results/21_03_24-12_48_37-Adult Income.csv,9\0\90258dc04b768e3c408de64649ae3d0784d0a1a9
-^
-.src/results/21_03_24-12_50_09-Adult Income.csv,2\9\2970dbc31ad173820d9333abe3905f87105112d2
 f
 6src/results/results-21_03_24-12_48_33-Adult Income.csv,7\1\71499edfb373623ba3e46cd6a1bf648912d8c6d3
 H
 src/algorithms/LGAFFS.py,9\b\9bd1039a293c80d8706ef3499573d3b248f5f944
+O
+src/evaluation/probabilities.py,5\a\5aad5eb004c470a40e75d16f97d59cd333d76e22
+E
+src/protocol/utils.py,a\1\a10f40d10d8b13a05f26d4195122901071d35194
+^
+.src/results/27_03_24-15_18_32-Adult Income.csv,f\9\f963a0f013e28311aad752c26bf5ce7f03bdece8
+^
+.src/results/27_03_24-15_24_03-Adult Income.csv,e\1\e1f43e51f18575887065695b4217de619f961a68
+^
+.src/results/27_03_24-15_56_15-Adult Income.csv,e\6\e6b2338c13a929ca2b3e3ffcee86055bf590d3ef
+^
+.src/results/27_03_24-16_11_59-Adult Income.csv,6\5\65536cc4d739c3222bc73506e088ffeb8f16010b

@@ -15,7 +15,7 @@ def extract_value(key: str, dictionary: dict):
     raise ValueError
 
 
-def safe_division(a: float, b: float) -> float:
+def ratio(a: float, b: float) -> float:
     try:
         return a / b
     except ZeroDivisionError:
