@@ -4,6 +4,7 @@ import math
 from random import sample
 
 import numpy as np
+from sklearn.ensemble import RandomForestClassifier
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold, cross_val_predict
@@ -20,7 +21,7 @@ class LGAFFS(Algorithm):
 
     def __init__(self, num_gen: int = 1, pop_size: int = 1, indiv_size: int = 1, tour_size: int = 2, elite_num: int = 2,
                  prob_mut: float = 0.05, prob_cross: float = 0.8, min_feature_prob: float = 0.0,
-                 max_feature_prob: float = 1.0, n_splits: int = 5):
+                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01):
         """
         Initialize an Evolutionary Machine Learning object.
 
@@ -183,7 +184,7 @@ class LGAFFS(Algorithm):
                 'fnerbs': -1.0
             }
 
-        model = LogisticRegression()
+        model = RandomForestClassifier()
 
         predictions = cross_val_predict(model, data.features.to_numpy(), data.targets.to_numpy().ravel(), cv=folds)
         predicted_data = update_dataset(data, targets=predictions)
@@ -194,12 +195,14 @@ class LGAFFS(Algorithm):
             math.sqrt(performance_evaluator.specificity() * performance_evaluator.sensitivity()), decimals=NUM_DECIMALS)
 
         ds = fairness_evaluator.discrimination_score()
+        di = fairness_evaluator.disparate_impact()
         consistency = fairness_evaluator.consistency(k=3)
         fperbs = fairness_evaluator.false_negative_error_rate_balance_score()
         fnerbs = fairness_evaluator.false_negative_error_rate_balance_score()
 
         return {
             'performance': performance_metric,
+            'di': di,
             'ds': ds,
             'consistency': consistency,
             'fperbs': fperbs,
@@ -243,4 +246,7 @@ class LGAFFS(Algorithm):
 
         if not best_individual:
             return data
+
+        print(f'[LGAFFS] Best individual: {best_individual[0]}')
+
         return self.__phenotype(data, best_individual)

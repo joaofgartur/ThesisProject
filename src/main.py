@@ -87,7 +87,16 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations()
         case AlgorithmOptions.LGAFFS:
-            return LGAFFS(num_gen=5, pop_size=4)
+            return LGAFFS(
+                pop_size=21,
+                num_gen=5,
+                n_splits=3,
+                min_feature_prob=0.1,
+                max_feature_prob=0.5,
+                tour_size=2,
+                prob_cross=0.9,
+                prob_mut=0.05
+            )
         case _:
             logger.error('Algorithm option unknown!')
             raise NotImplementedError

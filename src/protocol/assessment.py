@@ -88,12 +88,12 @@ def assess_all_surrogates(train_set: Dataset,
     error_check_dataset(train_set)
 
     surrogate_classifiers = {
-        'LR': LogisticRegression(),
+        #'LR': LogisticRegression(),
         #'SVC': SVC(),
         #'GNB': GaussianNB(),
         #'KNN': KNeighborsClassifier(),
         #"DT": DecisionTreeClassifier(),
-        #"RF": RandomForestClassifier()
+        "RF": RandomForestClassifier()
     }
 
     global_results = pd.DataFrame()

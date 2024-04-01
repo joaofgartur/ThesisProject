@@ -34,10 +34,9 @@ class FairnessEvaluator(object):
             joint_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME, self.sensitive_attribute: PRIVILEGED}),
             joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED}))
 
-        try:
-            return np.round_(ratio(unprivileged_cp, privileged_cp), decimals=NUM_DECIMALS)
-        except ZeroDivisionError:
-            return 0.0
+        disparate_impact = np.round_(ratio(unprivileged_cp, privileged_cp), decimals=NUM_DECIMALS)
+
+        return disparate_impact
 
     def discrimination_score(self):
         unprivileged_cp = ratio(
@@ -48,7 +47,9 @@ class FairnessEvaluator(object):
             joint_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME, self.sensitive_attribute: PRIVILEGED}),
             joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED}))
 
-        return np.round_(unprivileged_cp - privileged_cp, decimals=NUM_DECIMALS)
+        discrimination_score = np.round_(1 - abs(unprivileged_cp - privileged_cp), decimals=NUM_DECIMALS)
+
+        return discrimination_score
 
     def false_positive_rate_diff(self):
         fpr_privileged = ratio(
@@ -80,17 +81,21 @@ class FairnessEvaluator(object):
 
     def consistency(self, k):
 
-        model = NearestNeighbors(n_neighbors=k, algorithm='auto').fit(self.data.to_numpy())
-        neighbors = model.kneighbors(self.data.to_numpy(), return_distance=False)
+        data_array = self.data.to_numpy()
 
+        model = NearestNeighbors(n_neighbors=k+1, algorithm='auto').fit(data_array)
+        neighbors = model.kneighbors(data_array, return_distance=False)[:, 1:]
+
+        n = data_array.shape[0]
         sum_value = 0
-        n = self.data.shape[0]
+        pred_outcome_index = self.data.columns.get_loc(PRED_OUTCOME)
 
         for i in range(n):
             for j in neighbors[i]:
-                sum_value += abs(self.data.iloc[i][PRED_OUTCOME] - self.data.iloc[j][PRED_OUTCOME])
+                sum_value += abs(data_array[i][pred_outcome_index] - data_array[j][pred_outcome_index])
 
-        return np.round_(1 - (1 / (n * k)) * sum_value, decimals=NUM_DECIMALS)
+        consistency_score = 1 - (sum_value / (n * k))
+        return np.round_(consistency_score, decimals=NUM_DECIMALS)
 
     def false_positive_error_rate_balance_score(self):
         f_p_unprivileged = self.data[(self.data[PRED_OUTCOME] == POSITIVE_OUTCOME) &
