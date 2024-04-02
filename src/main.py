@@ -138,7 +138,7 @@ if __name__ == '__main__':
     else:
         dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.LGAFFS)
+        algorithm = load_algorithm(AlgorithmOptions.Massaging)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

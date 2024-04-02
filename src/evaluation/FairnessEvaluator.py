@@ -3,7 +3,6 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-import copy
 
 import numpy as np
 import pandas as pd
@@ -11,10 +10,30 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 
 from datasets import Dataset
-from helpers import ratio
-from evaluation import joint_probability
+from helpers import ratio, diff, abs_diff, conditional_probability
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
                        TRUE_OUTCOME, PRED_OUTCOME, NUM_DECIMALS)
+
+
+def to_dataframe(array, labels, metric_name='Value', stats=True):
+    def compute_stats(_array, _labels):
+        _array = np.array(_array, dtype=float)
+        mean_value = np.round(np.mean(_array), decimals=NUM_DECIMALS)
+        std_value = np.round(np.std(_array), decimals=NUM_DECIMALS)
+        _array = np.append(_array, [mean_value, std_value])
+        _labels = _labels + ['Average', 'Std']
+
+        return _array, _labels
+
+    if stats:
+        array, labels = compute_stats(array, labels)
+
+    label_series = pd.Series(labels, name='Label')
+    value_series = pd.Series(array, name=metric_name)
+
+    df = pd.concat([label_series, value_series], axis=1)
+
+    return df
 
 
 class FairnessEvaluator(object):
@@ -22,68 +41,86 @@ class FairnessEvaluator(object):
     def __init__(self, original_data: Dataset, predicted_data: Dataset, sensitive_attribute: str):
         y = original_data.targets.squeeze().rename(TRUE_OUTCOME)
         y_pred = predicted_data.targets.squeeze().rename(PRED_OUTCOME)
-        self.data = pd.concat([original_data.features, original_data.original_protected_features, y, y_pred], axis=1)
-        self.sensitive_attribute = 'orig_' + sensitive_attribute
+        x = original_data.features.drop(columns=[sensitive_attribute])
+        s = pd.get_dummies(original_data.protected_features[sensitive_attribute], dtype=float)
+        s = s.rename(columns=original_data.features_mapping[sensitive_attribute])
+        self.data = pd.concat([x, s, y, y_pred], axis=1)
+        self.sensitive_columns = s.columns.to_list()
+
+    def __get_counts(self, predicted_outcome, true_outcome, group_type, sensitive_attribute):
+        filtered_data = self.data[(self.data[PRED_OUTCOME] == predicted_outcome) &
+                                  (self.data[TRUE_OUTCOME] == true_outcome) &
+                                  (self.data[sensitive_attribute] == group_type)]
+        f_v = filtered_data.shape[0]
+        t_v = self.data[(self.data[PRED_OUTCOME] != predicted_outcome) &
+                        (self.data[TRUE_OUTCOME] == true_outcome) &
+                        (self.data[sensitive_attribute] == group_type)].shape[0]
+        return f_v, t_v
+
+    def __compute_false_error_balance_score(self, predicted_outcome, true_outcome):
+        result = []
+
+        for sensitive_attribute in self.sensitive_columns:
+            f_v_u, t_v_u = self.__get_counts(predicted_outcome, true_outcome, UNPRIVILEGED, sensitive_attribute)
+            f_v_p, t_v_p = self.__get_counts(predicted_outcome, true_outcome, PRIVILEGED, sensitive_attribute)
+
+            value = diff(1, abs_diff(ratio(f_v_u, (f_v_u + t_v_u)), ratio(f_v_p, (f_v_p + t_v_p))))
+            result.append(value)
+
+        return result
+
+    def __compute_rate_difference(self, true_outcome, pred_outcome):
+        result = []
+
+        for sensitive_attribute in self.sensitive_columns:
+            rate_privileged = conditional_probability(self.data, {PRED_OUTCOME: pred_outcome,
+                                                                  TRUE_OUTCOME: true_outcome,
+                                                                  sensitive_attribute: PRIVILEGED})
+
+            rate_unprivileged = conditional_probability(self.data, {PRED_OUTCOME: pred_outcome,
+                                                                    TRUE_OUTCOME: true_outcome,
+                                                                    sensitive_attribute: UNPRIVILEGED})
+            result.append(diff(rate_privileged, rate_unprivileged))
+
+        return result
 
     def disparate_impact(self):
-        unprivileged_cp = ratio(
-            joint_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME, self.sensitive_attribute: UNPRIVILEGED}),
-            joint_probability(self.data, {self.sensitive_attribute: UNPRIVILEGED}))
+        result = np.array([], dtype=float)
 
-        privileged_cp = ratio(
-            joint_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME, self.sensitive_attribute: PRIVILEGED}),
-            joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED}))
+        for sensitive_attribute in self.sensitive_columns:
+            unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                                  sensitive_attribute: UNPRIVILEGED})
+            privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                                sensitive_attribute: PRIVILEGED})
+            result = np.append(result, ratio(unprivileged_cp, privileged_cp))
 
-        disparate_impact = np.round_(ratio(unprivileged_cp, privileged_cp), decimals=NUM_DECIMALS)
-
-        return disparate_impact
+        return to_dataframe(result, self.sensitive_columns, 'disparate_impact')
 
     def discrimination_score(self):
-        unprivileged_cp = ratio(
-            joint_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME, self.sensitive_attribute: UNPRIVILEGED}),
-            joint_probability(self.data, {self.sensitive_attribute: UNPRIVILEGED}))
+        result = np.array([], dtype=float)
 
-        privileged_cp = ratio(
-            joint_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME, self.sensitive_attribute: PRIVILEGED}),
-            joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED}))
+        for sensitive_attribute in self.sensitive_columns:
+            unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                                  sensitive_attribute: UNPRIVILEGED})
+            privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                                sensitive_attribute: PRIVILEGED})
+            result = np.append(result, diff(1, abs_diff(unprivileged_cp, privileged_cp)))
 
-        discrimination_score = np.round_(1 - abs(unprivileged_cp - privileged_cp), decimals=NUM_DECIMALS)
-
-        return discrimination_score
+        return to_dataframe(result, self.sensitive_columns, 'discrimination_score')
 
     def false_positive_rate_diff(self):
-        fpr_privileged = ratio(
-            joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED, TRUE_OUTCOME: NEGATIVE_OUTCOME,
-                                          PRED_OUTCOME: POSITIVE_OUTCOME}),
-            joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED, TRUE_OUTCOME: NEGATIVE_OUTCOME}))
-
-        fpr_unprivileged = ratio(
-            joint_probability(self.data, {self.sensitive_attribute: UNPRIVILEGED, TRUE_OUTCOME: NEGATIVE_OUTCOME,
-                                          PRED_OUTCOME: POSITIVE_OUTCOME}),
-            joint_probability(self.data, {self.sensitive_attribute: UNPRIVILEGED, TRUE_OUTCOME: NEGATIVE_OUTCOME}))
-
-        return np.round_(fpr_privileged - fpr_unprivileged, decimals=NUM_DECIMALS)
+        result = self.__compute_rate_difference(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
+        return to_dataframe(result, self.sensitive_columns, 'false_positive_rate_diff')
 
     def true_positive_rate_diff(self):
-        tpr_privileged = ratio(
-            joint_probability(self.data,
-                              {self.sensitive_attribute: PRIVILEGED, TRUE_OUTCOME: POSITIVE_OUTCOME,
-                               PRED_OUTCOME: POSITIVE_OUTCOME}),
-            joint_probability(self.data, {self.sensitive_attribute: PRIVILEGED, TRUE_OUTCOME: POSITIVE_OUTCOME}))
-
-        tpr_unprivileged = ratio(
-            joint_probability(self.data,
-                              {self.sensitive_attribute: UNPRIVILEGED, TRUE_OUTCOME: POSITIVE_OUTCOME,
-                               PRED_OUTCOME: POSITIVE_OUTCOME}),
-            joint_probability(self.data, {self.sensitive_attribute: UNPRIVILEGED, TRUE_OUTCOME: POSITIVE_OUTCOME}))
-
-        return np.round_(tpr_privileged - tpr_unprivileged, decimals=NUM_DECIMALS)
+        result = self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME)
+        return to_dataframe(result, self.sensitive_columns, 'true_positive_rate_diff')
 
     def consistency(self, k):
 
         data_array = self.data.to_numpy()
 
-        model = NearestNeighbors(n_neighbors=k+1, algorithm='auto').fit(data_array)
+        model = NearestNeighbors(n_neighbors=k + 1, algorithm='auto').fit(data_array)
         neighbors = model.kneighbors(data_array, return_distance=False)[:, 1:]
 
         n = data_array.shape[0]
@@ -94,58 +131,27 @@ class FairnessEvaluator(object):
             for j in neighbors[i]:
                 sum_value += abs(data_array[i][pred_outcome_index] - data_array[j][pred_outcome_index])
 
-        consistency_score = 1 - (sum_value / (n * k))
-        return np.round_(consistency_score, decimals=NUM_DECIMALS)
+        score = diff(1, ratio(sum_value, n * k))
+        result = [score] * len(self.sensitive_columns)
+
+        return to_dataframe(result, self.sensitive_columns, 'consistency')
 
     def false_positive_error_rate_balance_score(self):
-        f_p_unprivileged = self.data[(self.data[PRED_OUTCOME] == POSITIVE_OUTCOME) &
-                                     (self.data[TRUE_OUTCOME] == NEGATIVE_OUTCOME) &
-                                     (self.data[self.sensitive_attribute] == UNPRIVILEGED)].shape[0]
-
-        t_n_unprivileged = self.data[(self.data[PRED_OUTCOME] == NEGATIVE_OUTCOME) &
-                                     (self.data[TRUE_OUTCOME] == NEGATIVE_OUTCOME) &
-                                     (self.data[self.sensitive_attribute] == UNPRIVILEGED)].shape[0]
-
-        f_p_privileged = self.data[(self.data[PRED_OUTCOME] == POSITIVE_OUTCOME) &
-                                   (self.data[TRUE_OUTCOME] == NEGATIVE_OUTCOME) &
-                                   (self.data[self.sensitive_attribute] == PRIVILEGED)].shape[0]
-
-        t_n_privileged = self.data[(self.data[PRED_OUTCOME] == NEGATIVE_OUTCOME) &
-                                   (self.data[TRUE_OUTCOME] == NEGATIVE_OUTCOME) &
-                                   (self.data[self.sensitive_attribute] == PRIVILEGED)].shape[0]
-
-        result = 1 - abs(ratio(f_p_unprivileged, (f_p_unprivileged + t_n_unprivileged) -
-                               ratio(f_p_privileged, (f_p_privileged + t_n_privileged))))
-        return np.round_(result, decimals=NUM_DECIMALS)
+        result = self.__compute_false_error_balance_score(POSITIVE_OUTCOME, NEGATIVE_OUTCOME)
+        return to_dataframe(result, self.sensitive_columns, 'false_positive_error_rate_balance_score')
 
     def false_negative_error_rate_balance_score(self):
-        f_n_unprivileged = self.data[(self.data[PRED_OUTCOME] == NEGATIVE_OUTCOME) &
-                                     (self.data[TRUE_OUTCOME] == POSITIVE_OUTCOME) &
-                                     (self.data[self.sensitive_attribute] == UNPRIVILEGED)].shape[0]
-
-        t_p_unprivileged = self.data[(self.data[PRED_OUTCOME] == POSITIVE_OUTCOME) &
-                                     (self.data[TRUE_OUTCOME] == POSITIVE_OUTCOME) &
-                                     (self.data[self.sensitive_attribute] == UNPRIVILEGED)].shape[0]
-
-        f_n_privileged = self.data[(self.data[PRED_OUTCOME] == NEGATIVE_OUTCOME) &
-                                   (self.data[TRUE_OUTCOME] == POSITIVE_OUTCOME) &
-                                   (self.data[self.sensitive_attribute] == PRIVILEGED)].shape[0]
-
-        t_p_privileged = self.data[(self.data[PRED_OUTCOME] == POSITIVE_OUTCOME) &
-                                   (self.data[TRUE_OUTCOME] == POSITIVE_OUTCOME) &
-                                   (self.data[self.sensitive_attribute] == PRIVILEGED)].shape[0]
-
-        result = 1 - abs(ratio(f_n_unprivileged, (f_n_unprivileged + t_p_unprivileged)) -
-                         ratio(f_n_privileged, (f_n_privileged + t_p_privileged)))
-        return np.round_(result, decimals=NUM_DECIMALS)
+        result = self.__compute_false_error_balance_score(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
+        return to_dataframe(result, self.sensitive_columns, 'false_negative_error_rate_balance_score')
 
     def evaluate(self):
-        return {
-            'disparate_impact': self.disparate_impact(),
-            'discrimination_score': self.discrimination_score(),
-            'true_positive_rate_diff': self.true_positive_rate_diff(),
-            'false_positive_rate_diff': self.false_positive_rate_diff(),
-            'consistency': self.consistency(5),
-            'fperbs': self.false_positive_error_rate_balance_score(),
-            'fnerbs': self.false_negative_error_rate_balance_score()
-        }
+        result = pd.concat([self.disparate_impact(),
+                            self.discrimination_score(),
+                            self.true_positive_rate_diff(),
+                            self.false_positive_rate_diff(),
+                            self.false_positive_error_rate_balance_score(),
+                            self.false_negative_error_rate_balance_score(),
+                            self.consistency(k=3)], axis=1)
+        result = result.T.drop_duplicates().T
+
+        return result

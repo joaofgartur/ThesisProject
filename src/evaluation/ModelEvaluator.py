@@ -1,8 +1,10 @@
 import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, precision_score, matthews_corrcoef
 
 from constants import NUM_DECIMALS, POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
+from helpers import dict_to_dataframe
 
 
 class ModelEvaluator(object):
@@ -37,7 +39,7 @@ class ModelEvaluator(object):
                         decimals=NUM_DECIMALS)
 
     def evaluate(self):
-        return {
+        result = {
             'confusion_matrix': self.confusion_matrix(),
             'accuracy': self.accuracy(),
             'f1_score': self.f1_score(),
@@ -47,3 +49,4 @@ class ModelEvaluator(object):
             'sensitivity': self.sensitivity(),
             'specificity': self.specificity()
         }
+        return dict_to_dataframe(result)

@@ -1,3 +1,5 @@
+import pandas as pd
+
 from helpers import logger
 
 
@@ -15,8 +17,9 @@ def extract_value(key: str, dictionary: dict):
     raise ValueError
 
 
-def ratio(a: float, b: float) -> float:
-    try:
-        return a / b
-    except ZeroDivisionError:
-        return 0.0
+def duplicate_rows(df: pd.DataFrame, num_duplicates: int) -> pd.DataFrame:
+    return pd.concat([df] * num_duplicates, ignore_index=True)
+
+
+def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
+    return pd.DataFrame(dictionary, index=[0])

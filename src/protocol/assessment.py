@@ -19,7 +19,7 @@ from sklearn.ensemble import RandomForestClassifier
 from datasets import Dataset, update_dataset, match_features
 from errors import error_check_dataset, error_check_sensitive_attribute
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import logger, bold
+from helpers import logger, bold, duplicate_rows, dict_to_dataframe
 from evaluation import FairnessEvaluator
 
 
@@ -44,15 +44,17 @@ def assess_model(model: object, train_data: Dataset, validation_data: Dataset, s
     predictions = pipeline.predict(validation_data.features)
     predicted_data = update_dataset(validation_data, targets=predictions)
 
-    performance_evaluator = ModelEvaluator(validation_data, predicted_data)
-    performance_metrics = performance_evaluator.evaluate()
-
     fairness_evaluator = FairnessEvaluator(validation_data, predicted_data, sensitive_attribute)
     fairness_metrics = fairness_evaluator.evaluate()
 
-    results = {'classifier': classifier_name}
-    results.update(fairness_metrics)
-    results.update(performance_metrics)
+    performance_evaluator = ModelEvaluator(validation_data, predicted_data)
+    performance_metrics = performance_evaluator.evaluate()
+    # performance_metrics = duplicate_rows(performance_metrics, fairness_metrics.shape[0])
+
+    classifier_name = dict_to_dataframe({'classifier': classifier_name})
+    # classifier_name = duplicate_rows(classifier_name, fairness_metrics.shape[0])
+
+    results = pd.concat([classifier_name, fairness_metrics, performance_metrics], axis=1)
 
     return results, predictions
 
@@ -97,17 +99,10 @@ def assess_all_surrogates(train_set: Dataset,
     }
 
     global_results = pd.DataFrame()
-    for feature in train_set.protected_features:
+    for feature in train_set.protected_features_names:
 
         for surrogate in surrogate_classifiers:
             logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{feature}\".')
-
-            local_results = {
-                'dataset': train_set.name,
-                'sensitive_attribute': feature,
-                'intervention_attribute': intervention_attribute,
-                'algorithm': algorithm
-            }
 
             surrogate_model_results, _ = assess_model(
                 surrogate_classifiers[surrogate],
@@ -115,11 +110,17 @@ def assess_all_surrogates(train_set: Dataset,
                 validation_set,
                 feature)
 
-            local_results.update(surrogate_model_results)
+            local_results = {
+                'dataset': train_set.name,
+                'sensitive_attribute': feature,
+                'intervention_attribute': intervention_attribute,
+                'algorithm': algorithm
+            }
+            local_results = dict_to_dataframe(local_results)
+            # local_results = duplicate_rows(local_results, surrogate_model_results.shape[0])
 
-            local_results_df = pd.DataFrame(local_results, index=[0])
-
-            global_results = pd.concat([global_results, local_results_df])
+            local_results = pd.concat([local_results, surrogate_model_results], axis=1)
+            global_results = pd.concat([global_results, local_results])
 
     return global_results
 

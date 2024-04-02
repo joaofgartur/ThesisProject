@@ -58,7 +58,7 @@ class Compas(Dataset):
             return POSITIVE_OUTCOME - x
 
         # binarize attribute
-        for feature, value in zip(self.protected_features, self.privileged_classes):
+        for feature, value in zip(self.protected_features_names, self.privileged_classes):
             self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
 
         self.targets = self.targets.apply(lambda x: derive_class(x))

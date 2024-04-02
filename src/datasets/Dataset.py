@@ -27,7 +27,7 @@ class Dataset(metaclass=abc.ABCMeta):
         self._preprocessing()
 
         # save original values for protected attributes
-        self.original_protected_features = self.get_protected_features().add_prefix('orig_')
+        self.protected_features = self.get_protected_features()
 
         logger.info(f'[{extract_filename(__file__)}] Loaded.')
 
@@ -40,7 +40,7 @@ class Dataset(metaclass=abc.ABCMeta):
         """"""
 
     def get_protected_features(self) -> pd.DataFrame:
-        return self.features.loc[:, self.protected_features]
+        return self.features.loc[:, self.protected_features_names]
 
     def merge_features_and_targets(self) -> (pd.DataFrame, str):
         data = pd.concat([self.features, self.targets], axis='columns')
@@ -70,15 +70,15 @@ class Dataset(metaclass=abc.ABCMeta):
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
         train_set.__reset_indexes()
-        train_set.original_protected_features = train_set.get_protected_features().add_prefix('orig_')
+        train_set.protected_features = train_set.get_protected_features()
 
         validation_set = update_dataset(self, features=x_val, targets=y_val)
         validation_set.__reset_indexes()
-        validation_set.original_protected_features = validation_set.get_protected_features().add_prefix('orig_')
+        validation_set.protected_features = validation_set.get_protected_features()
 
         test_set = update_dataset(self, features=x_test, targets=y_test)
         test_set.__reset_indexes()
-        test_set.original_protected_features = test_set.get_protected_features().add_prefix('orig_')
+        test_set.protected_features = test_set.get_protected_features()
 
         return train_set, validation_set, test_set
 
@@ -112,7 +112,7 @@ class Dataset(metaclass=abc.ABCMeta):
         target = 'target'
 
         self.name = extract_value(dataset_name, dataset_info)
-        self.protected_features = extract_value(protected_attributes, dataset_info)
+        self.protected_features_names = extract_value(protected_attributes, dataset_info)
         self.explanatory_features = extract_value(explanatory_attributes, dataset_info)
         self.privileged_classes = extract_value(privileged_classes, dataset_info)
         self.target = extract_value(target, dataset_info)
@@ -124,7 +124,7 @@ class Dataset(metaclass=abc.ABCMeta):
     def __quantize_numerical_features(self, n_bins=4):
         numerical_data = self.features.select_dtypes(include=['number'])
         to_drop = []
-        for attribute in self.protected_features:
+        for attribute in self.protected_features_names:
             if attribute in numerical_data.columns:
                 to_drop.append(attribute)
         numerical_data = numerical_data.drop(columns=to_drop)
@@ -137,7 +137,7 @@ class Dataset(metaclass=abc.ABCMeta):
 
         self.features = processed_features
 
-    """
+
     def __one_hot_encode_categorical_features(self):
         numerical_data = self.features.select_dtypes(include=['number'])
         categorical_data = self.features.drop(numerical_data, axis=1)
@@ -149,7 +149,7 @@ class Dataset(metaclass=abc.ABCMeta):
             processed_features = pd.concat([numerical_data, encoded_categorical_data], axis=1)
 
             self.features = processed_features
-    """
+
 
     def __label_encode_categorical(self, features=False, targets=True):
 
@@ -160,8 +160,8 @@ class Dataset(metaclass=abc.ABCMeta):
             for column in df.columns:
                 if df[column].dtype == object:
                     df[column] = encoder.fit_transform(df[column])
-                    mapping = dict(zip(encoder.classes_, encoder.transform(encoder.classes_)))
-                    mapping.update({column: mapping})
+                    local_mapping = dict(zip(encoder.transform(encoder.classes_), encoder.classes_))
+                    mapping.update({column: local_mapping})
 
             return df, mapping
 

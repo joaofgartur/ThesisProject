@@ -21,6 +21,7 @@ class Pipeline:
         try:
             train_set, validation_set, test_set = self.dataset.split(self.settings)
 
+            """
             scaler = MinMaxScaler(copy=False)
             scaler = scaler.fit(train_set.features)
             train_set.features = pd.DataFrame(scaler.transform(train_set.features),
@@ -29,6 +30,9 @@ class Pipeline:
                                                    columns=validation_set.features.columns)
             test_set.features = pd.DataFrame(scaler.transform(test_set.features),
                                              columns=test_set.features.columns)
+            """
+
+
 
             logger.info("[PRE-INTERVENTION] Performing assessment...")
 
@@ -36,7 +40,7 @@ class Pipeline:
 
             logger.info("[PRE-INTERVENTION] Assessment complete.")
 
-            for feature in train_set.protected_features:
+            for feature in train_set.protected_features_names:
                 logger.info(f"[INTERVENTION] Correcting bias w.r.t. attribute {feature} with "
                             f"{self.algorithm.__class__.__name__}")
 

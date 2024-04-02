@@ -3,3 +3,4 @@ from .logging import *
 from .utils import *
 from .files import *
 from .plots import *
+from .maths import *

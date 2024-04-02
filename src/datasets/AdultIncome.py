@@ -1,5 +1,4 @@
 import pandas as pd
-from sklearn.preprocessing import KBinsDiscretizer
 from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
@@ -36,8 +35,10 @@ class AdultIncome(Dataset):
     def _transform_protected_attributes(self):
 
         # binarize attribute
+        """
         for feature, value in zip(self.protected_features, self.privileged_classes):
             self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
+        """
 
         self.targets = (self.targets.replace("<=", NEGATIVE_OUTCOME, regex=True)
                         .replace(">", POSITIVE_OUTCOME, regex=True)

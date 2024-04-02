@@ -4,5 +4,4 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 
-from .probabilities import *
 from .FairnessEvaluator import FairnessEvaluator
