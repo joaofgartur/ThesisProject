@@ -1,4 +1,6 @@
 
-hpython:S1254"Remove this commented out code.(¯Ôİèúÿÿÿÿ8›¯°òé1J$d3e1b117-cdea-42b6-ae2e-e15e57a5de7b
-Bpython:S1257"Remove this commented out code.(ª»ÌÑùÿÿÿÿ8ø×°òé1
-hpython:S125x"Remove this commented out code.(’ÛÆ”úÿÿÿÿ8Õö¯òé1J$a91d1e11-814f-4688-af02-2c6968d07005
+‡python:S1481:"BReplace the unused local variable "dominant_performance" with "_".(¨÷«Õ8ŒõÊÈê1J$2c482466-f3d2-4d92-8588-a18c51543014
+python:S1481?"CReplace the unused local variable "candidate_performance" with "_".(ˆÖôÏıÿÿÿÿ8õÊÈê1J$f3ce6969-cb1d-4965-8233-19945d04caa7
+cpython:S125R"Remove this commented out code.(ÒşÂÖ8õÊÈê1J$60370d52-00ab-4cec-9c77-1dcd3ab2ee07
+cpython:S125U"Remove this commented out code.(…Óµ•8õÊÈê1J$f5b96416-941f-4bcc-878f-3b168d994aec
+ipython:S125É"Remove this commented out code.(’ÛÆ”úÿÿÿÿ8Õö¯òé1J$5f148f18-c9a2-41af-a35b-28f67f1ec7f0

@@ -26,9 +26,6 @@ class Dataset(metaclass=abc.ABCMeta):
         # preprocess dataset
         self._preprocessing()
 
-        # save original values for protected attributes
-        self.protected_features = self.get_protected_features()
-
         logger.info(f'[{extract_filename(__file__)}] Loaded.')
 
     @abc.abstractmethod
@@ -39,8 +36,30 @@ class Dataset(metaclass=abc.ABCMeta):
     def _transform_protected_attributes(self):
         """"""
 
-    def get_protected_features(self) -> pd.DataFrame:
+    def set_feature(self, feature: str, series: pd.Series):
+        if feature not in self.features.columns:
+            raise ValueError(f'Feature {feature} does not exist.')
+
+        self.features[feature] = series
+
+    def get_protected_features(self):
         return self.features.loc[:, self.protected_features_names]
+
+    def get_protected_feature(self, feature) -> pd.DataFrame:
+        if feature not in self.protected_features_names:
+            raise ValueError(f'Feature {feature} is not a protected feature.')
+
+        return self.features.loc[:, feature]
+
+    def get_dummy_protected_feature(self, feature) -> pd.DataFrame:
+        if feature not in self.protected_features_names:
+            raise ValueError(f'Attribute {feature} is not a protected attribute.')
+
+        protected_feature = self.get_protected_feature(feature)
+        dummy_protected_feature = pd.get_dummies(protected_feature, dtype=float)
+        dummy_protected_feature = dummy_protected_feature.rename(columns=self.features_mapping[feature])
+
+        return dummy_protected_feature
 
     def merge_features_and_targets(self) -> (pd.DataFrame, str):
         data = pd.concat([self.features, self.targets], axis='columns')
@@ -70,15 +89,12 @@ class Dataset(metaclass=abc.ABCMeta):
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
         train_set.__reset_indexes()
-        train_set.protected_features = train_set.get_protected_features()
 
         validation_set = update_dataset(self, features=x_val, targets=y_val)
         validation_set.__reset_indexes()
-        validation_set.protected_features = validation_set.get_protected_features()
 
         test_set = update_dataset(self, features=x_test, targets=y_test)
         test_set.__reset_indexes()
-        test_set.protected_features = test_set.get_protected_features()
 
         return train_set, validation_set, test_set
 

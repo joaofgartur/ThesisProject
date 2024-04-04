@@ -88,7 +88,7 @@ def load_algorithm(option: Enum):
             return LearningFairRepresentations()
         case AlgorithmOptions.LGAFFS:
             return LGAFFS(
-                pop_size=21,
+                pop_size=10,
                 num_gen=5,
                 n_splits=3,
                 min_feature_prob=0.1,
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     else:
         dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.Massaging)
+        algorithm = load_algorithm(AlgorithmOptions.DisparateImpactRemover)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

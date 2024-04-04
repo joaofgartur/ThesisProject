@@ -15,7 +15,8 @@ from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTC
                        TRUE_OUTCOME, PRED_OUTCOME, NUM_DECIMALS)
 
 
-def to_dataframe(array, labels, metric_name='Value', stats=True):
+def to_dataframe(array, labels, stats: bool, metric_name='Value'):
+
     def compute_stats(_array, _labels):
         _array = np.array(_array, dtype=float)
         mean_value = np.round(np.mean(_array), decimals=NUM_DECIMALS)
@@ -42,10 +43,10 @@ class FairnessEvaluator(object):
         y = original_data.targets.squeeze().rename(TRUE_OUTCOME)
         y_pred = predicted_data.targets.squeeze().rename(PRED_OUTCOME)
         x = original_data.features.drop(columns=[sensitive_attribute])
-        s = pd.get_dummies(original_data.protected_features[sensitive_attribute], dtype=float)
-        s = s.rename(columns=original_data.features_mapping[sensitive_attribute])
+        s = original_data.get_dummy_protected_feature(sensitive_attribute)
         self.data = pd.concat([x, s, y, y_pred], axis=1)
         self.sensitive_columns = s.columns.to_list()
+        self.stats = True
 
     def __get_counts(self, predicted_outcome, true_outcome, group_type, sensitive_attribute):
         filtered_data = self.data[(self.data[PRED_OUTCOME] == predicted_outcome) &
@@ -94,7 +95,7 @@ class FairnessEvaluator(object):
                                                                 sensitive_attribute: PRIVILEGED})
             result = np.append(result, ratio(unprivileged_cp, privileged_cp))
 
-        return to_dataframe(result, self.sensitive_columns, 'disparate_impact')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'disparate_impact')
 
     def discrimination_score(self):
         result = np.array([], dtype=float)
@@ -106,15 +107,15 @@ class FairnessEvaluator(object):
                                                                 sensitive_attribute: PRIVILEGED})
             result = np.append(result, diff(1, abs_diff(unprivileged_cp, privileged_cp)))
 
-        return to_dataframe(result, self.sensitive_columns, 'discrimination_score')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'discrimination_score')
 
     def false_positive_rate_diff(self):
         result = self.__compute_rate_difference(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, 'false_positive_rate_diff')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'false_positive_rate_diff')
 
     def true_positive_rate_diff(self):
         result = self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, 'true_positive_rate_diff')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'true_positive_rate_diff')
 
     def consistency(self, k):
 
@@ -134,17 +135,19 @@ class FairnessEvaluator(object):
         score = diff(1, ratio(sum_value, n * k))
         result = [score] * len(self.sensitive_columns)
 
-        return to_dataframe(result, self.sensitive_columns, 'consistency')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'consistency')
 
     def false_positive_error_rate_balance_score(self):
         result = self.__compute_false_error_balance_score(POSITIVE_OUTCOME, NEGATIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, 'false_positive_error_rate_balance_score')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'false_positive_error_rate_balance_score')
 
     def false_negative_error_rate_balance_score(self):
         result = self.__compute_false_error_balance_score(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, 'false_negative_error_rate_balance_score')
+        return to_dataframe(result, self.sensitive_columns, self.stats, 'false_negative_error_rate_balance_score')
 
-    def evaluate(self):
+    def evaluate(self, stats=True):
+        self.stats = stats
+
         result = pd.concat([self.disparate_impact(),
                             self.discrimination_score(),
                             self.true_positive_rate_diff(),

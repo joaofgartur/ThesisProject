@@ -5,8 +5,6 @@ from random import sample
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
-
-from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
@@ -35,7 +33,7 @@ class LGAFFS(Algorithm):
         """
         self.num_gen = num_gen
         self.pop_size = pop_size
-        self.indiv_size = indiv_size
+        self.individual_size = indiv_size
         self.tour_size = tour_size
         self.elite_num = elite_num
         self.prob_mut = prob_mut
@@ -50,9 +48,9 @@ class LGAFFS(Algorithm):
     def __gen_individual(self, feature_prob: float = 1.0):
         if feature_prob:
             features_prob = np.random.uniform(low=self.min_feature_prob, high=self.max_feature_prob,
-                                              size=self.indiv_size)
-            return np.array([1 if features_prob[i] > feature_prob else 0 for i in range(self.indiv_size)])
-        return np.random.randint(2, size=self.indiv_size)
+                                              size=self.individual_size)
+            return np.array([1 if features_prob[i] > feature_prob else 0 for i in range(self.individual_size)])
+        return np.random.randint(2, size=self.individual_size)
 
     def __gen_ramped_population(self):
         pop_feature_probs = np.random.uniform(low=self.min_feature_prob, high=self.max_feature_prob, size=self.pop_size)
@@ -197,19 +195,19 @@ class LGAFFS(Algorithm):
         ds = fairness_evaluator.discrimination_score()
         di = fairness_evaluator.disparate_impact()
         consistency = fairness_evaluator.consistency(k=3)
-        fperbs = fairness_evaluator.false_negative_error_rate_balance_score()
-        fnerbs = fairness_evaluator.false_negative_error_rate_balance_score()
+        false_positive_error_rate_balance_score = fairness_evaluator.false_positive_error_rate_balance_score()
+        false_negative_error_rate_balance_score = fairness_evaluator.false_negative_error_rate_balance_score()
 
         return {
             'performance': performance_metric,
             'di': di,
             'ds': ds,
             'consistency': consistency,
-            'fperbs': fperbs,
-            'fnerbs': fnerbs
+            'false_positive_error_rate_balance_score': false_positive_error_rate_balance_score,
+            'false_negative_error_rate_balance_score': false_negative_error_rate_balance_score
         }
 
-    def __phenotype(self, data: Dataset, individual):
+    def __phenotype(self, data: Dataset, individual: list) -> Dataset:
         new_data = copy.deepcopy(data)
         features_to_drop = np.argwhere(individual[0] == 0).ravel()
         selected_features = data.features.drop(data.features.columns[features_to_drop], axis=1)
@@ -218,7 +216,7 @@ class LGAFFS(Algorithm):
         return new_data
 
     def fit(self, data: Dataset, sensitive_attribute: str):
-        self.indiv_size = data.features.shape[1]
+        self.individual_size = data.features.shape[1]
         self.population = self.__gen_ramped_population()
         self.sensitive_attribute = sensitive_attribute
 
