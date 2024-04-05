@@ -41,7 +41,7 @@ class LGAFFS(Algorithm):
         self.min_feature_prob = min_feature_prob
         self.max_feature_prob = max_feature_prob
         self.n_splits = n_splits
-        self.epsilon = 0.05
+        self.epsilon = epsilon
         self.sensitive_attribute = None
         self.population = None
 

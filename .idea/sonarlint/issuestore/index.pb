@@ -98,3 +98,11 @@ D
 .src/results/02_04_24-11_16_26-Adult Income.csv,0\3\03f18533335b84b160e46b12db10cc3abb9390ca
 ^
 .src/results/04_04_24-13_31_55-Adult Income.csv,1\f\1f99a079d8cbd6fda87fd2632f4bb5e4fb06190f
+]
+-src/algorithms/PermutationGeneticAlgorithm.py,b\4\b40f1f7fc3173337b8489856c984ae98af91ea76
+^
+.src/results/04_04_24-21_19_31-Adult Income.csv,d\9\d9d7765a87391cef338d04658e8fe3fe93883e62
+^
+.src/results/05_04_24-14_56_58-Adult Income.csv,1\d\1d64eb83d9878e9851f695a3a3f064c653833cf7
+^
+.src/results/05_04_24-15_49_55-Adult Income.csv,8\7\87627587ca36d90ce825f1d254f4dcab1b6eca6e

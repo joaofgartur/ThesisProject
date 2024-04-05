@@ -61,6 +61,11 @@ class Dataset(metaclass=abc.ABCMeta):
 
         return dummy_protected_feature
 
+    def get_value_counts(self, feature):
+        df = self.features[feature]
+        df.replace(self.features_mapping[feature], inplace=True)
+        return df.value_counts()
+
     def merge_features_and_targets(self) -> (pd.DataFrame, str):
         data = pd.concat([self.features, self.targets], axis='columns')
         outcome = self.targets.columns[0]

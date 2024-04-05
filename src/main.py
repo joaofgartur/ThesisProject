@@ -7,6 +7,7 @@ from enum import Enum
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
 from algorithms.LGAFFS import LGAFFS
+from algorithms.PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
@@ -74,12 +75,13 @@ class AlgorithmOptions(Enum):
     DisparateImpactRemover = 2
     LearningFairRepresentations = 3
     LGAFFS = 4
+    PGA = 5
 
 
 def load_algorithm(option: Enum):
     match option:
         case AlgorithmOptions.Massaging:
-            return Massaging(learning_settings={'train_size': 0.5, 'test_size': 0.5})
+            return Massaging(learning_settings={'train_size': 0.8, 'test_size': 0.2})
         case AlgorithmOptions.Reweighing:
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
@@ -96,6 +98,16 @@ def load_algorithm(option: Enum):
                 tour_size=2,
                 prob_cross=0.9,
                 prob_mut=0.05
+            )
+        case AlgorithmOptions.PGA:
+            return PermutationGeneticAlgorithm(
+                pop_size=10,
+                num_gen=10,
+                tour_size=2,
+                prob_cross=0.9,
+                prob_mut=0.05,
+                elite_num=2,
+                base_algorithm=Massaging(learning_settings={'train_size': 0.9, 'test_size': 0.1})
             )
         case _:
             logger.error('Algorithm option unknown!')
@@ -138,7 +150,7 @@ if __name__ == '__main__':
     else:
         dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.DisparateImpactRemover)
+        algorithm = load_algorithm(AlgorithmOptions.PGA)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

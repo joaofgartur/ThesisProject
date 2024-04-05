@@ -44,11 +44,19 @@ class Pipeline:
                 logger.info(f"[INTERVENTION] Correcting bias w.r.t. attribute {protected_feature} with "
                             f"{self.algorithm.__class__.__name__}")
 
+                print(train_set.get_value_counts(protected_feature))
+
                 # preserve protected feature
                 original_values = train_set.get_protected_feature(protected_feature)
                 transformed_dataset = copy.deepcopy(train_set)
-                logger.info(f"[INTERVENTION] Dominant is {0}")
+                # logger.info(f"[INTERVENTION] Dominant is {0}")
 
+                self.algorithm.fit(transformed_dataset, protected_feature)
+                self.algorithm.set_validation_data(validation_data=validation_set)
+                transformed_dataset = self.algorithm.transform(transformed_dataset)
+                transformed_dataset.set_feature(protected_feature, original_values)
+
+                """
                 dummy_values = train_set.get_dummy_protected_feature(protected_feature)
 
                 permutations = list(itertools.permutations(dummy_values.columns.to_list()))
@@ -72,6 +80,8 @@ class Pipeline:
                         transformed_dataset = temp_transformed_dataset
 
                     permutation_count += 1
+                
+                """
 
                 logger.info('[INTERVENTION] Correction finished.')
                 logger.info("[POST-INTERVENTION] Performing assessment...")

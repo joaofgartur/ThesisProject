@@ -22,11 +22,11 @@ from helpers import logger, bold, dict_to_dataframe, abs_diff
 from evaluation import FairnessEvaluator
 
 surrogate_models = {
-    'LR': LogisticRegression(),
-    'SVC': SVC(),
-    'GNB': GaussianNB(),
-    'KNN': KNeighborsClassifier(),
-    "DT": DecisionTreeClassifier(),
+    #'LR': LogisticRegression(),
+    #'SVC': SVC(),
+    #'GNB': GaussianNB(),
+    #'KNN': KNeighborsClassifier(),
+    #"DT": DecisionTreeClassifier(),
     "RF": RandomForestClassifier()
 }
 

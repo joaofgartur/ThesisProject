@@ -16,3 +16,7 @@ class Algorithm(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def transform(self, dataset: Dataset) -> Dataset:
         """"""
+
+    def set_validation_data(self, validation_data: Dataset):
+        """"""
+        pass
