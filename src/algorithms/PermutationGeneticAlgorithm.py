@@ -19,6 +19,8 @@ class PermutationGeneticAlgorithm(Algorithm):
                  prob_mut: float = 0.05, prob_cross: float = 0.8, min_feature_prob: float = 0.0,
                  max_feature_prob: float = 1.0):
 
+        self.is_binary = False
+
         self.base_algorithm = base_algorithm
         self.num_gen = num_gen
         self.pop_size = pop_size

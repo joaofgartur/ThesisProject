@@ -48,55 +48,6 @@ def compare_metric(series_a: pd.Series, series_b: pd) -> int:
     return compare(a, b)
 
 
-def assess_dominance(dominant: Dataset, candidate: Dataset, validation_set: Dataset,
-                     sensitive_attribute: str) -> bool:
-    count_dominant = 0
-    count_candidate = 0
-
-    for model in surrogate_models:
-
-        dominant_fairness, dominant_performance = get_model_evaluators(surrogate_models[model],
-                                                                       dominant,
-                                                                       validation_set,
-                                                                       sensitive_attribute)
-
-        candidate_fairness, candidate_performance = get_model_evaluators(surrogate_models[model],
-                                                                         candidate,
-                                                                         validation_set,
-                                                                         sensitive_attribute)
-
-        dominant_f_metrics = dominant_fairness.evaluate(stats=False)
-        candidate_f_metrics = candidate_fairness.evaluate(stats=False)
-
-        for metric in dominant_f_metrics:
-            if metric == 'Label':
-                continue
-
-            comparison_result = compare_metric(dominant_f_metrics[metric], candidate_f_metrics[metric])
-
-            if comparison_result >= 0:
-                count_candidate += 1
-            else:
-                count_dominant += 1
-
-        # dominant_p_metrics = dominant_performance.evaluate().select_dtypes(include=['number'])
-        # candidate_p_metrics = candidate_performance.evaluate().select_dtypes(include=['number'])
-
-        """
-        for metric in dominant_p_metrics:
-            comparison_result = compare_metric(dominant_p_metrics[metric], candidate_p_metrics[metric])
-
-            if comparison_result >= 0:
-                count_dominant += 1
-            else:
-                count_candidate += 1
-        """
-
-    # print(f'dominant: {count_dominant} candidate: {count_candidate}')
-
-    return True if count_candidate > count_dominant else False
-
-
 def get_model_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
     pipeline = Pipeline([
         ('normalizer', StandardScaler()),
@@ -129,10 +80,14 @@ def get_model_evaluators(model: object, train_data: Dataset, validation_data: Da
     return fairness_evaluator, performance_evaluator
 
 
-def assess_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str):
+def assess_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str = 'NA'):
     model_name = model.__class__.__name__
 
     predicted_data = get_model_predictions(model, train_data, validation_data)
+
+    # restore original protected values
+    # original_values = train_data.get_protected_feature(feature=sensitive_attribute)
+    # train_data.set_feature(sensitive_attribute, original_values)
 
     fairness_evaluator, performance_evaluator = get_model_evaluators(model,
                                                                      train_data,
@@ -151,16 +106,14 @@ def assess_model(model: object, train_data: Dataset, validation_data: Dataset, s
 
 def assess_all_surrogates(train_set: Dataset,
                           validation_set: Dataset,
-                          intervention_attribute: str = 'NA',
-                          algorithm: str = 'NA'):
+                          protected_feature: str = 'NA'):
     """
     Conduct assessment on a dataset, including fairness evaluation and classifier accuracies.
 
     Parameters
     ----------
     validation_set
-    algorithm
-    intervention_attribute
+    protected_feature
     train_set : Dataset
         The dataset object containing features, targets, and sensitive attributes.
 
@@ -180,28 +133,17 @@ def assess_all_surrogates(train_set: Dataset,
     error_check_dataset(train_set)
 
     global_results = pd.DataFrame()
-    for feature in train_set.protected_features_names:
 
-        for surrogate in surrogate_models:
-            logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{feature}\".')
+    for surrogate in surrogate_models:
+        # logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{protected_feature}\".')
 
-            surrogate_model_results, _ = assess_model(
-                surrogate_models[surrogate],
-                train_set,
-                validation_set,
-                feature)
+        surrogate_model_results, _ = assess_model(
+            surrogate_models[surrogate],
+            train_set,
+            validation_set,
+            protected_feature)
 
-            local_results = {
-                'dataset': train_set.name,
-                'sensitive_attribute': feature,
-                'intervention_attribute': intervention_attribute,
-                'algorithm': algorithm
-            }
-            local_results = dict_to_dataframe(local_results)
-            # local_results = duplicate_rows(local_results, surrogate_model_results.shape[0])
-
-            local_results = pd.concat([local_results, surrogate_model_results], axis=1)
-            global_results = pd.concat([global_results, local_results])
+        global_results = pd.concat([global_results, surrogate_model_results])
 
     return global_results
 

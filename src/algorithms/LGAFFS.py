@@ -31,6 +31,7 @@ class LGAFFS(Algorithm):
         @param tour_size: Size of tournament
         @param elite_num: Size of elitism
         """
+        super().__init__()
         self.num_gen = num_gen
         self.pop_size = pop_size
         self.individual_size = indiv_size

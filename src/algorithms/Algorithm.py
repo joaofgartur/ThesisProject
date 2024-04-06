@@ -5,9 +5,9 @@ from datasets import Dataset
 
 class Algorithm(metaclass=abc.ABCMeta):
 
-    @abc.abstractmethod
     def __init__(self):
         """"""
+        self.is_binary = True
 
     @abc.abstractmethod
     def fit(self, data: Dataset, sensitive_attribute: str):

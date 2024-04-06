@@ -81,7 +81,7 @@ class AlgorithmOptions(Enum):
 def load_algorithm(option: Enum):
     match option:
         case AlgorithmOptions.Massaging:
-            return Massaging(learning_settings={'train_size': 0.8, 'test_size': 0.2})
+            return Massaging(learning_settings={'train_size': 0.9, 'test_size': 0.1})
         case AlgorithmOptions.Reweighing:
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     else:
         dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.PGA)
+        algorithm = load_algorithm(AlgorithmOptions.Massaging)
 
         pipeline = Pipeline(dataset, algorithm, model, settings)
         pipeline.run_and_save()

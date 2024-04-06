@@ -8,7 +8,7 @@ from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset, update_dataset
 from helpers import convert_to_standard_dataset
-from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
+from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 from errors import error_check_dataset, error_check_sensitive_attribute
 
 
@@ -24,8 +24,8 @@ class Reweighing(Algorithm):
 
         standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        privileged_groups = [{self.sensitive_attribute: POSITIVE_OUTCOME}]
-        unprivileged_groups = [{self.sensitive_attribute: NEGATIVE_OUTCOME}]
+        privileged_groups = [{self.sensitive_attribute: PRIVILEGED}]
+        unprivileged_groups = [{self.sensitive_attribute: UNPRIVILEGED}]
 
         self.transformer = Aif360Reweighing(unprivileged_groups=unprivileged_groups,
                                             privileged_groups=privileged_groups)

@@ -10,13 +10,12 @@ import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 
 from datasets import Dataset
-from helpers import ratio, diff, abs_diff, conditional_probability
+from helpers import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
                        TRUE_OUTCOME, PRED_OUTCOME, NUM_DECIMALS)
 
 
 def to_dataframe(array, labels, stats: bool, metric_name='Value'):
-
     def compute_stats(_array, _labels):
         _array = np.array(_array, dtype=float)
         mean_value = np.round(np.mean(_array), decimals=NUM_DECIMALS)
@@ -43,10 +42,9 @@ class FairnessEvaluator(object):
         y = original_data.targets.squeeze().rename(TRUE_OUTCOME)
         y_pred = predicted_data.targets.squeeze().rename(PRED_OUTCOME)
         x = original_data.features.drop(columns=[sensitive_attribute])
-        s = original_data.get_dummy_protected_feature(sensitive_attribute)
+        s = original_data.protected_features[sensitive_attribute]
+        self.sensitive_attribute = sensitive_attribute
         self.data = pd.concat([x, s, y, y_pred], axis=1)
-        self.sensitive_columns = s.columns.to_list()
-        self.stats = True
 
     def __get_counts(self, predicted_outcome, true_outcome, group_type, sensitive_attribute):
         filtered_data = self.data[(self.data[PRED_OUTCOME] == predicted_outcome) &
@@ -59,63 +57,41 @@ class FairnessEvaluator(object):
         return f_v, t_v
 
     def __compute_false_error_balance_score(self, predicted_outcome, true_outcome):
-        result = []
+        f_v_u, t_v_u = self.__get_counts(predicted_outcome, true_outcome, UNPRIVILEGED, self.sensitive_attribute)
+        f_v_p, t_v_p = self.__get_counts(predicted_outcome, true_outcome, PRIVILEGED, self.sensitive_attribute)
 
-        for sensitive_attribute in self.sensitive_columns:
-            f_v_u, t_v_u = self.__get_counts(predicted_outcome, true_outcome, UNPRIVILEGED, sensitive_attribute)
-            f_v_p, t_v_p = self.__get_counts(predicted_outcome, true_outcome, PRIVILEGED, sensitive_attribute)
-
-            value = diff(1, abs_diff(ratio(f_v_u, (f_v_u + t_v_u)), ratio(f_v_p, (f_v_p + t_v_p))))
-            result.append(value)
-
-        return result
+        return diff(1, abs_diff(ratio(f_v_u, (f_v_u + t_v_u)), ratio(f_v_p, (f_v_p + t_v_p))))
 
     def __compute_rate_difference(self, true_outcome, pred_outcome):
-        result = []
+        rate_privileged = conditional_probability(self.data, {PRED_OUTCOME: pred_outcome,
+                                                              TRUE_OUTCOME: true_outcome,
+                                                              self.sensitive_attribute: PRIVILEGED})
 
-        for sensitive_attribute in self.sensitive_columns:
-            rate_privileged = conditional_probability(self.data, {PRED_OUTCOME: pred_outcome,
-                                                                  TRUE_OUTCOME: true_outcome,
-                                                                  sensitive_attribute: PRIVILEGED})
-
-            rate_unprivileged = conditional_probability(self.data, {PRED_OUTCOME: pred_outcome,
-                                                                    TRUE_OUTCOME: true_outcome,
-                                                                    sensitive_attribute: UNPRIVILEGED})
-            result.append(diff(rate_privileged, rate_unprivileged))
-
-        return result
+        rate_unprivileged = conditional_probability(self.data, {PRED_OUTCOME: pred_outcome,
+                                                                TRUE_OUTCOME: true_outcome,
+                                                                self.sensitive_attribute: UNPRIVILEGED})
+        return diff(rate_privileged, rate_unprivileged)
 
     def disparate_impact(self):
-        result = np.array([], dtype=float)
 
-        for sensitive_attribute in self.sensitive_columns:
-            unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
-                                                                  sensitive_attribute: UNPRIVILEGED})
-            privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
-                                                                sensitive_attribute: PRIVILEGED})
-            result = np.append(result, ratio(unprivileged_cp, privileged_cp))
-
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'disparate_impact')
+        unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                              self.sensitive_attribute: UNPRIVILEGED})
+        privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                            self.sensitive_attribute: PRIVILEGED})
+        return ratio(unprivileged_cp, privileged_cp)
 
     def discrimination_score(self):
-        result = np.array([], dtype=float)
-
-        for sensitive_attribute in self.sensitive_columns:
-            unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
-                                                                  sensitive_attribute: UNPRIVILEGED})
-            privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
-                                                                sensitive_attribute: PRIVILEGED})
-            result = np.append(result, diff(1, abs_diff(unprivileged_cp, privileged_cp)))
-
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'discrimination_score')
+        unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                              self.sensitive_attribute: UNPRIVILEGED})
+        privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
+                                                            self.sensitive_attribute: PRIVILEGED})
+        return diff(1, abs_diff(unprivileged_cp, privileged_cp))
 
     def false_positive_rate_diff(self):
-        result = self.__compute_rate_difference(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'false_positive_rate_diff')
+        return self.__compute_rate_difference(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
 
     def true_positive_rate_diff(self):
-        result = self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'true_positive_rate_diff')
+        return self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME)
 
     def consistency(self, k):
 
@@ -132,29 +108,24 @@ class FairnessEvaluator(object):
             for j in neighbors[i]:
                 sum_value += abs(data_array[i][pred_outcome_index] - data_array[j][pred_outcome_index])
 
-        score = diff(1, ratio(sum_value, n * k))
-        result = [score] * len(self.sensitive_columns)
-
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'consistency')
+        return diff(1, ratio(sum_value, n * k))
 
     def false_positive_error_rate_balance_score(self):
-        result = self.__compute_false_error_balance_score(POSITIVE_OUTCOME, NEGATIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'false_positive_error_rate_balance_score')
+        return self.__compute_false_error_balance_score(POSITIVE_OUTCOME, NEGATIVE_OUTCOME)
 
     def false_negative_error_rate_balance_score(self):
-        result = self.__compute_false_error_balance_score(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
-        return to_dataframe(result, self.sensitive_columns, self.stats, 'false_negative_error_rate_balance_score')
+        return self.__compute_false_error_balance_score(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
 
-    def evaluate(self, stats=True):
-        self.stats = stats
+    def evaluate(self):
 
-        result = pd.concat([self.disparate_impact(),
-                            self.discrimination_score(),
-                            self.true_positive_rate_diff(),
-                            self.false_positive_rate_diff(),
-                            self.false_positive_error_rate_balance_score(),
-                            self.false_negative_error_rate_balance_score(),
-                            self.consistency(k=3)], axis=1)
-        result = result.T.drop_duplicates().T
+        result = {
+            'disparate_impact': self.disparate_impact(),
+            'discrimination_score': self.discrimination_score(),
+            'true_positive_rate_diff': self.true_positive_rate_diff(),
+            'false_positive_rate_diff': self.false_positive_rate_diff(),
+            'false_positive_error_rate_balance_score': self.false_positive_error_rate_balance_score(),
+            'false_negative_error_rate_balance_score': self.false_negative_error_rate_balance_score(),
+            'consistency': self.consistency(k=3),
+        }
 
-        return result
+        return dict_to_dataframe(result)

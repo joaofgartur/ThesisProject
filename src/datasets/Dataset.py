@@ -17,6 +17,7 @@ class Dataset(metaclass=abc.ABCMeta):
         self.features_mapping = None
         self.targets_mapping = None
         self.instance_weights = None
+        self.protected_features = None
 
         self.__parse_dataset_info(dataset_info)
 
@@ -25,6 +26,8 @@ class Dataset(metaclass=abc.ABCMeta):
 
         # preprocess dataset
         self._preprocessing()
+
+        self.save_protected_attributes()
 
         logger.info(f'[{extract_filename(__file__)}] Loaded.')
 
@@ -36,20 +39,23 @@ class Dataset(metaclass=abc.ABCMeta):
     def _transform_protected_attributes(self):
         """"""
 
-    def set_feature(self, feature: str, series: pd.Series):
+    def save_protected_attributes(self):
+        self.protected_features = self.features.loc[:, self.protected_features_names]
+
+    def set_feature(self, feature: str, series: pd.DataFrame):
         if feature not in self.features.columns:
             raise ValueError(f'Feature {feature} does not exist.')
 
         self.features[feature] = series
 
     def get_protected_features(self):
-        return self.features.loc[:, self.protected_features_names]
+        return self.protected_features.loc[:, self.protected_features_names]
 
     def get_protected_feature(self, feature) -> pd.DataFrame:
         if feature not in self.protected_features_names:
             raise ValueError(f'Feature {feature} is not a protected feature.')
 
-        return self.features.loc[:, feature]
+        return self.protected_features[feature]
 
     def get_dummy_protected_feature(self, feature) -> pd.DataFrame:
         if feature not in self.protected_features_names:
@@ -94,12 +100,15 @@ class Dataset(metaclass=abc.ABCMeta):
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
         train_set.__reset_indexes()
+        train_set.save_protected_attributes()
 
         validation_set = update_dataset(self, features=x_val, targets=y_val)
         validation_set.__reset_indexes()
+        validation_set.save_protected_attributes()
 
         test_set = update_dataset(self, features=x_test, targets=y_test)
         test_set.__reset_indexes()
+        test_set.save_protected_attributes()
 
         return train_set, validation_set, test_set
 
