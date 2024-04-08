@@ -6,6 +6,7 @@ Last edited: 30-11-2023
 from enum import Enum
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
+from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from algorithms.LGAFFS import LGAFFS
 from algorithms.PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
 from datasets.AIF360AdultIncome import AIF360AdultIncome
@@ -89,24 +90,30 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.LearningFairRepresentations:
             return LearningFairRepresentations()
         case AlgorithmOptions.LGAFFS:
+            genetic_parameters = GeneticBasicParameters(
+                population_size=20,
+                num_generations=10,
+                tournament_size=2,
+                probability_crossover=0.9,
+                probability_mutation=0.05
+            )
             return LGAFFS(
-                pop_size=10,
-                num_gen=5,
+                genetic_parameters=genetic_parameters,
                 n_splits=3,
                 min_feature_prob=0.1,
                 max_feature_prob=0.5,
-                tour_size=2,
-                prob_cross=0.9,
-                prob_mut=0.05
             )
         case AlgorithmOptions.PGA:
+            genetic_parameters = GeneticBasicParameters(
+                population_size=20,
+                num_generations=10,
+                tournament_size=2,
+                elite_size=2,
+                probability_crossover=0.9,
+                probability_mutation=0.05
+            )
             return PermutationGeneticAlgorithm(
-                pop_size=10,
-                num_gen=10,
-                tour_size=2,
-                prob_cross=0.9,
-                prob_mut=0.05,
-                elite_num=2,
+                genetic_parameters=genetic_parameters,
                 base_algorithm=Massaging(learning_settings={'train_size': 0.9, 'test_size': 0.1})
             )
         case _:

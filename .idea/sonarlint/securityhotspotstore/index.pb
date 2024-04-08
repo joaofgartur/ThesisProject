@@ -75,16 +75,6 @@ f
 H
 src/algorithms/LGAFFS.py,9\b\9bd1039a293c80d8706ef3499573d3b248f5f944
 ^
-.src/results/27_03_24-16_11_59-Adult Income.csv,6\5\65536cc4d739c3222bc73506e088ffeb8f16010b
-^
-.src/results/27_03_24-16_17_23-Adult Income.csv,4\2\420f1544e86332332df96bc35769e43de5bd2927
-^
-.src/results/29_03_24-01_55_11-Adult Income.csv,3\6\362eea10b1d05f5de3cf9a0bfeacc6974f21bf0c
-^
-.src/results/29_03_24-13_19_10-Adult Income.csv,3\3\33848ecb37b4a069dc85a2219c24b71a73b9fadc
-^
-.src/results/29_03_24-14_10_40-Adult Income.csv,6\c\6c5ad3178ff731fe8e62dce477467846c5e8fd2a
-^
 .src/results/30_03_24-11_15_50-Adult Income.csv,1\0\103f413bc1a77e5ca86d974d6954d2cba619f3eb
 ^
 .src/results/30_03_24-12_08_53-Adult Income.csv,0\9\09fb38735c3c30914a59a9fa0252f7e345ba4e2e
@@ -111,44 +101,42 @@ D
 ^
 .src/results/05_04_24-19_17_19-Adult Income.csv,6\7\67bb83be63d6efafedb96c292e583400772490e6
 ^
-.src/results/06_04_24-12_09_08-Adult Income.csv,1\6\162887108c322e08d1d635f9e1f4e89488b3ac7d
+.src/results/06_04_24-19_14_51-Adult Income.csv,2\d\2d47ee8be3b34de2f48570864b3a916fcfd7fafc
 ^
-.src/results/06_04_24-12_15_42-Adult Income.csv,7\a\7a2b072870ad73e4d0b619c8b7af263032d6bcba
+.src/results/06_04_24-19_08_12-Adult Income.csv,9\a\9ad4033ba72d3abc89c46fcb29cfdd8932e9c45c
 ^
-.src/results/06_04_24-12_17_24-Adult Income.csv,7\8\78a2e7119233dc08f69e6d8f9a9cec5a71dbbb41
+.src/results/06_04_24-19_06_07-Adult Income.csv,7\5\75b2c3567aef90100d836c39faee7bc922976b2a
 ^
-.src/results/06_04_24-12_35_40-Adult Income.csv,a\b\ab3f1e4914b9ca94b902828870c067c45785d632
+.src/results/06_04_24-19_04_05-Adult Income.csv,f\8\f82799164c2f96ecc125821b0384be785280be3d
 ^
-.src/results/06_04_24-12_45_14-Adult Income.csv,2\e\2ec29b001cba7067206b2876e99737a238a9aafb
+.src/results/07_04_24-18_09_24-Adult Income.csv,4\f\4f986f246cbc5cdae1ed914046947dbfebcf124d
+Y
+)src/algorithms/GeneticAlgorithmHelpers.py,c\1\c1cf3719a0d1c1d894dc9899e835b3b8719edc85
 ^
-.src/results/06_04_24-13_44_41-Adult Income.csv,7\b\7bd88954bdf82edb38f4f20cd8a123bfaecf933a
+.src/results/08_04_24-12_37_02-Adult Income.csv,0\c\0c3619952d7a5ba446e463d038cfaf0223fd6fa0
 ^
-.src/results/06_04_24-13_47_10-Adult Income.csv,9\f\9fb8223c92b651edf61c87d4bbad4c2c65519f11
+.src/results/08_04_24-14_55_57-Adult Income.csv,9\a\9a92274bb1c4e7ce9bd88c849c239a02a662dc57
 ^
-.src/results/06_04_24-13_57_00-Adult Income.csv,2\e\2e1cf0a5d940a516e1839e135b28e1d1c1fa1a32
+.src/results/08_04_24-15_05_45-Adult Income.csv,c\f\cfe975395cb925471806d867005813df66015883
 ^
-.src/results/06_04_24-14_08_19-Adult Income.csv,d\b\db3f2c04ea9cb29ebecf8f9046efa4270c50ef77
+.src/results/08_04_24-14_07_47-Adult Income.csv,a\b\ab61ae45f5a52d24620f6e816606fd292546a11c
 ^
-.src/results/06_04_24-14_13_59-Adult Income.csv,e\c\ecadf9e4d14693b5517bfa6a060648b119d727e9
+.src/results/08_04_24-15_11_17-Adult Income.csv,8\d\8df962592d2b1715cae3fde4cf585088c895b4c5
 ^
-.src/results/06_04_24-14_15_12-Adult Income.csv,e\0\e08965e7ba2d0e0f68217388a74b8bec053abfcc
+.src/results/08_04_24-15_22_49-Adult Income.csv,f\4\f4a2e84a9bfa4759af2fab20581f70ed95d66b45
 ^
-.src/results/06_04_24-14_22_19-Adult Income.csv,1\7\170ebce1c8ee21f3778af7887823e2868d9b4563
+.src/results/08_04_24-15_39_09-Adult Income.csv,d\7\d7967d8726c995091ff3c8125ba87bfda9133cb7
 ^
-.src/results/21_03_24-16_30_22-Adult Income.csv,9\a\9ad80c2cca24b12f84b39849b96832584d8d37e6
+.src/results/08_04_24-16_09_29-Adult Income.csv,4\a\4a0bcff8788251e09718730dc525f90c914a70b6
 ^
-.src/results/06_04_24-14_37_11-Adult Income.csv,f\4\f470940c36ad5b4489dc0e1b003e984552536a13
+.src/results/06_04_24-18_15_40-Adult Income.csv,e\f\efb7af58520ea173f65de3c17110cd8fd7d37c0c
 ^
-.src/results/06_04_24-14_45_30-Adult Income.csv,c\9\c9a8ebbb26fd05e0ba0021673a0634d3fe925534
+.src/results/08_04_24-16_14_44-Adult Income.csv,7\7\7707feb640c9b74195074927dfe4940614cc691f
 ^
-.src/results/06_04_24-14_58_08-Adult Income.csv,b\d\bd774efc37911d453d31f2ba3b4b4078cc92dd51
+.src/results/08_04_24-16_21_24-Adult Income.csv,5\d\5de0a7e46385c1d0b5cc61052e819dc2676a11d1
 ^
-.src/results/06_04_24-15_04_25-Adult Income.csv,e\0\e02046a8eef9f8db086349c51daf48344b81b8b5
+.src/results/08_04_24-16_36_00-Adult Income.csv,b\8\b83bbed22ea760833ce5c782587d67cf3c1456e1
 ^
-.src/results/06_04_24-15_09_32-Adult Income.csv,c\2\c2bcaaa3d8a2a1acf04a2791db1d5b51ed37f547
+.src/results/08_04_24-16_56_18-Adult Income.csv,d\1\d1b58f21805a8842e5d49eaac67fde41eee4fd4e
 ^
-.src/results/06_04_24-15_12_58-Adult Income.csv,b\a\ba3ef2fe3d517e81f86f3653091f4f103a582c7f
-^
-.src/results/06_04_24-17_22_21-Adult Income.csv,8\c\8c0760dd33fe66ca0aa933ea179584461ca7ab14
-^
-.src/results/06_04_24-18_08_32-Adult Income.csv,8\9\8962f45441b92eb3ab985144603d60384bcf9c52
+.src/results/08_04_24-17_01_21-Adult Income.csv,6\0\60ff906811a367b65aa0cd228510af85f8b2230f

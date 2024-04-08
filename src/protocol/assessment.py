@@ -4,8 +4,6 @@ Project: Master's Thesis
 Last edited: 20-11-2023
 """
 import pandas as pd
-import numpy as np
-from pandas.core.dtypes.common import is_numeric_dtype
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -18,7 +16,7 @@ from sklearn.ensemble import RandomForestClassifier
 from datasets import Dataset, update_dataset, match_features
 from errors import error_check_dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import logger, bold, dict_to_dataframe, abs_diff
+from helpers import bold, dict_to_dataframe
 from evaluation import FairnessEvaluator
 
 surrogate_models = {
@@ -29,23 +27,6 @@ surrogate_models = {
     #"DT": DecisionTreeClassifier(),
     "RF": RandomForestClassifier()
 }
-
-
-def compare_metric(series_a: pd.Series, series_b: pd) -> int:
-    def compare(_a: float, _b: float) -> int:
-        if _a > _b:
-            return 1
-        elif _a == _b:
-            return 0
-        return -1
-
-    if len(series_a) == 1:
-        return compare(series_a[0], series_b[0])
-
-    a = abs_diff(series_a.min(), series_a.max())
-    b = abs_diff(series_b.min(), series_b.max())
-
-    return compare(a, b)
 
 
 def get_model_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
@@ -81,23 +62,16 @@ def get_model_evaluators(model: object, train_data: Dataset, validation_data: Da
 
 
 def assess_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str = 'NA'):
-    model_name = model.__class__.__name__
 
     predicted_data = get_model_predictions(model, train_data, validation_data)
-
-    # restore original protected values
-    # original_values = train_data.get_protected_feature(feature=sensitive_attribute)
-    # train_data.set_feature(sensitive_attribute, original_values)
 
     fairness_evaluator, performance_evaluator = get_model_evaluators(model,
                                                                      train_data,
                                                                      validation_data,
                                                                      sensitive_attribute)
+    model_name = dict_to_dataframe({'model': model.__class__.__name__})
     fairness_metrics = fairness_evaluator.evaluate()
-
     performance_metrics = performance_evaluator.evaluate()
-
-    model_name = dict_to_dataframe({'model': model_name})
 
     results = pd.concat([model_name, fairness_metrics, performance_metrics], axis=1)
 

@@ -1,12 +1,13 @@
 import copy
-import itertools
 
 import pandas as pd
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
+from evaluation import FairnessEvaluator
+from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import logger, write_dataframe_to_csv, dict_to_dataframe
-from .assessment import assess_all_surrogates, assess_model
+from .assessment import assess_all_surrogates, get_model_predictions
 
 
 class Pipeline:
@@ -89,7 +90,6 @@ class Pipeline:
         results = pd.DataFrame()
 
         test_dummy_values = test_set.get_dummy_protected_feature(protected_feature)
-        test_original_values = test_set.protected_features[protected_feature]
 
         for value in test_dummy_values:
             logger.info(
@@ -104,9 +104,7 @@ class Pipeline:
                                                      self.algorithm.__class__.__name__)
 
             # prepare test set
-            test_set.protected_features[protected_feature] = test_dummy_values[value]
-            final_model_results = self.__train_final_model__(transformed_dataset, test_set)
-            test_set.protected_features[protected_feature] = test_original_values
+            final_model_results = self.__assess_final_model__(transformed_dataset, test_set)
 
             value_results = pd.concat([assessment_results, final_model_results])
             results = pd.concat([results, value_results])
@@ -114,27 +112,60 @@ class Pipeline:
         return results
 
     def __multiclass_attribute_mitigation__(self, train_set: Dataset, validation_set: Dataset, test_set: Dataset,
-                                            attribute: str) -> pd.DataFrame:
-        """"""
-        pass
+                                            protected_feature: str) -> pd.DataFrame:
 
-    def __train_final_model__(self, train_set: Dataset, test_set: Dataset) -> pd.DataFrame:
+        transformed_dataset = copy.deepcopy(train_set)
+
+        self.algorithm.set_validation_data(validation_set)
+        self.algorithm.fit(transformed_dataset, protected_feature)
+        transformed_dataset = self.algorithm.transform(transformed_dataset)
+
+        self.protected_feature = [protected_feature, '']
+        assessment_results = self.__assessment__(transformed_dataset, validation_set,
+                                                 self.algorithm.__class__.__name__)
+
+        final_model_results = self.__assess_final_model__(transformed_dataset, test_set)
+
+        return pd.concat([assessment_results, final_model_results])
+
+    def __assess_final_model__(self, train_set: Dataset, test_set: Dataset) -> pd.DataFrame:
         protected_feature = self.protected_feature[0]
 
         logger.info("[POST-INTERVENTION] Performing assessment...")
 
-        final_model_results, decisions = assess_model(
-            self.model,
-            train_set,
-            test_set,
-            protected_feature
-        )
+        predictions = get_model_predictions(self.model, train_set, test_set)
+        print(f'Decisions: {predictions.targets}')
 
-        final_model_results = pd.DataFrame(final_model_results)
+        # performance
+        performance_evaluator = ModelEvaluator(test_set, predictions)
+        performance_metrics = performance_evaluator.evaluate().reset_index(drop=True)
+
+        # fairness
+        original_values = test_set.protected_features[protected_feature]
+
+        dummy_values = test_set.get_dummy_protected_feature(protected_feature)
+
+        fairness_metrics = pd.DataFrame()
+        for value in dummy_values:
+            test_set.protected_features[protected_feature] = dummy_values[value]
+            fairness_evaluator = FairnessEvaluator(test_set, predictions, protected_feature)
+            fairness_metrics = pd.concat([fairness_metrics, fairness_evaluator.evaluate()])
+        fairness_metrics = fairness_metrics.reset_index(drop=True)
+
+        test_set.protected_features[protected_feature] = original_values
+
+        value_results = {
+            'dataset': train_set.name,
+            'sensitive_attribute': protected_feature,
+            'value': '',
+            'algorithm': '',
+            'model': self.model.__class__.__name__
+        }
+        value_results = dict_to_dataframe(value_results).reset_index(drop=True)
+
+        final_model_results = pd.concat([value_results, fairness_metrics, performance_metrics], axis=1)
 
         logger.info("[POST-INTERVENTION] Assessment complete.")
-
-        print(f'Decisions: {decisions}')
 
         return final_model_results
 
@@ -149,7 +180,7 @@ class Pipeline:
             for protected_feature in train_set.protected_features:
                 self.protected_feature = [protected_feature, '']
                 self.results = pd.concat(
-                    [self.results, self.__assessment__(train_set, validation_set, protected_feature)])
+                    [self.results, self.__assessment__(train_set, validation_set)])
 
             for protected_feature in train_set.protected_features_names:
 

@@ -39,10 +39,17 @@ def to_dataframe(array, labels, stats: bool, metric_name='Value'):
 class FairnessEvaluator(object):
 
     def __init__(self, original_data: Dataset, predicted_data: Dataset, sensitive_attribute: str):
+
+        if sensitive_attribute in original_data.features:
+            x = original_data.features.drop(columns=[sensitive_attribute])
+        else:
+            x = original_data.features
+
+        s = original_data.protected_features[sensitive_attribute]
+
         y = original_data.targets.squeeze().rename(TRUE_OUTCOME)
         y_pred = predicted_data.targets.squeeze().rename(PRED_OUTCOME)
-        x = original_data.features.drop(columns=[sensitive_attribute])
-        s = original_data.protected_features[sensitive_attribute]
+
         self.sensitive_attribute = sensitive_attribute
         self.data = pd.concat([x, s, y, y_pred], axis=1)
 
