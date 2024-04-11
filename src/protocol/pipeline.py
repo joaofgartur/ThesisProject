@@ -4,10 +4,8 @@ import pandas as pd
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
-from evaluation import FairnessEvaluator
-from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import logger, write_dataframe_to_csv, dict_to_dataframe
-from .assessment import assess_all_surrogates, get_model_predictions
+from .assessment import assess_all_surrogates, assess_model
 
 
 class Pipeline:
@@ -18,169 +16,115 @@ class Pipeline:
         self.settings = settings
         self.model = model
         self.results = None
-        self.TRAIN = 0
-        self.VALIDATION = 1
-        self.TEST = 2
-        self.protected_feature = []
 
-    def __assessment__(self, train_set: Dataset, validation_set: Dataset,
-                       algorithm: str = 'NA'):
-        results = pd.DataFrame()
-        protected_feature = self.protected_feature[0]
+    def __assessment__(self, train_set: Dataset,
+                       validation_set: Dataset,
+                       protected_feature: str,
+                       algorithm: str = 'NA',
+                       final_assessment: bool = False) -> pd.DataFrame:
 
-        train_dummy_values = train_set.get_dummy_protected_feature(protected_feature)
-        validation_dummy_values = validation_set.get_dummy_protected_feature(protected_feature)
+        pipeline_details = {
+            'dataset': train_set.name,
+            'sensitive_attribute': protected_feature,
+            'algorithm': algorithm
+        }
+        pipeline_df = dict_to_dataframe(pipeline_details)
 
-        train_original_values = train_set.protected_features[protected_feature]
-        validation_original_values = validation_set.protected_features[protected_feature]
+        if final_assessment:
+            decisions, assessment_df = assess_model(self.model, train_set, validation_set, protected_feature)
+            print(f'Decisions: \n {decisions.value_counts()}')
+        else:
+            assessment_df = assess_all_surrogates(train_set, validation_set, protected_feature)
 
-        for value in train_dummy_values:
-            train_set.protected_features[protected_feature] = train_dummy_values[value]
-            validation_set.protected_features[protected_feature] = validation_dummy_values[value]
-
-            value_results = {
-                'dataset': train_set.name,
-                'sensitive_attribute': protected_feature,
-                'value': value,
-                'algorithm': algorithm
-            }
-
-            value_results = dict_to_dataframe(value_results)
-
-            assessment_results = assess_all_surrogates(
-                train_set,
-                validation_set,
-                protected_feature)
-            assessment_results = pd.concat([value_results, assessment_results], axis=1)
-
-            results = pd.concat([results, assessment_results])
-
-        train_set.protected_features[protected_feature] = train_original_values
-        validation_set.protected_features[protected_feature] = validation_original_values
-
-        return results
+        return pd.concat([pipeline_df, assessment_df], axis=1)
 
     def __binary_attribute_mitigation__(self, train_set: Dataset, validation_set: Dataset, test_set: Dataset,
                                         protected_feature: str) -> pd.DataFrame:
 
-        def _mitigate(_train_set: Dataset, _validation_set: Dataset) -> Dataset:
-            _protected_feature, _value = self.protected_feature
+        def _mitigate(_train_set: Dataset, _validation_set: Dataset, _protected_feature: str, _value: str) -> Dataset:
 
-            original_values = (_train_set.protected_features[_protected_feature],
-                               _validation_set.protected_features[_protected_feature])
+            _original_values = (_train_set.protected_features[_protected_feature],
+                                _validation_set.protected_features[_protected_feature])
 
-            dummy_values = (_train_set.get_dummy_protected_feature(_protected_feature),
-                            _validation_set.get_dummy_protected_feature(_protected_feature))
+            _dummy_values = (_train_set.get_dummy_protected_feature(_protected_feature),
+                             _validation_set.get_dummy_protected_feature(_protected_feature))
 
-            _train_set.protected_features[_protected_feature] = dummy_values[self.TRAIN][_value]
-            _validation_set.protected_features[_protected_feature] = dummy_values[self.VALIDATION][_value]
+            _train_set.protected_features[_protected_feature] = _dummy_values[0][_value]
+            _validation_set.protected_features[_protected_feature] = _dummy_values[1][_value]
 
             # define sensitive value
             _transformed_dataset = copy.deepcopy(_train_set)
-            _transformed_dataset.set_feature(_protected_feature, dummy_values[self.TRAIN][_value])
+            _transformed_dataset.set_feature(_protected_feature, _dummy_values[0][_value])
             self.algorithm.fit(_transformed_dataset, _protected_feature)
             _transformed_dataset = self.algorithm.transform(_transformed_dataset)
 
-            _train_set.protected_features[_protected_feature] = original_values[self.TRAIN]
-            _transformed_dataset.protected_features[_protected_feature] = original_values[self.TRAIN]
-            _validation_set.protected_features[_protected_feature] = original_values[self.VALIDATION]
+            _train_set.protected_features[_protected_feature] = _original_values[0]
+            _transformed_dataset.protected_features[_protected_feature] = _original_values[0]
+            _validation_set.protected_features[_protected_feature] = _original_values[1]
 
             return _transformed_dataset
 
-        results = pd.DataFrame()
+        logger.info("[INTERVENTION] Correcting bias with binary algorithm.")
 
-        test_dummy_values = test_set.get_dummy_protected_feature(protected_feature)
-
-        for value in test_dummy_values:
+        results_df = pd.DataFrame()
+        dummy_values = train_set.get_dummy_protected_feature(protected_feature)
+        for value in dummy_values:
             logger.info(
                 f"[INTERVENTION] Correcting bias w.r.t. attribute {protected_feature} for {value} with "
                 f"{self.algorithm.__class__.__name__}")
 
-            self.protected_feature = [protected_feature, value]
+            # bias mitigation
+            transformed_dataset = _mitigate(train_set, validation_set, protected_feature, value)
 
-            transformed_dataset = _mitigate(train_set, validation_set)
-
-            assessment_results = self.__assessment__(transformed_dataset, validation_set,
+            # surrogate models assessment
+            logger.info("[POST-INTERVENTION] Assessing surrogate models.")
+            assessment_results = self.__assessment__(transformed_dataset, validation_set, protected_feature,
                                                      self.algorithm.__class__.__name__)
 
-            # prepare test set
-            final_model_results = self.__assess_final_model__(transformed_dataset, test_set)
+            # final model assessment
+            logger.info(f"[POST-INTERVENTION] Assessing model {self.model.__class__.__name__}.")
+            final_model_results = self.__assessment__(transformed_dataset, test_set, protected_feature,
+                                                      self.algorithm.__class__.__name__, True)
 
             value_results = pd.concat([assessment_results, final_model_results])
-            results = pd.concat([results, value_results])
+            results_df = pd.concat([results_df, value_results])
 
-        return results
+        return results_df
 
     def __multiclass_attribute_mitigation__(self, train_set: Dataset, validation_set: Dataset, test_set: Dataset,
                                             protected_feature: str) -> pd.DataFrame:
-
+        logger.info("[INTERVENTION] Correcting bias with multi-value algorithm.")
         transformed_dataset = copy.deepcopy(train_set)
 
+        # bias mitigation
         self.algorithm.set_validation_data(validation_set)
         self.algorithm.fit(transformed_dataset, protected_feature)
         transformed_dataset = self.algorithm.transform(transformed_dataset)
 
-        self.protected_feature = [protected_feature, '']
-        assessment_results = self.__assessment__(transformed_dataset, validation_set,
+        # surrogate models assessment
+        logger.info("[POST-INTERVENTION] Assessing surrogate models.")
+        assessment_results = self.__assessment__(transformed_dataset, validation_set, protected_feature,
                                                  self.algorithm.__class__.__name__)
 
-        final_model_results = self.__assess_final_model__(transformed_dataset, test_set)
+        # final model assessment
+        logger.info(f"[POST-INTERVENTION] Assessing model {self.model.__class__.__name__}.")
+        final_model_results = self.__assessment__(transformed_dataset, test_set, protected_feature,
+                                                  self.algorithm.__class__.__name__, True)
 
         return pd.concat([assessment_results, final_model_results])
 
-    def __assess_final_model__(self, train_set: Dataset, test_set: Dataset) -> pd.DataFrame:
-        protected_feature = self.protected_feature[0]
-
-        logger.info("[POST-INTERVENTION] Performing assessment...")
-
-        predictions = get_model_predictions(self.model, train_set, test_set)
-        print(f'Decisions: {predictions.targets}')
-
-        # performance
-        performance_evaluator = ModelEvaluator(test_set, predictions)
-        performance_metrics = performance_evaluator.evaluate().reset_index(drop=True)
-
-        # fairness
-        original_values = test_set.protected_features[protected_feature]
-
-        dummy_values = test_set.get_dummy_protected_feature(protected_feature)
-
-        fairness_metrics = pd.DataFrame()
-        for value in dummy_values:
-            test_set.protected_features[protected_feature] = dummy_values[value]
-            fairness_evaluator = FairnessEvaluator(test_set, predictions, protected_feature)
-            fairness_metrics = pd.concat([fairness_metrics, fairness_evaluator.evaluate()])
-        fairness_metrics = fairness_metrics.reset_index(drop=True)
-
-        test_set.protected_features[protected_feature] = original_values
-
-        value_results = {
-            'dataset': train_set.name,
-            'sensitive_attribute': protected_feature,
-            'value': '',
-            'algorithm': '',
-            'model': self.model.__class__.__name__
-        }
-        value_results = dict_to_dataframe(value_results).reset_index(drop=True)
-
-        final_model_results = pd.concat([value_results, fairness_metrics, performance_metrics], axis=1)
-
-        logger.info("[POST-INTERVENTION] Assessment complete.")
-
-        return final_model_results
-
     def run(self) -> None:
+        self.results = pd.DataFrame()
 
         try:
+            logger.info("[PIPELINE] Start.")
+
             train_set, validation_set, test_set = self.dataset.split(self.settings)
 
-            logger.info("[PRE-INTERVENTION] Performing assessment...")
-
-            self.results = pd.DataFrame()
+            logger.info("[PRE-INTERVENTION] Assessing surrogate models.")
             for protected_feature in train_set.protected_features:
-                self.protected_feature = [protected_feature, '']
-                self.results = pd.concat(
-                    [self.results, self.__assessment__(train_set, validation_set)])
+                self.results = pd.concat([self.results,
+                                          self.__assessment__(train_set, validation_set, protected_feature)])
 
             for protected_feature in train_set.protected_features_names:
 
@@ -196,6 +140,8 @@ class Pipeline:
                                                                                  protected_feature)
 
                 self.results = pd.concat([self.results, attribute_results])
+
+            logger.info("[PIPELINE] End.")
 
         except Exception as e:
             logger.error(f'An error occurred in the pipeline: \n {e}')

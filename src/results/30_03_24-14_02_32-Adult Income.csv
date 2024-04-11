@@ -1,9 +1,0 @@
-dataset,sensitive_attribute,intervention_attribute,algorithm,classifier,disparate_impact,discrimination_score,true_positive_rate_diff,false_positive_rate_diff,consistency,fperbs,fnerbs,confusion_matrix,accuracy,f1_score,recall,precision,mathews_cc,sensitivity,specificity
-Adult Income,race,NA,NA,RandomForestClassifier,0.6268,0.9148,0.0501,0.0408,0.9996,0.9288,0.9499,"[6440, 759, 1026, 1299]",0.8126,0.5927,0.5587,0.6312,0.4731,0.5587,0.8946
-Adult Income,sex,NA,NA,RandomForestClassifier,0.2929,0.8031,0.1302,0.1072,0.9998,0.962,0.8698,"[6453, 746, 1035, 1290]",0.813,0.5916,0.5548,0.6336,0.4728,0.5548,0.8964
-Adult Income,race,race,LGAFFS,RandomForestClassifier,0.5988,0.9085,0.1124,0.0335,1.0,0.9279,0.8876,"[6478, 721, 999, 1326]",0.8194,0.6066,0.5703,0.6478,0.4917,0.5703,0.8998
-Adult Income,sex,race,LGAFFS,RandomForestClassifier,0.2697,0.7939,0.2075,0.0986,1.0,0.9627,0.7925,"[6496, 703, 985, 1340]",0.8228,0.6136,0.5763,0.6559,0.5009,0.5763,0.9023
-,,,,XGBClassifier,0.5718,0.9076,0.1013,0.0329,1.0,0.9462,0.8987,"[9911, 879, 1481, 2016]",0.8348,0.6308,0.5765,0.6964,0.5295,0.5765,0.9185
-Adult Income,race,sex,LGAFFS,RandomForestClassifier,0.617,0.9125,0.067,0.0384,1.0,0.9305,0.933,"[6467, 732, 1001, 1324]",0.818,0.6044,0.5695,0.644,0.4884,0.5695,0.8983
-Adult Income,sex,sex,LGAFFS,RandomForestClassifier,0.2813,0.7933,0.1683,0.1081,1.0,0.9613,0.8317,"[6444, 755, 987, 1338]",0.8171,0.6057,0.5755,0.6393,0.4882,0.5755,0.8951
-,,,,XGBClassifier,0.3175,0.814,0.1411,0.0857,0.9999,0.9677,0.8589,"[9876, 914, 1403, 2094]",0.8378,0.6438,0.5988,0.6961,0.5422,0.5988,0.9153

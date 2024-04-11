@@ -1,17 +1,15 @@
 import copy
 import numpy as np
-import pandas as pd
 from random import sample
 from sklearn.ensemble import RandomForestClassifier
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters, uniform_crossover, scramble_mutation, \
-    select_best, print_population
+    select_best
 from datasets import Dataset
-from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import abs_diff, logger
-from protocol.assessment import get_model_predictions
+from protocol.assessment import get_model_predictions, fairness_assessment
 
 
 class PermutationGeneticAlgorithm(Algorithm):
@@ -81,24 +79,15 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __performance_fitness(self, data: Dataset, predictions: Dataset):
         performance_evaluator = ModelEvaluator(data, predictions)
-        return {'performance': performance_evaluator.accuracy()}
+        return {'performance': -1}
 
     def __fairness_fitness(self, data: Dataset, predictions: Dataset):
-
-        original_values = data.protected_features[self.sensitive_attribute]
-
-        dummy_values = data.get_dummy_protected_feature(self.sensitive_attribute)
-
-        metrics = pd.DataFrame()
-        for value in dummy_values:
-            data.protected_features[self.sensitive_attribute] = dummy_values[value]
-            fairness_evaluator = FairnessEvaluator(data, predictions, self.sensitive_attribute)
-            metrics = pd.concat([metrics, fairness_evaluator.evaluate()])
-
-        data.protected_features[self.sensitive_attribute] = original_values
+        metrics = fairness_assessment(data, predictions, self.sensitive_attribute)
 
         result = {}
         for metric in metrics.columns:
+            if metrics[metric].dtype == 'object':
+                continue
             result.update({metric: -abs_diff(metrics[metric].min(), metrics[metric].max())})
 
         return result
@@ -121,7 +110,8 @@ class PermutationGeneticAlgorithm(Algorithm):
         model = RandomForestClassifier()
         predictions = get_model_predictions(model, data, self.validation_data)
 
-        return [individual[0], {'performance': -1}, self.__fairness_fitness(self.validation_data, predictions)]
+        return [individual[0], self.__performance_fitness(self.validation_data, predictions),
+                self.__fairness_fitness(self.validation_data, predictions)]
 
     def __phenotype(self, data: Dataset, individual):
         dummy_values = data.get_dummy_protected_feature(self.sensitive_attribute)
@@ -156,16 +146,18 @@ class PermutationGeneticAlgorithm(Algorithm):
         for i in range(1, self.genetic_parameters.num_generations):
             parents = self.__tournament(population)
 
+            """
             # Crossover
             new_parents = []
             for j in range(0, len(population) - 1, 2):
                 child1, child2 = self.__uniform_crossover(parents[j], parents[j + 1])
                 new_parents.append(child1)
                 new_parents.append(child2)
+            """
 
             # Mutation
             offsprings = []
-            for individual in new_parents:
+            for individual in parents:
                 mutated_individual = self.__mutation(individual)
                 offsprings.append(self.__fitness(dataset, mutated_individual))
 
@@ -179,6 +171,3 @@ class PermutationGeneticAlgorithm(Algorithm):
                 f'Best Individual: {[self.decoder[i] for i in best_individual[0]]}')
 
         return self.__phenotype(dataset, best_individual)
-
-
-

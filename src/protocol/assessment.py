@@ -14,7 +14,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 from datasets import Dataset, update_dataset, match_features
-from errors import error_check_dataset
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import bold, dict_to_dataframe
 from evaluation import FairnessEvaluator
@@ -30,6 +29,7 @@ surrogate_models = {
 
 
 def get_model_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
+
     pipeline = Pipeline([
         ('normalizer', StandardScaler()),
         ('classifier', model)
@@ -51,75 +51,57 @@ def get_model_predictions(model: object, train_data: Dataset, validation_data: D
     return predicted_data
 
 
-def get_model_evaluators(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str):
-    predicted_data = get_model_predictions(model, train_data, validation_data)
+def fairness_assessment(data: Dataset, predictions: Dataset, sensitive_attribute: str) -> pd.DataFrame:
+    original_attribute_values = data.protected_features[sensitive_attribute]
 
-    fairness_evaluator = FairnessEvaluator(validation_data, predicted_data, sensitive_attribute)
+    dummy_values = data.get_dummy_protected_feature(sensitive_attribute)
 
-    performance_evaluator = ModelEvaluator(validation_data, predicted_data)
+    assessment_df = pd.DataFrame()
+    for value in dummy_values:
+        data.protected_features[sensitive_attribute] = dummy_values[value]
+        fairness_evaluator = FairnessEvaluator(data, predictions, sensitive_attribute)
+        value_df = pd.concat([dict_to_dataframe({'value': value}), fairness_evaluator.evaluate()], axis=1)
+        assessment_df = pd.concat([assessment_df, value_df])
 
-    return fairness_evaluator, performance_evaluator
+    data.protected_features[sensitive_attribute] = original_attribute_values
+
+    return assessment_df.reset_index(drop=True)
+
+
+def performance_assessment(data: Dataset, predictions: Dataset) -> pd.DataFrame:
+    performance_evaluator = ModelEvaluator(data, predictions)
+    return performance_evaluator.evaluate().reset_index(drop=True)
 
 
 def assess_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str = 'NA'):
+    predictions = get_model_predictions(model, train_data, validation_data)
 
-    predicted_data = get_model_predictions(model, train_data, validation_data)
+    fairness_metrics = fairness_assessment(validation_data, predictions, sensitive_attribute)
+    performance_metrics = performance_assessment(validation_data, predictions)
 
-    fairness_evaluator, performance_evaluator = get_model_evaluators(model,
-                                                                     train_data,
-                                                                     validation_data,
-                                                                     sensitive_attribute)
     model_name = dict_to_dataframe({'model': model.__class__.__name__})
-    fairness_metrics = fairness_evaluator.evaluate()
-    performance_metrics = performance_evaluator.evaluate()
 
     results = pd.concat([model_name, fairness_metrics, performance_metrics], axis=1)
 
-    return results, predicted_data.targets
+    return predictions.targets, results
 
 
 def assess_all_surrogates(train_set: Dataset,
                           validation_set: Dataset,
-                          protected_feature: str = 'NA'):
-    """
-    Conduct assessment on a dataset, including fairness evaluation and classifier accuracies.
+                          protected_feature: str = 'NA') -> pd.DataFrame:
 
-    Parameters
-    ----------
-    validation_set
-    protected_feature
-    train_set : Dataset
-        The dataset object containing features, targets, and sensitive attributes.
-
-    Returns
-    -------
-    pd.DataFrame
-        A dictionary containing fairness evaluation and classifier accuracies.
-
-    Raises
-    ------
-    ValueError
-        - If an invalid dataset is provided.
-        - If the dataset does not contain both features and targets.
-        - If there are missing sensitive attributes in the dataset.
-        - If learning settings are missing required keys.
-    """
-    error_check_dataset(train_set)
-
-    global_results = pd.DataFrame()
+    assessment_df = pd.DataFrame()
 
     for surrogate in surrogate_models:
-        # logger.info(f'[ASSESSMENT] Assessing surrogate {surrogate} for feature \"{protected_feature}\".')
-
-        surrogate_model_results, _ = assess_model(
+        _, surrogate_model_results = assess_model(
             surrogate_models[surrogate],
             train_set,
             validation_set,
             protected_feature)
 
-        global_results = pd.concat([global_results, surrogate_model_results])
+        assessment_df = pd.concat([assessment_df, surrogate_model_results])
 
-    return global_results
+    return assessment_df
 
 
 def data_description_diff(df: pd.DataFrame, fixed_df: pd.DataFrame) -> pd.DataFrame:

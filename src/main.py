@@ -91,8 +91,8 @@ def load_algorithm(option: Enum):
             return LearningFairRepresentations()
         case AlgorithmOptions.LGAFFS:
             genetic_parameters = GeneticBasicParameters(
-                population_size=20,
-                num_generations=10,
+                population_size=50,
+                num_generations=30,
                 tournament_size=2,
                 probability_crossover=0.9,
                 probability_mutation=0.05
@@ -105,8 +105,8 @@ def load_algorithm(option: Enum):
             )
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
-                population_size=20,
-                num_generations=10,
+                population_size=50,
+                num_generations=30,
                 tournament_size=2,
                 elite_size=2,
                 probability_crossover=0.9,
@@ -123,7 +123,7 @@ def load_algorithm(option: Enum):
 
 if __name__ == '__main__':
     config_logger(level=logger_levels.INFO.value)
-    results_path = 'results'
+    results_path = 'results/permutation_genetic_algorithm/'
     settings = {
         'seed': 125,
         'train_size': 0.5,
@@ -136,6 +136,7 @@ if __name__ == '__main__':
 
     run_all = False
     run_all_dataset = False
+    num_runs = 24
 
     if run_all:
         for i in DatasetOptions:
@@ -155,11 +156,12 @@ if __name__ == '__main__':
             pipeline = Pipeline(dataset, algorithm, model, settings)
             pipeline.run_and_save()
     else:
-        dataset = load_dataset(DatasetOptions.ADULT)
+        for i in range(max(1, num_runs)):
+            dataset = load_dataset(DatasetOptions.ADULT)
 
-        algorithm = load_algorithm(AlgorithmOptions.Massaging)
+            algorithm = load_algorithm(AlgorithmOptions.PGA)
 
-        pipeline = Pipeline(dataset, algorithm, model, settings)
-        pipeline.run_and_save()
+            pipeline = Pipeline(dataset, algorithm, model, settings)
+            pipeline.run_and_save(results_path)
 
     logger.info(f'[{extract_filename(__file__)}] End of program.')

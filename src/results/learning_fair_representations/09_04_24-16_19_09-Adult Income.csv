@@ -1,0 +1,66 @@
+dataset,sensitive_attribute,algorithm,model,value,disparate_impact,discrimination_score,true_positive_rate_diff,false_positive_rate_diff,false_positive_error_rate_balance_score,false_negative_error_rate_balance_score,consistency,confusion_matrix,accuracy,f1_score,recall,precision,mathews_cc,sensitivity,specificity
+Adult Income,race,NA,RandomForestClassifier,Amer-Indian-Eskimo,0.2977,0.8495,0.3216,0.0777,0.9237,0.693,0.9402,"[6461, 738, 1035, 1290]",0.8138,0.5927,0.5548,0.6361,0.4746,0.5548,0.8975
+,,,,Asian-Pac-Islander,1.3102,0.9346,-0.0534,-0.0115,0.9878,0.9465,0.9403,,,,,,,,
+,,,,Black,0.4522,0.8768,0.0859,0.0562,0.9441,0.9176,0.94,,,,,,,,
+,,,,Other,0.2631,0.8423,0.3052,0.0582,0.9439,0.6946,0.9402,,,,,,,,
+,,,,White,1.6761,0.9088,-0.0445,-0.0483,0.9513,0.9541,0.9401,,,,,,,,
+Adult Income,sex,NA,RandomForestClassifier,Female,0.2911,0.802,0.1385,0.105,0.8951,0.8632,0.9358,"[6468, 731, 1015, 1310]",0.8167,0.6001,0.5634,0.6418,0.4835,0.5634,0.8985
+,,,,Male,3.4354,0.802,-0.1385,-0.105,0.8951,0.8632,0.9358,,,,,,,,
+Adult Income,race,LearningFairRepresentations,RandomForestClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[7199, 0, 2325, 0]",0.7559,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,XGBClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[10790, 0, 3497, 0]",0.7552,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,RandomForestClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[7199, 0, 2325, 0]",0.7559,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,XGBClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[10790, 0, 3497, 0]",0.7552,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,RandomForestClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[7199, 0, 2325, 0]",0.7559,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,XGBClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[10790, 0, 3497, 0]",0.7552,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,RandomForestClassifier,Amer-Indian-Eskimo,0.9088,0.9669,0.0121,0.0293,0.9731,0.9825,0.9476,"[4867, 2332, 1203, 1122]",0.6288,0.3883,0.4826,0.3248,0.1418,0.4826,0.6761
+,,,,Asian-Pac-Islander,1.4097,0.8533,-0.199,-0.0959,0.9033,0.7971,0.9476,,,,,,,,
+,,,,Black,0.5528,0.8305,0.1531,0.1474,0.8525,0.8437,0.9472,,,,,,,,
+,,,,Other,0.9708,0.9894,-0.5183,0.0107,0.9885,0.4817,0.9473,,,,,,,,
+,,,,White,1.3001,0.9134,0.031,-0.0933,0.9069,0.9709,0.9473,,,,,,,,
+Adult Income,race,LearningFairRepresentations,XGBClassifier,Amer-Indian-Eskimo,0.0,0.9588,0.037,0.0425,0.9575,0.9629,0.9986,"[10336, 454, 3368, 129]",0.7325,0.0632,0.0369,0.2213,-0.0113,0.0369,0.9579
+,,,,Asian-Pac-Islander,3.9787,0.8883,-0.1255,-0.1065,0.891,0.879,0.9986,,,,,,,,
+,,,,Black,0.8169,0.9924,0.0047,0.009,0.9911,0.9969,0.9986,,,,,,,,
+,,,,Other,5.8393,0.8103,-0.0631,-0.2065,0.7901,0.9653,0.9986,,,,,,,,
+,,,,White,0.5432,0.9693,0.0417,0.0281,0.9721,0.9561,0.9986,,,,,,,,
+Adult Income,race,LearningFairRepresentations,RandomForestClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[7199, 0, 2325, 0]",0.7559,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,race,LearningFairRepresentations,XGBClassifier,Amer-Indian-Eskimo,,1.0,0.0,0.0,1.0,1.0,1.0,"[10790, 0, 3497, 0]",0.7552,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Asian-Pac-Islander,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Black,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,Other,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+,,,,White,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,sex,LearningFairRepresentations,RandomForestClassifier,Female,,1.0,0.0,0.0,1.0,1.0,1.0,"[7199, 0, 2325, 0]",0.7559,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Male,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,sex,LearningFairRepresentations,XGBClassifier,Female,,1.0,0.0,0.0,1.0,1.0,1.0,"[10790, 0, 3497, 0]",0.7552,0.0,0.0,0.0,0.0,0.0,1.0
+,,,,Male,,1.0,0.0,0.0,1.0,1.0,1.0,,,,,,,,
+Adult Income,sex,LearningFairRepresentations,RandomForestClassifier,Female,1.3632,0.9376,0.0388,-0.0958,0.9042,0.9626,0.9612,"[5906, 1293, 1787, 538]",0.6766,0.2589,0.2314,0.2938,0.0565,0.2314,0.8204
+,,,,Male,0.7336,0.9376,-0.0388,0.0958,0.9042,0.9626,0.9612,,,,,,,,
+Adult Income,sex,LearningFairRepresentations,XGBClassifier,Female,1.3333,0.939,-0.06,-0.0756,0.9245,0.9405,0.9579,"[8726, 2064, 2657, 840]",0.6696,0.2625,0.2402,0.2893,0.0523,0.2402,0.8087
+,,,,Male,0.75,0.939,0.06,0.0756,0.9245,0.9405,0.9579,,,,,,,,

@@ -74,69 +74,55 @@ f
 6src/results/results-21_03_24-12_48_33-Adult Income.csv,7\1\71499edfb373623ba3e46cd6a1bf648912d8c6d3
 H
 src/algorithms/LGAFFS.py,9\b\9bd1039a293c80d8706ef3499573d3b248f5f944
-^
-.src/results/30_03_24-11_15_50-Adult Income.csv,1\0\103f413bc1a77e5ca86d974d6954d2cba619f3eb
-^
-.src/results/30_03_24-12_08_53-Adult Income.csv,0\9\09fb38735c3c30914a59a9fa0252f7e345ba4e2e
-^
-.src/results/30_03_24-13_17_41-Adult Income.csv,a\9\a9976ca491d5767c6e53d7af793209d53f0472f1
-^
-.src/results/30_03_24-14_02_32-Adult Income.csv,7\5\75e5574d6a2b97c62e0f19ea0be8200cb14f76c6
 D
 src/helpers/maths.py,2\e\2e9e2f47b55e25c6c4f65a22520efc87753e0f00
-^
-.src/results/02_04_24-11_16_26-Adult Income.csv,0\3\03f18533335b84b160e46b12db10cc3abb9390ca
-^
-.src/results/04_04_24-13_31_55-Adult Income.csv,1\f\1f99a079d8cbd6fda87fd2632f4bb5e4fb06190f
 ]
 -src/algorithms/PermutationGeneticAlgorithm.py,b\4\b40f1f7fc3173337b8489856c984ae98af91ea76
-^
-.src/results/04_04_24-21_19_31-Adult Income.csv,d\9\d9d7765a87391cef338d04658e8fe3fe93883e62
-^
-.src/results/05_04_24-14_56_58-Adult Income.csv,1\d\1d64eb83d9878e9851f695a3a3f064c653833cf7
-^
-.src/results/05_04_24-15_49_55-Adult Income.csv,8\7\87627587ca36d90ce825f1d254f4dcab1b6eca6e
-^
-.src/results/05_04_24-18_56_21-Adult Income.csv,6\a\6a4df5783eeec1a538a1c60335f3db287ade8a81
-^
-.src/results/05_04_24-19_17_19-Adult Income.csv,6\7\67bb83be63d6efafedb96c292e583400772490e6
-^
-.src/results/06_04_24-19_14_51-Adult Income.csv,2\d\2d47ee8be3b34de2f48570864b3a916fcfd7fafc
-^
-.src/results/06_04_24-19_08_12-Adult Income.csv,9\a\9ad4033ba72d3abc89c46fcb29cfdd8932e9c45c
-^
-.src/results/06_04_24-19_06_07-Adult Income.csv,7\5\75b2c3567aef90100d836c39faee7bc922976b2a
-^
-.src/results/06_04_24-19_04_05-Adult Income.csv,f\8\f82799164c2f96ecc125821b0384be785280be3d
-^
-.src/results/07_04_24-18_09_24-Adult Income.csv,4\f\4f986f246cbc5cdae1ed914046947dbfebcf124d
 Y
 )src/algorithms/GeneticAlgorithmHelpers.py,c\1\c1cf3719a0d1c1d894dc9899e835b3b8719edc85
 ^
-.src/results/08_04_24-12_37_02-Adult Income.csv,0\c\0c3619952d7a5ba446e463d038cfaf0223fd6fa0
+.src/results/08_04_24-21_02_15-Adult Income.csv,c\a\ca14635473bb01446c3d74b902b5c6f618b0d369
 ^
-.src/results/08_04_24-14_55_57-Adult Income.csv,9\a\9a92274bb1c4e7ce9bd88c849c239a02a662dc57
+.src/results/08_04_24-21_02_45-Adult Income.csv,c\b\cba549dde48941608090878e1243b7587a0d47f3
 ^
-.src/results/08_04_24-15_05_45-Adult Income.csv,c\f\cfe975395cb925471806d867005813df66015883
+.src/results/08_04_24-21_03_16-Adult Income.csv,d\a\da3fc407c9e9eb6c2244e92711b77c15c615564f
 ^
-.src/results/08_04_24-14_07_47-Adult Income.csv,a\b\ab61ae45f5a52d24620f6e816606fd292546a11c
+.src/results/09_04_24-07_43_11-Adult Income.csv,3\f\3fe0ee1393bddbafaa75b1c23d576e91c4371fce
 ^
-.src/results/08_04_24-15_11_17-Adult Income.csv,8\d\8df962592d2b1715cae3fde4cf585088c895b4c5
+.src/results/09_04_24-05_34_08-Adult Income.csv,c\e\ced956e1142da5f9a5821b6461cf1e464e10dd30
 ^
-.src/results/08_04_24-15_22_49-Adult Income.csv,f\4\f4a2e84a9bfa4759af2fab20581f70ed95d66b45
+.src/results/08_04_24-21_09_44-Adult Income.csv,5\e\5e7daf36f9e20e8bf8bb09a7bada029689921ded
 ^
-.src/results/08_04_24-15_39_09-Adult Income.csv,d\7\d7967d8726c995091ff3c8125ba87bfda9133cb7
-^
-.src/results/08_04_24-16_09_29-Adult Income.csv,4\a\4a0bcff8788251e09718730dc525f90c914a70b6
-^
-.src/results/06_04_24-18_15_40-Adult Income.csv,e\f\efb7af58520ea173f65de3c17110cd8fd7d37c0c
-^
-.src/results/08_04_24-16_14_44-Adult Income.csv,7\7\7707feb640c9b74195074927dfe4940614cc691f
-^
-.src/results/08_04_24-16_21_24-Adult Income.csv,5\d\5de0a7e46385c1d0b5cc61052e819dc2676a11d1
-^
-.src/results/08_04_24-16_36_00-Adult Income.csv,b\8\b83bbed22ea760833ce5c782587d67cf3c1456e1
-^
-.src/results/08_04_24-16_56_18-Adult Income.csv,d\1\d1b58f21805a8842e5d49eaac67fde41eee4fd4e
-^
-.src/results/08_04_24-17_01_21-Adult Income.csv,6\0\60ff906811a367b65aa0cd228510af85f8b2230f
+.src/results/09_04_24-14_13_40-Adult Income.csv,3\e\3e400b7bf0cbc857c1b42ea8176f6f6291c7181e
+E
+src/results/script.py,2\7\27b0f56fad76dd5e99600766c720141b459c8890
+U
+%src/results/massaging/mean_values.csv,c\3\c3fd2c819ab83285ce3329f8b067d4f68e227c80
+|
+Lsrc/results/learning_fair_representations/09_04_24-16_39_09-Adult Income.csv,e\8\e841af663479bbf14cb3c5d019be618cea15ea3c
+|
+Lsrc/results/learning_fair_representations/09_04_24-17_41_10-Adult Income.csv,a\7\a7edcf4a183cb8e560bfc0c62ab19522bce15b7d
+|
+Lsrc/results/learning_fair_representations/09_04_24-18_10_55-Adult Income.csv,b\a\ba1518b758420f616b81f93e59cac009fb3b3f34
+|
+Lsrc/results/learning_fair_representations/09_04_24-18_48_06-Adult Income.csv,9\e\9eefbe3081fc6a8ebafe6a0ceb14ade0abcabeae
+|
+Lsrc/results/learning_fair_representations/09_04_24-18_54_20-Adult Income.csv,1\c\1c78a9792632a4637306a089e1530b796255aba5
+|
+Lsrc/results/learning_fair_representations/09_04_24-18_29_29-Adult Income.csv,9\1\915753ac364347c382e8f1ce9cbbc3b900e1535b
+i
+9src/results/learning_fair_representations/mean_values.csv,7\c\7c2dde6a52fd5b8d778c343a5c108f0201b90630
+h
+8src/results/massaging/09_04_24-15_07_08-Adult Income.csv,7\6\76d2a5cfaceb304f10f2afa7b4a3244c57f13b2f
+V
+&src/results/reweighing/mean_values.csv,5\f\5f7cfebe66c4db92e45a2aa16aebeca65c644ee0
+d
+4src/results/disparate_impact_remover/mean_values.csv,9\2\923100b6d35efb532be5cfcb6d8ac85d8a4ca32c
+R
+"src/results/lgaffs/mean_values.csv,b\b\bbb9d6badd5acee7cfab9f117ba6d234a1255bf6
+i
+9src/results/permutation_genetic_algorithm/mean_values.csv,e\b\eb444c64c1b7d38e28db984e60b9b5c1ca2eb951
+O
+src/results/11_04_2024_race.csv,9\a\9acdbd63bc5248601fb95c41e1c1b7123edfe26c
+N
+src/results/11_04_2024_sex.csv,3\c\3cd65926ec101dfddb9ee4829497dae27fff20e3

@@ -1,0 +1,22 @@
+dataset,sensitive_attribute,algorithm,model,value,disparate_impact,discrimination_score,true_positive_rate_diff,false_positive_rate_diff,false_positive_error_rate_balance_score,false_negative_error_rate_balance_score,consistency,confusion_matrix,accuracy,f1_score,recall,precision,mathews_cc,sensitivity,specificity
+Adult Income,race,NA,RandomForestClassifier,Amer-Indian-Eskimo,0.3493,0.8612,0.2616,0.0767,0.9247,0.7568,0.9403,"[6468, 731, 1037, 1288]",0.8144,0.593,0.554,0.6379,0.4755,0.554,0.8985
+,,,,Asian-Pac-Islander,1.3159,0.9337,-0.0442,-0.0175,0.9816,0.9561,0.9404,,,,,,,,
+,,,,Black,0.4738,0.8825,0.0473,0.0536,0.9465,0.9485,0.9401,,,,,,,,
+,,,,Other,0.2642,0.8432,0.3044,0.0572,0.9449,0.6955,0.9401,,,,,,,,
+,,,,White,1.6125,0.9148,-0.029,-0.0452,0.9546,0.9699,0.9405,,,,,,,,
+Adult Income,sex,NA,RandomForestClassifier,Female,0.2922,0.8016,0.1342,0.1077,0.8924,0.8677,0.9339,"[6451, 748, 1024, 1301]",0.8139,0.5949,0.5596,0.6349,0.4763,0.5596,0.8961
+,,,,Male,3.4225,0.8016,-0.1342,-0.1077,0.8924,0.8677,0.9339,,,,,,,,
+Adult Income,race,PermutationGeneticAlgorithm,RandomForestClassifier,Amer-Indian-Eskimo,0.662,0.9348,0.2531,0.0075,0.9975,0.7615,0.946,"[6500, 699, 1193, 1132]",0.8013,0.5448,0.4869,0.6182,0.4249,0.4869,0.9029
+,,,,Asian-Pac-Islander,1.0073,0.9986,0.1071,-0.0025,0.9975,0.8923,0.9462,,,,,,,,
+,,,,Black,0.536,0.9066,0.0146,0.042,0.9585,0.9888,0.9459,,,,,,,,
+,,,,Other,0.5111,0.9057,-0.0133,0.0227,0.9808,0.9869,0.9458,,,,,,,,
+,,,,White,1.597,0.924,-0.0728,-0.032,0.9681,0.9255,0.9463,,,,,,,,
+Adult Income,race,PermutationGeneticAlgorithm,XGBClassifier,Amer-Indian-Eskimo,0.626,0.9212,0.0724,0.0285,0.9749,0.9106,0.954,"[9655, 1135, 1632, 1865]",0.8063,0.5741,0.5333,0.6217,0.4519,0.5333,0.8948
+,,,,Asian-Pac-Islander,0.9183,0.9828,0.0978,0.002,0.9967,0.8992,0.9539,,,,,,,,
+,,,,Black,0.5807,0.9083,0.0689,0.0334,0.9661,0.9322,0.954,,,,,,,,
+,,,,Other,0.514,0.8975,0.234,0.0233,0.9714,0.8231,0.9538,,,,,,,,
+,,,,White,1.581,0.9186,-0.0896,-0.0296,0.9705,0.9091,0.9539,,,,,,,,
+Adult Income,sex,PermutationGeneticAlgorithm,RandomForestClassifier,Female,0.3196,0.8529,-0.0354,0.1315,0.8684,0.9637,0.9325,"[6379, 820, 1546, 779]",0.7516,0.397,0.3351,0.4872,0.2542,0.3351,0.8861
+,,,,Male,3.1288,0.8529,0.0354,-0.1315,0.8684,0.9637,0.9325,,,,,,,,
+Adult Income,sex,PermutationGeneticAlgorithm,XGBClassifier,Female,0.6138,0.9309,-0.2718,0.0824,0.9176,0.7285,0.9483,"[9730, 1060, 2329, 1168]",0.7628,0.408,0.334,0.5242,0.2794,0.334,0.9018
+,,,,Male,1.6293,0.9309,0.2718,-0.0824,0.9176,0.7285,0.9483,,,,,,,,
