@@ -8,10 +8,22 @@ from helpers import (convert_to_standard_dataset)
 
 class LearningFairRepresentations(Algorithm):
 
-    def __init__(self):
+    def __init__(self, seed: int,
+                 k: int = 5,
+                 ax: float = 0.01,
+                 ay: float = 1.0,
+                 az: float = 50.0,
+                 print_interval: int = 1000,
+                 verbose: int = 0):
         super().__init__()
         self.transformer = None
-        self.sensitive_attribute = None
+        self.seed = seed
+        self.k = k
+        self.Ax = ax
+        self.Ay = ay
+        self.Az = az
+        self.print_interval = print_interval
+        self.verbose = verbose
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.sensitive_attribute = sensitive_attribute
@@ -23,8 +35,13 @@ class LearningFairRepresentations(Algorithm):
 
         self.transformer = LFR(unprivileged_groups=unprivileged_groups,
                                privileged_groups=privileged_groups,
-                               k=10, Ax=0.1, Ay=1.0, Az=2.0,
-                               verbose=1)
+                               k=self.k,
+                               Ax=self.Ax,
+                               Ay=self.Ay,
+                               Az=self.Az,
+                               print_interval=self.print_interval,
+                               verbose=self.verbose,
+                               seed=self.seed)
         self.transformer.fit(standard_data)
 
     def transform(self, data: Dataset, ) -> Dataset:

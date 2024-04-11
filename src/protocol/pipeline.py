@@ -1,9 +1,10 @@
 import copy
 
 import pandas as pd
+from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 from algorithms.Algorithm import Algorithm
-from datasets import Dataset
+from datasets import Dataset, update_dataset
 from helpers import logger, write_dataframe_to_csv, dict_to_dataframe
 from .assessment import assess_all_surrogates, assess_model
 
@@ -43,14 +44,14 @@ class Pipeline:
 
         def _mitigate(_train_set: Dataset, _validation_set: Dataset, _protected_feature: str, _value: str) -> Dataset:
 
-            _original_values = (_train_set.protected_features[_protected_feature],
-                                _validation_set.protected_features[_protected_feature])
+            _original_values = (_train_set.protected_attributes[_protected_feature],
+                                _validation_set.protected_attributes[_protected_feature])
 
             _dummy_values = (_train_set.get_dummy_protected_feature(_protected_feature),
                              _validation_set.get_dummy_protected_feature(_protected_feature))
 
-            _train_set.protected_features[_protected_feature] = _dummy_values[0][_value]
-            _validation_set.protected_features[_protected_feature] = _dummy_values[1][_value]
+            _train_set.protected_attributes[_protected_feature] = _dummy_values[0][_value]
+            _validation_set.protected_attributes[_protected_feature] = _dummy_values[1][_value]
 
             # define sensitive value
             _transformed_dataset = copy.deepcopy(_train_set)
@@ -58,9 +59,9 @@ class Pipeline:
             self.algorithm.fit(_transformed_dataset, _protected_feature)
             _transformed_dataset = self.algorithm.transform(_transformed_dataset)
 
-            _train_set.protected_features[_protected_feature] = _original_values[0]
-            _transformed_dataset.protected_features[_protected_feature] = _original_values[0]
-            _validation_set.protected_features[_protected_feature] = _original_values[1]
+            _train_set.protected_attributes[_protected_feature] = _original_values[0]
+            _transformed_dataset.protected_attributes[_protected_feature] = _original_values[0]
+            _validation_set.protected_attributes[_protected_feature] = _original_values[1]
 
             return _transformed_dataset
 
@@ -121,8 +122,14 @@ class Pipeline:
 
             train_set, validation_set, test_set = self.dataset.split(self.settings)
 
+            scaler = MinMaxScaler()
+            scaler.fit(train_set.features)
+            train_set = update_dataset(train_set, features=scaler.transform(train_set.features))
+            validation_set = update_dataset(validation_set, features=scaler.transform(validation_set.features))
+            test_set = update_dataset(test_set, features=scaler.transform(test_set.features))
+
             logger.info("[PRE-INTERVENTION] Assessing surrogate models.")
-            for protected_feature in train_set.protected_features:
+            for protected_feature in train_set.protected_attributes:
                 self.results = pd.concat([self.results,
                                           self.__assessment__(train_set, validation_set, protected_feature)])
 

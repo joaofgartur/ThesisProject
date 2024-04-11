@@ -52,18 +52,18 @@ def get_model_predictions(model: object, train_data: Dataset, validation_data: D
 
 
 def fairness_assessment(data: Dataset, predictions: Dataset, sensitive_attribute: str) -> pd.DataFrame:
-    original_attribute_values = data.protected_features[sensitive_attribute]
+    original_attribute_values = data.protected_attributes[sensitive_attribute]
 
     dummy_values = data.get_dummy_protected_feature(sensitive_attribute)
 
     assessment_df = pd.DataFrame()
     for value in dummy_values:
-        data.protected_features[sensitive_attribute] = dummy_values[value]
+        data.protected_attributes[sensitive_attribute] = dummy_values[value]
         fairness_evaluator = FairnessEvaluator(data, predictions, sensitive_attribute)
         value_df = pd.concat([dict_to_dataframe({'value': value}), fairness_evaluator.evaluate()], axis=1)
         assessment_df = pd.concat([assessment_df, value_df])
 
-    data.protected_features[sensitive_attribute] = original_attribute_values
+    data.protected_attributes[sensitive_attribute] = original_attribute_values
 
     return assessment_df.reset_index(drop=True)
 

@@ -3,7 +3,13 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 30-11-2023
 """
+
+import numpy as np
+import random
+
 from enum import Enum
+
+from sklearn.utils import check_random_state
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
@@ -14,6 +20,19 @@ from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
 from helpers import logger, logger_levels, config_logger, extract_filename
 from xgboost import XGBClassifier
+
+
+def set_seed(seed: int):
+
+    # random module
+    random.seed(seed)
+
+    # numpy
+    np.random.seed(seed)
+
+    # sklearn
+    random_state = check_random_state(seed)
+    random_state.seed(seed)
 
 
 class DatasetOptions(Enum):
@@ -54,7 +73,7 @@ def load_dataset(option: Enum):
                 'privileged_classes': ['White', 'Male'],
 
             }
-            return AdultIncome(adult_info)
+            return AdultIncome(adult_info, seed=settings['seed'])
         case DatasetOptions.AIF360ADULT:
             adult_info = {
                 'dataset_name': 'Aif360 Adult Income',
@@ -88,7 +107,10 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.DisparateImpactRemover:
             return DisparateImpactRemover(repair_level=1.0)
         case AlgorithmOptions.LearningFairRepresentations:
-            return LearningFairRepresentations()
+            return LearningFairRepresentations(
+                seed=settings['seed'],
+                k=20,
+            )
         case AlgorithmOptions.LGAFFS:
             genetic_parameters = GeneticBasicParameters(
                 population_size=50,
@@ -123,20 +145,22 @@ def load_algorithm(option: Enum):
 
 if __name__ == '__main__':
     config_logger(level=logger_levels.INFO.value)
-    results_path = 'results/permutation_genetic_algorithm/'
+    results_path = 'results/lfr'
     settings = {
         'seed': 125,
         'train_size': 0.5,
         'validation_size': 0.2,
         "test_size": 0.3,
+        "n_splits": 5,
     }
+    set_seed(settings['seed'])
     model = XGBClassifier(random_state=settings['seed'])
 
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
     run_all_dataset = False
-    num_runs = 24
+    num_runs = 1
 
     if run_all:
         for i in DatasetOptions:
@@ -159,7 +183,7 @@ if __name__ == '__main__':
         for i in range(max(1, num_runs)):
             dataset = load_dataset(DatasetOptions.ADULT)
 
-            algorithm = load_algorithm(AlgorithmOptions.PGA)
+            algorithm = load_algorithm(AlgorithmOptions.LearningFairRepresentations)
 
             pipeline = Pipeline(dataset, algorithm, model, settings)
             pipeline.run_and_save(results_path)

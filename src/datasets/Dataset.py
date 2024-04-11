@@ -12,12 +12,13 @@ from helpers import logger, extract_value, extract_filename
 
 class Dataset(metaclass=abc.ABCMeta):
 
-    def __init__(self, dataset_info: dict):
+    def __init__(self, dataset_info: dict, seed: int):
         """Initializes class instance"""
         self.features_mapping = None
         self.targets_mapping = None
         self.instance_weights = None
-        self.protected_features = None
+        self.protected_attributes = None
+        self.seed = seed
 
         self.__parse_dataset_info(dataset_info)
 
@@ -40,7 +41,7 @@ class Dataset(metaclass=abc.ABCMeta):
         """"""
 
     def save_protected_attributes(self):
-        self.protected_features = self.features.loc[:, self.protected_features_names]
+        self.protected_attributes = self.features.loc[:, self.protected_features_names]
 
     def set_feature(self, feature: str, series: pd.DataFrame):
         if feature not in self.features.columns:
@@ -48,14 +49,14 @@ class Dataset(metaclass=abc.ABCMeta):
 
         self.features[feature] = series
 
-    def get_protected_features(self):
-        return self.protected_features.loc[:, self.protected_features_names]
+    def get_protected_attributes(self):
+        return self.protected_attributes.loc[:, self.protected_features_names]
 
     def get_protected_feature(self, feature) -> pd.DataFrame:
         if feature not in self.protected_features_names:
             raise ValueError(f'Feature {feature} is not a protected feature.')
 
-        return self.protected_features[feature]
+        return self.protected_attributes[feature]
 
     def get_dummy_protected_feature(self, feature) -> pd.DataFrame:
         if feature not in self.protected_features_names:
@@ -87,16 +88,21 @@ class Dataset(metaclass=abc.ABCMeta):
         return self.instance_weights[indexes]
 
     def split(self, settings: dict):
-        x_train, x_test, y_train, y_test = train_test_split(self.features,
-                                                            self.targets,
-                                                            train_size=settings['train_size'],
-                                                            random_state=settings['seed'])
 
+        # split into train and validation/test sets
+        x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,
+                                                            train_size=settings.get('train_size'),
+                                                            random_state=self.seed,
+                                                            shuffle=True,
+                                                            stratify=self.features[self.protected_features_names])
+
+        # split into validation and test sets
         split_ratio = settings['test_size'] / (settings['validation_size'] + settings['test_size'])
-        x_val, x_test, y_val, y_test = train_test_split(x_test,
-                                                        y_test,
+        x_val, x_test, y_val, y_test = train_test_split(x_test, y_test,
                                                         test_size=split_ratio,
-                                                        random_state=settings['seed'])
+                                                        random_state=self.seed,
+                                                        shuffle=True,
+                                                        stratify=x_test[self.protected_features_names])
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
         train_set.__reset_indexes()
@@ -167,7 +173,6 @@ class Dataset(metaclass=abc.ABCMeta):
 
         self.features = processed_features
 
-
     def __one_hot_encode_categorical_features(self):
         numerical_data = self.features.select_dtypes(include=['number'])
         categorical_data = self.features.drop(numerical_data, axis=1)
@@ -179,7 +184,6 @@ class Dataset(metaclass=abc.ABCMeta):
             processed_features = pd.concat([numerical_data, encoded_categorical_data], axis=1)
 
             self.features = processed_features
-
 
     def __label_encode_categorical(self, features=False, targets=True):
 

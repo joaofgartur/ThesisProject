@@ -9,9 +9,9 @@ from helpers import logger, extract_filename
 class AdultIncome(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/adult_income/adult.data"
 
-    def __init__(self, dataset_info: dict):
+    def __init__(self, dataset_info: dict, seed: int):
         logger.info(f'[{extract_filename(__file__)}] Loading...')
-        Dataset.__init__(self, dataset_info)
+        Dataset.__init__(self, dataset_info, seed=seed)
 
     def _load_dataset(self):
         try:

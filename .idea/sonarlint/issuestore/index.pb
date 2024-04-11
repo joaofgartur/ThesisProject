@@ -126,3 +126,17 @@ O
 src/results/11_04_2024_race.csv,9\a\9acdbd63bc5248601fb95c41e1c1b7123edfe26c
 N
 src/results/11_04_2024_sex.csv,3\c\3cd65926ec101dfddb9ee4829497dae27fff20e3
+^
+.src/results/11_04_24-14_39_42-Adult Income.csv,c\c\cc21bb1ffba81a05ced14836755d5e4b77a61d05
+^
+.src/results/11_04_24-16_01_08-Adult Income.csv,6\2\62d2e7f4a5e8b299d05d59ac07cb6d4be555c3e6
+^
+.src/results/11_04_24-16_13_35-Adult Income.csv,9\e\9e4ed88adc865a40ee28b2fc3fc603a8d5b67be2
+^
+.src/results/11_04_24-16_15_16-Adult Income.csv,0\f\0fbc6e1fb7defe22cac1083f1adc3b570a46e103
+^
+.src/results/11_04_24-16_52_07-Adult Income.csv,7\f\7fa5b94b15746244d49d8e96db3323477c63c90f
+^
+.src/results/11_04_24-16_59_07-Adult Income.csv,2\4\2433523133bffdd152fbdac4969a1f4ae31d81b4
+b
+2src/results/lfr/11_04_24-17_40_45-Adult Income.csv,3\8\3802740fc79fd030fa16eb949813bc15cd632131
