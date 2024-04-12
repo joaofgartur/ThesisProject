@@ -90,19 +90,21 @@ class Dataset(metaclass=abc.ABCMeta):
     def split(self, settings: dict):
 
         # split into train and validation/test sets
+        stratify_criteria = pd.concat([self.features[self.protected_features_names], self.targets], axis=1)
         x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,
                                                             train_size=settings.get('train_size'),
                                                             random_state=self.seed,
                                                             shuffle=True,
-                                                            stratify=self.features[self.protected_features_names])
+                                                            stratify=stratify_criteria)
 
         # split into validation and test sets
         split_ratio = settings['test_size'] / (settings['validation_size'] + settings['test_size'])
+        stratify_criteria = pd.concat([x_test[self.protected_features_names], y_test], axis=1)
         x_val, x_test, y_val, y_test = train_test_split(x_test, y_test,
                                                         test_size=split_ratio,
                                                         random_state=self.seed,
                                                         shuffle=True,
-                                                        stratify=x_test[self.protected_features_names])
+                                                        stratify=stratify_criteria)
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
         train_set.__reset_indexes()

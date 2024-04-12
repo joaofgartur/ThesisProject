@@ -9,12 +9,18 @@ import random
 
 from enum import Enum
 
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB, MultinomialNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+
 from sklearn.utils import check_random_state
 
-from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LearningFairRepresentations)
+from algorithms import (Massaging, Reweighing, DisparateImpactRemover, AIF360LearningFairRepresentations, LGAFFS,
+                        PermutationGeneticAlgorithm)
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
-from algorithms.LGAFFS import LGAFFS
-from algorithms.PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
@@ -23,7 +29,6 @@ from xgboost import XGBClassifier
 
 
 def set_seed(seed: int):
-
     # random module
     random.seed(seed)
 
@@ -107,7 +112,7 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.DisparateImpactRemover:
             return DisparateImpactRemover(repair_level=1.0)
         case AlgorithmOptions.LearningFairRepresentations:
-            return LearningFairRepresentations(
+            return AIF360LearningFairRepresentations(
                 seed=settings['seed'],
                 k=20,
             )
@@ -127,8 +132,8 @@ def load_algorithm(option: Enum):
             )
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
-                population_size=50,
-                num_generations=30,
+                population_size=10,
+                num_generations=5,
                 tournament_size=2,
                 elite_size=2,
                 probability_crossover=0.9,
@@ -145,16 +150,25 @@ def load_algorithm(option: Enum):
 
 if __name__ == '__main__':
     config_logger(level=logger_levels.INFO.value)
-    results_path = 'results/lfr'
+
+    results_path = 'results/'
     settings = {
         'seed': 125,
-        'train_size': 0.5,
-        'validation_size': 0.2,
-        "test_size": 0.3,
-        "n_splits": 5,
+        'train_size': 0.8,
+        'validation_size': 0.1,
+        "test_size": 0.1,
     }
+
     set_seed(settings['seed'])
-    model = XGBClassifier(random_state=settings['seed'])
+
+    test_classifier = XGBClassifier(random_state=settings['seed'])
+    surrogate_models = {
+        'LR': LogisticRegression(),
+        'SVC': SVC(),
+        'GNB': GaussianNB(),
+        "DT": DecisionTreeClassifier(),
+        "RF": RandomForestClassifier(),
+    }
 
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
@@ -167,25 +181,23 @@ if __name__ == '__main__':
             dataset = load_dataset(i)
 
             for j in AlgorithmOptions:
-                algorithm = load_algorithm(j)
+                unbiasing_algorithms = load_algorithm(j)
 
-                pipeline = Pipeline(dataset, algorithm, model, settings)
+                pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
                 pipeline.run_and_save()
     elif run_all_dataset:
         dataset = load_dataset(DatasetOptions.ADULT)
-
-        for j in AlgorithmOptions:
-            algorithm = load_algorithm(j)
-
-            pipeline = Pipeline(dataset, algorithm, model, settings)
-            pipeline.run_and_save()
+        unbiasing_algorithms = [load_algorithm(j) for j in AlgorithmOptions]
+        pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
+        pipeline.run_and_save()
     else:
         for i in range(max(1, num_runs)):
             dataset = load_dataset(DatasetOptions.ADULT)
-
-            algorithm = load_algorithm(AlgorithmOptions.LearningFairRepresentations)
-
-            pipeline = Pipeline(dataset, algorithm, model, settings)
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Massaging),
+                                    load_algorithm(AlgorithmOptions.Reweighing),
+                                    load_algorithm(AlgorithmOptions.DisparateImpactRemover),
+                                    load_algorithm(AlgorithmOptions.PGA),]
+            pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 
     logger.info(f'[{extract_filename(__file__)}] End of program.')

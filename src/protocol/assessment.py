@@ -3,33 +3,18 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
+
 import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
-from sklearn.naive_bayes import GaussianNB
-from sklearn.linear_model import SGDClassifier, LogisticRegression
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
 
 from datasets import Dataset, update_dataset, match_features
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import bold, dict_to_dataframe
+from helpers import bold, dict_to_dataframe, concat_df
 from evaluation import FairnessEvaluator
 
-surrogate_models = {
-    #'LR': LogisticRegression(),
-    #'SVC': SVC(),
-    #'GNB': GaussianNB(),
-    #'KNN': KNeighborsClassifier(),
-    #"DT": DecisionTreeClassifier(),
-    "RF": RandomForestClassifier()
-}
 
-
-def get_model_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
-
+def get_classifier_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
     pipeline = Pipeline([
         ('normalizer', StandardScaler()),
         ('classifier', model)
@@ -73,35 +58,38 @@ def performance_assessment(data: Dataset, predictions: Dataset) -> pd.DataFrame:
     return performance_evaluator.evaluate().reset_index(drop=True)
 
 
-def assess_model(model: object, train_data: Dataset, validation_data: Dataset, sensitive_attribute: str = 'NA'):
-    predictions = get_model_predictions(model, train_data, validation_data)
+def assess_classifier(classifier: object, train_data: Dataset, validation_data: Dataset,
+                      protected_attribute: str = 'NA') -> (pd.Series, pd.DataFrame):
 
-    fairness_metrics = fairness_assessment(validation_data, predictions, sensitive_attribute)
+    predictions = get_classifier_predictions(classifier, train_data, validation_data)
+
+    fairness_metrics = fairness_assessment(validation_data, predictions, protected_attribute)
     performance_metrics = performance_assessment(validation_data, predictions)
 
-    model_name = dict_to_dataframe({'model': model.__class__.__name__})
+    rows = max(len(fairness_metrics), len(performance_metrics))
+    classification_algorithm = pd.concat([dict_to_dataframe({'classification_algorithm': classifier.__class__.__name__})] * rows, ignore_index=True)
 
-    results = pd.concat([model_name, fairness_metrics, performance_metrics], axis=1)
+    results = concat_df(concat_df(classification_algorithm, fairness_metrics, axis=1), performance_metrics, axis=1)
 
     return predictions.targets, results
 
 
 def assess_all_surrogates(train_set: Dataset,
                           validation_set: Dataset,
-                          protected_feature: str = 'NA') -> pd.DataFrame:
+                          surrogate_classifiers: dict,
+                          protected_attribute: str = 'NA') -> pd.DataFrame:
+    df = pd.DataFrame()
 
-    assessment_df = pd.DataFrame()
-
-    for surrogate in surrogate_models:
-        _, surrogate_model_results = assess_model(
-            surrogate_models[surrogate],
+    for surrogate in surrogate_classifiers:
+        _, surrogate_model_results = assess_classifier(
+            surrogate_classifiers[surrogate],
             train_set,
             validation_set,
-            protected_feature)
+            protected_attribute)
 
-        assessment_df = pd.concat([assessment_df, surrogate_model_results])
+        df = pd.concat([df, surrogate_model_results]).reset_index(drop=True)
 
-    return assessment_df
+    return df
 
 
 def data_description_diff(df: pd.DataFrame, fixed_df: pd.DataFrame) -> pd.DataFrame:

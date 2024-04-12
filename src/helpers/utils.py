@@ -23,3 +23,7 @@ def duplicate_rows(df: pd.DataFrame, num_duplicates: int) -> pd.DataFrame:
 
 def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
     return pd.DataFrame(dictionary, index=[0])
+
+
+def concat_df(df1: pd.DataFrame, df2: pd.DataFrame, axis: int = 0) -> pd.DataFrame:
+    return pd.concat([df1, df2], axis=axis).reset_index(drop=True)

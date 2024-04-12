@@ -95,10 +95,10 @@ class FairnessEvaluator(object):
         return diff(1, abs_diff(unprivileged_cp, privileged_cp))
 
     def false_positive_rate_diff(self):
-        return self.__compute_rate_difference(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
+        return abs_diff(1, self.__compute_rate_difference(NEGATIVE_OUTCOME, POSITIVE_OUTCOME))
 
     def true_positive_rate_diff(self):
-        return self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME)
+        return abs_diff(1, self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME))
 
     def consistency(self, k):
 

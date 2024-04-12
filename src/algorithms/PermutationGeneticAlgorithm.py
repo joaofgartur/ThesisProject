@@ -9,7 +9,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters, uniform_c
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import abs_diff, logger
-from protocol.assessment import get_model_predictions, fairness_assessment
+from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
 class PermutationGeneticAlgorithm(Algorithm):
@@ -108,7 +108,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         data = self.__phenotype(data, individual)
 
         model = RandomForestClassifier()
-        predictions = get_model_predictions(model, data, self.validation_data)
+        predictions = get_classifier_predictions(model, data, self.validation_data)
 
         return [individual[0], self.__performance_fitness(self.validation_data, predictions),
                 self.__fairness_fitness(self.validation_data, predictions)]
