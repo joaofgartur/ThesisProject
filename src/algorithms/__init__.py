@@ -10,3 +10,4 @@ from .DisparateImpactRemover import DisparateImpactRemover
 from .AIF360LearningFairRepresentations import AIF360LearningFairRepresentations
 from .LGAFFS import LGAFFS
 from .PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
+from .LearningFairRepresentations import LearnedFairRepresentations

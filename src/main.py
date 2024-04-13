@@ -11,20 +11,19 @@ from enum import Enum
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import GaussianNB, MultinomialNB
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
 from sklearn.utils import check_random_state
 
-from algorithms import (Massaging, Reweighing, DisparateImpactRemover, AIF360LearningFairRepresentations, LGAFFS,
-                        PermutationGeneticAlgorithm)
+from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LGAFFS,
+                        PermutationGeneticAlgorithm, LearnedFairRepresentations)
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
-from helpers import logger, logger_levels, config_logger, extract_filename
+from helpers import logger, extract_filename
 from xgboost import XGBClassifier
 
 
@@ -106,19 +105,22 @@ class AlgorithmOptions(Enum):
 def load_algorithm(option: Enum):
     match option:
         case AlgorithmOptions.Massaging:
-            return Massaging(learning_settings={'train_size': 0.9, 'test_size': 0.1})
+            return Massaging()
         case AlgorithmOptions.Reweighing:
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
             return DisparateImpactRemover(repair_level=1.0)
         case AlgorithmOptions.LearningFairRepresentations:
-            return AIF360LearningFairRepresentations(
+            return LearnedFairRepresentations(
+                k=10,
+                ax=1e-4,
+                ay=0.1,
+                az=1000,
                 seed=settings['seed'],
-                k=20,
             )
         case AlgorithmOptions.LGAFFS:
             genetic_parameters = GeneticBasicParameters(
-                population_size=50,
+                population_size=101,
                 num_generations=30,
                 tournament_size=2,
                 probability_crossover=0.9,
@@ -132,8 +134,8 @@ def load_algorithm(option: Enum):
             )
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
-                population_size=10,
-                num_generations=5,
+                population_size=20,
+                num_generations=30,
                 tournament_size=2,
                 elite_size=2,
                 probability_crossover=0.9,
@@ -141,7 +143,7 @@ def load_algorithm(option: Enum):
             )
             return PermutationGeneticAlgorithm(
                 genetic_parameters=genetic_parameters,
-                base_algorithm=Massaging(learning_settings={'train_size': 0.9, 'test_size': 0.1})
+                base_algorithm=Massaging()
             )
         case _:
             logger.error('Algorithm option unknown!')
@@ -149,7 +151,6 @@ def load_algorithm(option: Enum):
 
 
 if __name__ == '__main__':
-    config_logger(level=logger_levels.INFO.value)
 
     results_path = 'results/'
     settings = {
@@ -193,10 +194,7 @@ if __name__ == '__main__':
     else:
         for i in range(max(1, num_runs)):
             dataset = load_dataset(DatasetOptions.ADULT)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Massaging),
-                                    load_algorithm(AlgorithmOptions.Reweighing),
-                                    load_algorithm(AlgorithmOptions.DisparateImpactRemover),
-                                    load_algorithm(AlgorithmOptions.PGA),]
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Massaging),load_algorithm(AlgorithmOptions.Reweighing)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 

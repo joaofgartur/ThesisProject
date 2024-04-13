@@ -10,7 +10,6 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 
 from algorithms.Algorithm import Algorithm
@@ -21,9 +20,8 @@ from errors import error_check_dataset, error_check_sensitive_attribute
 
 class Massaging(Algorithm):
 
-    def __init__(self, learning_settings: dict):
+    def __init__(self):
         super().__init__()
-        self.learning_settings = learning_settings
         self.m = None
         self.demotion_candidates = None
         self.promotion_candidates = None
@@ -106,16 +104,9 @@ class Massaging(Algorithm):
 
         error_check_dataset(dataset)
 
-        if _TRAIN_SIZE_KEY not in self.learning_settings or _TEST_SIZE_KEY not in self.learning_settings:
-            raise ValueError("Both train size and test size should be provided in the learning settings.")
-
         try:
-            x_train, __, y_train, __ = train_test_split(dataset.features, dataset.targets,
-                                                        test_size=self.learning_settings[_TEST_SIZE_KEY],
-                                                        train_size=self.learning_settings[_TRAIN_SIZE_KEY])
-
             model = GaussianNB()
-            model.fit(x_train, y_train.values.ravel())
+            model.fit(dataset.features.to_numpy(), dataset.targets.to_numpy().ravel())
 
             class_probabilities = model.predict_proba(dataset.features)
 

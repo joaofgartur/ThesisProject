@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
-from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, precision_score, matthews_corrcoef
+from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, precision_score, \
+    matthews_corrcoef, roc_curve, auc
 
 from constants import NUM_DECIMALS, POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
@@ -15,6 +16,14 @@ class ModelEvaluator(object):
 
     def confusion_matrix(self):
         return [list(np.concatenate(confusion_matrix(y_true=self.y, y_pred=self.y_pred)).flat)]
+
+    def roc_curve(self):
+        fpr, tpr, thresholds = roc_curve(self.y, self.y_pred)
+        return [[list(fpr), list(tpr), list(thresholds)]]
+
+    def auc(self):
+        fpr, tpr, _ = roc_curve(self.y, self.y_pred)
+        return np.round(auc(fpr, tpr), decimals=NUM_DECIMALS)
 
     def accuracy(self):
         return np.round(accuracy_score(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
@@ -46,6 +55,8 @@ class ModelEvaluator(object):
             'recall': self.recall(),
             'precision': self.precision(),
             'mathews_cc': self.mathews_cc(),
+            'roc_curve': self.roc_curve(),
+            'auc': self.auc(),
             'sensitivity': self.sensitivity(),
             'specificity': self.specificity()
         }

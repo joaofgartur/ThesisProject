@@ -1,7 +1,7 @@
 from aif360.algorithms.preprocessing import LFR
 
 from algorithms.Algorithm import Algorithm
-from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
+from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 from datasets import Dataset, update_dataset
 from helpers import (convert_to_standard_dataset)
 
@@ -15,6 +15,7 @@ class AIF360LearningFairRepresentations(Algorithm):
                  az: float = 50.0,
                  print_interval: int = 1000,
                  verbose: int = 0):
+
         super().__init__()
         self.transformer = None
         self.seed = seed
@@ -30,8 +31,8 @@ class AIF360LearningFairRepresentations(Algorithm):
 
         standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        privileged_groups = [{self.sensitive_attribute: POSITIVE_OUTCOME}]
-        unprivileged_groups = [{self.sensitive_attribute: NEGATIVE_OUTCOME}]
+        privileged_groups = [{self.sensitive_attribute: PRIVILEGED}]
+        unprivileged_groups = [{self.sensitive_attribute: UNPRIVILEGED}]
 
         self.transformer = LFR(unprivileged_groups=unprivileged_groups,
                                privileged_groups=privileged_groups,

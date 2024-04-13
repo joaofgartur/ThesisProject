@@ -210,6 +210,8 @@ class Pipeline:
                     self.results[unbiasing_algorithm.__class__.__name__] = pd.concat(
                         [self.results[unbiasing_algorithm.__class__.__name__], attribute_results])
 
+                    self.save_algorithm_results(unbiasing_algorithm.__class__.__name__, attribute=attribute)
+
             logger.info("[PIPELINE] End.")
 
         except Exception as e:
@@ -221,6 +223,15 @@ class Pipeline:
             for key, result in self.results.items():
                 write_dataframe_to_csv(df=result, dataset_name=self.dataset.name,
                                        path=f'{path}/{key}')
+        else:
+            raise KeyError('Results are empty!')
+
+    def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results') -> None:
+        if self.results is not None:
+            suffix = f'_intermediary_{attribute}_'
+            write_dataframe_to_csv(df=self.results[algorithm],
+                                   dataset_name=self.dataset.name+suffix,
+                                   path=f'{path}/{algorithm}')
         else:
             raise KeyError('Results are empty!')
 
