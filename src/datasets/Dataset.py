@@ -91,6 +91,41 @@ class Dataset(metaclass=abc.ABCMeta):
 
         # split into train and validation/test sets
         stratify_criteria = pd.concat([self.features[self.protected_features_names], self.targets], axis=1)
+
+        # Assuming 'subgroup_column' contains the subgroup identifiers
+        subgroup_counts = stratify_criteria.value_counts()
+
+        print(subgroup_counts)
+
+        # Identify subgroups with dimensionality 1
+        subgroups_to_remove = subgroup_counts[subgroup_counts == 1].index
+
+        print(subgroups_to_remove)
+
+        indexes_to_remove = []
+        columns = subgroups_to_remove.names
+        for i in range(len(subgroups_to_remove)):
+            df = copy.deepcopy(stratify_criteria)
+            for j in range(len(columns)):
+                df = df[df[columns[j]] == subgroups_to_remove[i][j]]
+
+            indexes_to_remove.append(df.index.to_list()[0])
+            
+        print(f'to remove:\n {indexes_to_remove}')
+
+        print(self.features.shape)
+        self.features = self.features.drop(index=indexes_to_remove)
+        print(self.features.shape)
+
+        print(self.targets.shape)
+        self.targets = self.targets.drop(index=indexes_to_remove)
+        print(self.targets.shape)
+
+        print(stratify_criteria.value_counts())
+        stratify_criteria = stratify_criteria.drop(index=indexes_to_remove)
+        print(stratify_criteria.value_counts())
+
+
         x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,
                                                             train_size=settings.get('train_size'),
                                                             random_state=self.seed,

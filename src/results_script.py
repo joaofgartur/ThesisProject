@@ -42,9 +42,9 @@ def compute_mean_csv(folder_path, output_file):
 
 
 if __name__ == '__main__':
-    algorithms = ['massaging', 'reweighing', 'disparate_impact_remover', 'learning_fair_representations', 'lgaffs', 'permutation_genetic_algorithm']
+    algorithms = ['Massaging', 'Reweighing', 'DisparateImpactRemover', 'AIF360LearningFairRepresentations', 'LGAFFS', 'PermutationGeneticAlgorithm']
 
     for algorithm in algorithms:
         input_folder = f"results/{algorithm}"
-        output_file = f"{input_folder}/mean_values.csv"
+        output_file = f"{input_folder}/{algorithm}_mean_values.csv"
         compute_mean_csv(input_folder, output_file)

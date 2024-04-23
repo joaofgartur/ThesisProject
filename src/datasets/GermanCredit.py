@@ -10,9 +10,9 @@ class GermanCredit(Dataset):
 
     _LOCAL_DATA_FILE = "datasets/local_storage/german_credit/german.data"
 
-    def __init__(self, dataset_info: dict):
+    def __init__(self, dataset_info: dict, seed: int):
         logger.info(f'[{extract_filename(__file__)}] Loading...')
-        Dataset.__init__(self, dataset_info)
+        Dataset.__init__(self, dataset_info, seed)
 
     def _load_dataset(self):
         try:
@@ -56,8 +56,10 @@ class GermanCredit(Dataset):
         self.features[age_column] = self.features[age_column].apply(lambda x: derive_age(x))
 
         # binarize attribute
+        """
         for feature, value in zip(self.protected_features_names, self.privileged_classes):
             self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
+        """
 
         # rename target column
         self.targets = self.targets.rename(columns={self.target: 'target'})

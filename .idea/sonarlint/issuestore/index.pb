@@ -76,17 +76,15 @@ D
 -src/algorithms/PermutationGeneticAlgorithm.py,b\4\b40f1f7fc3173337b8489856c984ae98af91ea76
 Y
 )src/algorithms/GeneticAlgorithmHelpers.py,c\1\c1cf3719a0d1c1d894dc9899e835b3b8719edc85
-E
-src/results/script.py,2\7\27b0f56fad76dd5e99600766c720141b459c8890
 c
 3src/algorithms/AIF360LearningFairRepresentations.py,6\0\60d6a08d3a04907280422f431120d5e3df35dd05
 L
 src/algorithms/LFRhelpers.py,2\9\294cf48f46a4ba25f6f5391852d8316d10cc1176
-u
-Esrc/results/DisparateImpactRemover/13_04_24-23_10_32-Adult Income.csv,8\e\8eb052f67969a9b3a0662d1eee289e0fbdb95258
-h
-8src/results/Massaging/13_04_24-23_10_32-Adult Income.csv,0\8\082eb5df2bb5bb966a42254be3b625e432462ee9
-i
-9src/results/Reweighing/13_04_24-23_10_32-Adult Income.csv,5\0\5039716141daa3815128b63b9a9f10efb2d79c8c
+j
+:src/results/Reweighing/19_04_24-17_58_06-German Credit.csv,3\5\3584d1e4560e202969120be2f6de14cb5597d912
 {
-Ksrc/results/Massaging/13_04_24-23_32_42-Adult Income_intermediary_race_.csv,5\b\5b211e01a6d20b900d070697128b394ce51cfbcc
+Ksrc/results/PermutationGeneticAlgorithm/19_04_24-17_58_06-German Credit.csv,6\6\66791e41cf38f3fa6a98843971d7378071d7f794
+E
+src/results_script.py,d\8\d84a4bfe8af14c51ebb630ae7557a54d41c313df
+m
+=src/results/AIF360LearningFairRepresentations/mean_values.csv,d\3\d3575105ed5a93b4298e4e46df3fc66d5dc06dda

@@ -28,9 +28,9 @@ class Compas(Dataset):
 
     _LOCAL_DATA_FILE = "datasets/local_storage/compas/compas-scores-two-years.csv"
 
-    def __init__(self, dataset_info: dict):
+    def __init__(self, dataset_info: dict, seed: int):
         logger.info(f'[{extract_filename(__file__)}] Loading...')
-        Dataset.__init__(self, dataset_info)
+        Dataset.__init__(self, dataset_info, seed)
 
     def _load_dataset(self):
         try:
@@ -58,7 +58,9 @@ class Compas(Dataset):
             return POSITIVE_OUTCOME - x
 
         # binarize attribute
+        """
         for feature, value in zip(self.protected_features_names, self.privileged_classes):
             self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
+        """
 
         self.targets = self.targets.apply(lambda x: derive_class(x))

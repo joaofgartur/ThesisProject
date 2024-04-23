@@ -1,0 +1,433 @@
+dataset,protected_attribute,unbiasing_algorithm,data,classifier_type,classification_algorithm,value,disparate_impact,discrimination_score,true_positive_rate_diff,false_positive_rate_diff,false_positive_error_rate_balance_score,false_negative_error_rate_balance_score,consistency,confusion_matrix,accuracy,f1_score,recall,precision,mathews_cc,roc_curve,auc,sensitivity,specificity
+Adult Income,race,NA,Validation,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.1119,0.8397,0.5367,0.9339,0.935,0.5366,0.9999,"[3288, 320, 622, 532]",0.8022,0.5304,0.461,0.6244,0.4162,"[[0.0, 0.08869179600886919, 1.0], [0.0, 0.4610051993067591, 1.0], [inf, 1.0, 0.0]]",0.6862,0.461,0.9113
+Adult Income,race,NA,Validation,Surrogate,LogisticRegression,Asian-Pac-Islander,0.8415,0.9715,0.8061,1.0163,0.9834,0.8073,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,LogisticRegression,Black,0.313,0.8685,0.7991,0.9339,0.9342,0.8023,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,LogisticRegression,Other,0.4071,0.8934,0.7379,0.9673,0.9698,0.7379,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,LogisticRegression,White,2.5343,0.8814,1.226,1.0517,0.948,0.7728,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,SVC,Amer-Indian-Eskimo,0.0,0.8246,0.4981,0.9296,0.9296,0.4983,1.0,"[3357, 251, 578, 576]",0.8259,0.5815,0.4991,0.6965,0.4859,"[[0.0, 0.06956762749445676, 1.0], [0.0, 0.49913344887348354, 1.0], [inf, 1.0, 0.0]]",0.7148,0.4991,0.9304
+Adult Income,race,NA,Validation,Surrogate,SVC,Asian-Pac-Islander,1.5401,0.9077,1.1243,1.0547,0.9441,0.8696,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,SVC,Black,0.3344,0.8766,0.8778,0.9419,0.9416,0.8768,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,SVC,Other,0.2795,0.8742,0.6998,0.9582,0.9595,0.6996,1.0,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,SVC,White,1.8685,0.9135,1.0609,1.0397,0.9604,0.9386,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.0,0.6795,0.2945,0.8035,0.8035,0.2944,1.0,"[2907, 701, 344, 810]",0.7806,0.6079,0.7019,0.5361,0.4673,"[[0.0, 0.19429046563192906, 1.0], [0.0, 0.7019064124783362, 1.0], [inf, 1.0, 0.0]]",0.7538,0.7019,0.8057
+Adult Income,race,NA,Validation,Surrogate,GaussianNB,Asian-Pac-Islander,0.2737,0.7643,0.4824,0.8468,0.8489,0.4801,1.0,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,GaussianNB,Black,0.2713,0.7516,0.7382,0.8301,0.8296,0.7402,1.0,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,GaussianNB,Other,0.4975,0.8399,0.8976,0.8892,0.8929,0.8977,1.0,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,GaussianNB,White,3.991,0.7335,1.3975,1.1804,0.8202,0.6011,1.0,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,0.6651,0.9237,0.5939,1.0304,0.9745,0.6066,1.0,"[3171, 437, 510, 644]",0.8011,0.5763,0.5581,0.5957,0.447,"[[0.0, 0.12111973392461198, 1.0], [0.0, 0.5580589254766031, 1.0], [inf, 1.0, 0.0]]",0.7185,0.5581,0.8789
+Adult Income,race,NA,Validation,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,1.4547,0.8982,0.9892,1.1188,0.8795,0.9917,0.9996,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,DecisionTreeClassifier,Black,0.4613,0.8711,0.9159,0.9312,0.9316,0.9104,0.9997,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,DecisionTreeClassifier,Other,0.6964,0.9309,0.6405,1.0199,0.9738,0.6404,0.9997,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,DecisionTreeClassifier,White,1.4798,0.9228,1.0957,1.0207,0.9794,0.9049,0.9994,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,0.2709,0.8369,0.5582,0.9425,0.9448,0.5709,0.9999,"[3235, 373, 469, 685]",0.8232,0.6193,0.5936,0.6474,0.5053,"[[0.0, 0.10338137472283813, 1.0], [0.0, 0.5935875216637782, 1.0], [inf, 1.0, 0.0]]",0.7451,0.5936,0.8966
+Adult Income,race,NA,Validation,Surrogate,RandomForestClassifier,Asian-Pac-Islander,1.222,0.951,1.0018,1.0387,0.9593,0.9934,0.9998,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,RandomForestClassifier,Black,0.411,0.8614,0.8786,0.935,0.9346,0.8731,0.9997,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,RandomForestClassifier,Other,0.2182,0.8252,0.6049,0.9241,0.9253,0.6047,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Surrogate,RandomForestClassifier,White,1.847,0.8909,1.115,1.0487,0.9511,0.8866,0.9997,,,,,,,,,,
+Adult Income,race,NA,Validation,Test,XGBClassifier,Amer-Indian-Eskimo,0.0927,0.8023,0.3886,0.9323,0.9333,0.3885,1.0,"[3282, 326, 452, 702]",0.8366,0.6434,0.6083,0.6829,0.5395,"[[0.0, 0.09035476718403547, 1.0], [0.0, 0.608318890814558, 1.0], [inf, 1.0, 0.0]]",0.759,0.6083,0.9096
+Adult Income,race,NA,Validation,Test,XGBClassifier,Asian-Pac-Islander,1.1957,0.958,0.9864,1.0334,0.9656,0.9914,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Test,XGBClassifier,Black,0.414,0.8661,0.9182,0.9375,0.938,0.9149,0.9999,,,,,,,,,,
+Adult Income,race,NA,Validation,Test,XGBClassifier,Other,0.3373,0.8562,0.7908,0.9373,0.9385,0.7908,1.0,,,,,,,,,,
+Adult Income,race,NA,Validation,Test,XGBClassifier,White,1.8874,0.8912,1.1017,1.0479,0.9522,0.9015,0.9999,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.1267,0.8532,0.746,0.924,0.924,0.7461,1.0,"[3337, 271, 632, 523]",0.8104,0.5367,0.4528,0.6587,0.4343,"[[0.0, 0.07511086474501108, 1.0], [0.0, 0.45281385281385284, 1.0], [inf, 1.0, 0.0]]",0.6889,0.4528,0.9249
+Adult Income,race,NA,Test,Surrogate,LogisticRegression,Asian-Pac-Islander,0.7488,0.9578,0.9226,0.9508,0.9521,0.9294,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,LogisticRegression,Black,0.3059,0.8761,0.7824,0.9465,0.9466,0.7869,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,LogisticRegression,Other,0.437,0.9057,0.746,0.981,0.9835,0.7461,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,LogisticRegression,White,2.6483,0.8861,1.1732,1.056,0.9436,0.8266,0.9999,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,SVC,Amer-Indian-Eskimo,0.1277,0.8545,0.7017,0.9401,0.94,0.7017,1.0,"[3394, 214, 581, 574]",0.8331,0.5908,0.497,0.7284,0.5048,"[[0.0, 0.05931263858093126, 1.0], [0.0, 0.49696969696969695, 1.0], [inf, 1.0, 0.0]]",0.7188,0.497,0.9407
+Adult Income,race,NA,Test,Surrogate,SVC,Asian-Pac-Islander,1.3138,0.9486,1.0916,1.0184,0.9826,0.904,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,SVC,Black,0.3386,0.8832,0.834,0.956,0.9559,0.8343,0.9999,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,SVC,Other,0.4404,0.907,1.1033,0.9402,0.9401,0.8965,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,SVC,White,1.9593,0.9129,1.0623,1.0373,0.9624,0.9352,0.9999,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.0,0.6904,0.3032,0.815,0.815,0.3035,1.0,"[2948, 660, 354, 801]",0.7871,0.6124,0.6935,0.5483,0.4745,"[[0.0, 0.18292682926829268, 1.0], [0.0, 0.6935064935064935, 1.0], [inf, 1.0, 0.0]]",0.7553,0.6935,0.8171
+Adult Income,race,NA,Test,Surrogate,GaussianNB,Asian-Pac-Islander,0.2428,0.7623,0.5219,0.8304,0.8312,0.5211,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,GaussianNB,Black,0.241,0.749,0.6094,0.8455,0.8452,0.6089,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,GaussianNB,Other,0.3958,0.8138,0.9061,0.8723,0.8747,0.9061,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,GaussianNB,White,4.5361,0.7309,1.4482,1.1724,0.8276,0.5514,1.0,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.2332,0.9497,1.2756,1.0861,0.9163,0.7243,0.9992,"[3185, 423, 548, 607]",0.7961,0.5556,0.5255,0.5893,0.4251,"[[0.0, 0.11723946784922394, 1.0], [0.0, 0.5255411255411255, 1.0], [inf, 1.0, 0.0]]",0.7042,0.5255,0.8828
+Adult Income,race,NA,Test,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,1.2651,0.9431,0.9607,1.0759,0.9245,0.9603,0.999,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,DecisionTreeClassifier,Black,0.5042,0.8875,0.8931,0.9476,0.9473,0.8981,0.9992,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,DecisionTreeClassifier,Other,0.3367,0.8558,0.8739,0.9101,0.9113,0.8739,0.9994,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,DecisionTreeClassifier,White,1.4541,0.9293,1.0636,1.0216,0.978,0.9353,0.9994,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,0.6813,0.9353,1.0548,0.9786,0.9822,0.9452,0.9998,"[3274, 334, 525, 630]",0.8197,0.5946,0.5455,0.6535,0.4831,"[[0.0, 0.09257206208425721, 1.0], [0.0, 0.5454545454545454, 1.0], [inf, 1.0, 0.0]]",0.7264,0.5455,0.9074
+Adult Income,race,NA,Test,Surrogate,RandomForestClassifier,Asian-Pac-Islander,1.0317,0.9936,0.9402,1.0123,0.9874,0.9397,0.9996,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,RandomForestClassifier,Black,0.3904,0.869,0.8902,0.9323,0.9327,0.8959,0.9997,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,RandomForestClassifier,Other,0.4801,0.8943,1.0548,0.935,0.9362,0.9452,0.9998,,,,,,,,,,
+Adult Income,race,NA,Test,Surrogate,RandomForestClassifier,White,1.8961,0.8974,1.0753,1.0522,0.9475,0.9238,0.9997,,,,,,,,,,
+Adult Income,race,NA,Test,Test,XGBClassifier,Amer-Indian-Eskimo,0.5115,0.8984,0.9964,0.9671,0.9696,0.9965,0.9999,"[3319, 289, 458, 697]",0.8432,0.6511,0.6035,0.7069,0.5536,"[[0.0, 0.08009977827050997, 1.0], [0.0, 0.6034632034632035, 1.0], [inf, 1.0, 0.0]]",0.7617,0.6035,0.9199
+Adult Income,race,NA,Test,Test,XGBClassifier,Asian-Pac-Islander,1.4256,0.913,1.0693,1.0766,0.9255,0.9346,0.9997,,,,,,,,,,
+Adult Income,race,NA,Test,Test,XGBClassifier,Black,0.3814,0.8639,0.8112,0.9491,0.9495,0.8162,0.9998,,,,,,,,,,
+Adult Income,race,NA,Test,Test,XGBClassifier,Other,0.4695,0.8897,1.1973,0.9191,0.9191,0.8026,0.9999,,,,,,,,,,
+Adult Income,race,NA,Test,Test,XGBClassifier,White,1.683,0.9108,1.0643,1.0296,0.9707,0.9334,0.9998,,,,,,,,,,
+Adult Income,sex,NA,Validation,Surrogate,LogisticRegression,Female,0.0645,0.7579,0.5186,0.8754,0.8752,0.518,0.9999,"[3288, 320, 622, 532]",0.8022,0.5304,0.461,0.6244,0.4162,"[[0.0, 0.08869179600886919, 1.0], [0.0, 0.4610051993067591, 1.0], [inf, 1.0, 0.0]]",0.6862,0.461,0.9113
+Adult Income,sex,NA,Validation,Surrogate,LogisticRegression,Male,15.497,0.7579,1.4814,1.1246,0.8752,0.518,0.9999,,,,,,,,,,
+Adult Income,sex,NA,Validation,Surrogate,SVC,Female,0.2365,0.8228,0.8254,0.9154,0.9157,0.8251,1.0,"[3357, 251, 578, 576]",0.8259,0.5815,0.4991,0.6965,0.4859,"[[0.0, 0.06956762749445676, 1.0], [0.0, 0.49913344887348354, 1.0], [inf, 1.0, 0.0]]",0.7148,0.4991,0.9304
+Adult Income,sex,NA,Validation,Surrogate,SVC,Male,4.2277,0.8228,1.1746,1.0846,0.9157,0.8251,1.0,,,,,,,,,,
+Adult Income,sex,NA,Validation,Surrogate,GaussianNB,Female,0.0,0.5266,0.1735,0.6831,0.6831,0.1735,1.0,"[2907, 701, 344, 810]",0.7806,0.6079,0.7019,0.5361,0.4673,"[[0.0, 0.19429046563192906, 1.0], [0.0, 0.7019064124783362, 1.0], [inf, 1.0, 0.0]]",0.7538,0.7019,0.8057
+Adult Income,sex,NA,Validation,Surrogate,GaussianNB,Male,inf,0.5266,1.8265,1.3169,0.6831,0.1735,1.0,,,,,,,,,,
+Adult Income,sex,NA,Validation,Surrogate,DecisionTreeClassifier,Female,0.3587,0.8135,0.9069,0.8928,0.8927,0.9073,1.0,"[3164, 444, 506, 648]",0.8005,0.577,0.5615,0.5934,0.4469,"[[0.0, 0.12305986696230599, 1.0], [0.0, 0.561525129982669, 1.0], [inf, 1.0, 0.0]]",0.7192,0.5615,0.8769
+Adult Income,sex,NA,Validation,Surrogate,DecisionTreeClassifier,Male,2.7881,0.8135,1.0931,1.1072,0.8927,0.9073,1.0,,,,,,,,,,
+Adult Income,sex,NA,Validation,Surrogate,RandomForestClassifier,Female,0.3012,0.8023,0.9047,0.89,0.8899,0.9031,1.0,"[3243, 365, 482, 672]",0.8221,0.6134,0.5823,0.648,0.4995,"[[0.0, 0.10116407982261641, 1.0], [0.0, 0.5823223570190641, 1.0], [inf, 1.0, 0.0]]",0.7406,0.5823,0.8988
+Adult Income,sex,NA,Validation,Surrogate,RandomForestClassifier,Male,3.3204,0.8023,1.0953,1.11,0.8899,0.9031,1.0,,,,,,,,,,
+Adult Income,sex,NA,Validation,Test,XGBClassifier,Female,0.2942,0.8014,0.8999,0.8982,0.8982,0.8995,1.0,"[3282, 326, 452, 702]",0.8366,0.6434,0.6083,0.6829,0.5395,"[[0.0, 0.09035476718403547, 1.0], [0.0, 0.608318890814558, 1.0], [inf, 1.0, 0.0]]",0.759,0.6083,0.9096
+Adult Income,sex,NA,Validation,Test,XGBClassifier,Male,3.3986,0.8014,1.1001,1.1018,0.8982,0.8995,1.0,,,,,,,,,,
+Adult Income,sex,NA,Test,Surrogate,LogisticRegression,Female,0.0855,0.7819,0.529,0.9043,0.9045,0.5286,1.0,"[3337, 271, 632, 523]",0.8104,0.5367,0.4528,0.6587,0.4343,"[[0.0, 0.07511086474501108, 1.0], [0.0, 0.45281385281385284, 1.0], [inf, 1.0, 0.0]]",0.6889,0.4528,0.9249
+Adult Income,sex,NA,Test,Surrogate,LogisticRegression,Male,11.6912,0.7819,1.471,1.0957,0.9045,0.5286,1.0,,,,,,,,,,
+Adult Income,sex,NA,Test,Surrogate,SVC,Female,0.2931,0.8476,0.9335,0.9301,0.9302,0.9322,1.0,"[3394, 214, 581, 574]",0.8331,0.5908,0.497,0.7284,0.5048,"[[0.0, 0.05931263858093126, 1.0], [0.0, 0.49696969696969695, 1.0], [inf, 1.0, 0.0]]",0.7188,0.497,0.9407
+Adult Income,sex,NA,Test,Surrogate,SVC,Male,3.4114,0.8476,1.0665,1.0699,0.9302,0.9322,1.0,,,,,,,,,,
+Adult Income,sex,NA,Test,Surrogate,GaussianNB,Female,0.0,0.5429,0.1843,0.7018,0.7019,0.1843,1.0,"[2948, 660, 354, 801]",0.7871,0.6124,0.6935,0.5483,0.4745,"[[0.0, 0.18292682926829268, 1.0], [0.0, 0.6935064935064935, 1.0], [inf, 1.0, 0.0]]",0.7553,0.6935,0.8171
+Adult Income,sex,NA,Test,Surrogate,GaussianNB,Male,inf,0.5429,1.8157,1.2982,0.7019,0.1843,1.0,,,,,,,,,,
+Adult Income,sex,NA,Test,Surrogate,DecisionTreeClassifier,Female,0.4241,0.8456,0.903,0.9244,0.9246,0.9016,0.9997,"[3177, 431, 551, 604]",0.7938,0.5516,0.5229,0.5836,0.4193,"[[0.0, 0.11945676274944568, 1.0], [0.0, 0.5229437229437229, 1.0], [inf, 1.0, 0.0]]",0.7017,0.5229,0.8805
+Adult Income,sex,NA,Test,Surrogate,DecisionTreeClassifier,Male,2.358,0.8456,1.097,1.0756,0.9246,0.9016,0.9997,,,,,,,,,,
+Adult Income,sex,NA,Test,Surrogate,RandomForestClassifier,Female,0.3594,0.8326,0.9449,0.9139,0.9138,0.9438,0.9998,"[3262, 346, 519, 636]",0.8184,0.5952,0.5506,0.6477,0.4818,"[[0.0, 0.0958980044345898, 1.0], [0.0, 0.5506493506493506, 1.0], [inf, 1.0, 0.0]]",0.7274,0.5506,0.9041
+Adult Income,sex,NA,Test,Surrogate,RandomForestClassifier,Male,2.7827,0.8326,1.0551,1.0861,0.9138,0.9438,0.9998,,,,,,,,,,
+Adult Income,sex,NA,Test,Test,XGBClassifier,Female,0.3511,0.8292,0.9708,0.9219,0.9221,0.9701,0.9999,"[3319, 289, 458, 697]",0.8432,0.6511,0.6035,0.7069,0.5536,"[[0.0, 0.08009977827050997, 1.0], [0.0, 0.6034632034632035, 1.0], [inf, 1.0, 0.0]]",0.7617,0.6035,0.9199
+Adult Income,sex,NA,Test,Test,XGBClassifier,Male,2.8485,0.8292,1.0292,1.0781,0.9221,0.9701,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.0,0.9499,0.9224,0.9588,0.9588,0.9225,1.0,"[3461, 147, 1065, 89]",0.7455,0.1281,0.0771,0.3771,0.0718,"[[0.0, 0.04074279379157428, 1.0], [0.0, 0.07712305025996534, 1.0], [inf, 1.0, 0.0]]",0.5182,0.0771,0.9593
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Asian-Pac-Islander,8.1622,0.7085,1.438,1.2342,0.7673,0.5619,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Black,0.5067,0.9744,0.9738,0.9797,0.9796,0.9762,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Other,4.2919,0.841,1.1233,1.1721,0.8333,0.8766,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,White,0.4137,0.9416,0.8376,0.9581,0.9579,0.8356,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Amer-Indian-Eskimo,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1154, 0]",0.7577,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Asian-Pac-Islander,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Black,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Other,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,White,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.0,0.7397,0.871,0.6975,0.6975,0.8711,1.0,"[2529, 1079, 1006, 148]",0.5622,0.1243,0.1282,0.1206,-0.1674,"[[0.0, 0.2990576496674058, 1.0], [0.0, 0.12824956672443674, 1.0], [inf, 1.0, 0.0]]",0.4146,0.1282,0.7009
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Asian-Pac-Islander,0.0,0.7342,0.867,0.692,0.692,0.8671,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Black,0.0,0.7152,0.8653,0.6638,0.6639,0.8653,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Other,0.0,0.7402,0.8711,0.6981,0.6981,0.8712,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,White,inf,0.6991,1.1413,1.3561,0.6439,0.8588,0.9996,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,0.9921,0.9968,0.9166,1.0062,0.9978,0.9422,1.0,"[2120, 1488, 703, 451]",0.5399,0.2916,0.3908,0.2326,-0.0188,"[[0.0, 0.4124168514412417, 1.0], [0.0, 0.39081455805892545, 1.0], [inf, 1.0, 0.0]]",0.4892,0.3908,0.5876
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,0.7948,0.9159,0.8541,0.9403,0.9382,0.8541,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Black,0.9907,0.9962,1.0644,0.9828,0.9827,0.9331,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Other,1.0789,0.9679,1.0092,1.0245,0.9709,0.9908,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,White,1.0537,0.9791,1.0253,1.0233,0.9765,0.9748,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,1.3907,0.9773,0.9618,1.0285,0.9669,0.9617,0.9994,"[3374, 234, 1110, 44]",0.7178,0.0615,0.0381,0.1583,-0.0488,"[[0.0, 0.06485587583148558, 1.0], [0.0, 0.038128249566724434, 1.0], [inf, 1.0, 0.0]]",0.4866,0.0381,0.9351
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Asian-Pac-Islander,4.771,0.8024,1.269,1.1673,0.8313,0.7287,0.9993,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Black,0.7755,0.9866,0.9967,0.9809,0.9807,0.9982,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Other,1.2577,0.985,0.9619,1.0199,0.9764,0.9617,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,White,0.5616,0.9591,0.8986,0.9742,0.9742,0.8965,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.0,0.9559,0.9399,0.961,0.961,0.94,0.9999,"[3469, 139, 1086, 69]",0.7428,0.1012,0.0597,0.3317,0.0445,"[[0.0, 0.03852549889135255, 1.0], [0.0, 0.05974025974025974, 1.0], [inf, 1.0, 0.0]]",0.5106,0.0597,0.9615
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Asian-Pac-Islander,6.045,0.8093,1.3298,1.1382,0.8631,0.6638,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Black,0.9567,0.9981,0.9905,1.0024,0.9981,0.9935,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Other,2.2593,0.9456,0.9399,1.075,0.9202,0.94,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,White,0.4515,0.9548,0.8758,0.9672,0.9674,0.8772,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Amer-Indian-Eskimo,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1155, 0]",0.7575,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Asian-Pac-Islander,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Black,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Other,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,White,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.0,0.7402,0.8695,0.6984,0.6984,0.8696,0.9999,"[2532, 1076, 1005, 150]",0.5631,0.126,0.1299,0.1223,-0.165,"[[0.0, 0.2982261640798226, 1.0], [0.0, 0.12987012987012986, 1.0], [inf, 1.0, 0.0]]",0.4158,0.1299,0.7018
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Asian-Pac-Islander,0.0,0.7346,0.8656,0.6929,0.6928,0.8656,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Black,0.0,0.7155,0.8635,0.6648,0.6648,0.8635,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Other,0.0,0.7405,0.8695,0.699,0.6989,0.8696,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,White,inf,0.6996,1.1429,1.355,0.645,0.8571,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.1075,0.9525,0.9775,1.0519,0.9482,0.9774,0.9999,"[1989, 1619, 667, 488]",0.5201,0.2992,0.4225,0.2316,-0.0226,"[[0.0, 0.4487250554323725, 1.0], [0.0, 0.4225108225108225, 1.0], [inf, 1.0, 0.0]]",0.4869,0.4225,0.5513
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,0.8266,0.9229,0.8533,0.9498,0.9498,0.8547,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Black,0.9255,0.9668,0.9481,0.9648,0.9645,0.9501,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Other,1.2151,0.905,0.9775,1.1158,0.8889,0.9774,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,White,1.0776,0.9678,1.0851,1.0241,0.9754,0.9124,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,2.6337,0.901,0.947,1.1156,0.8881,0.947,0.9997,"[3376, 232, 1094, 61]",0.7216,0.0843,0.0528,0.2082,-0.0205,"[[0.0, 0.06430155210643015, 1.0], [0.0, 0.05281385281385281, 1.0], [inf, 1.0, 0.0]]",0.4943,0.0528,0.9357
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Asian-Pac-Islander,4.3238,0.8142,1.2609,1.1585,0.8407,0.7362,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Black,0.7322,0.9831,0.9802,0.9815,0.9813,0.982,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Other,3.0231,0.8776,0.947,1.1484,0.8571,0.947,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,White,0.5316,0.9519,0.9131,0.9607,0.961,0.9115,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Amer-Indian-Eskimo,0.569,0.9847,0.9842,0.9815,0.9826,0.9843,0.9999,"[3458, 150, 1136, 18]",0.7299,0.0272,0.0156,0.1071,-0.0603,"[[0.0, 0.041574279379157426, 1.0], [0.0, 0.01559792027729636, 1.0], [inf, 1.0, 0.0]]",0.487,0.0156,0.9584
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Asian-Pac-Islander,4.3053,0.8939,1.2181,1.0648,0.9349,0.7831,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Black,0.9183,0.9971,1.0018,0.9923,0.9928,0.9973,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Other,0.0,0.9644,0.9843,0.958,0.958,0.9843,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,White,0.6106,0.9794,0.9135,0.9956,0.9959,0.9133,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Amer-Indian-Eskimo,3.7162,0.9378,0.9921,1.0674,0.9277,0.9922,0.9998,"[3505, 103, 1146, 9]",0.7378,0.0142,0.0078,0.0804,-0.0587,"[[0.0, 0.02854767184035477, 1.0], [0.0, 0.007792207792207792, 1.0], [inf, 1.0, 0.0]]",0.4896,0.0078,0.9715
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Asian-Pac-Islander,4.8857,0.9184,1.0933,1.0783,0.9215,0.9019,0.9996,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Black,1.3333,0.9924,0.9918,1.007,0.9925,0.9918,0.9996,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Other,2.0944,0.9745,0.9921,1.028,0.9695,0.9922,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,White,0.3706,0.9679,0.9681,0.97,0.9701,0.9667,0.999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Amer-Indian-Eskimo,47.5294,0.6045,1.5988,1.3546,0.64,0.3499,0.9994,"[3572, 36, 1131, 23]",0.7549,0.0379,0.0199,0.3898,0.0386,"[[0.0, 0.009977827050997782, 1.0], [0.0, 0.01993067590987868, 1.0], [inf, 1.0, 0.0]]",0.505,0.0199,0.99
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Asian-Pac-Islander,62.7209,0.7346,1.4481,1.1958,0.8043,0.5545,0.9991,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Black,0.1556,0.9886,0.9975,0.9887,0.9888,0.9982,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Other,0.0,0.9875,0.9801,0.9899,0.9899,0.98,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,White,0.0,0.9136,0.7848,0.9374,0.9377,0.783,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Amer-Indian-Eskimo,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1154]",0.2423,0.3901,1.0,0.2423,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Asian-Pac-Islander,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Black,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Other,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,White,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.5605,0.6198,0.3977,0.6614,0.6619,0.423,0.9999,"[554, 3054, 107, 1047]",0.3362,0.3985,0.9073,0.2553,0.0754,"[[0.0, 0.8464523281596452, 1.0], [0.0, 0.9072790294627383, 1.0], [inf, 1.0, 0.0]]",0.5304,0.9073,0.1535
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Asian-Pac-Islander,0.0074,0.1186,0.0599,0.1376,0.138,0.0601,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Black,0.0211,0.0704,0.0655,0.0715,0.0712,0.0664,0.9992,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Other,0.2392,0.3407,0.0887,0.3872,0.383,0.0888,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,White,16.621,0.0643,1.969,1.9294,0.0703,0.0321,0.9983,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.2747,0.926,1.0024,1.0532,0.9414,0.9849,1.0,"[2497, 1111, 979, 175]",0.5611,0.1434,0.1516,0.1361,-0.1508,"[[0.0, 0.3079268292682927, 1.0], [0.0, 0.15164644714038128, 1.0], [inf, 1.0, 0.0]]",0.4219,0.1516,0.6921
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,1.7568,0.8002,1.2867,1.1744,0.8267,0.7168,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Black,1.2382,0.9371,1.0327,1.0438,0.9564,0.9683,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Other,1.4047,0.8911,0.8479,1.1299,0.8655,0.8477,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,White,0.7083,0.895,0.8758,0.9174,0.9175,0.8761,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,5.2994,0.8607,1.1459,1.1341,0.8697,0.8411,0.9996,"[3457, 151, 1144, 10]",0.7281,0.0152,0.0087,0.0621,-0.0787,"[[0.0, 0.04185144124168515, 1.0], [0.0, 0.008665511265164644, 1.0], [inf, 1.0, 0.0]]",0.4834,0.0087,0.9581
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Asian-Pac-Islander,3.2177,0.9297,1.065,1.0739,0.9254,0.9313,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Black,1.5781,0.9815,0.9909,1.0175,0.9821,0.9909,0.9992,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Other,2.1851,0.9603,0.9913,1.0431,0.9532,0.9913,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,White,0.3821,0.9557,0.97,0.9576,0.9571,0.968,0.9991,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Amer-Indian-Eskimo,68.8382,0.5387,1.3896,1.4706,0.5306,0.6104,0.9995,"[3569, 39, 1141, 14]",0.7523,0.0232,0.0121,0.2642,0.0054,"[[0.0, 0.010809312638580931, 1.0], [0.0, 0.012121212121212121, 1.0], [inf, 1.0, 0.0]]",0.5007,0.0121,0.9892
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Asian-Pac-Islander,42.5714,0.7963,1.3032,1.1667,0.8346,0.6941,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Black,0.3559,0.9924,0.9874,0.9932,0.9935,0.9873,0.9992,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Other,0.0,0.9888,0.988,0.9891,0.9891,0.9878,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,White,0.0,0.9225,0.8682,0.9323,0.9324,0.8667,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Amer-Indian-Eskimo,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1155]",0.2425,0.3903,1.0,0.2425,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Asian-Pac-Islander,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Black,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Other,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,White,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.4913,0.5595,0.2878,0.6012,0.5988,0.2878,0.9998,"[553, 3055, 105, 1050]",0.3366,0.3992,0.9091,0.2558,0.0775,"[[0.0, 0.8467294900221729, 1.0], [0.0, 0.9090909090909091, 1.0], [inf, 1.0, 0.0]]",0.5312,0.9091,0.1533
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Asian-Pac-Islander,0.0224,0.1319,0.0593,0.1561,0.1573,0.0591,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Black,0.0231,0.0716,0.0446,0.0764,0.0765,0.0446,0.999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Other,0.2954,0.3892,0.4886,0.3869,0.3828,0.4887,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,White,16.1886,0.0659,1.97,1.9273,0.0725,0.0315,0.999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.1047,0.9768,0.9035,1.012,0.9868,0.9035,0.9999,"[2663, 945, 1044, 111]",0.5824,0.1004,0.0961,0.1051,-0.1711,"[[0.0, 0.2619179600886918, 1.0], [0.0, 0.09610389610389611, 1.0], [inf, 1.0, 0.0]]",0.4171,0.0961,0.7381
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,2.0656,0.7711,1.2918,1.2125,0.7891,0.7014,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Black,1.3112,0.933,1.0505,1.0444,0.9555,0.9508,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Other,1.9964,0.7809,1.1043,1.219,0.7893,0.8957,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,White,0.6348,0.8822,0.8557,0.907,0.9074,0.8543,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,4.4555,0.934,0.9959,1.0714,0.9238,0.9957,0.9992,"[3519, 89, 1150, 5]",0.7399,0.008,0.0043,0.0532,-0.0627,"[[0.0, 0.02466740576496674, 1.0], [0.0, 0.004329004329004329, 1.0], [inf, 1.0, 0.0]]",0.4898,0.0043,0.9753
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Asian-Pac-Islander,6.6627,0.9043,1.0462,1.1105,0.8881,0.9514,0.999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Black,1.776,0.9858,0.9957,1.0141,0.9854,0.9955,0.9989,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Other,5.1099,0.9215,1.1967,1.0604,0.9359,0.8035,0.999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,White,0.2339,0.9561,0.9745,0.9546,0.9551,0.9733,0.9986,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Amer-Indian-Eskimo,2.2909,0.8691,1.1032,1.1265,0.8738,0.8838,1.0,"[3178, 430, 1095, 59]",0.6798,0.0718,0.0511,0.1207,-0.0961,"[[0.0, 0.11917960088691797, 1.0], [0.0, 0.0511265164644714, 1.0], [inf, 1.0, 0.0]]",0.466,0.0511,0.8808
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Asian-Pac-Islander,1.875,0.9125,1.206,1.0457,0.956,0.794,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Black,0.937,0.9935,0.9645,0.9871,0.9874,0.9654,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Other,0.9513,0.995,0.9486,0.9934,0.9984,0.9487,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,White,0.7841,0.9728,0.9329,0.9899,0.9895,0.9316,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Amer-Indian-Eskimo,2.9688,0.8236,0.9611,1.1916,0.8059,0.9609,0.9998,"[3218, 390, 1110, 45]",0.6851,0.0566,0.039,0.1034,-0.1029,"[[0.0, 0.10809312638580931, 1.0], [0.0, 0.03896103896103896, 1.0], [inf, 1.0, 0.0]]",0.4654,0.039,0.8919
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Asian-Pac-Islander,1.549,0.9507,1.0104,1.0665,0.9348,0.9872,0.9996,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Black,1.2868,0.9745,0.977,1.0223,0.9775,0.9779,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Other,1.7456,0.9323,1.1619,1.0331,0.9606,0.8383,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,White,0.6402,0.9525,1.0026,0.9508,0.9513,0.9991,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.0,0.6622,0.4434,0.7326,0.7325,0.4434,1.0,"[2654, 954, 515, 639]",0.6915,0.4652,0.5537,0.4011,0.2627,"[[0.0, 0.26441241685144123, 1.0], [0.0, 0.5537261698440208, 1.0], [inf, 1.0, 0.0]]",0.6447,0.5537,0.7356
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Asian-Pac-Islander,0.4841,0.8247,0.7099,0.8541,0.8552,0.7113,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Black,0.0978,0.6698,0.4733,0.7392,0.7396,0.4758,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Other,0.7642,0.921,0.8455,0.9746,0.9706,0.8456,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,White,5.1751,0.6948,1.4418,1.2451,0.7552,0.5564,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Amer-Indian-Eskimo,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1154, 0]",0.7577,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Asian-Pac-Islander,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Black,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Other,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,White,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Amer-Indian-Eskimo,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1154, 0]",0.7577,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Asian-Pac-Islander,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Black,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Other,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,White,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,0.8613,0.9561,0.8486,0.9442,0.9473,0.8484,1.0,"[2276, 1332, 980, 174]",0.5145,0.1308,0.1508,0.1155,-0.2012,"[[0.0, 0.369179600886918, 1.0], [0.0, 0.15077989601386482, 1.0], [inf, 1.0, 0.0]]",0.3908,0.1508,0.6308
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,0.8919,0.9657,1.0285,0.9521,0.9533,0.9749,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Black,1.5667,0.83,1.1519,1.1417,0.8586,0.8529,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Other,1.3923,0.8763,1.0496,1.1106,0.8976,0.9506,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,White,0.7219,0.8846,0.9189,0.904,0.904,0.9167,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,0.7043,0.9576,0.9216,0.952,0.9577,0.9216,0.9999,"[3017, 591, 1064, 90]",0.6525,0.0981,0.078,0.1322,-0.105,"[[0.0, 0.16380266075388025, 1.0], [0.0, 0.0779896013864818, 1.0], [inf, 1.0, 0.0]]",0.4571,0.078,0.8362
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Asian-Pac-Islander,1.6168,0.9134,1.2028,1.0466,0.9529,0.7959,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Black,0.9037,0.9861,1.0099,0.9679,0.9684,0.9864,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Other,1.6283,0.9106,0.9217,1.1048,0.8981,0.9217,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,White,0.9073,0.9856,0.9179,1.0096,0.9904,0.9197,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.0,0.669,0.4582,0.7369,0.7368,0.4583,1.0,"[2669, 939, 532, 623]",0.6912,0.4586,0.5394,0.3988,0.2548,"[[0.0, 0.2602549889135255, 1.0], [0.0, 0.5393939393939394, 1.0], [inf, 1.0, 0.0]]",0.6396,0.5394,0.7397
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Asian-Pac-Islander,0.3763,0.7915,0.6816,0.8209,0.8202,0.6806,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Black,0.1054,0.6792,0.4864,0.7465,0.747,0.4895,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Other,0.7796,0.9276,0.659,1.0073,0.9955,0.6591,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,White,5.6662,0.6939,1.4585,1.2439,0.7563,0.5428,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Amer-Indian-Eskimo,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1155, 0]",0.7575,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Asian-Pac-Islander,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Black,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Other,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,White,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Amer-Indian-Eskimo,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1155, 0]",0.7575,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Asian-Pac-Islander,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Black,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Other,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,White,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.2134,0.9495,0.9089,1.0377,0.9586,0.9087,0.9999,"[2583, 1025, 1050, 105]",0.5644,0.0919,0.0909,0.0929,-0.1946,"[[0.0, 0.2840909090909091, 1.0], [0.0, 0.09090909090909091, 1.0], [inf, 1.0, 0.0]]",0.4034,0.0909,0.7159
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,0.8189,0.9568,0.9061,0.9836,0.9821,0.9059,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Black,1.4751,0.8922,1.0378,1.0894,0.9098,0.9642,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Other,0.8728,0.9698,1.1097,0.9265,0.9211,0.8904,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,White,0.7723,0.9329,1.0153,0.9401,0.94,0.9838,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,0.7858,0.9768,0.9416,0.9708,0.9756,0.9417,0.9997,"[3160, 448, 1088, 67]",0.6775,0.0802,0.058,0.1301,-0.0913,"[[0.0, 0.12416851441241686, 1.0], [0.0, 0.05800865800865801, 1.0], [inf, 1.0, 0.0]]",0.4669,0.058,0.8758
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Asian-Pac-Islander,1.7195,0.9238,1.1039,1.0687,0.9317,0.9009,0.9996,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Black,1.0427,0.9954,0.9927,0.9962,0.996,0.9954,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Other,2.1634,0.8754,0.9416,1.1447,0.8581,0.9417,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,White,0.7886,0.9721,0.969,0.9808,0.9807,0.9695,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Amer-Indian-Eskimo,0.1697,0.9012,0.9249,0.8902,0.8912,0.9251,1.0,"[3132, 476, 1068, 86]",0.6758,0.1002,0.0745,0.153,-0.0762,"[[0.0, 0.1319290465631929, 1.0], [0.0, 0.07452339688041594, 1.0], [inf, 1.0, 0.0]]",0.4713,0.0745,0.8681
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Asian-Pac-Islander,1.353,0.9588,1.1076,1.0232,0.9789,0.8959,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Black,0.8045,0.9765,0.9768,0.9675,0.9675,0.979,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Other,0.8257,0.9794,0.925,0.9807,0.9855,0.9252,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,White,1.1426,0.985,0.9785,1.0295,0.9707,0.9782,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Amer-Indian-Eskimo,0.9383,0.993,0.9321,0.991,0.9969,0.9322,1.0,"[3146, 462, 1077, 78]",0.6769,0.092,0.0675,0.1444,-0.0818,"[[0.0, 0.12804878048780488, 1.0], [0.0, 0.06753246753246753, 1.0], [inf, 1.0, 0.0]]",0.4697,0.0675,0.872
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Asian-Pac-Islander,0.8436,0.9822,0.9805,0.9851,0.9858,0.9832,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Black,0.9692,0.9965,0.9645,0.9918,0.9916,0.9665,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Other,1.6215,0.9299,0.9321,1.084,0.9214,0.9322,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,White,1.0179,0.998,1.0339,1.004,0.9961,0.9676,0.9996,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Amer-Indian-Eskimo,2.7798,0.9612,0.961,1.0535,0.9431,0.9608,0.9997,"[3547, 61, 1109, 45]",0.7543,0.0714,0.039,0.4245,0.0642,"[[0.0, 0.016906873614190687, 1.0], [0.0, 0.0389948006932409, 1.0], [inf, 1.0, 0.0]]",0.511,0.039,0.9831
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Asian-Pac-Islander,12.018,0.816,1.2928,1.1417,0.8604,0.7037,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Black,1.1,0.9978,1.0141,1.0038,0.9964,0.9837,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Other,3.3578,0.9486,1.1619,1.0398,0.9577,0.8383,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,White,0.2178,0.9472,0.8654,0.9603,0.9604,0.8663,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Amer-Indian-Eskimo,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1154]",0.2423,0.3901,1.0,0.2423,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Asian-Pac-Islander,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Black,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Other,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,White,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.6672,0.7985,0.7469,0.7988,0.7948,0.7723,0.9999,"[1380, 2228, 508, 646]",0.4255,0.3208,0.5598,0.2248,-0.0506,"[[0.0, 0.6175166297117517, 1.0], [0.0, 0.5597920277296361, 1.0], [inf, 1.0, 0.0]]",0.4711,0.5598,0.3825
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Asian-Pac-Islander,0.0,0.3776,0.4198,0.3639,0.364,0.4201,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Black,0.0,0.3331,0.412,0.3059,0.3059,0.4122,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Other,0.0,0.3915,0.4376,0.3765,0.3766,0.4378,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,White,25.0896,0.3279,1.5964,1.7,0.2997,0.4044,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.5598,0.8695,1.0464,1.1365,0.8581,0.928,0.9999,"[2794, 814, 852, 302]",0.6501,0.2661,0.2617,0.2706,0.0365,"[[0.0, 0.22560975609756098, 1.0], [0.0, 0.2616984402079723, 1.0], [inf, 1.0, 0.0]]",0.518,0.2617,0.7744
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,2.1657,0.7362,1.3455,1.231,0.7714,0.6496,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Black,0.9859,0.9967,1.0083,1.0006,0.9994,0.9884,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Other,1.6216,0.8551,1.1389,1.1562,0.8417,0.8611,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,White,0.7318,0.9184,0.8436,0.9292,0.9287,0.8414,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,7.848,0.5946,1.1181,1.4449,0.5545,0.869,0.9995,"[3349, 259, 1112, 42]",0.7121,0.0577,0.0364,0.1395,-0.0623,"[[0.0, 0.07178492239467849, 1.0], [0.0, 0.036395147313691506, 1.0], [inf, 1.0, 0.0]]",0.4823,0.0364,0.9282
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Asian-Pac-Islander,12.5107,0.4613,1.7147,1.4785,0.5247,0.2867,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Black,0.906,0.994,0.9984,0.9867,0.9871,1.0,0.9995,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Other,0.7709,0.9855,0.9635,0.9843,0.9869,0.9634,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,White,0.207,0.8437,0.7091,0.8736,0.8733,0.7076,0.9992,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Amer-Indian-Eskimo,2.2781,0.9761,0.9635,1.0347,0.9629,0.9635,0.9999,"[3560, 48, 1113, 42]",0.7562,0.0675,0.0364,0.4667,0.0726,"[[0.0, 0.013303769401330377, 1.0], [0.0, 0.03636363636363636, 1.0], [inf, 1.0, 0.0]]",0.5115,0.0364,0.9867
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Asian-Pac-Islander,10.3605,0.8624,1.3033,1.0753,0.9254,0.6927,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Black,0.9368,0.9988,0.9975,1.0025,0.998,0.9993,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Other,2.6096,0.9699,0.9635,1.0434,0.9541,0.9635,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,White,0.2782,0.9642,0.885,0.9766,0.9767,0.8828,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Amer-Indian-Eskimo,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1155]",0.2425,0.3903,1.0,0.2425,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Asian-Pac-Islander,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Black,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Other,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,White,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.5983,0.7572,0.6383,0.7507,0.7567,0.6383,0.9998,"[1387, 2221, 508, 647]",0.427,0.3217,0.5602,0.2256,-0.0485,"[[0.0, 0.6155764966740577, 1.0], [0.0, 0.5601731601731602, 1.0], [inf, 1.0, 0.0]]",0.4723,0.5602,0.3844
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Asian-Pac-Islander,0.0,0.3792,0.4204,0.366,0.366,0.4203,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Black,0.0,0.3345,0.4114,0.3081,0.3081,0.4113,0.9993,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Other,0.0804,0.4421,0.4374,0.4354,0.4379,0.4374,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,White,26.3547,0.3281,1.6061,1.6974,0.3023,0.3943,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,0.5469,0.9295,0.8766,0.9293,0.9341,0.8765,0.9999,"[3012, 596, 1013, 142]",0.6622,0.15,0.1229,0.1924,-0.05,"[[0.0, 0.16518847006651885, 1.0], [0.0, 0.12294372294372294, 1.0], [inf, 1.0, 0.0]]",0.4789,0.1229,0.8348
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,2.5747,0.7671,1.3272,1.2043,0.7974,0.6761,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Black,1.2707,0.9591,1.0401,1.0348,0.9654,0.9603,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Other,0.6281,0.9422,0.8766,0.9471,0.952,0.8765,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,White,0.655,0.9241,0.8607,0.941,0.9408,0.8629,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,6.3545,0.7221,0.9627,1.3124,0.6816,0.9626,0.999,"[3391, 217, 1112, 43]",0.721,0.0608,0.0372,0.1654,-0.0432,"[[0.0, 0.06014412416851441, 1.0], [0.0, 0.03722943722943723, 1.0], [inf, 1.0, 0.0]]",0.4885,0.0372,0.9399
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Asian-Pac-Islander,9.4391,0.6329,1.517,1.3125,0.6892,0.4812,0.9986,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Black,0.5333,0.9734,0.9788,0.9688,0.9691,0.9797,0.9991,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Other,2.2635,0.9319,0.9627,1.0815,0.9122,0.9626,0.999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,White,0.301,0.9048,0.8109,0.9252,0.9251,0.8105,0.9983,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Amer-Indian-Eskimo,2.5401,0.7428,1.0032,1.293,0.7087,0.984,1.0,"[2975, 633, 980, 174]",0.6613,0.1775,0.1508,0.2156,-0.0282,"[[0.0, 0.17544345898004435, 1.0], [0.0, 0.15077989601386482, 1.0], [inf, 1.0, 0.0]]",0.4877,0.1508,0.8246
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Asian-Pac-Islander,2.3223,0.7846,1.2875,1.1938,0.808,0.7159,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Black,0.6027,0.93,0.9149,0.9265,0.9271,0.918,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Other,1.0797,0.9865,1.2504,0.9651,0.9714,0.7497,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,White,0.8732,0.9759,0.9189,0.9903,0.9905,0.9167,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Amer-Indian-Eskimo,2.3812,0.7902,0.8567,1.2501,0.7547,0.8565,1.0,"[3040, 568, 990, 165]",0.6729,0.1748,0.1429,0.2251,-0.0173,"[[0.0, 0.1574279379157428, 1.0], [0.0, 0.14285714285714285, 1.0], [inf, 1.0, 0.0]]",0.4927,0.1429,0.8426
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Asian-Pac-Islander,2.1601,0.8275,1.1174,1.1936,0.809,0.8825,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Black,0.7094,0.954,0.9213,0.9561,0.9558,0.9249,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Other,1.0299,0.9954,0.8567,1.0259,0.9807,0.8565,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,White,0.8614,0.9758,1.012,0.971,0.9708,0.9895,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.0,0.9884,0.9818,0.9905,0.9905,0.9817,0.9997,"[3574, 34, 1133, 21]",0.7549,0.0347,0.0182,0.3818,0.0352,"[[0.0, 0.009423503325942351, 1.0], [0.0, 0.018197573656845753, 1.0], [inf, 1.0, 0.0]]",0.5044,0.0182,0.9906
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Asian-Pac-Islander,41.1154,0.7914,1.3141,1.1681,0.8332,0.6822,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Black,1.8692,0.9907,1.0175,1.0094,0.9908,0.9809,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Other,4.3571,0.9624,0.9818,1.0474,0.9502,0.9817,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,White,0.0522,0.9419,0.8669,0.9554,0.9556,0.8642,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Amer-Indian-Eskimo,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1154]",0.2423,0.3901,1.0,0.2423,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Asian-Pac-Islander,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Black,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Other,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,White,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.0,0.9304,0.9714,0.9174,0.9173,0.9713,0.9993,"[3313, 295, 1121, 33]",0.7026,0.0445,0.0286,0.1006,-0.09,"[[0.0, 0.08176274944567627, 1.0], [0.0, 0.02859618717504333, 1.0], [inf, 1.0, 0.0]]",0.4734,0.0286,0.9182
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Asian-Pac-Islander,2.8758,0.8777,1.0938,1.1312,0.8684,0.9001,0.9992,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Black,105.4921,0.3417,1.5087,1.6786,0.321,0.4954,0.9985,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Other,0.0,0.9305,0.9714,0.9175,0.9175,0.9713,0.9993,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,White,0.0,0.5202,0.6906,0.4901,0.4896,0.6887,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,1.0319,0.9947,1.0352,0.9924,0.9888,0.9518,1.0,"[2952, 656, 1017, 137]",0.6487,0.1407,0.1187,0.1728,-0.0726,"[[0.0, 0.18181818181818182, 1.0], [0.0, 0.11871750433275563, 1.0], [inf, 1.0, 0.0]]",0.4684,0.1187,0.8182
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,1.9722,0.8427,1.3209,1.0983,0.9028,0.6827,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Black,1.7605,0.8819,1.0486,1.1198,0.8796,0.9529,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Other,1.5446,0.9097,0.8806,1.115,0.8866,0.8808,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,White,0.5391,0.8732,0.8494,0.8849,0.8849,0.8503,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,1.2552,0.9692,1.1007,1.0088,0.9961,0.8864,1.0,"[3094, 514, 1092, 62]",0.6627,0.0717,0.0537,0.1076,-0.1166,"[[0.0, 0.14246119733924612, 1.0], [0.0, 0.053726169844020795, 1.0], [inf, 1.0, 0.0]]",0.4556,0.0537,0.8575
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Asian-Pac-Islander,1.5189,0.9382,1.1787,1.0217,0.98,0.8226,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Black,1.1264,0.9849,1.0619,0.9946,0.9952,0.9419,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Other,2.1359,0.8638,0.9461,1.1548,0.8469,0.946,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,White,0.7622,0.9639,0.8916,0.9883,0.9884,0.893,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Amer-Indian-Eskimo,0.0,0.9879,0.9843,0.9891,0.9891,0.9843,0.9999,"[3569, 39, 1137, 18]",0.7531,0.0297,0.0156,0.3158,0.0188,"[[0.0, 0.010809312638580931, 1.0], [0.0, 0.015584415584415584, 1.0], [inf, 1.0, 0.0]]",0.5024,0.0156,0.9892
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Asian-Pac-Islander,21.7671,0.8484,1.2236,1.1247,0.8738,0.7773,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Black,2.2523,0.9866,1.0192,1.0134,0.9867,0.9789,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Other,8.7143,0.9136,0.9843,1.103,0.8922,0.9843,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,White,0.0841,0.9488,0.9023,0.9568,0.9572,0.9019,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Amer-Indian-Eskimo,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1155]",0.2425,0.3903,1.0,0.2425,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Asian-Pac-Islander,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Black,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Other,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,SVC,White,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Amer-Indian-Eskimo,0.0,0.9283,0.9685,0.9154,0.9154,0.9687,0.9997,"[3306, 302, 1119, 36]",0.7017,0.0482,0.0312,0.1065,-0.0877,"[[0.0, 0.0837028824833703, 1.0], [0.0, 0.03116883116883117, 1.0], [inf, 1.0, 0.0]]",0.4737,0.0312,0.9163
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Asian-Pac-Islander,2.1208,0.923,1.069,1.0823,0.9195,0.9261,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Black,142.6122,0.3061,1.5643,1.71,0.2892,0.4322,0.9983,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Other,0.0,0.9284,0.9685,0.9155,0.9155,0.9687,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,White,0.0,0.5042,0.6545,0.4765,0.4766,0.6571,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Amer-Indian-Eskimo,2.5407,0.8903,0.9296,1.131,0.8715,0.9296,0.9999,"[3345, 263, 1074, 81]",0.7193,0.1081,0.0701,0.2355,-0.0046,"[[0.0, 0.07289356984478935, 1.0], [0.0, 0.07012987012987013, 1.0], [inf, 1.0, 0.0]]",0.4986,0.0701,0.9271
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Asian-Pac-Islander,6.2612,0.6717,1.4576,1.2806,0.7219,0.5419,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Black,1.5058,0.9651,1.0421,1.0338,0.9662,0.9611,0.9998,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Other,0.3361,0.9518,1.1304,0.9264,0.9264,0.8696,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,White,0.3461,0.8927,0.7922,0.9118,0.9114,0.7943,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Amer-Indian-Eskimo,2.3041,0.8615,0.9652,1.1446,0.8542,0.9652,0.9996,"[3136, 472, 1115, 40]",0.6668,0.048,0.0346,0.0781,-0.1331,"[[0.0, 0.13082039911308205, 1.0], [0.0, 0.03463203463203463, 1.0], [inf, 1.0, 0.0]]",0.4519,0.0346,0.8692
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Asian-Pac-Islander,1.5667,0.9401,1.0908,1.0525,0.9483,0.9032,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Black,1.4341,0.9552,0.9992,1.0358,0.9635,0.9989,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Other,2.8791,0.801,1.166,1.1949,0.8055,0.8339,0.9994,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,White,0.5848,0.9307,0.9531,0.9366,0.9371,0.9543,0.9993,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Amer-Indian-Eskimo,1.4217,0.9251,1.0858,1.0546,0.9445,0.9012,1.0,"[2838, 770, 1075, 79]",0.6126,0.0789,0.0685,0.0931,-0.1623,"[[0.0, 0.21341463414634146, 1.0], [0.0, 0.0684575389948007, 1.0], [inf, 1.0, 0.0]]",0.4275,0.0685,0.7866
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Asian-Pac-Islander,1.6562,0.8853,1.1387,1.1125,0.8863,0.8637,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Black,1.2562,0.9554,0.9829,1.0317,0.9688,0.9853,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Other,1.164,0.9708,0.9312,1.0262,0.9779,0.9312,1.0,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,White,0.7167,0.9333,0.952,0.9471,0.9472,0.9507,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Amer-Indian-Eskimo,1.7649,0.8663,0.9287,1.137,0.8582,0.9287,1.0,"[2851, 757, 1073, 82]",0.6158,0.0822,0.071,0.0977,-0.1562,"[[0.0, 0.20981152993348115, 1.0], [0.0, 0.070995670995671, 1.0], [inf, 1.0, 0.0]]",0.4306,0.071,0.7902
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Asian-Pac-Islander,1.2304,0.9597,1.0276,1.0507,0.9513,0.9673,0.9997,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Black,1.182,0.9685,0.9788,1.0184,0.9817,0.9817,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Other,2.1674,0.7964,1.1296,1.2006,0.7961,0.8704,0.9999,,,,,,,,,,
+Adult Income,race,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,White,0.7498,0.9439,0.993,0.9509,0.9506,0.9943,0.9997,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Female,0.1095,0.6008,0.4634,0.671,0.6712,0.4642,0.9999,"[2718, 890, 536, 618]",0.7005,0.4643,0.5355,0.4098,0.2661,"[[0.0, 0.2466740576496674, 1.0], [0.0, 0.5355285961871751, 1.0], [inf, 1.0, 0.0]]",0.6444,0.5355,0.7533
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Male,9.1303,0.6008,1.5366,1.329,0.6712,0.4642,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Female,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1154]",0.2423,0.3901,1.0,0.2423,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Male,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Female,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1154, 0]",0.7577,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Male,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Female,1.4702,0.7963,1.4354,1.1295,0.8703,0.5667,1.0,"[1636, 1972, 743, 411]",0.4299,0.2324,0.3562,0.1725,-0.1632,"[[0.0, 0.5465631929046563, 1.0], [0.0, 0.3561525129982669, 1.0], [inf, 1.0, 0.0]]",0.4048,0.3562,0.4534
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Male,0.6802,0.7963,0.5646,0.8705,0.8703,0.5667,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Female,1.2679,0.8599,1.168,1.1199,0.8799,0.8325,1.0,"[1470, 2138, 582, 572]",0.4288,0.2961,0.4957,0.2111,-0.0839,"[[0.0, 0.5925720620842572, 1.0], [0.0, 0.49566724436741766, 1.0], [inf, 1.0, 0.0]]",0.4515,0.4957,0.4074
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Male,0.7887,0.8599,0.832,0.8801,0.8799,0.8325,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Female,0.1098,0.6058,0.488,0.6725,0.6726,0.4866,0.9999,"[2728, 880, 544, 611]",0.701,0.4618,0.529,0.4098,0.2635,"[[0.0, 0.24390243902439024, 1.0], [0.0, 0.529004329004329, 1.0], [inf, 1.0, 0.0]]",0.6426,0.529,0.7561
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Male,9.1111,0.6058,1.512,1.3275,0.6726,0.4866,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Female,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1155]",0.2425,0.3903,1.0,0.2425,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Male,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Female,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1155, 0]",0.7575,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Male,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Female,1.487,0.8021,1.4477,1.1273,0.8726,0.5538,1.0,"[1765, 1843, 752, 403]",0.4552,0.237,0.3489,0.1794,-0.139,"[[0.0, 0.510809312638581, 1.0], [0.0, 0.3489177489177489, 1.0], [inf, 1.0, 0.0]]",0.4191,0.3489,0.4892
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Male,0.6725,0.8021,0.5523,0.8727,0.8726,0.5538,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Female,1.3553,0.8255,1.1885,1.1516,0.8481,0.813,1.0,"[1519, 2089, 631, 524]",0.4289,0.2781,0.4537,0.2005,-0.1079,"[[0.0, 0.5789911308203991, 1.0], [0.0, 0.4536796536796537, 1.0], [inf, 1.0, 0.0]]",0.4373,0.4537,0.421
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Male,0.7379,0.8255,0.8115,0.8484,0.8481,0.813,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Female,1.0159,0.9866,1.0385,1.0163,0.9835,0.9636,0.9999,"[574, 3034, 155, 999]",0.3303,0.3852,0.8657,0.2477,0.0295,"[[0.0, 0.8409090909090909, 1.0], [0.0, 0.865684575389948, 1.0], [inf, 1.0, 0.0]]",0.5124,0.8657,0.1591
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Male,0.9843,0.9866,0.9615,0.9837,0.9835,0.9636,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Female,1.0429,0.9648,1.0772,1.0375,0.9624,0.9241,0.9999,"[632, 2976, 168, 987]",0.3399,0.3857,0.8545,0.2491,0.0341,"[[0.0, 0.8248337028824834, 1.0], [0.0, 0.8545454545454545, 1.0], [inf, 1.0, 0.0]]",0.5149,0.8545,0.1752
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Male,0.9589,0.9648,0.9228,0.9625,0.9624,0.9241,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Female,1.312,0.9138,1.1877,1.1038,0.8961,0.8139,1.0,"[2618, 990, 693, 461]",0.6466,0.3539,0.3995,0.3177,0.1165,"[[0.0, 0.27439024390243905, 1.0], [0.0, 0.39948006932409014, 1.0], [inf, 1.0, 0.0]]",0.5625,0.3995,0.7256
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,LogisticRegression,Male,0.7622,0.9138,0.8123,0.8962,0.8961,0.8139,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Female,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1154, 0]",0.7577,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,SVC,Male,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Female,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1154]",0.2423,0.3901,1.0,0.2423,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,GaussianNB,Male,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Female,1.6634,0.7676,1.4591,1.1566,0.8433,0.5401,0.9999,"[1887, 1721, 842, 312]",0.4618,0.1958,0.2704,0.1535,-0.179,"[[0.0, 0.47699556541019955, 1.0], [0.0, 0.2703639514731369, 1.0], [inf, 1.0, 0.0]]",0.3967,0.2704,0.523
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,DecisionTreeClassifier,Male,0.6012,0.7676,0.5409,0.8434,0.8433,0.5401,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Female,1.1377,0.9485,1.224,0.9842,0.9843,0.7766,0.9999,"[2051, 1557, 849, 305]",0.4948,0.2023,0.2643,0.1638,-0.1469,"[[0.0, 0.4315410199556541, 1.0], [0.0, 0.26429809358752165, 1.0], [inf, 1.0, 0.0]]",0.4164,0.2643,0.5685
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Surrogate,RandomForestClassifier,Male,0.879,0.9485,0.776,1.0158,0.9843,0.7766,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Female,1.34,0.9046,1.2025,1.1109,0.8892,0.7984,1.0,"[2585, 1023, 692, 463]",0.6399,0.3506,0.4009,0.3116,0.1085,"[[0.0, 0.28353658536585363, 1.0], [0.0, 0.40086580086580087, 1.0], [inf, 1.0, 0.0]]",0.5587,0.4009,0.7165
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,LogisticRegression,Male,0.7463,0.9046,0.7975,0.8891,0.8892,0.7984,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Female,,1.0,1.0,1.0,1.0,1.0,1.0,"[3608, 0, 1155, 0]",0.7575,0.0,0.0,0.0,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 0.0]]",0.5,0.0,1.0
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,SVC,Male,,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Female,1.0,1.0,1.0,1.0,1.0,1.0,1.0,"[0, 3608, 0, 1155]",0.2425,0.3903,1.0,0.2425,0.0,"[[0.0, 1.0], [0.0, 1.0], [inf, 1.0]]",0.5,1.0,0.0
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,GaussianNB,Male,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Female,1.4608,0.7957,1.4229,1.1152,0.8845,0.579,0.9999,"[1537, 2071, 794, 361]",0.3985,0.2013,0.3126,0.1484,-0.2242,"[[0.0, 0.5740022172949002, 1.0], [0.0, 0.31255411255411253, 1.0], [inf, 1.0, 0.0]]",0.3693,0.3126,0.426
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,DecisionTreeClassifier,Male,0.6846,0.7957,0.5771,0.8848,0.8845,0.579,0.9999,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Female,0.8696,0.9301,1.136,0.8646,0.8647,0.8633,1.0,"[1665, 1943, 655, 500]",0.4545,0.2779,0.4329,0.2047,-0.0906,"[[0.0, 0.5385254988913526, 1.0], [0.0, 0.4329004329004329, 1.0], [inf, 1.0, 0.0]]",0.4472,0.4329,0.4615
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Surrogate,RandomForestClassifier,Male,1.15,0.9301,0.864,1.1354,0.8647,0.8633,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Female,1.3837,0.8211,1.3668,1.1101,0.8897,0.6338,1.0,"[1544, 2064, 717, 437]",0.416,0.2391,0.3787,0.1747,-0.1659,"[[0.0, 0.5720620842572062, 1.0], [0.0, 0.378682842287695, 1.0], [inf, 1.0, 0.0]]",0.4033,0.3787,0.4279
+Adult Income,sex,AIF360LearningFairRepresentations,Validation,Test,XGBClassifier,Male,0.7227,0.8211,0.6332,0.8899,0.8897,0.6338,1.0,,,,,,,,,,
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Female,1.4224,0.8069,1.4383,1.1166,0.8831,0.5622,1.0,"[1566, 2042, 717, 438]",0.4207,0.241,0.3792,0.1766,-0.1602,"[[0.0, 0.5659645232815964, 1.0], [0.0, 0.37922077922077924, 1.0], [inf, 1.0, 0.0]]",0.4066,0.3792,0.434
+Adult Income,sex,AIF360LearningFairRepresentations,Test,Test,XGBClassifier,Male,0.703,0.8069,0.5617,0.8834,0.8831,0.5622,1.0,,,,,,,,,,

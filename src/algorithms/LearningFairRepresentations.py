@@ -104,8 +104,9 @@ class LearnedFairRepresentations(Algorithm):
 
         transformed_targets = (np.array(transformed_targets) > 0.5).astype(np.float64)
 
-        if transformed_targets.all() == 0 or transformed_targets.all() == 1:
-            print('All targets are 0 or 1. This is not expected. Check the optimization results.')
+        unique_values = np.unique(transformed_targets)
+        if len(unique_values) == 1 and (unique_values[0] == 0 or unique_values[0] == 1):
+            print('All targets are either 0 or 1. This is not expected. Check the optimization results.')
             return data
 
         transformed_dataset = copy.deepcopy(data)

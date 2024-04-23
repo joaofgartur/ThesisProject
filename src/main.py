@@ -18,7 +18,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.utils import check_random_state
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LGAFFS,
-                        PermutationGeneticAlgorithm, LearnedFairRepresentations)
+                        PermutationGeneticAlgorithm, LearnedFairRepresentations, AIF360LearningFairRepresentations)
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
@@ -57,7 +57,7 @@ def load_dataset(option: Enum):
                 'privileged_classes': ['Caucasian', 'Male'],
 
             }
-            return Compas(compas_info)
+            return Compas(compas_info, seed=settings['seed'])
         case DatasetOptions.GERMAN:
             german_info = {
                 'dataset_name': 'German Credit',
@@ -67,7 +67,7 @@ def load_dataset(option: Enum):
                 'privileged_classes': ['Male', 'Aged'],
 
             }
-            return GermanCredit(german_info)
+            return GermanCredit(german_info, seed=settings['seed'])
         case DatasetOptions.ADULT:
             adult_info = {
                 'dataset_name': 'Adult Income',
@@ -97,9 +97,9 @@ class AlgorithmOptions(Enum):
     Massaging = 0
     Reweighing = 1
     DisparateImpactRemover = 2
-    LearningFairRepresentations = 3
-    LGAFFS = 4
-    PGA = 5
+    AIF360LFR = 4
+    LGAFFS = 5
+    PGA = 6
 
 
 def load_algorithm(option: Enum):
@@ -110,8 +110,8 @@ def load_algorithm(option: Enum):
             return Reweighing()
         case AlgorithmOptions.DisparateImpactRemover:
             return DisparateImpactRemover(repair_level=1.0)
-        case AlgorithmOptions.LearningFairRepresentations:
-            return LearnedFairRepresentations(
+        case AlgorithmOptions.AIF360LFR:
+            return AIF360LearningFairRepresentations(
                 k=10,
                 ax=1e-4,
                 ay=0.1,
@@ -134,7 +134,7 @@ def load_algorithm(option: Enum):
             )
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
-                population_size=20,
+                population_size=2,
                 num_generations=30,
                 tournament_size=2,
                 elite_size=2,
@@ -154,7 +154,7 @@ if __name__ == '__main__':
 
     results_path = 'results/'
     settings = {
-        'seed': 125,
+        'seed': 42,
         'train_size': 0.8,
         'validation_size': 0.1,
         "test_size": 0.1,
@@ -187,14 +187,15 @@ if __name__ == '__main__':
                 pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
                 pipeline.run_and_save()
     elif run_all_dataset:
-        dataset = load_dataset(DatasetOptions.ADULT)
-        unbiasing_algorithms = [load_algorithm(j) for j in AlgorithmOptions]
-        pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
-        pipeline.run_and_save()
+        for i in range(max(1, num_runs)):
+            dataset = load_dataset(DatasetOptions.GERMAN)
+            unbiasing_algorithms = [load_algorithm(j) for j in AlgorithmOptions]
+            pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
+            pipeline.run_and_save()
     else:
         for i in range(max(1, num_runs)):
-            dataset = load_dataset(DatasetOptions.ADULT)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Massaging),load_algorithm(AlgorithmOptions.Reweighing)]
+            dataset = load_dataset(DatasetOptions.COMPAS)
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Massaging), load_algorithm(AlgorithmOptions.Reweighing)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 
