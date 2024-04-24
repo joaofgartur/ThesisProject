@@ -218,7 +218,7 @@ class Pipeline:
             logger.error(f'An error occurred in the pipeline: \n {e}')
             raise
 
-    def save(self, path: str = 'results') -> None:
+    def save(self, path: str = 'results_adult_income') -> None:
         if self.results is not None:
             for key, result in self.results.items():
                 write_dataframe_to_csv(df=result, dataset_name=self.dataset.name,
@@ -226,7 +226,7 @@ class Pipeline:
         else:
             raise KeyError('Results are empty!')
 
-    def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results') -> None:
+    def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results_adult_income') -> None:
         if self.results is not None:
             suffix = f'_intermediary_{attribute}_'
             write_dataframe_to_csv(df=self.results[algorithm],
@@ -235,6 +235,6 @@ class Pipeline:
         else:
             raise KeyError('Results are empty!')
 
-    def run_and_save(self, path: str = 'results') -> None:
+    def run_and_save(self, path: str = 'results_adult_income') -> None:
         self.run()
         self.save(path)

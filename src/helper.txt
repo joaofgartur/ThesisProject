@@ -1,0 +1,225 @@
+\hline
+\multirow{2}{*}{LR} & 
+                    & 
+\hline
+\multirow{2}{*}{SVM} & 
+                    & 
+\hline
+\multirow{2}{*}{GNB} & 
+                    & 
+\hline
+\multirow{2}{*}{DT} & 
+                    & 
+\hline
+\multirow{2}{*}{RF} & 
+                    & 
+\hline
+\multirow{2}{*}{XGB} & 
+                    & 
+\hline
+
+
+
+\hline
+\multirow{2}{*}{LR} & 
+                    & 
+\hline
+\multirow{2}{*}{SVM} & 
+                    & 
+\hline
+\multirow{2}{*}{GNB} & 
+                    & 
+\hline
+\multirow{2}{*}{DT} & 
+                    & 
+\hline
+\multirow{2}{*}{RF} & 
+                    & 
+\hline
+\multirow{2}{*}{XGB} & 
+                    & 
+\hline
+
+
+
+\hline
+\multirow{6}{*}{Massaging} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{Reweighing} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{DIR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LFR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LGAFFS} & LR & 
+                        & SVM & 
+                        & GNB & 
+                        & DT & 
+                        & RF & 
+                        & XGB & 
+\hline
+\multirow{6}{*}{PGA} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+
+
+
+\hline
+\multirow{6}{*}{Massaging} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{Reweighing} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{DIR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LFR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LGAFFS} & LR & 
+                        & SVM & 
+                        & GNB & 
+                        & DT & 
+                        & RF & 
+                        & XGB & 
+\hline
+\multirow{6}{*}{PGA} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+
+
+
+\hline
+\multirow{6}{*}{Massaging} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{Reweighing} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{DIR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LFR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LGAFFS} & LR & 
+                        & SVM & 
+                        & GNB & 
+                        & DT & 
+                        & RF & 
+                        & XGB & 
+\hline
+\multirow{6}{*}{PGA} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+
+
+
+\hline
+\multirow{6}{*}{Massaging} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{Reweighing} & LR & 
+                            & SVM & 
+                            & GNB & 
+                            & DT & 
+                            & RF & 
+                            & XGB & 
+\hline
+\multirow{6}{*}{DIR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LFR} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline
+\multirow{6}{*}{LGAFFS} & LR & 
+                        & SVM & 
+                        & GNB & 
+                        & DT & 
+                        & RF & 
+                        & XGB & 
+\hline
+\multirow{6}{*}{PGA} & LR & 
+                    & SVM & 
+                    & GNB & 
+                    & DT & 
+                    & RF & 
+                    & XGB & 
+\hline

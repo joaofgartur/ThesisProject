@@ -152,7 +152,7 @@ def load_algorithm(option: Enum):
 
 if __name__ == '__main__':
 
-    results_path = 'results/'
+    results_path = 'results_adult_income/'
     settings = {
         'seed': 42,
         'train_size': 0.8,

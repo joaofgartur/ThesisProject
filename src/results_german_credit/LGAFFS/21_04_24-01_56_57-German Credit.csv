@@ -1,0 +1,145 @@
+dataset,protected_attribute,unbiasing_algorithm,data,classifier_type,classification_algorithm,value,disparate_impact,discrimination_score,true_positive_rate_diff,false_positive_rate_diff,false_positive_error_rate_balance_score,false_negative_error_rate_balance_score,consistency,confusion_matrix,accuracy,f1_score,recall,precision,mathews_cc,roc_curve,auc,sensitivity,specificity
+German Credit,Attribute9,NA,Validation,Surrogate,LogisticRegression,Female,0.83,0.8546,0.96,0.732,0.732,0.96,0.9467,"[14, 16, 5, 65]",0.79,0.8609,0.9286,0.8025,0.4617,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6976,0.9286,0.4667
+German Credit,Attribute9,NA,Validation,Surrogate,LogisticRegression,Male,1.2049,0.8546,1.04,1.268,0.732,0.96,0.9467,,,,,,,,,,
+German Credit,Attribute9,NA,Validation,Surrogate,SVC,Female,0.9852,0.9869,0.99,1.0431,0.9569,0.99,0.9533,"[9, 21, 3, 67]",0.76,0.8481,0.9571,0.7614,0.3626,"[[0.0, 0.7, 1.0], [0.0, 0.9571428571428572, 1.0], [inf, 1.0, 0.0]]",0.6286,0.9571,0.3
+German Credit,Attribute9,NA,Validation,Surrogate,SVC,Male,1.015,0.9869,1.01,0.9569,0.9569,0.99,0.9533,,,,,,,,,,
+German Credit,Attribute9,NA,Validation,Surrogate,GaussianNB,Female,0.9417,0.9561,1.04,0.8899,0.8899,0.96,0.94,"[17, 13, 9, 61]",0.78,0.8472,0.8714,0.8243,0.4577,"[[0.0, 0.43333333333333335, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.719,0.8714,0.5667
+German Credit,Attribute9,NA,Validation,Surrogate,GaussianNB,Male,1.0619,0.9561,0.96,1.1101,0.8899,0.96,0.94,,,,,,,,,,
+German Credit,Attribute9,NA,Validation,Surrogate,DecisionTreeClassifier,Female,1.0919,0.9294,1.06,1.1484,0.8516,0.94,0.9033,"[11, 19, 10, 60]",0.71,0.8054,0.8571,0.7595,0.2518,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.8571428571428571, 1.0], [inf, 1.0, 0.0]]",0.6119,0.8571,0.3667
+German Credit,Attribute9,NA,Validation,Surrogate,DecisionTreeClassifier,Male,0.9158,0.9294,0.94,0.8516,0.8516,0.94,0.9033,,,,,,,,,,
+German Credit,Attribute9,NA,Validation,Surrogate,RandomForestClassifier,Female,0.9852,0.9869,1.04,0.9522,0.9522,0.96,0.9533,"[10, 20, 2, 68]",0.78,0.8608,0.9714,0.7727,0.4298,"[[0.0, 0.6666666666666666, 1.0], [0.0, 0.9714285714285714, 1.0], [inf, 1.0, 0.0]]",0.6524,0.9714,0.3333
+German Credit,Attribute9,NA,Validation,Surrogate,RandomForestClassifier,Male,1.015,0.9869,0.96,1.0478,0.9522,0.96,0.9533,,,,,,,,,,
+German Credit,Attribute9,NA,Validation,Test,XGBClassifier,Female,0.8532,0.8723,0.88,0.8996,0.8996,0.88,0.9233,"[9, 21, 8, 62]",0.71,0.8105,0.8857,0.747,0.2266,"[[0.0, 0.7, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.5929,0.8857,0.3
+German Credit,Attribute9,NA,Validation,Test,XGBClassifier,Male,1.1721,0.8723,1.12,1.1004,0.8996,0.88,0.9233,,,,,,,,,,
+German Credit,Attribute9,NA,Test,Surrogate,LogisticRegression,Female,0.7662,0.7933,0.79,0.8613,0.8613,0.79,0.8933,"[11, 19, 7, 63]",0.74,0.8289,0.9,0.7683,0.3181,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6333,0.9,0.3667
+German Credit,Attribute9,NA,Test,Surrogate,LogisticRegression,Male,1.3051,0.7933,1.21,1.1387,0.8613,0.79,0.8933,,,,,,,,,,
+German Credit,Attribute9,NA,Test,Surrogate,SVC,Female,0.7419,0.7644,0.82,0.7177,0.7177,0.82,0.9067,"[11, 19, 5, 65]",0.76,0.8442,0.9286,0.7738,0.369,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6476,0.9286,0.3667
+German Credit,Attribute9,NA,Test,Surrogate,SVC,Male,1.3478,0.7644,1.18,1.2823,0.7177,0.82,0.9067,,,,,,,,,,
+German Credit,Attribute9,NA,Test,Surrogate,GaussianNB,Female,0.51,0.6591,0.73,0.6316,0.6316,0.73,0.94,"[23, 7, 18, 52]",0.75,0.8062,0.7429,0.8814,0.4747,"[[0.0, 0.23333333333333334, 1.0], [0.0, 0.7428571428571429, 1.0], [inf, 1.0, 0.0]]",0.7548,0.7429,0.7667
+German Credit,Attribute9,NA,Test,Surrogate,GaussianNB,Male,1.9608,0.6591,1.27,1.3684,0.6316,0.73,0.94,,,,,,,,,,
+German Credit,Attribute9,NA,Test,Surrogate,DecisionTreeClassifier,Female,0.9165,0.9383,0.91,1.0718,0.9282,0.91,0.8733,"[15, 15, 13, 57]",0.72,0.8028,0.8143,0.7917,0.3208,"[[0.0, 0.5, 1.0], [0.0, 0.8142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6571,0.8143,0.5
+German Credit,Attribute9,NA,Test,Surrogate,DecisionTreeClassifier,Male,1.0911,0.9383,1.09,0.9282,0.9282,0.91,0.8733,,,,,,,,,,
+German Credit,Attribute9,NA,Test,Surrogate,RandomForestClassifier,Female,0.9122,0.9224,1.01,0.8087,0.8087,0.99,0.9267,"[10, 20, 4, 66]",0.76,0.8462,0.9429,0.7674,0.3648,"[[0.0, 0.6666666666666666, 1.0], [0.0, 0.9428571428571428, 1.0], [inf, 1.0, 0.0]]",0.6381,0.9429,0.3333
+German Credit,Attribute9,NA,Test,Surrogate,RandomForestClassifier,Male,1.0962,0.9224,0.99,1.1913,0.8087,0.99,0.9267,,,,,,,,,,
+German Credit,Attribute9,NA,Test,Test,XGBClassifier,Female,0.8744,0.8981,1.03,0.7464,0.7464,0.97,0.9133,"[17, 13, 5, 65]",0.82,0.8784,0.9286,0.8333,0.5479,"[[0.0, 0.43333333333333335, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.7476,0.9286,0.5667
+German Credit,Attribute9,NA,Test,Test,XGBClassifier,Male,1.1436,0.8981,0.97,1.2536,0.7464,0.97,0.9133,,,,,,,,,,
+German Credit,Attribute13,NA,Validation,Surrogate,LogisticRegression,Aged,1.4118,0.7529,1.0605,1.323,0.677,0.9395,0.9467,"[14, 16, 5, 65]",0.79,0.8609,0.9286,0.8025,0.4617,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6976,0.9286,0.4667
+German Credit,Attribute13,NA,Validation,Surrogate,LogisticRegression,Young,0.7083,0.7529,0.9395,0.677,0.677,0.9395,0.9467,,,,,,,,,,
+German Credit,Attribute13,NA,Validation,Surrogate,SVC,Aged,1.2354,0.8274,1.0927,1.1677,0.8323,0.9073,0.9533,"[9, 21, 3, 67]",0.76,0.8481,0.9571,0.7614,0.3626,"[[0.0, 0.7, 1.0], [0.0, 0.9571428571428572, 1.0], [inf, 1.0, 0.0]]",0.6286,0.9571,0.3
+German Credit,Attribute13,NA,Validation,Surrogate,SVC,Young,0.8095,0.8274,0.9073,0.8323,0.8323,0.9073,0.9533,,,,,,,,,,
+German Credit,Attribute13,NA,Validation,Surrogate,GaussianNB,Aged,1.456,0.7568,1.1371,1.1926,0.8074,0.8629,0.94,"[17, 13, 9, 61]",0.78,0.8472,0.8714,0.8243,0.4577,"[[0.0, 0.43333333333333335, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.719,0.8714,0.5667
+German Credit,Attribute13,NA,Validation,Surrogate,GaussianNB,Young,0.6868,0.7568,0.8629,0.8074,0.8074,0.8629,0.94,,,,,,,,,,
+German Credit,Attribute13,NA,Validation,Surrogate,DecisionTreeClassifier,Aged,1.0441,0.9647,0.996,1.0248,0.9752,0.996,0.9067,"[8, 22, 9, 61]",0.69,0.7974,0.8714,0.7349,0.1685,"[[0.0, 0.7333333333333333, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.569,0.8714,0.2667
+German Credit,Attribute13,NA,Validation,Surrogate,DecisionTreeClassifier,Young,0.9577,0.9647,1.004,0.9752,0.9752,0.996,0.9067,,,,,,,,,,
+German Credit,Attribute13,NA,Validation,Surrogate,RandomForestClassifier,Aged,1.1176,0.9059,1.0927,0.9814,0.9814,0.9073,0.9367,"[9, 21, 3, 67]",0.76,0.8481,0.9571,0.7614,0.3626,"[[0.0, 0.7, 1.0], [0.0, 0.9571428571428572, 1.0], [inf, 1.0, 0.0]]",0.6286,0.9571,0.3
+German Credit,Attribute13,NA,Validation,Surrogate,RandomForestClassifier,Young,0.8948,0.9059,0.9073,1.0186,0.9814,0.9073,0.9367,,,,,,,,,,
+German Credit,Attribute13,NA,Validation,Test,XGBClassifier,Aged,1.0441,0.9647,1.0121,0.9814,0.9814,0.9879,0.9233,"[9, 21, 8, 62]",0.71,0.8105,0.8857,0.747,0.2266,"[[0.0, 0.7, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.5929,0.8857,0.3
+German Credit,Attribute13,NA,Validation,Test,XGBClassifier,Young,0.9577,0.9647,0.9879,1.0186,0.9814,0.9879,0.9233,,,,,,,,,,
+German Credit,Attribute13,NA,Test,Surrogate,LogisticRegression,Aged,1.0508,0.9601,1.0127,1.04,0.96,0.9873,0.8933,"[11, 19, 7, 63]",0.74,0.8289,0.9,0.7683,0.3181,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6333,0.9,0.3667
+German Credit,Attribute13,NA,Test,Surrogate,LogisticRegression,Young,0.9517,0.9601,0.9873,0.96,0.96,0.9873,0.8933,,,,,,,,,,
+German Credit,Attribute13,NA,Test,Surrogate,SVC,Aged,1.0803,0.9369,1.0455,1.04,0.96,0.9545,0.9067,"[11, 19, 5, 65]",0.76,0.8442,0.9286,0.7738,0.369,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6476,0.9286,0.3667
+German Credit,Attribute13,NA,Test,Surrogate,SVC,Young,0.9257,0.9369,0.9545,0.96,0.96,0.9545,0.9067,,,,,,,,,,
+German Credit,Attribute13,NA,Test,Surrogate,GaussianNB,Aged,3.0387,0.5631,1.47,1.28,0.72,0.53,0.94,"[23, 7, 18, 52]",0.75,0.8062,0.7429,0.8814,0.4747,"[[0.0, 0.23333333333333334, 1.0], [0.0, 0.7428571428571429, 1.0], [inf, 1.0, 0.0]]",0.7548,0.7429,0.7667
+German Credit,Attribute13,NA,Test,Surrogate,GaussianNB,Young,0.3291,0.5631,0.53,0.72,0.72,0.53,0.94,,,,,,,,,,
+German Credit,Attribute13,NA,Test,Surrogate,DecisionTreeClassifier,Aged,1.067,0.9569,1.1038,0.88,0.88,0.8962,0.8233,"[15, 15, 17, 53]",0.68,0.7681,0.7571,0.7794,0.2526,"[[0.0, 0.5, 1.0], [0.0, 0.7571428571428571, 1.0], [inf, 1.0, 0.0]]",0.6286,0.7571,0.5
+German Credit,Attribute13,NA,Test,Surrogate,DecisionTreeClassifier,Young,0.9372,0.9569,0.8962,1.12,0.88,0.8962,0.8233,,,,,,,,,,
+German Credit,Attribute13,NA,Test,Surrogate,RandomForestClassifier,Aged,1.036,0.9717,1.0619,0.88,0.88,0.9381,0.9167,"[15, 15, 4, 66]",0.81,0.8742,0.9429,0.8148,0.5173,"[[0.0, 0.5, 1.0], [0.0, 0.9428571428571428, 1.0], [inf, 1.0, 0.0]]",0.7214,0.9429,0.5
+German Credit,Attribute13,NA,Test,Surrogate,RandomForestClassifier,Young,0.9652,0.9717,0.9381,1.12,0.88,0.9381,0.9167,,,,,,,,,,
+German Credit,Attribute13,NA,Test,Test,XGBClassifier,Aged,0.9916,0.9934,0.918,1.04,0.96,0.918,0.9133,"[17, 13, 5, 65]",0.82,0.8784,0.9286,0.8333,0.5479,"[[0.0, 0.43333333333333335, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.7476,0.9286,0.5667
+German Credit,Attribute13,NA,Test,Test,XGBClassifier,Young,1.0085,0.9934,1.082,0.96,0.96,0.918,0.9133,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,LogisticRegression,Female,1.0118,0.9906,1.02,1.0575,0.9425,0.98,0.9367,"[12, 18, 8, 62]",0.74,0.8267,0.8857,0.775,0.3273,"[[0.0, 0.6, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6429,0.8857,0.4
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,LogisticRegression,Male,0.9883,0.9906,0.98,0.9425,0.9425,0.98,0.9367,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,SVC,Female,1.0745,0.9374,1.01,1.2393,0.7607,0.99,0.9567,"[10, 20, 4, 66]",0.76,0.8462,0.9429,0.7674,0.3648,"[[0.0, 0.6666666666666666, 1.0], [0.0, 0.9428571428571428, 1.0], [inf, 1.0, 0.0]]",0.6381,0.9429,0.3333
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,SVC,Male,0.9307,0.9374,0.99,0.7607,0.7607,0.99,0.9567,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,GaussianNB,Female,1.0418,0.9715,1.09,0.9808,0.9808,0.91,0.9233,"[16, 14, 15, 55]",0.71,0.7914,0.7857,0.7971,0.3161,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.7857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6595,0.7857,0.5333
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,GaussianNB,Male,0.9598,0.9715,0.91,1.0192,0.9808,0.91,0.9233,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Female,0.8591,0.8836,0.94,0.8087,0.8087,0.94,0.8933,"[10, 20, 11, 59]",0.69,0.7919,0.8429,0.7468,0.1982,"[[0.0, 0.6666666666666666, 1.0], [0.0, 0.8428571428571429, 1.0], [inf, 1.0, 0.0]]",0.5881,0.8429,0.3333
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Male,1.164,0.8836,1.06,1.1913,0.8087,0.94,0.8933,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,RandomForestClassifier,Female,1.1324,0.8906,1.03,1.3302,0.6698,0.97,0.9433,"[9, 21, 5, 65]",0.74,0.8333,0.9286,0.7558,0.3019,"[[0.0, 0.7, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6143,0.9286,0.3
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,RandomForestClassifier,Male,0.8831,0.8906,0.97,0.6698,0.6698,0.97,0.9433,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,LogisticRegression,Female,0.9713,0.9771,0.95,1.1101,0.8899,0.95,0.9,"[13, 17, 8, 62]",0.75,0.8322,0.8857,0.7848,0.359,"[[0.0, 0.5666666666666667, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6595,0.8857,0.4333
+German Credit,Attribute9,LGAFFS,Test,Surrogate,LogisticRegression,Male,1.0296,0.9771,1.05,0.8899,0.8899,0.95,0.9,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,SVC,Female,0.8059,0.8368,0.89,0.8373,0.8373,0.89,0.9067,"[16, 14, 5, 65]",0.81,0.8725,0.9286,0.8228,0.5197,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.731,0.9286,0.5333
+German Credit,Attribute9,LGAFFS,Test,Surrogate,SVC,Male,1.2409,0.8368,1.11,1.1627,0.8373,0.89,0.9067,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,GaussianNB,Female,0.6491,0.7559,0.81,0.7751,0.7751,0.81,0.9267,"[23, 7, 15, 55]",0.78,0.8333,0.7857,0.8871,0.5215,"[[0.0, 0.23333333333333334, 1.0], [0.0, 0.7857142857142857, 1.0], [inf, 1.0, 0.0]]",0.7762,0.7857,0.7667
+German Credit,Attribute9,LGAFFS,Test,Surrogate,GaussianNB,Male,1.5405,0.7559,1.19,1.2249,0.7751,0.81,0.9267,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Female,1.016,0.9893,0.99,1.1244,0.8756,0.99,0.85,"[16, 14, 17, 53]",0.69,0.7737,0.7571,0.791,0.2831,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.7571428571428571, 1.0], [inf, 1.0, 0.0]]",0.6452,0.7571,0.5333
+German Credit,Attribute9,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Male,0.9842,0.9893,1.01,0.8756,0.8756,0.99,0.85,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,RandomForestClassifier,Female,0.948,0.9593,0.97,1.0192,0.9808,0.97,0.8667,"[14, 16, 9, 61]",0.75,0.8299,0.8714,0.7922,0.3682,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.669,0.8714,0.4667
+German Credit,Attribute9,LGAFFS,Test,Surrogate,RandomForestClassifier,Male,1.0549,0.9593,1.03,0.9808,0.9808,0.97,0.8667,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Test,XGBClassifier,Female,1.1331,0.8939,0.98,1.4354,0.5646,0.98,0.9233,"[11, 19, 6, 64]",0.75,0.8366,0.9143,0.7711,0.3428,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6405,0.9143,0.3667
+German Credit,Attribute9,LGAFFS,Validation,Test,XGBClassifier,Male,0.8825,0.8939,1.02,0.5646,0.5646,0.98,0.9233,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Test,XGBClassifier,Female,0.9602,0.9706,0.96,1.0718,0.9282,0.96,0.85,"[15, 15, 12, 58]",0.73,0.8112,0.8286,0.7945,0.3392,"[[0.0, 0.5, 1.0], [0.0, 0.8285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6643,0.8286,0.5
+German Credit,Attribute9,LGAFFS,Test,Test,XGBClassifier,Male,1.0414,0.9706,1.04,0.9282,0.9282,0.96,0.85,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,LogisticRegression,Female,0.8392,0.8578,0.89,0.8613,0.8613,0.89,0.95,"[11, 19, 5, 65]",0.76,0.8442,0.9286,0.7738,0.369,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6476,0.9286,0.3667
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,LogisticRegression,Male,1.1917,0.8578,1.11,1.1387,0.8613,0.89,0.95,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,SVC,Female,0.9486,0.9546,0.94,1.0431,0.9569,0.94,0.9367,"[9, 21, 4, 66]",0.75,0.8408,0.9429,0.7586,0.3309,"[[0.0, 0.7, 1.0], [0.0, 0.9428571428571428, 1.0], [inf, 1.0, 0.0]]",0.6214,0.9429,0.3
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,SVC,Male,1.0541,0.9546,1.06,0.9569,0.9569,0.94,0.9367,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,GaussianNB,Female,0.8498,0.8803,0.99,0.732,0.732,0.99,0.9133,"[14, 16, 10, 60]",0.74,0.8219,0.8571,0.7895,0.3474,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8571428571428571, 1.0], [inf, 1.0, 0.0]]",0.6619,0.8571,0.4667
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,GaussianNB,Male,1.1767,0.8803,1.01,1.268,0.732,0.99,0.9133,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Female,1.0118,0.9906,1.08,0.8996,0.8996,0.92,0.8667,"[9, 21, 11, 59]",0.68,0.7867,0.8429,0.7375,0.1637,"[[0.0, 0.7, 1.0], [0.0, 0.8428571428571429, 1.0], [inf, 1.0, 0.0]]",0.5714,0.8429,0.3
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Male,0.9883,0.9906,0.92,1.1004,0.8996,0.92,0.8667,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,RandomForestClassifier,Female,0.9808,0.9836,0.91,1.1866,0.8134,0.91,0.9333,"[9, 21, 6, 64]",0.73,0.8258,0.9143,0.7529,0.275,"[[0.0, 0.7, 1.0], [0.0, 0.9142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6071,0.9143,0.3
+German Credit,Attribute9,LGAFFS,Validation,Surrogate,RandomForestClassifier,Male,1.0196,0.9836,1.09,0.8134,0.8134,0.91,0.9333,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,LogisticRegression,Female,0.779,0.8078,0.86,0.7703,0.7703,0.86,0.8967,"[12, 18, 7, 63]",0.75,0.8344,0.9,0.7778,0.3504,"[[0.0, 0.6, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.65,0.9,0.4
+German Credit,Attribute9,LGAFFS,Test,Surrogate,LogisticRegression,Male,1.2837,0.8078,1.14,1.2297,0.7703,0.86,0.8967,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,SVC,Female,0.7048,0.7433,0.74,0.8229,0.8229,0.74,0.9167,"[13, 17, 8, 62]",0.75,0.8322,0.8857,0.7848,0.359,"[[0.0, 0.5666666666666667, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6595,0.8857,0.4333
+German Credit,Attribute9,LGAFFS,Test,Surrogate,SVC,Male,1.4188,0.7433,1.26,1.1771,0.8229,0.74,0.9167,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,GaussianNB,Female,0.5879,0.6835,0.81,0.512,0.512,0.81,0.9067,"[18, 12, 15, 55]",0.73,0.8029,0.7857,0.8209,0.3759,"[[0.0, 0.4, 1.0], [0.0, 0.7857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6929,0.7857,0.6
+German Credit,Attribute9,LGAFFS,Test,Surrogate,GaussianNB,Male,1.7008,0.6835,1.19,1.488,0.512,0.81,0.9067,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Female,0.8997,0.9317,0.95,0.9952,0.9952,0.95,0.86,"[19, 11, 15, 55]",0.74,0.8088,0.7857,0.8333,0.4054,"[[0.0, 0.36666666666666664, 1.0], [0.0, 0.7857142857142857, 1.0], [inf, 1.0, 0.0]]",0.7095,0.7857,0.6333
+German Credit,Attribute9,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Male,1.1114,0.9317,1.05,1.0048,0.9952,0.95,0.86,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Surrogate,RandomForestClassifier,Female,0.8059,0.8368,0.79,1.0192,0.9808,0.79,0.8933,"[14, 16, 7, 63]",0.77,0.8456,0.9,0.7975,0.4125,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6833,0.9,0.4667
+German Credit,Attribute9,LGAFFS,Test,Surrogate,RandomForestClassifier,Male,1.2409,0.8368,1.21,0.9808,0.9808,0.79,0.8933,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Validation,Test,XGBClassifier,Female,0.9977,0.9981,0.89,1.2919,0.7081,0.89,0.9367,"[11, 19, 5, 65]",0.76,0.8442,0.9286,0.7738,0.369,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9285714285714286, 1.0], [inf, 1.0, 0.0]]",0.6476,0.9286,0.3667
+German Credit,Attribute9,LGAFFS,Validation,Test,XGBClassifier,Male,1.0023,0.9981,1.11,0.7081,0.7081,0.89,0.9367,,,,,,,,,,
+German Credit,Attribute9,LGAFFS,Test,Test,XGBClassifier,Female,0.8094,0.8481,0.83,0.9808,0.9808,0.83,0.8833,"[16, 14, 9, 61]",0.77,0.8414,0.8714,0.8133,0.4284,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.7024,0.8714,0.5333
+German Credit,Attribute9,LGAFFS,Test,Test,XGBClassifier,Male,1.2354,0.8481,1.17,1.0192,0.9808,0.83,0.8833,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,LogisticRegression,Aged,1.2352,0.8432,1.1694,0.9938,0.9938,0.8306,0.94,"[13, 17, 7, 63]",0.76,0.84,0.9,0.7875,0.3819,"[[0.0, 0.5666666666666667, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6667,0.9,0.4333
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,LogisticRegression,Young,0.8096,0.8432,0.8306,1.0062,0.9938,0.8306,0.94,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,SVC,Aged,1.1999,0.8667,1.1532,0.9503,0.9503,0.8468,0.9433,"[14, 16, 8, 62]",0.76,0.8378,0.8857,0.7949,0.3898,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6762,0.8857,0.4667
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,SVC,Young,0.8334,0.8667,0.8468,1.0497,0.9503,0.8468,0.9433,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,GaussianNB,Aged,0.9,0.9333,0.9435,0.7764,0.7764,0.9435,0.9433,"[18, 12, 21, 49]",0.67,0.7481,0.7,0.8033,0.2819,"[[0.0, 0.4, 1.0], [0.0, 0.7, 1.0], [inf, 1.0, 0.0]]",0.65,0.7,0.6
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,GaussianNB,Young,1.1112,0.9333,1.0565,1.2236,0.7764,0.9435,0.9433,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Aged,1.196,0.8824,1.0565,1.0497,0.9503,0.9435,0.8833,"[16, 14, 14, 56]",0.72,0.8,0.8,0.8,0.3333,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.8, 1.0], [inf, 1.0, 0.0]]",0.6667,0.8,0.5333
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Young,0.8361,0.8824,0.9435,0.9503,0.9503,0.9435,0.8833,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,RandomForestClassifier,Aged,1.0428,0.9686,1.0121,0.8634,0.8634,0.9879,0.9367,"[16, 14, 8, 62]",0.78,0.8493,0.8857,0.8158,0.4496,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.8857142857142857, 1.0], [inf, 1.0, 0.0]]",0.7095,0.8857,0.5333
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,RandomForestClassifier,Young,0.9589,0.9686,0.9879,1.1366,0.8634,0.9879,0.9367,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,LogisticRegression,Aged,1.0211,0.9834,1.0127,0.96,0.96,0.9873,0.8967,"[13, 17, 7, 63]",0.76,0.84,0.9,0.7875,0.3819,"[[0.0, 0.5666666666666667, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6667,0.9,0.4333
+German Credit,Attribute13,LGAFFS,Test,Surrogate,LogisticRegression,Young,0.9793,0.9834,0.9873,1.04,0.96,0.9873,0.8967,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,SVC,Aged,0.9225,0.9336,0.8852,0.96,0.96,0.8852,0.8967,"[13, 17, 7, 63]",0.76,0.84,0.9,0.7875,0.3819,"[[0.0, 0.5666666666666667, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6667,0.9,0.4333
+German Credit,Attribute13,LGAFFS,Test,Surrogate,SVC,Young,1.084,0.9336,1.1148,1.04,0.96,0.8852,0.8967,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,GaussianNB,Aged,0.6511,0.7259,0.7504,0.6,0.6,0.7504,0.92,"[22, 8, 23, 47]",0.69,0.752,0.6714,0.8545,0.3728,"[[0.0, 0.26666666666666666, 1.0], [0.0, 0.6714285714285714, 1.0], [inf, 1.0, 0.0]]",0.7024,0.6714,0.7333
+German Credit,Attribute13,LGAFFS,Test,Surrogate,GaussianNB,Young,1.5358,0.7259,1.2496,1.4,0.6,0.7504,0.92,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Aged,1.3024,0.8272,1.153,1.16,0.84,0.847,0.8433,"[14, 16, 14, 56]",0.7,0.7887,0.8,0.7778,0.2722,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8, 1.0], [inf, 1.0, 0.0]]",0.6333,0.8,0.4667
+German Credit,Attribute13,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Young,0.7678,0.8272,0.847,0.84,0.84,0.847,0.8433,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,RandomForestClassifier,Aged,1.0743,0.9469,1.0911,0.92,0.92,0.9089,0.91,"[14, 16, 10, 60]",0.74,0.8219,0.8571,0.7895,0.3474,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8571428571428571, 1.0], [inf, 1.0, 0.0]]",0.6619,0.8571,0.4667
+German Credit,Attribute13,LGAFFS,Test,Surrogate,RandomForestClassifier,Young,0.9308,0.9469,0.9089,1.08,0.92,0.9089,0.91,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Test,XGBClassifier,Aged,1.147,0.902,1.1048,0.9503,0.9503,0.8952,0.9133,"[14, 16, 11, 59]",0.73,0.8138,0.8429,0.7867,0.3276,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8428571428571429, 1.0], [inf, 1.0, 0.0]]",0.6548,0.8429,0.4667
+German Credit,Attribute13,LGAFFS,Validation,Test,XGBClassifier,Young,0.8718,0.902,0.8952,1.0497,0.9503,0.8952,0.9133,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Test,XGBClassifier,Aged,1.1395,0.9103,1.0419,1.12,0.88,0.9581,0.87,"[15, 15, 13, 57]",0.72,0.8028,0.8143,0.7917,0.3208,"[[0.0, 0.5, 1.0], [0.0, 0.8142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6571,0.8143,0.5
+German Credit,Attribute13,LGAFFS,Test,Test,XGBClassifier,Young,0.8776,0.9103,0.9581,0.88,0.88,0.9581,0.87,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,LogisticRegression,Aged,1.2881,0.8079,1.1855,1.0808,0.9192,0.8145,0.9533,"[11, 19, 6, 64]",0.75,0.8366,0.9143,0.7711,0.3428,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6405,0.9143,0.3667
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,LogisticRegression,Young,0.7763,0.8079,0.8145,0.9192,0.9192,0.8145,0.9533,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,SVC,Aged,1.2193,0.8392,1.0927,1.1243,0.8757,0.9073,0.9633,"[10, 20, 3, 67]",0.77,0.8535,0.9571,0.7701,0.3958,"[[0.0, 0.6666666666666666, 1.0], [0.0, 0.9571428571428572, 1.0], [inf, 1.0, 0.0]]",0.6452,0.9571,0.3333
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,SVC,Young,0.8202,0.8392,0.9073,0.8757,0.8757,0.9073,0.9633,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,GaussianNB,Aged,1.5663,0.698,1.1855,1.2795,0.7205,0.8145,0.94,"[15, 15, 6, 64]",0.79,0.8591,0.9143,0.8101,0.4661,"[[0.0, 0.5, 1.0], [0.0, 0.9142857142857143, 1.0], [inf, 1.0, 0.0]]",0.7071,0.9143,0.5
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,GaussianNB,Young,0.6385,0.698,0.8145,0.7205,0.7205,0.8145,0.94,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Aged,1.4118,0.7804,1.2298,1.0497,0.9503,0.7702,0.8633,"[16, 14, 12, 58]",0.74,0.8169,0.8286,0.8056,0.3694,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.8285714285714286, 1.0], [inf, 1.0, 0.0]]",0.681,0.8286,0.5333
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,DecisionTreeClassifier,Young,0.7083,0.7804,0.7702,0.9503,0.9503,0.7702,0.8633,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,RandomForestClassifier,Aged,1.2706,0.8196,1.2177,0.9503,0.9503,0.7823,0.94,"[14, 16, 4, 66]",0.8,0.8684,0.9429,0.8049,0.4885,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.9428571428571428, 1.0], [inf, 1.0, 0.0]]",0.7048,0.9429,0.4667
+German Credit,Attribute13,LGAFFS,Validation,Surrogate,RandomForestClassifier,Young,0.787,0.8196,0.7823,1.0497,0.9503,0.7823,0.94,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,LogisticRegression,Aged,1.1721,0.8771,1.0127,1.28,0.72,0.9873,0.9033,"[11, 19, 7, 63]",0.74,0.8289,0.9,0.7683,0.3181,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.9, 1.0], [inf, 1.0, 0.0]]",0.6333,0.9,0.3667
+German Credit,Attribute13,LGAFFS,Test,Surrogate,LogisticRegression,Young,0.8532,0.8771,0.9873,0.72,0.72,0.9873,0.9033,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,SVC,Aged,1.0508,0.9601,1.0291,1.0,1.0,0.9709,0.8833,"[12, 18, 6, 64]",0.76,0.8421,0.9143,0.7805,0.3749,"[[0.0, 0.6, 1.0], [0.0, 0.9142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6571,0.9143,0.4
+German Credit,Attribute13,LGAFFS,Test,Surrogate,SVC,Young,0.9517,0.9601,0.9709,1.0,1.0,0.9709,0.8833,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,GaussianNB,Aged,3.4727,0.4701,1.5192,1.48,0.52,0.4808,0.9033,"[18, 12, 15, 55]",0.73,0.8029,0.7857,0.8209,0.3759,"[[0.0, 0.4, 1.0], [0.0, 0.7857142857142857, 1.0], [inf, 1.0, 0.0]]",0.6929,0.7857,0.6
+German Credit,Attribute13,LGAFFS,Test,Surrogate,GaussianNB,Young,0.288,0.4701,0.4808,0.52,0.52,0.4808,0.9033,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Aged,1.1576,0.8987,1.1694,0.92,0.92,0.8306,0.8567,"[14, 16, 13, 57]",0.71,0.7972,0.8143,0.7808,0.29,"[[0.0, 0.5333333333333333, 1.0], [0.0, 0.8142857142857143, 1.0], [inf, 1.0, 0.0]]",0.6405,0.8143,0.4667
+German Credit,Attribute13,LGAFFS,Test,Surrogate,DecisionTreeClassifier,Young,0.8639,0.8987,0.8306,1.08,0.92,0.8306,0.8567,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Surrogate,RandomForestClassifier,Aged,0.9916,0.9934,1.1074,0.72,0.72,0.8926,0.9033,"[13, 17, 9, 61]",0.74,0.8243,0.8714,0.7821,0.3371,"[[0.0, 0.5666666666666667, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.6524,0.8714,0.4333
+German Credit,Attribute13,LGAFFS,Test,Surrogate,RandomForestClassifier,Young,1.0085,0.9934,0.8926,1.28,0.72,0.8926,0.9033,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Validation,Test,XGBClassifier,Aged,1.3922,0.7647,1.2177,1.0497,0.9503,0.7823,0.9433,"[16, 14, 4, 66]",0.82,0.88,0.9429,0.825,0.5455,"[[0.0, 0.4666666666666667, 1.0], [0.0, 0.9428571428571428, 1.0], [inf, 1.0, 0.0]]",0.7381,0.9429,0.5333
+German Credit,Attribute13,LGAFFS,Validation,Test,XGBClassifier,Young,0.7183,0.7647,0.7823,0.9503,0.9503,0.7823,0.9433,,,,,,,,,,
+German Credit,Attribute13,LGAFFS,Test,Test,XGBClassifier,Aged,1.1396,0.9003,1.2349,0.8,0.8,0.7651,0.89,"[11, 19, 9, 61]",0.72,0.8133,0.8714,0.7625,0.2728,"[[0.0, 0.6333333333333333, 1.0], [0.0, 0.8714285714285714, 1.0], [inf, 1.0, 0.0]]",0.619,0.8714,0.3667
+German Credit,Attribute13,LGAFFS,Test,Test,XGBClassifier,Young,0.8775,0.9003,0.7651,1.2,0.8,0.7651,0.89,,,,,,,,,,

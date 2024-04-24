@@ -80,11 +80,17 @@ c
 3src/algorithms/AIF360LearningFairRepresentations.py,6\0\60d6a08d3a04907280422f431120d5e3df35dd05
 L
 src/algorithms/LFRhelpers.py,2\9\294cf48f46a4ba25f6f5391852d8316d10cc1176
-j
-:src/results/Reweighing/19_04_24-17_58_06-German Credit.csv,3\5\3584d1e4560e202969120be2f6de14cb5597d912
-{
-Ksrc/results/PermutationGeneticAlgorithm/19_04_24-17_58_06-German Credit.csv,6\6\66791e41cf38f3fa6a98843971d7378071d7f794
 E
 src/results_script.py,d\8\d84a4bfe8af14c51ebb630ae7557a54d41c313df
 m
-=src/results/AIF360LearningFairRepresentations/mean_values.csv,d\3\d3575105ed5a93b4298e4e46df3fc66d5dc06dda
+=src/results_german_credit/Massaging/Massaging_mean_values.csv,7\5\75293680a95f2bd2c8d979104d84e565bb7d0a1a
+o
+?src/results_german_credit/Reweighing/Reweighing_mean_values.csv,8\5\8599bfac3f5620581a988de447020c9851c57411
+á
+Wsrc/results_german_credit/DisparateImpactRemover/DisparateImpactRemover_mean_values.csv,4\d\4d2e7f997ea1f3db9cc5ef49c0bbfe21d40b9307
+ù
+msrc/results_german_credit/AIF360LearningFairRepresentations/AIF360LearningFairRepresentations_mean_values.csv,c\c\cc763aff4ead9c8df1935061d3c48f3ca260bb77
+g
+7src/results_german_credit/LGAFFS/LGAFFS_mean_values.csv,d\1\d175f2df030109efe865e0ea1cc896d1b3475877
+ë
+asrc/results_german_credit/PermutationGeneticAlgorithm/PermutationGeneticAlgorithm_mean_values.csv,9\a\9a99a249c0200619cc6959b85f0439cefdb4278b

@@ -59,8 +59,8 @@ def bias_correction(dataset: Dataset, settings: dict, algorithm: Algorithm) -> (
             logger.info(f"Finished correcting bias. Computing post-protocol assessment "
                         f"for attribute {feature}...")
 
-            results = assess_all_surrogates(dataset, settings, feature, algorithm.__class__.__name__)
-            correction_results = pd.concat([correction_results, results])
+            results_adult_income = assess_all_surrogates(dataset, settings, feature, algorithm.__class__.__name__)
+            correction_results = pd.concat([correction_results, results_adult_income])
 
             logger.info("Post-protocol assessment computed.")
 

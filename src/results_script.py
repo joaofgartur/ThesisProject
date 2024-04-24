@@ -45,6 +45,6 @@ if __name__ == '__main__':
     algorithms = ['Massaging', 'Reweighing', 'DisparateImpactRemover', 'AIF360LearningFairRepresentations', 'LGAFFS', 'PermutationGeneticAlgorithm']
 
     for algorithm in algorithms:
-        input_folder = f"results/{algorithm}"
+        input_folder = f"results_german_credit/{algorithm}"
         output_file = f"{input_folder}/{algorithm}_mean_values.csv"
         compute_mean_csv(input_folder, output_file)
