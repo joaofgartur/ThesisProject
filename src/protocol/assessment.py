@@ -6,7 +6,6 @@ Last edited: 20-11-2023
 
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 
 from datasets import Dataset, update_dataset, match_features
 from evaluation.ModelEvaluator import ModelEvaluator
@@ -16,7 +15,6 @@ from evaluation import FairnessEvaluator
 
 def get_classifier_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
     pipeline = Pipeline([
-        ('normalizer', StandardScaler()),
         ('classifier', model)
     ])
 

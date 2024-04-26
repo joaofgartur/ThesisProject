@@ -94,3 +94,41 @@ g
 7src/results_german_credit/LGAFFS/LGAFFS_mean_values.csv,d\1\d175f2df030109efe865e0ea1cc896d1b3475877
 ‘
 asrc/results_german_credit/PermutationGeneticAlgorithm/PermutationGeneticAlgorithm_mean_values.csv,9\a\9a99a249c0200619cc6959b85f0439cefdb4278b
+”
+dsrc/results/PermutationGeneticAlgorithm/26_04_24-11_24_17-German Credit_intermediary_Attribute9_.csv,d\7\d7e08b1cd653cb82a5cd886b9a1844b967ba32b2
+{
+Ksrc/results/PermutationGeneticAlgorithm/26_04_24-11_29_43-German Credit.csv,d\4\d40b37a94d68da6fd5a535e818f836122855c427
+{
+Ksrc/results/PermutationGeneticAlgorithm/26_04_24-11_35_30-German Credit.csv,b\2\b261dbe03d698d37b0530f965abd257437bde5ad
+Q
+!src/pga/26_04_24-11_48_11-pga.csv,7\3\7397e4880bd47adc0b6a10a20687f09364d0ec82
+Q
+!src/pga/26_04_24-11_48_19-pga.csv,f\b\fb2e5e1186304b34606b2e163d7c5417d287a52b
+Q
+!src/pga/26_04_24-11_52_13-pga.csv,a\4\a4fa3033c8c3d9a4bb8f57673cfaf4c27c241755
+Q
+!src/pga/26_04_24-11_58_14-pga.csv,3\5\35313a3011217820f55eaaa6a27814a66663c941
+Q
+!src/pga/26_04_24-12_07_31-pga.csv,9\b\9b98c233cee4246aeb82f6511694a21534b008a2
+Q
+!src/pga/26_04_24-12_10_34-pga.csv,b\2\b2a0780be63c3a6871d602f039431ad997356828
+Q
+!src/pga/26_04_24-12_10_42-pga.csv,d\d\ddcf1072a4e0e2cedf9dd52eae840944e2ba2e7f
+Q
+!src/pga/26_04_24-12_11_27-pga.csv,c\6\c6940ee408c8efd889c583db0986370d09125f10
+Q
+!src/pga/26_04_24-12_12_18-pga.csv,1\f\1ffadfac9dd0ba26df3dac9d6047ee548a9e56a1
+Q
+!src/pga/26_04_24-12_13_05-pga.csv,9\0\9091349fb8961dacd22830deaec5f9ee92207ff8
+Q
+!src/pga/26_04_24-12_13_28-pga.csv,f\b\fb8eccaa60a0534e4a24c1bd435b66f8c1df4127
+Q
+!src/pga/26_04_24-12_14_09-pga.csv,0\f\0f60c03b7683c8e85c5d0a4192fb29618f2d676e
+Q
+!src/pga/26_04_24-12_14_16-pga.csv,c\c\cc2ec4619ff10fc8fc927e6ebfe057c898b3fa20
+\
+,src/pga_Attribute9/26_04_24-12_17_26-pga.csv,5\0\5072cfa792345627faf2307a2e4ea293e8692a2e
+i
+9src/best_individuals/26_04_24-12_18_46-pga_Attribute9.csv,4\a\4a5504003c35e4e7df8854ef8d58b632442dd924
+j
+:src/best_individuals/26_04_24-12_18_53-pga_Attribute13.csv,8\8\88c9971e57f1d7f2ad7fe1541ad427a281e05018

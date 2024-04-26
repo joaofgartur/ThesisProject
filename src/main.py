@@ -152,12 +152,13 @@ def load_algorithm(option: Enum):
 
 if __name__ == '__main__':
 
-    results_path = 'results_adult_income/'
+    results_path = 'results'
     settings = {
         'seed': 42,
         'train_size': 0.8,
         'validation_size': 0.1,
         "test_size": 0.1,
+        "num_repetitions": 1
     }
 
     set_seed(settings['seed'])
@@ -194,8 +195,8 @@ if __name__ == '__main__':
             pipeline.run_and_save()
     else:
         for i in range(max(1, num_runs)):
-            dataset = load_dataset(DatasetOptions.COMPAS)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Massaging), load_algorithm(AlgorithmOptions.Reweighing)]
+            dataset = load_dataset(DatasetOptions.GERMAN)
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.PGA), load_algorithm(AlgorithmOptions.Reweighing)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 

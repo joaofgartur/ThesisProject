@@ -43,6 +43,36 @@ def uniform_crossover(parent1: list, parent2: list, probability_crossover: float
         return parent1, parent2
 
 
+def pmx_cromossover(parent1: list, parent2: list, probability_crossover: float):
+    value = np.random.random()
+    if value < probability_crossover:
+        offspring1 = [parent1[0], {}, {}]
+        offspring2 = [parent1[0], {}, {}]
+
+        n = len(parent1[0])
+        cp1 = np.random.randint(0, n - 1)
+        cp2 = np.random.randint(cp1 + 1, n)
+
+        for i in range(cp1, cp2):
+            mapping1 = {parent1[0][j]: parent2[0][j] for j in range(n)}
+            mapping2 = {parent2[0][j]: parent1[0][j] for j in range(n)}
+
+            if parent1[0][i] != parent2[0][i]:
+
+                v1 = offspring1[0][i]
+                while v1 in mapping2:
+                    v1 = mapping2[v1]
+                offspring1[0][i] = v1
+
+                v2 = offspring2[0][i]
+                while v2 in mapping1:
+                    v2 = mapping1[v2]
+                offspring2[0][i] = v2
+
+        return offspring1, offspring2
+    else:
+        return parent1, parent2
+
 def bit_flip_mutation(individual: list, probability_mutation: float):
     new_individual = copy.deepcopy(individual)
     random_probs = np.random.rand(individual[0].shape[0])

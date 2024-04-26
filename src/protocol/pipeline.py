@@ -129,8 +129,9 @@ class Pipeline:
             # define sensitive value
             _transformed_dataset = copy.deepcopy(_train_set)
             _transformed_dataset.set_feature(_protected_feature, _dummy_values[0][_value])
-            unbiasing_algorithm.fit(_transformed_dataset, _protected_feature)
-            _transformed_dataset = unbiasing_algorithm.transform(_transformed_dataset)
+            for _ in range(self.settings["num_repetitions"]):
+                unbiasing_algorithm.fit(_transformed_dataset, _protected_feature)
+                _transformed_dataset = unbiasing_algorithm.transform(_transformed_dataset)
 
             _train_set.protected_attributes[_protected_feature] = _original_values[0]
             _transformed_dataset.protected_attributes[_protected_feature] = _original_values[0]
@@ -164,8 +165,9 @@ class Pipeline:
 
         # bias mitigation
         unbiasing_algorithm.set_validation_data(validation_set)
-        unbiasing_algorithm.fit(transformed_dataset, protected_feature)
-        transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
+        for _ in range(self.settings["num_repetitions"]):
+            unbiasing_algorithm.fit(transformed_dataset, protected_feature)
+            transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
 
         return self.__post_intervention__(transformed_dataset, validation_set, test_set, protected_feature)
 
@@ -218,7 +220,7 @@ class Pipeline:
             logger.error(f'An error occurred in the pipeline: \n {e}')
             raise
 
-    def save(self, path: str = 'results_adult_income') -> None:
+    def save(self, path: str = 'results') -> None:
         if self.results is not None:
             for key, result in self.results.items():
                 write_dataframe_to_csv(df=result, dataset_name=self.dataset.name,
@@ -226,7 +228,7 @@ class Pipeline:
         else:
             raise KeyError('Results are empty!')
 
-    def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results_adult_income') -> None:
+    def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results') -> None:
         if self.results is not None:
             suffix = f'_intermediary_{attribute}_'
             write_dataframe_to_csv(df=self.results[algorithm],
@@ -235,6 +237,6 @@ class Pipeline:
         else:
             raise KeyError('Results are empty!')
 
-    def run_and_save(self, path: str = 'results_adult_income') -> None:
+    def run_and_save(self, path: str = 'results') -> None:
         self.run()
         self.save(path)

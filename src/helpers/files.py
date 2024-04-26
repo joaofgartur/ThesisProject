@@ -9,8 +9,12 @@ def extract_filename(filename):
 
 
 def create_directory(directory: str) -> None:
-    mode = 0o666
-    os.mkdir(directory, mode)
+    mode = 0o777
+    print(directory.split(os.path.sep))
+    for sub_directory in directory.split(os.path.sep):
+        print(sub_directory)
+        if not os.path.exists(sub_directory):
+            os.mkdir(sub_directory, mode)
 
 
 def write_dataframe_to_csv(df: pd.DataFrame, dataset_name: str, path: str) -> None:

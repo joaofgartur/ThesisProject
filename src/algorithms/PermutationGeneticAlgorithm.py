@@ -1,14 +1,16 @@
 import copy
 import numpy as np
 from random import sample
+
+import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 
 from algorithms.Algorithm import Algorithm
-from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters, uniform_crossover, scramble_mutation, \
-    select_best
+from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters, scramble_mutation, \
+    select_best, pmx_cromossover
+from constants import NUM_DECIMALS
 from datasets import Dataset
-from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import abs_diff, logger
+from helpers import abs_diff, logger, write_dataframe_to_csv, dict_to_dataframe
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -44,8 +46,8 @@ class PermutationGeneticAlgorithm(Algorithm):
     def __generate_population(self):
         return [self.__generate_individual() for _ in range(self.genetic_parameters.population_size)]
 
-    def __uniform_crossover(self, parent1, parent2):
-        return uniform_crossover(parent1, parent2, self.genetic_parameters.probability_crossover)
+    def __crossover(self, parent1, parent2):
+        return pmx_cromossover(parent1, parent2, self.genetic_parameters.probability_crossover)
 
     def __mutation(self, individual):
         return scramble_mutation(individual, self.genetic_parameters.probability_mutation)
@@ -78,7 +80,6 @@ class PermutationGeneticAlgorithm(Algorithm):
         return mate_pool
 
     def __performance_fitness(self, data: Dataset, predictions: Dataset):
-        performance_evaluator = ModelEvaluator(data, predictions)
         return {'performance': -1}
 
     def __fairness_fitness(self, data: Dataset, predictions: Dataset):
@@ -88,7 +89,8 @@ class PermutationGeneticAlgorithm(Algorithm):
         for metric in metrics.columns:
             if metrics[metric].dtype == 'object':
                 continue
-            result.update({metric: -abs_diff(metrics[metric].min(), metrics[metric].max())})
+            sum_of_squares = np.round(np.sum((metrics[metric] - 1.0)**2), decimals=NUM_DECIMALS)
+            result.update({metric: sum_of_squares})
 
         return result
 
@@ -143,17 +145,20 @@ class PermutationGeneticAlgorithm(Algorithm):
         logger.info(f'[PGA] Generation {0}/{self.genetic_parameters.num_generations} '
                     f'Best Individual: {[self.decoder[i] for i in best_individual[0]]}')
 
+        best_individual_df = pd.concat([pd.DataFrame([str(list(best_individual[0]))], columns=['genotype']),
+                                       dict_to_dataframe(best_individual[1]),
+                                       dict_to_dataframe(best_individual[2])], axis=1)
+        best = best_individual_df
+
         for i in range(1, self.genetic_parameters.num_generations):
             parents = self.__tournament(population)
 
-            """
             # Crossover
             new_parents = []
             for j in range(0, len(population) - 1, 2):
-                child1, child2 = self.__uniform_crossover(parents[j], parents[j + 1])
+                child1, child2 = self.__crossover(parents[j], parents[j + 1])
                 new_parents.append(child1)
                 new_parents.append(child2)
-            """
 
             # Mutation
             offsprings = []
@@ -169,5 +174,12 @@ class PermutationGeneticAlgorithm(Algorithm):
             logger.info(
                 f'[PGA] Generation {i}/{self.genetic_parameters.num_generations} '
                 f'Best Individual: {[self.decoder[i] for i in best_individual[0]]}')
+
+            best_individual_df = pd.concat([pd.DataFrame([str(list(best_individual[0]))], columns=['genotype']),
+                                            dict_to_dataframe(best_individual[1]),
+                                            dict_to_dataframe(best_individual[2])], axis=1)
+            best = pd.concat([best, best_individual_df])
+
+        write_dataframe_to_csv(best, f'pga_{self.sensitive_attribute}', 'best_individuals')
 
         return self.__phenotype(dataset, best_individual)
