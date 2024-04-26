@@ -132,3 +132,9 @@ i
 9src/best_individuals/26_04_24-12_18_46-pga_Attribute9.csv,4\a\4a5504003c35e4e7df8854ef8d58b632442dd924
 j
 :src/best_individuals/26_04_24-12_18_53-pga_Attribute13.csv,8\8\88c9971e57f1d7f2ad7fe1541ad427a281e05018
+i
+9src/best_individuals/26_04_24-12_33_35-pga_Attribute9.csv,d\c\dca5cff17d5cfc68abd063772e01170b743eac8f
+j
+:src/best_individuals/26_04_24-14_21_35-pga_Attribute13.csv,3\1\317bdd87e8ee2c8c7d4174a3a7ab43c22f0b9e52
+i
+9src/best_individuals/26_04_24-14_21_14-pga_Attribute9.csv,5\c\5caae7146518841e4102d204707771ab227d08d7
