@@ -28,7 +28,7 @@ def compute_mean_csv(folder_path, output_file):
 
             # Store values for each numeric column
             for col in col_values.keys():
-                col_values[col] = pd.concat([col_values[col], df[col]], axis=1)
+                col_values[col] = pd.concat([col_values[col].reset_index(drop=True), df[col].reset_index(drop=True)], axis=1)
 
     for col in col_values.keys():
         mean_values = np.round(col_values[col].mean(axis=1, skipna=True), decimals=4)
@@ -45,6 +45,6 @@ if __name__ == '__main__':
     algorithms = ['Massaging', 'Reweighing', 'DisparateImpactRemover', 'AIF360LearningFairRepresentations', 'LGAFFS', 'PermutationGeneticAlgorithm']
 
     for algorithm in algorithms:
-        input_folder = f"results_german_credit/{algorithm}"
+        input_folder = f"results_german_27_04_2024/{algorithm}"
         output_file = f"{input_folder}/{algorithm}_mean_values.csv"
         compute_mean_csv(input_folder, output_file)

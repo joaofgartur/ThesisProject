@@ -158,7 +158,7 @@ if __name__ == '__main__':
         'train_size': 0.8,
         'validation_size': 0.1,
         "test_size": 0.1,
-        "num_repetitions": 1
+        "num_repetitions": 2
     }
 
     set_seed(settings['seed'])
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
-    run_all_dataset = False
+    run_all_dataset = True
     num_runs = 1
 
     if run_all:
