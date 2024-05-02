@@ -80,8 +80,6 @@ c
 3src/algorithms/AIF360LearningFairRepresentations.py,6\0\60d6a08d3a04907280422f431120d5e3df35dd05
 L
 src/algorithms/LFRhelpers.py,2\9\294cf48f46a4ba25f6f5391852d8316d10cc1176
-E
-src/results_script.py,d\8\d84a4bfe8af14c51ebb630ae7557a54d41c313df
 i
 9src/best_individuals/26_04_24-14_24_47-pga_Attribute9.csv,b\8\b8da723178b93f5587178ce6c369bc45c31c3538
 j
@@ -124,24 +122,6 @@ esrc/results_german_28_04_2024/PermutationGeneticAlgorithm/PermutationGeneticAlg
 Ksrc/best_individuals_german_27_04_2024/26_04_24-15_58_04-pga_Attribute9.csv,2\4\2450b9317cebbee4cf29168dcd7ca18b50f04bb2
 {
 Ksrc/results_german_27_04_2024/Massaging/26_04_24-17_58_44-German Credit.csv,e\c\ecb0c66d38e458c80368a695b0b6ca5aea3587f2
-I
-src/new_results_script.py,5\7\57353840b4fc95a021fea8bb87fcca2879ccb556
->
-src/output.csv,5\c\5cba069f5bef92588f5e365f3245960279f6635d
-H
-src/your_output_file.csv,1\f\1fada2cfc5c7d9f33b63fb3fa8e24c6ede34b7f4
-B
-src/test_script.py,5\1\5168f1fe7ea2878e9622702e01b2e28791a8694f
-;
-src/test.py,e\6\e6ee4ae7fdce4b55ee2d65c7133de7dd089fb9e2
-C
-src/output_data.csv,b\3\b327c9a0d1ca98d0c18a6e005ab95d9b81cfaa03
-I
-src/concatenated_data.csv,b\c\bc1a5d71713eba350ecc1963a558e75a2a850dca
-M
-src/temp_files/group_Test.csv,7\d\7d1ea9b9ca44e788072836ad8a41779488531a96
-S
-#src/temp_files/group_Validation.csv,8\3\831623aa868f9206dc52b402ce1cc3458c0e0ce4
 G
 src/temp_files/Test.csv,c\6\c610b6aa9974d7bc788b6b107c5988a36cfce1e3
 r
@@ -168,11 +148,9 @@ l
 fsrc/results_german_28_04_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,f\4\f42ae0933dad9c2c7b8cf4e6dbd52225a76a36fe
 ¢
 rsrc/results_german_28_04_2024/AIF360LearningFairRepresentations/concatenated_AIF360LearningFairRepresentations.csv,6\5\6598dbf0f6ad74c0b231ee1eb5d7223fd4ef21a2
-`
-0src/results_processing_scripts/results_script.py,9\c\9c0edef529e29b44a53cca39d108652b867ec76e
 k
 ;src/results_processing_scripts/compute_agregated_metrics.py,7\d\7def2c366034af060fc183498e75369116f9f412
-V
-&src/results_processing_scripts/test.py,8\8\88a99b3dc710107564fc5af0c5bbc6ae6b471987
 ^
 .src/results_processing_scripts/table_format.py,0\5\05e072d58359cb28e11ad6057004f42edded1d17
+@
+requirements.txt,1\9\19359a61ae2446b51b549167b014da2fcf265768
