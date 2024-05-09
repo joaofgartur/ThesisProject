@@ -1,6 +1,9 @@
 import copy
 import itertools
 import math
+import os
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from random import sample
 
 import numpy as np
@@ -96,7 +99,6 @@ class LGAFFS(Algorithm):
 
     def __fitness(self, data: Dataset, individual, folds: KFold):
 
-        # invalid individual
         if sum(individual[0]) == 0:
             return [individual[0], {'performance': -1}, {}]
 
@@ -108,6 +110,17 @@ class LGAFFS(Algorithm):
 
         return [individual[0], self.__performance_fitness(data, predicted_data),
                 self.__fairness_fitness(data, predicted_data)]
+
+    def __multithread_fitness(self, data: Dataset, population, folds: KFold):
+        num_threads = os.cpu_count()
+
+        def evaluate_fitness(individual):
+            return self.__fitness(data, individual, folds)
+
+        with ThreadPoolExecutor(max_workers=num_threads) as executor:
+            fitness_results = list(executor.map(evaluate_fitness, population))
+
+        return fitness_results
 
     def __phenotype(self, data: Dataset, individual: list) -> Dataset:
         transformed_data = copy.deepcopy(data)
@@ -130,8 +143,8 @@ class LGAFFS(Algorithm):
         for i in range(self.genetic_parameters.num_generations):
             logger.info(f'[LGAFFS] Generation {i + 1}/{self.genetic_parameters.num_generations}')
 
-            for j in range(len(self.population)):
-                self.population[j] = self.__fitness(data, self.population[j], folds)
+            for j, individual in enumerate(self.__multithread_fitness(data, self.population, folds)):
+                self.population[j] = individual
 
             best_individual = self.__select_best(self.population)
             new_population = [best_individual]

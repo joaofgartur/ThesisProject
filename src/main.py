@@ -20,6 +20,7 @@ from sklearn.utils import check_random_state
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LGAFFS,
                         PermutationGeneticAlgorithm, LearnedFairRepresentations, AIF360LearningFairRepresentations)
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
+from algorithms.MultivalueLGAFFS import MultivalueLGAFFS
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
@@ -100,6 +101,7 @@ class AlgorithmOptions(Enum):
     AIF360LFR = 4
     LGAFFS = 5
     PGA = 6
+    MLGAFFS = 7
 
 
 def load_algorithm(option: Enum):
@@ -145,6 +147,20 @@ def load_algorithm(option: Enum):
                 genetic_parameters=genetic_parameters,
                 base_algorithm=Massaging()
             )
+        case AlgorithmOptions.MLGAFFS:
+            genetic_parameters = GeneticBasicParameters(
+                population_size=101,
+                num_generations=30,
+                tournament_size=2,
+                probability_crossover=0.9,
+                probability_mutation=0.05
+            )
+            return MultivalueLGAFFS(
+                genetic_parameters=genetic_parameters,
+                n_splits=3,
+                min_feature_prob=0.1,
+                max_feature_prob=0.5,
+            )
         case _:
             logger.error('Algorithm option unknown!')
             raise NotImplementedError
@@ -158,7 +174,7 @@ if __name__ == '__main__':
         'train_size': 0.8,
         'validation_size': 0.1,
         "test_size": 0.1,
-        "num_repetitions": 2
+        "num_repetitions": 1
     }
 
     set_seed(settings['seed'])
@@ -175,7 +191,7 @@ if __name__ == '__main__':
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
-    run_all_dataset = True
+    run_all_dataset = False
     num_runs = 1
 
     if run_all:
@@ -195,8 +211,8 @@ if __name__ == '__main__':
             pipeline.run_and_save()
     else:
         for i in range(max(1, num_runs)):
-            dataset = load_dataset(DatasetOptions.GERMAN)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.PGA), load_algorithm(AlgorithmOptions.Reweighing)]
+            dataset = load_dataset(DatasetOptions.ADULT)
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.MLGAFFS)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 
