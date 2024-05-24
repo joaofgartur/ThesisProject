@@ -1,0 +1,455 @@
+\begin{table}[hp]
+    \centering
+    \makebox[\linewidth]{
+        \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+            \hline
+            \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{2}{c|}{DI $\downarrow$} & \multicolumn{2}{c|}{DP $\downarrow$} & \multicolumn{2}{c|}{TPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPERBS $\downarrow$} & \multicolumn{2}{c|}{FNERBS $\downarrow$} & \multicolumn{2}{c|}{Consistency $\downarrow$} \\
+            \cline{5-18}
+            & & & & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test \\
+            \hline
+            \multirow{15}{*}{AGE} & Pre & N/A & 0 & \gray 5.5806 & \gray 0.1287 & \gray 2.0093 & \gray 0.0796 & \gray 0.1098 & \gray 0.0254 & \gray 4.0297 & \gray 4.0297 & \gray 0.1098 & \gray 0.0480 & \gray 0.0480 & \gray 0.0254 & \gray 0.0750 & \gray 0.3851 \\
+            \cline{2-18}
+               & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 1.9188 & \red 0.3289 & 0.8528 & \red 0.2414 & \green 0.0591 & \green 0.0004 & 0.9731 & 0.9731 & \green 0.0591 & \red 3.0720 & \red 3.0720 & \green 0.0004 & \red 0.1080 & 0.1765 \\
+            \cline{4-18}
+               & & & 2 & 1.9188 & \red 0.3289 & 0.8528 & \red 0.2414 & \green 0.0591 & \green 0.0004 & 0.9731 & 0.9731 & \green 0.0591 & \red 3.0720 & \red 3.0720 & \green 0.0004 & \red 0.1080 & 0.1765 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \red 7.7969 & \red 0.2719 & \red 2.8072 & \red 0.1679 & \red 0.1760 & \green 0.0621 & \red 7.4073 & \red 7.4073 & \red 0.1760 & \red 0.1920 & \red 0.1920 & \green 0.0621 & \green 0.0214 & 0.3201 \\
+            \cline{4-18}
+                & & & 2 & \red 7.7969 & \red 0.2719 & \red 2.8072 & \red 0.1679 & \red 0.1760 & \green 0.0621 & \red 7.4073 & \red 7.4073 & \red 0.1760 & \red 0.1920 & \red 0.1920 & \green 0.0621 & \green 0.0214 & 0.3201 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & 1.9188 & \green 0.2484 & 0.8528 & \red 0.1825 & \green 0.0591 & \green 0.0004 & 0.9731 & 0.9731 & \green 0.0591 & \red 2.3520 & \red 2.3520 & \green 0.0004 & \red 0.1080 & 0.2082 \\
+            \cline{4-18}
+               & & & 2 & 1.9188 & \green 0.2484 & 0.8528 & \red 0.1825 & \green 0.0591 & \green 0.0004 & 0.9731 & 0.9731 & \green 0.0591 & \red 2.3520 & \red 2.3520 & \green 0.0004 & \red 0.1080 & 0.2082 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 64.8711 & \red 102.4642 & \red 2.5948 & \red 2.0925 & \red 2.6713 & \red 1.9233 & 1.2595 & 1.2595 & \red 2.6713 & \red 1.7280 & \red 1.7280 & \red 1.9233 & \red 0.1920 & 0.0964 \\
+            \cline{4-18}
+               & & & 2 & \red 64.8711 & \red 102.4642 & \red 2.5948 & \red 2.0925 & \red 2.6713 & \red 1.9233 & 1.2595 & 1.2595 & \red 2.6713 & \red 1.7280 & \red 1.7280 & \red 1.9233 & \red 0.1920 & 0.0964 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 1.1637 & \green 0.3931 & 0.5446 & \red 0.2368 & \red 0.2391 & \red 0.1152 & 0.3218 & 0.3218 & \red 0.2391 & \red 1.3632 & \red 1.3632 & \red 0.1152 & \red 0.0849 & 0.2832 \\
+            \cline{4-18}
+               & & & 2 & 1.2033 & \green 0.5414 & 0.5571 & \red 0.3349 & \red 0.2232 & \red 0.2022 & 0.4252 & 0.4252 & \red 0.2232 & \red 1.4848 & \red 1.4848 & \red 0.2022 & \red 0.0913 & 0.2531 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & 2.6405 & 1.4235 & 1.1181 & \red 0.6319 & \red 0.5927 & \red 0.5393 & 0.8284 & 0.8284 & \red 0.5927 & \red 1.2736 & \red 1.2736 & \red 0.5393 & \red 0.0815 & 0.2744 \\
+            \cline{4-18}
+               & & & 2 & 2.2474 & 1.4612 & 1.0054 & \red 0.6573 & \red 0.6593 & \red 0.3288 & 0.6387 & 0.6387 & \red 0.6593 & \red 1.5296 & \red 1.5296 & \red 0.3288 & \red 0.0869 & 0.2880 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.6483 & \green 0.0288 & 0.4149 & \green 0.0212 & \red 0.2578 & \green 0.0254 & 0.1399 & 0.1399 & \red 0.2578 & \green 0.0000 & \green 0.0000 & \green 0.0254 & \green 0.0750 & 0.1765 \\
+            \cline{4-18}
+               & & & 2 & \green 0.3164 & \green 0.8361 & 0.2026 & \red 0.8345 & \red 0.1394 & \red 0.3214 & \green 0.0363 & \green 0.0363 & \red 0.1394 & \red 3.1104 & \red 3.1104 & \red 0.3214 & \green 0.0750 & 0.3085 \\
+            \cline{1-18}
+
+            \multirow{15}{*}{YNG} & Pre & N/A & 0 & \gray 2.7253 & \gray 0.1135 & \gray 2.0093 & \gray 0.0796 & \gray 0.1098 & \gray 0.0254 & \gray 4.0297 & \gray 4.0297 & \gray 0.1098 & \gray 0.0480 & \gray 0.0480 & \gray 0.0254 & \gray 0.0750 & \gray 0.3851 \\
+            \cline{2-18}
+                & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.1973 & \red 1.5664 & 0.1495 & \red 1.0379 & 0.1098 & \red 0.3954 & \green 0.0104 & \green 0.0104 & 0.1098 & \red 3.8880 & \red 3.8880 & \red 0.3954 & \green 0.0750 & 0.3415 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1973 & \red 1.5664 & 0.1495 & \red 1.0379 & 0.1098 & \red 0.3954 & \green 0.0104 & \green 0.0104 & 0.1098 & \red 3.8880 & \red 3.8880 & \red 0.3954 & \green 0.0750 & 0.3415 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.0537 & \green 0.0840 & \green 0.0374 & \green 0.0557 & \green 0.0591 & \green 0.0004 & 0.3345 & 0.3345 & \green 0.0591 & \red 0.7680 & \red 0.7680 & \green 0.0004 & \red 0.1080 & 0.2805 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0537 & \green 0.0840 & \green 0.0374 & \green 0.0557 & \green 0.0591 & \green 0.0004 & 0.3345 & 0.3345 & \green 0.0591 & \red 0.7680 & \red 0.7680 & \green 0.0004 & \red 0.1080 & 0.2805 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & 2.7253 & \green 0.1135 & \red 2.0093 & 0.0796 & 0.1098 & \green 0.0254 & 4.0297 & 4.0297 & 0.1098 & \green 0.0480 & \green 0.0480 & \green 0.0254 & \green 0.0750 & 0.3851 \\
+            \cline{4-18}
+               & & & 2 & 2.7253 & \green 0.1135 & \red 2.0093 & 0.0796 & 0.1098 & \green 0.0254 & 4.0297 & 4.0297 & 0.1098 & \green 0.0480 & \green 0.0480 & \green 0.0254 & \green 0.0750 & 0.3851 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 5.2042 & \red 8.6189 & 0.2881 & \red 0.2982 & \red 1.3192 & \red 1.3855 & 0.0937 & 0.0937 & \red 1.3192 & \red 0.1920 & \red 0.1920 & \red 1.3855 & \red 0.1920 & 0.0964 \\
+            \cline{4-18}
+               & & & 2 & \red 5.2042 & \red 8.6189 & 0.2881 & \red 0.2982 & \red 1.3192 & \red 1.3855 & 0.0937 & 0.0937 & \red 1.3192 & \red 0.1920 & \red 0.1920 & \red 1.3855 & \red 0.1920 & 0.0964 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & 1.4302 & \green 0.6527 & 1.0696 & \red 0.4615 & \red 0.5341 & \red 0.2890 & 0.8655 & 0.8655 & \red 0.5341 & \red 1.2672 & \red 1.2672 & \red 0.2890 & \green 0.0749 & 0.3051 \\
+            \cline{4-18}
+               & & & 2 & 1.3811 & \green 0.6632 & 1.0361 & \red 0.4718 & \red 0.5919 & \red 0.2397 & 0.8914 & 0.8914 & \red 0.5919 & \red 1.1744 & \red 1.1744 & \red 0.2397 & \red 0.0843 & 0.2712 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & 1.4950 & \green 0.8899 & 1.1181 & \red 0.6319 & \red 0.5927 & \red 0.5393 & 0.8284 & 0.8284 & \red 0.5927 & \red 1.2736 & \red 1.2736 & \red 0.5393 & \green 0.0815 & 0.2744 \\
+            \cline{4-18}
+               & & & 2 & 1.3563 & \green 0.9031 & 1.0054 & \red 0.6573 & \red 0.6593 & \red 0.3288 & 0.6387 & 0.6387 & \red 0.6593 & \red 1.5296 & \red 1.5296 & \red 0.3288 & \green 0.0869 & 0.2880 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.4931 & \green 0.0272 & 0.4149 & \green 0.0212 & \red 0.2578 & \green 0.0254 & 0.1399 & 0.1399 & \red 0.2578 & \green 0.0000 & \green 0.0000 & \green 0.0254 & \green 0.0750 & 0.1765 \\
+            \cline{4-18}
+               & & & 2 & \green 0.2565 & \red 1.2585 & 0.2026 & \red 0.8345 & \red 0.1394 & \red 0.3214 & \green 0.0363 & \green 0.0363 & \red 0.1394 & \red 3.1104 & \red 3.1104 & \red 0.3214 & \green 0.0750 & 0.3085 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Fairness metrics for Logistic Regression for sensitive attribute \textit{Age }. The cells highlighted in gray are the value before any intervention. A cell coloured in green means that the intervention successfully reduced the bias, while a red cell signifies that the intervention augmented the bias. If the cell is not highlighted, it means that the level of bias either remained the same or it was reduced to a non-acceptable level. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+    \label{tab::german_credit::age::lr}
+\end{table}
+
+\begin{table}[hp]
+    \centering
+    \makebox[\linewidth]{
+        \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+            \hline
+            \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{2}{c|}{DI $\downarrow$} & \multicolumn{2}{c|}{DP $\downarrow$} & \multicolumn{2}{c|}{TPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPERBS $\downarrow$} & \multicolumn{2}{c|}{FNERBS $\downarrow$} & \multicolumn{2}{c|}{Consistency $\downarrow$} \\
+            \cline{5-18}
+            & & & & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test \\
+            \hline
+            \multirow{15}{*}{AGE} & Pre & N/A & 0 & \gray 3.4905 & \gray 0.0389 & \gray 1.5513 & \gray 0.0240 & \gray 0.1760 & \gray 0.0254 & \gray 2.8923 & \gray 2.8923 & \gray 0.1760 & \gray 0.0480 & \gray 0.0480 & \gray 0.0254 & \gray 0.0964 & \gray 0.3201 \\
+            \cline{2-18}
+               & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 3.1396 & \green 0.2484 & 1.3958 & \red 0.1825 & 0.1760 & \green 0.0004 & 2.1403 & 2.1403 & 0.1760 & \red 2.3520 & \red 2.3520 & \green 0.0004 & \green 0.0404 & 0.1920 \\
+            \cline{4-18}
+               & & & 2 & 3.1396 & \green 0.2484 & 1.3958 & \red 0.1825 & 0.1760 & \green 0.0004 & 2.1403 & 2.1403 & 0.1760 & \red 2.3520 & \red 2.3520 & \green 0.0004 & \green 0.0404 & 0.1920 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & 4.2481 & \green 0.1016 & \red 1.8885 & \green 0.0747 & \red 0.2578 & \red 0.1839 & \red 3.7595 & \red 3.7595 & \red 0.2578 & \green 0.0480 & \green 0.0480 & \red 0.1839 & \green 0.0562 & 0.1080 \\
+            \cline{4-18}
+                & & & 2 & 4.2481 & \green 0.1016 & \red 1.8885 & \green 0.0747 & \red 0.2578 & \red 0.1839 & \red 3.7595 & \red 3.7595 & \red 0.2578 & \green 0.0480 & \green 0.0480 & \red 0.1839 & \green 0.0562 & 0.1080 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & 3.1396 & \green 0.2484 & 1.3958 & \red 0.1825 & 0.1760 & \green 0.0004 & 2.1403 & 2.1403 & 0.1760 & \red 2.3520 & \red 2.3520 & \green 0.0004 & \green 0.0404 & 0.1920 \\
+            \cline{4-18}
+               & & & 2 & 3.1396 & \green 0.2484 & 1.3958 & \red 0.1825 & 0.1760 & \green 0.0004 & 2.1403 & 2.1403 & 0.1760 & \red 2.3520 & \red 2.3520 & \green 0.0004 & \green 0.0404 & 0.1920 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 \red & \red 0.0000 & \red 0.0000 & \red 0.0000 \\
+            \cline{4-18}
+               & & & 2 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 \red & \red 0.0000 & \red 0.0000 & \red 0.0000 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 1.1257 & \green 0.4991 & 0.5391 & \red 0.2700 & \red 0.2156 & \red 0.3447 & 0.4268 & 0.4268 & \red 0.2156 & \red 0.5088 & \red 0.5088 & \red 0.3447 & 0.0945 & 0.2340 \\
+            \cline{4-18}
+               & & & 2 & \green 1.1143 & \green 0.6413 & 0.5355 & \red 0.2646 & \red 0.1864 & \red 0.3507 & 0.5057 & 0.5057 & 0.1864 & \red 0.6592 & \red 0.6592 & \red 0.3507 & \red 0.0978 & 0.2356 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & 2.2224 & \red 1.2280 & 1.0132 & \red 0.4814 & \red 0.3146 & \red 0.6377 & 1.1039 & 1.1039 & \red 0.3146 & \red 0.7248 & \red 0.7248 & \red 0.6377 & 0.0951 & 0.2658 \\
+            \cline{4-18}
+               & & & 2 & 2.4496 & \green 0.3613 & 1.0934 & \red 0.1891 & \red 0.6663 & \red 0.2142 & 0.8416 & 0.8416 & \red 0.6663 & \red 0.3664 & \red 0.3664 & \red 0.2142 & \red 0.1057 & 0.2459 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 &2.6910 & \green 0.0805 & 1.4467 & \green 0.0694 & \red 0.3558 & \green 0.0081 & 2.6677 & 2.6677 & \red 0.3558 & \red 0.7680 & \red 0.7680 & \green 0.0081 & 0.0852 & \green 0.0163 \\
+            \cline{4-18}
+               & & & 2 & \green 0.6095 & \green 1.1872 & 0.3515 & \red 1.1850 & 0.1710 & \red 0.6463 & 0.8677 & 0.8677 & 0.1710 & \red 3.2640 & \red 3.2640 & \red 0.6463 & \red 0.1034 & 0.2277 \\
+            \cline{1-18}
+
+            \multirow{15}{*}{YNG} & Pre & N/A & 0 & \gray 1.9401 & \gray 0.0363 & \gray 1.5513 & \gray 0.0240 & \gray 0.1760 & \gray 0.0254 & \gray 2.8923 & \gray 2.8923 & \gray 0.1760 & \gray 0.0480 & \gray 0.0480 & \gray 0.0254 & \gray 0.0964 & \gray 0.3201 \\
+            \cline{2-18}
+                & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.0999 & \red 2.4112 & 0.0777 & \red 1.4639 & 0.1248 & \red 0.8059 & 0.4177 & 0.4177 & 0.1248 & \red 3.8880 & \red 3.8880 & \red 0.8059 & \red 0.1080 & 0.2805 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0999 & \red 2.4112 & 0.0777 & \red 1.4639 & 0.1248 & \red 0.8059 & 0.4177 & 0.4177 & 0.1248 & \red 3.8880 & \red 3.8880 & \red 0.8059 & \red 0.1080 & 0.2805 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.0095 & \green 0.5947 & \green 0.0074 & \red 0.3940 & 0.1248 & \red 0.2017 & \green 0.0185 & \green 0.0185 & 0.1248 & \red 1.7280 & \red 1.7280 & \red 0.2017 & \red 0.1202 & 0.2611 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0095 & \green 0.5947 & \green 0.0074 & \red 0.3940 & 0.1248 & \red 0.2017 & \green 0.0185 & \green 0.0185 & 0.1248 & \red 1.7280 & \red 1.7280 & \red 0.2017 & \red 0.1202 & 0.2611 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & 1.9401 & \green 0.0363 & 1.5513 & \green 0.0240 & 0.1760 & \green 0.0254 & 2.8923 & 2.8923 & 0.1760 & \green 0.0480 & \green 0.0480 & \green 0.0254 & 0.0964 & 0.3201 \\
+            \cline{4-18}
+               & & & 2 & 1.9401 & \green 0.0363 & 1.5513 & \green 0.0240 & 0.1760 & \green 0.0254 & 2.8923 & 2.8923 & 0.1760 & \green 0.0480 & \green 0.0480 & \green 0.0254 & 0.0964 & 0.3201 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 \red & \red 0.0000 & \red 0.0000 & \red 0.0000 \\
+            \cline{4-18}
+               & & & 2 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 & \red 0.0000 \red & \red 0.0000 & \red 0.0000 & \red 0.0000 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & 1.2046 & \green 0.5032 & 0.9463 & \red 0.3411 & \red 0.2918 & \red 0.4990 & 1.0579 & 1.0579 & \red 0.2918 & \red 0.2096 & \red 0.2096 & \red 0.4990 & \red 0.1069 & 0.2762 \\
+            \cline{4-18}
+               & & & 2 & 1.4563 & \green 0.5994 & 1.1389 & \red 0.4231 & \red 0.5831 & \red 0.6081 & 1.0461 & 1.0461 & \red 0.5831 & \red 0.2656 & \red 0.2656 & \red 0.6081 & \red 0.1120 & 0.2407 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & 1.2931 & \green 0.6917 & 1.0132 & \red 0.4814 \red & \red 0.3146 & \red 0.6377 & 1.1039 & 1.1039 & \red 0.3146 & \red 0.7248 & \red 0.7248 & \red 0.6377 & 0.0951 & 0.2658 \\
+            \cline{4-18}
+               & & & 2 & 1.4018 & \green 0.2650 & 1.0934 & \red 0.1891 \red & \red 0.6663 & \red 0.2142 & 0.8416 & 0.8416 & \red 0.6663 & \red 0.3664 & \red 0.3664 & \red 0.2142 & \red 0.1057 & 0.2459 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & 1.5939 & \green 0.0726 & 1.4467 & \green 0.0694 & \red 0.3558 & \green 0.0081 & 2.6677 & 2.6677 & \red 0.3558 & \red 0.7680 & \red 0.7680 & \green 0.0081 & 0.0852 & \green 0.0163 \\
+            \cline{4-18}
+               & & & 2 & \green 0.3987 & \red 1.9435 & 0.3515 & \red 1.1850 & 0.1710 & \red 0.6463 & 0.8677 & 0.8677 & 0.1710 & \red 3.2640 & \red 3.2640 & \red 0.6463 & \red 0.1034 & 0.2277 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Fairness metrics for Support Vector Machine for sensitive attribute \textit{Age }. The cells highlighted in gray are the value before any intervention. A cell coloured in green means that the intervention successfully reduced the bias, while a red cell signifies that the intervention augmented the bias. If the cell is not highlighted, it means that the level of bias either remained the same or it was reduced to a non-acceptable level. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+    \label{tab::german_credit::age::svm}
+\end{table}
+
+\begin{table}[hp]
+    \centering
+    \makebox[\linewidth]{
+        \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+            \hline
+            \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{2}{c|}{DI $\downarrow$} & \multicolumn{2}{c|}{DP $\downarrow$} & \multicolumn{2}{c|}{TPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPERBS $\downarrow$} & \multicolumn{2}{c|}{FNERBS $\downarrow$} & \multicolumn{2}{c|}{Consistency $\downarrow$} \\
+            \cline{5-18}
+            & & & & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test \\
+            \hline
+            \multirow{15}{*}{AGE} & Pre & N/A & 0 & \gray 6.2381 & \gray 124.6889 & \gray 1.7744 & \gray 5.7264 & \gray 0.5639 & \gray 6.6270 & \gray 1.1128 & \gray 1.1128 & \gray 0.5639 & \gray 2.3520 & \gray 2.3520 & \gray 6.6270 & \gray 0.1080 & \gray 0.1080 \\
+            \cline{2-18}
+               & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.0066 & 2.0047 & \green 0.0019 & 0.8287 & 0.3295 & 0.1756 & \green 0.0185 & \green 0.0185 & 0.3295 & \red 4.8000 & \red 4.8000 & 0.1756 & 0.0480 & \red 0.2430 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0066 & 2.0047 & \green 0.0019 & 0.8287 & 0.3295 & 0.1756 & \green 0.0185 & \green 0.0185 & 0.3295 & \red 4.8000 & \red 4.8000 & 0.1756 & 0.0480 & \red 0.2430 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & 5.6481 & \green 0.0008 & 1.6064 & \green 0.0003 & 0.4392 & 0.4334 & 1.1128 & 1.1128 & 0.4392 & \red 3.0720 & \red 3.0720 & 0.4334 & 0.0852 & \red 0.1470 \\
+            \cline{4-18}
+                & & & 2 & 5.6481 & \green 0.0008 & 1.6064 & \green 0.0003 & 0.4392 & 0.4334 & 1.1128 & 1.1128 & 0.4392 & \red 3.0720 & \red 3.0720 & 0.4334 & 0.0852 & \red 0.1470 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 0.0066 & 2.0047 & \green 0.0019 & 0.8287 & 0.3295 & 0.1756 & \green 0.0185 & \green 0.0185 & 0.3295 & \red 4.8000 & \red 4.8000 & 0.1756 & \green 0.0480 & \red 0.2430 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0066 & 2.0047 & \green 0.0019 & 0.8287 & 0.3295 & 0.1756 & \green 0.0185 & \green 0.0185 & 0.3295 & \red 4.8000 & \red 4.8000 & 0.1756 & \green 0.0480 & \red 0.2430 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 87.3131 & \red 141.7231 & \red 3.4925 & 2.8942 & \red 6.2271 & 3.6310 & 0.6669 & 0.6669 & \red 6.2271 & 1.7280 & 1.7280 & 3.6310 & \red 0.4561 & \red 0.5070 \\
+            \cline{4-18}
+               & & & 2 & \red 87.3131 & \red 141.7231 & \red 3.4925 & 2.8942 & \red 6.2271 & 3.6310 & 0.6669 & 0.6669 & \red 6.2271 & 1.7280 & 1.7280 & 3.6310 & \red 0.4561 & \red 0.5070 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 0.8203 & 4.7386 & 0.3335 & 1.0958 & 0.2384 & 0.9449 & 0.8848 & 0.8848 & 0.2384 & \red 2.8304 & \red 2.8304 & 0.9449 & 0.1387 & \red 0.2245 \\
+            \cline{4-18}
+               & & & 2 & 1.7577 & 2.5475 & 0.7103 & 1.1471 & 0.5064 & 0.9997 & \red 1.4414 & \red 1.4414 & 0.5064 & \red 3.4240 & \red 3.4240 & 0.9997 & \red 0.1281 & \red 0.2401 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & \red 6.9010 & 70.8061 & \red 1.8847 & 4.1655 & \red 0.7818 & 4.1780 & \red 1.6835 & \red 1.6835 & \red 0.7818 & \red 3.1232 & \red 3.1232 & 4.1780 & \red 0.1254 & \red 0.2048 \\
+            \cline{4-18}
+               & & & 2 & 4.1392 & 42.3343 & 1.3344 & 2.7704 & 0.5610 & 2.8642 & 1.0334 & 1.0334 & 0.5610 & 1.9248 & 1.9248 & 2.8642 & \red 0.1279 & \red 0.2311 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.1621 & \green 0.7776 & 0.1037 & 0.6705 & \green 0.0005 & \green 0.0397 & 0.3750 & 0.3750 & \green 0.0005 & \red 4.8000 & \red 4.8000 & \green 0.0397 & 0.1080 & \red 0.1765 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1621 & \green 0.7776 & 0.1037 & 0.6705 & \green 0.0005 & \green 0.0397 & 0.3750 & 0.3750 & \green 0.0005 & \red 4.8000 & \red 4.8000 & \green 0.0397 & 0.1080 & \red 0.1765 \\
+            \cline{1-18}
+
+            \multirow{15}{*}{YNG} & Pre & N/A & 0 & \gray 2.9428 & \gray 13.5032 & \gray 1.7744 & \gray 5.7264 & \gray 0.5639 & \gray 6.6270 & \gray 1.1128 & \gray 1.1128 & \gray 0.5639 & \gray 2.3520 & \gray 2.3520 & \gray 6.6270 & \gray 0.1080 & \gray 0.1080 \\
+            \cline{2-18}
+                & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.1408 & \green 1.1048 & 0.1037 & 0.6705 & \green 0.0005 & \green 0.0397 & 0.3750 & 0.3750 & \green 0.0005 & \red 4.8000 & \red 4.8000 & \green 0.0397 & 0.1080 & \red 0.1765 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1408 & \green 1.1048 & 0.1037 & 0.6705 & \green 0.0005 & \green 0.0397 & 0.3750 & 0.3750 & \green 0.0005 & \red 4.8000 & \red 4.8000 & \green 0.0397 & 0.1080 & \red 0.1765 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & 2.7470 & \green 0.0008 & 1.6064 & \green 0.0003 & 0.4392 & 0.4334 & 1.1128 & 1.1128 & 0.4392 & \red 3.0720 & \red 3.0720 & 0.4334 & 0.0852 & \red 0.1470 \\
+            \cline{4-18}
+               & & & 2 & 2.7470 & \green 0.0008 & 1.6064 & \green 0.0003 & 0.4392 & 0.4334 & 1.1128 & 1.1128 & 0.4392 & \red 3.0720 & \red 3.0720 & 0.4334 & 0.0852 & \red 0.1470 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & 2.9428 & 13.5032 & 1.7744 & 5.7264 & 0.5639 & 6.6270 & 1.1128 & 1.1128 & 0.5639 & 2.3520 & 2.3520 & 6.6270 & 0.1080 & 0.1080 \\
+            \cline{4-18}
+               & & & 2 & 2.9428 & 13.5032 & 1.7744 & 5.7264 & 0.5639 & 6.6270 & 1.1128 & 1.1128 & 0.5639 & 2.3520 & 2.3520 & 6.6270 & 0.1080 & 0.1080 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \green 0.0426 & 7.1472 & \green 0.0166 & 2.2261 & 0.3295 & 1.7352 & 0.5598 & 0.5598 & 0.3295 & \red 3.0720 & \red 3.0720 & 1.7352 & 0.1612 & \red 0.3201 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0426 & 7.1472 & \green 0.0166 & 2.2261 & 0.3295 & 1.7352 & 0.5598 & 0.5598 & 0.3295 & \red 3.0720 & \red 3.0720 & 1.7352 & 0.1612 & \red 0.3201 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & 2.5464 & 6.7392 & 1.6583 & 3.4017 & \red 0.6884 & 3.6303 & 1.3120 & 1.3120 & \red 0.6884 & \red 2.3872 & \red 2.3872 & 3.6303 & 0.1396 & \red 0.2259 \\
+            \cline{4-18}
+               & & & 2 & 2.2818 & 6.1724 & 1.4865 & 3.1910 & \red 0.7116 & 3.3848 & 0.8669 & 0.8669 & \red 0.7116 & 1.9776 & 1.9776 & 3.3848 & 0.1267 & \red 0.2174 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & 2.9266 & 8.4356 & \red 1.8847 & 4.1655 & \red 0.7818 & 4.1780 & \red 1.6835 & \red 1.6835 & \red 0.7818 & \red 3.1232 & \red 3.1232 & 4.1780 & \red 0.1254 & \red 0.2048 \\
+            \cline{4-18}
+               & & & 2 & 2.0206 & 5.2249 & 1.3344 & 2.7704 & 0.5610 & 2.8642 & 1.0334 & 1.0334 & 0.5610 & 1.9248 & 1.9248 & 2.8642 & \red 0.1279 & \red 0.2311 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.1408 & \green 1.1048 & 0.1037 & 0.6705 & \green 0.0005 & \green 0.0397 & 0.3750 & 0.3750 & \green 0.0005 & \red 4.8000 & \red 4.8000 & \green 0.0397 & 0.1080 & \red 0.1765 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1408 & \green 1.1048 & 0.1037 & 0.6705 & \green 0.0005 & \green 0.0397 & 0.3750 & 0.3750 & \green 0.0005 & \red 4.8000 & \red 4.8000 & \green 0.0397 & 0.1080 & \red 0.1765 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Fairness metrics for Gaussian Naive Bayes for sensitive attribute \textit{Age }. The cells highlighted in gray are the value before any intervention. A cell coloured in green means that the intervention successfully reduced the bias, while a red cell signifies that the intervention augmented the bias. If the cell is not highlighted, it means that the level of bias either remained the same or it was reduced to a non-acceptable level. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+    \label{tab::german_credit::age::gnb}
+\end{table}
+
+\begin{table}[hp]
+    \centering
+    \makebox[\linewidth]{
+        \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+            \hline
+            \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{2}{c|}{DI $\downarrow$} & \multicolumn{2}{c|}{DP $\downarrow$} & \multicolumn{2}{c|}{TPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPERBS $\downarrow$} & \multicolumn{2}{c|}{FNERBS $\downarrow$} & \multicolumn{2}{c|}{Consistency $\downarrow$} \\
+            \cline{5-18}
+            & & & & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test \\
+            \hline
+            \multirow{15}{*}{AGE} & Pre & N/A & 0 & \gray 0.0259 & \gray 0.6147 & \gray 0.0166 & \gray 0.3795 & \gray 0.0018 & \gray 0.0177 & \gray 0.0455 & \gray 0.0455 & \gray 0.0018 & \gray 3.8880 & \gray 3.8880 & \gray 0.0177 & \gray 0.2208 & \gray 0.7366 \\
+            \cline{2-18}
+               & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.2258 & \green 0.0252 & \red 0.1447 & \green 0.0155 & \red 0.3967 & \red 0.1652 & \red 0.1230 & \red 0.1230 & \red 0.3967 & 1.8304 & 1.8304 & \red 0.1652 & \red 0.4019 & 0.5871 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0305 & \green 0.3402 & \green 0.0195 & 0.2391 & \red 0.0386 & \red 0.2371 & \red 0.1654 & \red 0.1654 & \red 0.0386 & \red 4.5184 & \red 4.5184 & \red 0.2371 & \red 0.2575 & 0.6308 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.4149 & \green 0.7575 & \red 0.2656 & \red 0.5565 & \red 0.3083 & \red 0.3121 & \red 1.0980 & \red 1.0980 & \red 0.3083 & 1.7280 & 1.7280 & \red 0.3121 & \red 0.4086 & 0.7346 \\
+            \cline{4-18}
+                & & & 2 & \green 0.2548 & \green 0.6647 & \red 0.1631 & \red 0.4880 & \red 0.2981 & \red 0.3356 & \red 0.4804 & \red 0.4804 & \red 0.2981 & 1.2560 & 1.2560 & \red 0.3356 & \red 0.3858 & 0.7152 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 0.5209 & \green 0.6169 & \red 0.3913 & \red 0.3847 & \red 0.9501 & \green 0.0031 & \red 0.6669 & \red 0.6669 & \red 0.9501 & \red 4.9536 & \red 4.9536 & \green 0.0031 & \red 0.2645 & 0.6151 \\
+            \cline{4-18}
+               & & & 2 & \green 0.2850 & \green 0.8056 & \red 0.2140 & \red 0.6088 & \red 0.6990 & \red 0.1843 & \red 0.3427 & \red 0.3427 & \red 0.6990 & \red 7.4256 & \red 7.4256 & \red 0.1843 & \red 0.2877 & 0.5535 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 166.2536 & \red 6.6524 & \red 2.9541 & \red 2.1724 & \red 1.2193 & \red 5.6377 & \red 5.6715 & \red 5.6715 & \red 1.2193 & \green 0.0000 & \green 0.0000 & \red 5.6377 & \red 0.4561 & 0.2430 \\
+            \cline{4-18}
+               & & & 2 & \red 166.2536 & \red 6.6524 & \red 2.9541 & \red 2.1724 & \red 1.2193 & \red 5.6377 & \red 5.6715 & \red 5.6715 & \red 1.2193 & \green 0.0000 & \green 0.0000 & \red 5.6377 & \red 0.4561 & 0.2430 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 1.0484 & \red 2.3564 & \red 0.3697 & \red 0.5956 & \red 0.3066 & \red 0.8829 & \red 0.3942 & \red 0.3942 & \red 0.3066 & 1.3088 & 1.3088 & \red 0.8829 & \red 0.4483 & 0.6546 \\
+            \cline{4-18}
+               & & & 2 & \red 2.1370 & \red 2.8357 & \red 0.6651 & \red 0.7237 & \red 0.5869 & \red 0.5234 & \red 0.7102 & \red 0.7102 & \red 0.5869 & 1.7680 & 1.7680 & \red 0.5234 & \red 0.4246 & 0.6605 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & \red 1.4461 & \red 6.6651 & \red 0.5303 & \red 1.1595 & \red 0.5953 & \red 1.4217 & \red 0.6320 & \red 0.6320 & \red 0.5953 & 2.0016 & 2.0016 & \red 1.4217 & \red 0.4520 & 0.6213 \\
+            \cline{4-18}
+               & & & 2 & \red 3.6316 & \red 5.7655 & \red 1.0122 & \red 1.2124 & \red 1.1951 & \red 1.5032 & \red 0.8752 & \red 0.8752 & \red 1.1951 & 1.9056 & 1.9056 & \red 1.5032 & \red 0.4476 & 0.6010 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.0015 & \green 0.1420 & \green 0.0008 & 0.0876 & \red 0.1374 & \green 0.0189 & \green 0.0741 & \green 0.0741 & \red 0.1374 & 1.7280 & 1.7280 & \green 0.0189 & \red 0.5079 & 0.5563 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1238 & \green 0.3548 & \green 0.0750 & 0.2307 & \red 0.1110 & \red 0.1801 & \red 0.7321 & \red 0.7321 & \red 0.1110 & 2.1520 & 2.1520 & \red 0.1801 & \red 0.4475 & 0.4613 \\
+            \cline{1-18}
+
+            \multirow{15}{*}{YNG} & Pre & N/A & 0 & \gray 0.0244 & \gray 0.8465 & \gray 0.0166 & \gray 0.3795 & \gray 0.0018 & \gray 0.0177 & \gray 0.0455 & \gray 0.0455 & \gray 0.0018 & \gray 3.8880 & \gray 3.8880 & \gray 0.0177 & \gray 0.2208 & \gray 0.7366 \\
+            \cline{2-18}
+                & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.0619 & \green 0.6154 & \green 0.0362 & 0.2900 & \green 0.0150 & \green 0.0033 & \red 1.1128 & \red 1.1128 & \green 0.0150 & 3.0272 & 3.0272 & \green 0.0033 & \red 0.3829 & 0.5022 \\
+            \cline{4-18}
+               & & & 2 & \green 0.2117 & \green 0.4311 & \red 0.1082 & 0.2208 & \red 0.1690 & \red 0.0774 & \red 0.8790 & \red 0.8790 & \red 0.1690 & 2.0864 & 2.0864 & \red 0.0774 & 0.4114 & 0.4623 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.2739 & \green 0.8601 & \red 0.1458 & \red 0.4623 & \red 0.4010 & \red 0.4139 & \red 0.1157 & \red 0.1157 & \red 0.4010 & 0.7824 & 0.7824 & \red 0.4139 & 0.4851 & \red 0.8337 \\
+            \cline{4-18}
+               & & & 2 & \green 0.2805 & \red 1.4686 & \red 0.1479 & \red 0.8034 & \red 0.3276 & \red 0.2842 & \red 0.2765 & \red 0.2765 & \red 0.3276 & 3.0992 & 3.0992 & \red 0.2842 & 0.5056 & \red 0.7424 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 0.2725 & \green 0.4727 & \red 0.1451 & 0.2304 & \red 0.2948 & \green 0.0369 & \red 0.3272 & \red 0.3272 & \red 0.2948 & 3.3792 & 3.3792 & \green 0.0369 & 0.4043 & 0.7317 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0450 & \red 1.6227 & \green 0.0282 & \red 0.7369 & \green 0.0634 & \red 0.3044 & \red 0.3832 & \red 0.3832 & \green 0.0634 & \red 7.1696 & \red 7.1696 & \red 0.3044 & 0.2832 & 0.6262 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 2.0187 & \red 8.6060 & \red 0.2037 & \red 1.1916 & \red 0.6325 & \red 1.5066 & \red 0.1399 & \red 0.1399 & \red 0.6325 & 1.2000 & 1.2000 & \red 1.5066 & 0.1765 & 0.5331 \\
+            \cline{4-18}
+               & & & 2 & \red 2.0187 & \red 8.6060 & \red 0.2037 & \red 1.1916 & \red 0.6325 & \red 1.5066 & \red 0.1399 & \red 0.1399 & \red 0.6325 & 1.2000 & 1.2000 & \red 1.5066 & 0.1765 & 0.5331 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \red 1.2684 & \red 1.5011 & \red 0.7942 & \red 0.7928 & \red 0.7358 & \red 1.0525 & \red 1.0640 & \red 1.0640 & \red 0.7358 & 1.6464 & 1.6464 & \red 1.0525 & 0.4643 & 0.6251 \\
+            \cline{4-18}
+               & & & 2 & \red 1.4472 & \red 2.0187 & \red 0.8749 & \red 1.0483 & \red 0.8017 & \red 0.9291 & \red 0.8272 & \red 0.8272 & \red 0.8017 & 2.2160 & 2.2160 & \red 0.9291 & 0.4573 & 0.5766 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & \green 0.8716 & \red 2.2287 & \red 0.5303 & \red 1.1595 & \red 0.5953 & \red 1.4217 & \red 0.6320 & \red 0.6320 & \red 0.5953 & 2.0016 & 2.0016 & \red 1.4217 & 0.4520 & 0.6224 \\
+            \cline{4-18}
+               & & & 2 & \red 1.7274 & \red 2.2832 & \red 1.0122 & \red 1.2124 & \red 1.1951 & \red 1.5032 & \red 0.8752 & \red 0.8752 & \red 1.1951 & 1.9056 & 1.9056 & \red 1.5032 & 0.4476 & 0.6010 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.0015 & \green 0.1640 & \green 0.0008 & 0.0876 & \red 0.1374 & \green 0.0189 & \green 0.0741 & \green 0.0741 & \red 0.1374 & 1.7280 & 1.7280 & \green 0.0189 & 0.5079 & 0.5563 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1420 & \green 0.4512 & \green 0.0750 & 0.2307 & \red 0.1110 & \red 0.1801 & \red 0.7321 & \red 0.7321 & \red 0.1110 & 2.1520 & 2.1520 & \red 0.1801 & 0.4475 & 0.4613 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Fairness metrics for Decision Tree for sensitive attribute \textit{Age }. The cells highlighted in gray are the value before any intervention. A cell coloured in green means that the intervention successfully reduced the bias, while a red cell signifies that the intervention augmented the bias. If the cell is not highlighted, it means that the level of bias either remained the same or it was reduced to a non-acceptable level. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+    \label{tab::german_credit::age::dt}
+\end{table}
+
+\begin{table}[hp]
+    \centering
+    \makebox[\linewidth]{
+        \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+            \hline
+            \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{2}{c|}{DI $\downarrow$} & \multicolumn{2}{c|}{DP $\downarrow$} & \multicolumn{2}{c|}{TPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPERBS $\downarrow$} & \multicolumn{2}{c|}{FNERBS $\downarrow$} & \multicolumn{2}{c|}{Consistency $\downarrow$} \\
+            \cline{5-18}
+            & & & & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test \\
+            \hline
+            \multirow{15}{*}{AGE} & Pre & N/A & 0 & \gray 2.4331 & \gray 0.4156 & \gray 1.1021 & \gray 0.2147 & \gray 1.0065 & \gray 0.5288 & \gray 0.3125 & \gray 0.3125 & \gray 1.0065 & \gray 0.1920 & \gray 0.1920 & \gray 0.5288 & \gray 0.0860 & \gray 0.1817 \\
+            \cline{2-18}
+               & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.1299 & \green 0.5405 & 0.0801 & \red 0.4656 & \green 0.0738 & 0.1315 & \green 0.0025 & \green 0.0025 & \green 0.0738 & \red 2.9760 & \red 2.9760 & 0.1315 & \red 0.0964 & 0.1339 \\
+            \cline{4-18}
+               & & & 2 & \green 0.3614 & \green 0.4100 & 0.2001 & \red 0.3489 & 0.1375 & 0.1721 & 0.3259 & 0.3259 & 0.1375 & \red 1.9088 & \red 1.9088 & 0.1721 & \red 0.1037 & 0.1499 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.2310 & \green 0.2813 & 0.1480 & \red 0.2427 & 0.3463 & \green 0.0726 & \red 0.6461 & \red 0.6461 & 0.3463 & \red 1.6720 & \red 1.6720 & \green 0.0726 & 0.0852 & \red 0.2418 \\
+            \cline{4-18}
+                & & & 2 & \green 0.4651 & \green 0.2971 & 0.2563 & \red 0.2501 & 0.1572 & 0.1040 & 0.2556 & 0.2556 & 0.1572 & \red 1.9552 & \red 1.9552 & 0.1040 & \red 0.0998 & 0.1242 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 0.1586 & \green 0.4601 & 0.1015 & \red 0.3968 & 0.2529 & 0.2017 & \red 0.6669 & \red 0.6669 & 0.2529 & \red 1.7488 & \red 1.7488 & 0.2017 & \green 0.0673 & 0.1371 \\
+            \cline{4-18}
+               & & & 2 & \green 0.2570 & \green 0.4763 & 0.1470 & \red 0.4077 & 0.1369 & 0.1837 & 0.3428 & 0.3428 & 0.1369 & \red 2.2048 & \red 2.2048 & 0.1837 & \red 0.0903 & 0.1618 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 5.8397 & \red 1.9630 & 0.9346 & \red 0.4908 & 0.9441 & 0.2102 & \green 0.0104 & \green 0.0104 & 0.9441 & \red 1.2000 & \red 1.2000 & 0.2102 & \red 0.2082 & \red 0.3000 \\
+            \cline{4-18}
+               & & & 2 & \red 5.8397 & \red 1.9630 & 0.9346 & \red 0.4908 & 0.9441 & 0.2102 & \green 0.0104 & \green 0.0104 & 0.9441 & \red 1.2000 & \red 1.2000 & 0.2102 & \red 0.2082 & \red 0.3000 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 0.7571 & \red 1.9490 & 0.3339 & \red 0.5673 & 0.2428 & \red 0.8422 & \red 0.8105 & \red 0.8105 & 0.2428 & \red 0.7248 & \red 0.7248 & \red 0.8422 & \red 0.1176 & \red 0.3504 \\
+            \cline{4-18}
+               & & & 2 & 1.4404 & \red 1.9234 & 0.5693 & \red 0.5587 & 0.5930 & \red 0.7704 & \red 0.4909 & \red 0.4909 & 0.5930 & \red 0.8048 & \red 0.8048 & \red 0.7704 & \red 0.1430 & \red 0.3516 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & 1.2868 & \red 2.5864 & 0.6168 & \red 0.8115 & 0.4446 & \red 1.0929 & 0.2651 & 0.2651 & 0.4446 & \red 0.8096 & \red 0.8096 & \red 1.0929 & \red 0.1289 & \red 0.3272 \\
+            \cline{4-18}
+               & & & 2 & 2.0938 & \red 2.2958 & 0.9105 & \red 0.7542 & 0.9407 & \red 1.2945 & \red 0.3858 & \red 0.3858 & 0.9407 & \red 0.7280 & \red 0.7280 & \red 1.2945 & \red 0.1523 & \red 0.3593 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.1181 & \green 0.7699 & \green 0.0755 & \red 0.7697 & 0.1098 & 0.2832 & \red 0.3359 & \red 0.3359 & 0.1098 & \red 2.9712 & \red 2.9712 & 0.2832 & \red 0.1354 & \red 0.2799 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1072 & \green 0.2003 & \green 0.0677 & 0.1669 & 0.1199 & 0.1063 & \red 0.6060 & \red 0.6060 & 0.1199 & \red 2.3680 & \red 2.3680 & 0.1063 & \red 0.1563 & \red 0.3288 \\
+            \cline{1-18}
+
+            \multirow{15}{*}{YNG} & Pre & N/A & 0 & \gray 1.3806 & \gray 0.3235 & \gray 1.1021 & \gray 0.2147 & \gray 1.0065 & \gray 0.5288 & \gray 0.3125 & \gray 0.3125 & \gray 1.0065 & \gray 0.1920 & \gray 0.1920 & \gray 0.5288 & \gray 0.0860 & \gray 0.1817 \\
+            \cline{2-18}
+                & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.0519 & \green 0.5749 & \green 0.0362 & \red 0.3809 & \green 0.0267 & 0.1971 & 0.1379 & 0.1379 & \green 0.0267 & \red 1.6848 & \red 1.6848 & 0.1971 & \red 0.2234 & \red 0.3383 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0435 & \green 0.4374 & \green 0.0332 & \red 0.2816 & 0.1027 & 0.1203 & 0.6695 & 0.6695 & 0.1027 & \red 3.2208 & \red 3.2208 & 0.1203 & \red 0.1449 & \red 0.3135 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.9779 & \green 0.0406 & 0.7838 & \green 0.0272 & 0.2611 & 0.1172 & \red 0.4762 & \red 0.4762 & 0.2611 & \red 0.4192 & \red 0.4192 & 0.1172 & \red 0.0948 & 0.1607 \\
+            \cline{4-18}
+               & & & 2 & \green 0.6110 & \green 0.1066 & 0.4922 & \green 0.0750 & 0.2663 & 0.1226 & \red 0.3214 & \red 0.3214 & 0.2663 & \red 0.3696 & \red 0.3696 & 0.1226 & 0.0810 & \red 0.1946 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 1.0689 & \green 0.0087 & 0.8778 & \green 0.0063 & 0.2611 & \green 0.0307 & \red 0.8162 & \red 0.8162 & 0.2611 & \red 0.4176 & \red 0.4176 & \green 0.0307 & \green 0.0744 & \red 0.2244 \\
+            \cline{4-18}
+               & & & 2 & \green 0.6396 & \green 0.1164 & 0.5199 & 0.0829 & 0.2952 & 0.1392 & 0.2777 & 0.2777 & 0.2952 & \red 0.2256 & \red 0.2256 & 0.1392 & 0.0795 & 0.1809 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 6.6129 & \red 3.0242 & 0.6669 & \red 0.5299 & \red 1.6979 & \red 0.9177 & \red 0.7235 & \red 0.7235 & \red 1.6979 & \green 0.0000 & \green 0.0000 & \red 0.9177 & \red 0.1470 & \red 0.4086 \\
+            \cline{4-18}
+               & & & 2 & \red 6.6129 & \red 3.0242 & 0.6669 & \red 0.5299 & \red 1.6979 & \red 0.9177 & \red 0.7235 & \red 0.7235 & \red 1.6979 & \green 0.0000 & \green 0.0000 & \red 0.9177 & \red 0.1470 & \red 0.4086 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 0.9207 & \green 1.0626 & 0.6984 & \red 0.6695 & 0.7269 & \red 0.9605 & 0.1704 & 0.1704 & 0.7269 & \red 0.7456 & \red 0.7456 & \red 0.9605 & \red 0.1063 & \red 0.3369 \\
+            \cline{4-18}
+               & & & 2 & 1.2203 & \green 0.9270 & 0.8877 & \red 0.5671 & 0.7296 & \red 1.1577 & \red 0.4480 & \red 0.4480 & 0.7296 & \red 0.5024 & \red 0.5024 & \red 1.1577 & \red 0.1564 & \red 0.3518 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & \green 0.8341 & \red 1.2259 & 0.6168 & \red 0.8115 & 0.4446 & \red 1.0929 & 0.2651 & 0.2651 & 0.4446 & \red 0.8096 & \red 0.8096 & \red 1.0929 & \red 0.1289 & \red 0.3272 \\
+            \cline{4-18}
+               & & & 2 & 1.2524 & \red 1.2214 & 0.9105 & \red 0.7542 & 0.9407 & \red 1.2945 & \red 0.3858 & \red 0.3858 & 0.9407 & \red 0.7280 & \red 0.7280 & \red 1.2945 & \red 0.1523 & \red 0.3593 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.1033 & \green 1.0985 & 0.0755 & \red 0.7697 & 0.1098 & 0.2832 & \red 0.3359 & \red 0.3359 & 0.1098 & \red 2.9712 & \red 2.9712 & 0.2832 & \red 0.1354 & \red 0.2799 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0895 & \green 0.2529 & \green 0.0677 & 0.1669 & 0.1199 & 0.1063 & \red 0.6060 & \red 0.6060 & 0.1199 & \red 2.3680 & \red 2.3680 & 0.1063 & \red 0.1563 & \red 0.3288 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Fairness metrics for Random Forest for sensitive attribute \textit{Age }. The cells highlighted in gray are the value before any intervention. A cell coloured in green means that the intervention successfully reduced the bias, while a red cell signifies that the intervention augmented the bias. If the cell is not highlighted, it means that the level of bias either remained the same or it was reduced to a non-acceptable level. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+    \label{tab::german_credit::age::rf}
+\end{table}
+
+\begin{table}[hp]
+    \centering
+    \makebox[\linewidth]{
+        \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+            \hline
+            \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{2}{c|}{DI $\downarrow$} & \multicolumn{2}{c|}{DP $\downarrow$} & \multicolumn{2}{c|}{TPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPRDiff $\downarrow$} & \multicolumn{2}{c|}{FPERBS $\downarrow$} & \multicolumn{2}{c|}{FNERBS $\downarrow$} & \multicolumn{2}{c|}{Consistency $\downarrow$} \\
+            \cline{5-18}
+            & & & & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test & Val & Test \\
+            \hline
+            \multirow{15}{*}{AGE} & Pre & N/A & 0 & \gray 0.0583 & \gray 0.0021 & \gray 0.0374 & \gray 0.0013 & \gray 0.0044 & \gray 0.2017 & \gray 0.0104 & \gray 0.0104 & \gray 0.0044 & \gray 0.0480 & \gray 0.0480 & \gray 0.2017 & \gray 0.1765 & \gray 0.2255 \\
+            \cline{2-18}
+               & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.0259 & \green 0.3289 & \green 0.0166 & \red 0.2414 & \green 0.0239 & \red 0.2905 & \red 2.3436 & \red 2.3436 & \green 0.0239 & \red 0.7680 & \red 0.7680 & \red 0.2905 & 0.1202 & \red 0.2611 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0259 & \green 0.3289 & \green 0.0166 & \red 0.2414 & \green 0.0239 & \red 0.2905 & \red 2.3436 & \red 2.3436 & \green 0.0239 & \red 0.7680 & \red 0.7680 & \red 0.2905 & 0.1202 & \red 0.2611 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.0744 & \green 0.0759 & \green 0.0560 & \green 0.0557 & \red 0.1248 & \green 0.0323 & \red 1.1128 & \red 1.1128 & \red 0.1248 & \red 0.7680 & \red 0.7680 & \green 0.0323 & 0.1080 & 0.1920 \\
+            \cline{4-18}
+                & & & 2 & \green 0.0744 & \green 0.0759 & \green 0.0560 & \green 0.0557 & \red 0.1248 & \green 0.0323 & \red 1.1128 & \red 1.1128 & \red 0.1248 & \red 0.7680 & \red 0.7680 & \green 0.0323 & 0.1080 & 0.1920 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 0.1779 & \green 0.4191 & \red 0.1335 & \red 0.3079 & \red 0.2811 & \red 0.3954 & \red 1.1128 & \red 1.1128 & \red 0.2811 & \red 0.7680 & \red 0.7680 & \red 0.3954 & 0.1202 & \red 0.2611 \\
+            \cline{4-18}
+               & & & 2 & \green 0.1779 & \green 0.4191 & \red 0.1335 & \red 0.3079 & \red 0.2811 & \red 0.3954 & \red 1.1128 & \red 1.1128 & \red 0.2811 & \red 0.7680 & \red 0.7680 & \red 0.3954 & 0.1202 & \red 0.2611 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 4.0517 & \red 24.2568 & \red 0.2881 & \red 1.1140 & \green 0.0591 & \red 0.4740 & \red 0.1665 & \red 0.1665 & \green 0.0591 & \red 2.3520 & \red 2.3520 & \red 0.4740 & 0.1612 & \red 0.2430 \\
+            \cline{4-18}
+               & & & 2 & \red 4.0517 & \red 24.2568 & \red 0.2881 & \red 1.1140 & \green 0.0591 & \red 0.4740 & \red 0.1665 & \red 0.1665 & \green 0.0591 & \red 2.3520 & \red 2.3520 & \red 0.4740 & 0.1612 & \red 0.2430 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 0.5253 & \red 2.1969 & \red 0.2181 & \red 0.5395 & \red 0.1604 & \red 1.0186 & \red 1.0901 & \red 1.0901 & \red 0.1604 & \red 0.6720 & \red 0.6720 & \red 1.0186 & 0.1655 & \red 0.4506 \\
+            \cline{4-18}
+               & & & 2 & \green 0.8244 & \green 1.1875 & \red 0.3347 & \red 0.4299 & \red 0.2953 & \red 0.5795 & \red 0.5849 & \red 0.5849 & \red 0.2953 & \red 1.5040 & \red 1.5040 & \red 0.5795 & \red 0.1848 & \red 0.4444 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & \red 1.2230 & \green 0.9004 & \red 0.5066 & \red 0.2989 & \red 0.3121 & \red 0.5562 & \red 0.6764 & \red 0.6764 & \red 0.3121 & \red 1.2832 & \red 1.2832 & \red 0.5562 & 0.1542 & \red 0.4116 \\
+            \cline{4-18}
+               & & & 2 & \red 1.7731 & \green 1.0189 & \red 0.6700 & \red 0.3678 & \red 0.5780 & \red 0.7181 & \red 0.4059 & \red 0.4059 & \red 0.5780 & \red 0.9872 & \red 0.9872 & \red 0.7181 & 0.1638 & \red 0.4722 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.0744 & \green 0.0406 & \green 0.0560 & \green 0.0298 & \red 0.2811 & \green 0.0726 & \red 0.3345 & \red 0.3345 & \red 0.2811 & \red 0.1920 & \red 0.1920 & \green 0.0726 & \red 0.2430 & \red 0.2082 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0201 & \green 0.8393 & \green 0.0145 & \red 0.7226 & \green 0.0597 & \red 0.3308 & \red 0.9572 & \red 0.9572 & \green 0.0597 & \red 3.1488 & \red 3.1488 & \red 0.3308 & 0.1554 & \red 0.5120 \\
+            \cline{1-18}
+
+            \multirow{15}{*}{YNG} & Pre & N/A & 0 & \gray 0.0537 & \gray 0.0022 & \gray 0.0374 & \gray 0.0013 & \gray 0.0044 & \gray 0.2017 & \gray 0.0104 & \gray 0.0104 & \gray 0.0044 & \gray 0.0480 & \gray 0.0480 & \gray 0.2017 & \gray 0.1765 & \gray 0.2255 \\
+            \cline{2-18}
+                & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.0067 & \red 1.5677 & \green 0.0042 & \red 0.8958 & \green 0.0044 & \red 0.3954 & \red 1.1128 & \red 1.1128 & \green 0.0044 & \red 3.8880 & \red 3.8880 & \red 0.3954 & 0.1335 & \red 0.5880 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0067 & \red 1.5677 & \green 0.0042 & \red 0.8958 & \green 0.0044 & \red 0.3954 & \red 1.1128 & \red 1.1128 & \green 0.0044 & \red 3.8880 & \red 3.8880 & \red 0.3954 & 0.1335 & \red 0.5880 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{REW} & 1 & \green 0.0927 & \green 0.0363 & \green 0.0666 & \green 0.0240 & \red 0.1098 & 0.1149 & \red 0.3345 & \red 0.3345 & \red 0.1098 & \red 0.4320 & \red 0.4320 & 0.1149 & 0.1470 & \red 0.2805 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0927 & \green 0.0363 & \green 0.0666 & \green 0.0240 & \red 0.1098 & 0.1149 & \red 0.3345 & \red 0.3345 & \red 0.1098 & \red 0.4320 & \red 0.4320 & 0.1149 & 0.1470 & \red 0.2805 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{DIR} & 1 & \green 0.0000 & \green 0.0170 & \green 0.0000 & \green 0.0100 & \green 0.0239 & \green 0.0048 & \red 1.1128 & \red 1.1128 & \green 0.0239 & \red 0.7680 & \red 0.7680 & \green 0.0048 & 0.1612 & \red 0.3630 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0000 & \green 0.0170 & \green 0.0000 & \green 0.0100 & \green 0.0239 & \green 0.0048 & \red 1.1128 & \red 1.1128 & \green 0.0239 & \red 0.7680 & \red 0.7680 & \green 0.0048 & 0.1612 & \red 0.3630 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{LFR} & 1 & \red 78.3534 & \red 45.6679 & \red 1.8318 & \red 0.7470 & \red 6.0104 & \red 0.7023 & \red 0.0937 & \red 0.0937 & \red 6.0104 & \red 1.2000 & \red 1.2000 & \red 0.7023 & 0.1202 & \red 0.2255 \\
+            \cline{4-18}
+               & & & 2 & \red 78.3534 & \red 45.6679 & \red 1.8318 & \red 0.7470 & \red 6.0104 & \red 0.7023 & \red 0.0937 & \red 0.0937 & \red 6.0104 & \red 1.2000 & \red 1.2000 & \red 0.7023 & 0.1202 & \red 0.2255 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{FFS} & 1 & \green 0.8069 & \green 0.2335 & \red 0.5534 & \red 0.1383 & \red 0.4336 & \red 0.5782 & \red 0.5576 & \red 0.5576 & \red 0.4336 & \red 1.1936 & \red 1.1936 & \red 0.5782 & 0.1530 & \red 0.4367 \\
+            \cline{4-18}
+               & & & 2 & \green 1.0196 & \green 0.3962 & \red 0.6981 & \red 0.2401 & \red 0.5384 & \red 0.8718 & \red 0.5821 & \red 0.5821 & \red 0.5384 & \red 1.3344 & \red 1.3344 & \red 0.8718 & 0.1687 & \red 0.4325 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{MFS} & 1 & \green 0.7223 & \green 0.5028 & \red 0.5066 & \red 0.2989 & \red 0.3121 & \red 0.5562 & \red 0.6764 & \red 0.6764 & \red 0.3121 & \red 1.2832 & \red 1.2832 & \red 0.5562 & 0.1542 & \red 0.4116 \\
+            \cline{4-18}
+               & & & 2 & \green 1.0279 & \green 0.6028 & \red 0.6700 & \red 0.3678 & \red 0.5780 & \red 0.7181 & \red 0.4059 & \red 0.4059 & \red 0.5780 & \red 0.9872 & \red 0.9872 & \red 0.7181 & 0.1638 & \red 0.4722 \\
+            \cline{3-18}
+                &  & \multirow{2}{*}{PGA} & 1 & \green 0.0827 & \green 0.0438 & \green 0.0560 & \green 0.0298 & \red 0.2811 & \green 0.0726 & \red 0.3345 & \red 0.3345 & \red 0.2811 & \red 0.1920 & \red 0.1920 & \green 0.0726 & \red 0.2430 & 0.2082 \\
+            \cline{4-18}
+               & & & 2 & \green 0.0219 & \red 1.2629 & \green 0.0145 & \red 0.7226 & \green 0.0597 & \red 0.3308 & \red 0.9572 & \red 0.9572 & \green 0.0597 & \red 3.1488 & \red 3.1488 & \red 0.3308 & 0.1554 & \red 0.5120 \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Fairness metrics for XGBoost for sensitive attribute \textit{Age }. The cells highlighted in gray are the value before any intervention. A cell coloured in green means that the intervention successfully reduced the bias, while a red cell signifies that the intervention augmented the bias. If the cell is not highlighted, it means that the level of bias either remained the same or it was reduced to a non-acceptable level. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+    \label{tab::german_credit::age::xgboost}
+\end{table}
