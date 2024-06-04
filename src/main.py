@@ -181,10 +181,10 @@ if __name__ == '__main__':
 
     test_classifier = XGBClassifier(random_state=settings['seed'])
     surrogate_models = {
-        'LR': LogisticRegression(),
+        #'LR': LogisticRegression(),
         'SVC': SVC(),
         'GNB': GaussianNB(),
-        "DT": DecisionTreeClassifier(),
+        #"DT": DecisionTreeClassifier(),
         "RF": RandomForestClassifier(),
     }
 
@@ -212,7 +212,7 @@ if __name__ == '__main__':
     else:
         for i in range(max(1, num_runs)):
             dataset = load_dataset(DatasetOptions.ADULT)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.MLGAFFS)]
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.AIF360LFR)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 

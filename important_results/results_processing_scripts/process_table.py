@@ -154,8 +154,22 @@ def apply_padding(input_file, output_file, num_decimals):
     write_file(content, output_file)
 
 
+def count_colors(table):
+    patterns = {'green': r'\\green', 'red': r'\\red', 'yellow': r'\\yellow'}
+    counts = {}
+    for key, pattern in patterns.items():
+        count = len(re.findall(pattern, table))
+        counts.update({key: count})
+
+    for key, value in counts.items():
+        print(f'{key}: {value}')
+
+
 def apply_analysis(input_file):
     content = read_file(input_file, False)
+
+    count_colors(read_file(input_file))
+
     stats = process_table(content)
     increase = 0
     unchanged = 0
@@ -164,7 +178,7 @@ def apply_analysis(input_file):
         increase += stat[0]
         decrease += stat[1]
         unchanged += stat[2]
-    print(f'Increased: {increase} Decreased: {decrease} Unchanged: {unchanged}')
+    print(f'Iteration stats: \n Increased: {increase} Decreased: {decrease} Unchanged: {unchanged}')
 
 def process_latex_table(input_file, output_file, num_decimals, highlight, analysis):
 

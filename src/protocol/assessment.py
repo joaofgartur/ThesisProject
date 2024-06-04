@@ -14,6 +14,7 @@ from evaluation import FairnessEvaluator
 
 
 def get_classifier_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
+
     pipeline = Pipeline([
         ('classifier', model)
     ])
@@ -79,11 +80,13 @@ def assess_all_surrogates(train_set: Dataset,
     df = pd.DataFrame()
 
     for surrogate in surrogate_classifiers:
-        _, surrogate_model_results = assess_classifier(
+        decisions, surrogate_model_results = assess_classifier(
             surrogate_classifiers[surrogate],
             train_set,
             validation_set,
             protected_attribute)
+        
+        print(f'Outcomes for surrogate {surrogate}: \n{decisions.value_counts()}')
 
         df = pd.concat([df, surrogate_model_results]).reset_index(drop=True)
 
@@ -107,12 +110,12 @@ def data_assessment(dataset: Dataset, fixed_dataset: Dataset, sensitive_attribut
     print(f'\t{bold("Features")}:')
     print(
         f'\t\t{bold("Data Description Differences")}: \n{data_description_diff(dataset.features, fixed_dataset.features).to_string()}')
-    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.features)}')
-    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.features)}')
+    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.features).to_string()}')
+    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.features).to_string()}')
 
     # compare targets
     print(f'\t{bold("Targets")}:')
     print(
         f'\t\t{bold("Data Description Differences")}: \n{data_description_diff(dataset.targets, fixed_dataset.targets).to_string()}')
-    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.targets)}')
-    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.targets)}')
+    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.targets).to_string()}')
+    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.targets).to_string()}')

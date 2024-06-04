@@ -57,6 +57,7 @@ class AIF360LearningFairRepresentations(Algorithm):
                                              targets=transformed_data.labels)
     
         unique_values = np.unique(transformed_dataset.targets)
+        print(f'unique_values: {unique_values}')
         if len(unique_values) == 1 and (unique_values[0] == 0 or unique_values[0] == 1):
             print('All targets are either 0 or 1. This is not expected. Check the optimization results_adult_income.')
             return data

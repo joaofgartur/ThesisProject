@@ -95,12 +95,8 @@ class Dataset(metaclass=abc.ABCMeta):
         # Assuming 'subgroup_column' contains the subgroup identifiers
         subgroup_counts = stratify_criteria.value_counts()
 
-        print(subgroup_counts)
-
         # Identify subgroups with dimensionality 1
         subgroups_to_remove = subgroup_counts[subgroup_counts == 1].index
-
-        print(subgroups_to_remove)
 
         indexes_to_remove = []
         columns = subgroups_to_remove.names
@@ -111,19 +107,10 @@ class Dataset(metaclass=abc.ABCMeta):
 
             indexes_to_remove.append(df.index.to_list()[0])
             
-        print(f'to remove:\n {indexes_to_remove}')
-
-        print(self.features.shape)
         self.features = self.features.drop(index=indexes_to_remove)
-        print(self.features.shape)
-
-        print(self.targets.shape)
         self.targets = self.targets.drop(index=indexes_to_remove)
-        print(self.targets.shape)
-
-        print(stratify_criteria.value_counts())
+        
         stratify_criteria = stratify_criteria.drop(index=indexes_to_remove)
-        print(stratify_criteria.value_counts())
 
 
         x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,

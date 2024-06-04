@@ -6,7 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset, update_dataset
 from helpers import logger, write_dataframe_to_csv, dict_to_dataframe
-from .assessment import assess_all_surrogates, assess_classifier
+from .assessment import assess_all_surrogates, assess_classifier, data_assessment
 
 
 class Pipeline:
@@ -97,7 +97,7 @@ class Pipeline:
                                                               train_data=train_set,
                                                               validation_data=validation_set,
                                                               protected_attribute=protected_attribute)
-            print(f'Decisions: {decisions.value_counts()}')
+            # print(f'Decisions: {decisions.value_counts()}')
 
             rows = len(test_classifier_df)
             pipeline_details['classifier_type'] = 'Test'
@@ -132,6 +132,19 @@ class Pipeline:
             for _ in range(self.settings["num_repetitions"]):
                 unbiasing_algorithm.fit(_transformed_dataset, _protected_feature)
                 _transformed_dataset = unbiasing_algorithm.transform(_transformed_dataset)
+
+            print('Classes:')
+            print(f'Original Data: \n{_train_set.targets.value_counts()}')
+            print(f'Transformed Data: \n{_transformed_dataset.targets.value_counts()}')
+
+            print('Protected Attributes:')
+            print(f'Mapping:\n {_train_set.features_mapping[_protected_feature]}')
+            print(f'Original Protected Attributes: \n{_train_set.features[_protected_feature].value_counts()}')
+            print(f'Transformed Protected Attributes: \n{_train_set.features[_protected_feature].value_counts()}')
+
+            print('Data Description')
+            print(f'Original Data Description: \n{_train_set.features.describe().to_string()}')
+            print(f'Transformed Data Description: \n{_transformed_dataset.features.describe().to_string()}')
 
             _train_set.protected_attributes[_protected_feature] = _original_values[0]
             _transformed_dataset.protected_attributes[_protected_feature] = _original_values[0]
