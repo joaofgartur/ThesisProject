@@ -1,26 +1,22 @@
 import numpy as np
 import pandas as pd
 
-from constants import NUM_DECIMALS
-
 
 def ratio(a: float, b: float) -> float:
-    try:
-        return np.round(a / b, decimals=NUM_DECIMALS)
-    except ZeroDivisionError:
-        return 0.0
+    return np.divide(a, b, out=np.zeros_like(a, dtype=float), where=b != 0)
 
 
 def diff(a: float, b: float) -> float:
-    return np.round(a - b, decimals=NUM_DECIMALS)
+    return np.subtract(a, b)
 
 
 def abs_diff(a: float, b: float) -> float:
-    return np.round(abs(a - b), decimals=NUM_DECIMALS)
+    return np.abs(np.subtract(a, b))
 
 
 def joint_probability(data: pd.DataFrame, variables: dict) -> float:
     filtered_data = data.copy()
+
     for var, value in variables.items():
         filtered_data = filtered_data[filtered_data[var] == value]
 

@@ -10,9 +10,9 @@ class GermanCredit(Dataset):
 
     _LOCAL_DATA_FILE = "datasets/local_storage/german_credit/german.data"
 
-    def __init__(self, dataset_info: dict, seed: int):
+    def __init__(self, dataset_info: dict):
         logger.info(f'[{extract_filename(__file__)}] Loading...')
-        Dataset.__init__(self, dataset_info, seed)
+        Dataset.__init__(self, dataset_info)
 
     def _load_dataset(self):
         try:

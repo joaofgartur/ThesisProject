@@ -1,8 +1,6 @@
 import copy
-import itertools
 import math
 import os
-import threading
 from concurrent.futures import ThreadPoolExecutor
 from random import sample
 
@@ -16,7 +14,7 @@ from constants import NUM_DECIMALS
 from datasets import Dataset, update_dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import logger
+from helpers import logger, get_generator, get_seed
 
 
 class LGAFFS(Algorithm):
@@ -38,17 +36,17 @@ class LGAFFS(Algorithm):
 
     def __gen_individual(self, feature_prob: float = 1.0):
         if feature_prob:
-            features_prob = np.random.uniform(low=self.min_feature_prob, high=self.max_feature_prob,
-                                              size=self.genetic_parameters.individual_size)
+            features_prob = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob,
+                                                    size=self.genetic_parameters.individual_size)
             # genome, performance, fairness
             return [np.array(
                 [1 if features_prob[i] > feature_prob else 0 for i in range(self.genetic_parameters.individual_size)]),
                     [], []]
-        return [np.random.randint(2, size=self.genetic_parameters.individual_size), {}, {}]
+        return [get_generator().randint(2, size=self.genetic_parameters.individual_size), {}, {}]
 
     def __gen_ramped_population(self):
         n = self.genetic_parameters.population_size
-        pop_feature_probs = np.random.uniform(low=self.min_feature_prob, high=self.max_feature_prob, size=n)
+        pop_feature_probs = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob, size=n)
         return [self.__gen_individual(float(pop_feature_probs[i])) for i in range(n)]
 
     def __uniform_crossover(self, parent1, parent2):
@@ -104,7 +102,7 @@ class LGAFFS(Algorithm):
 
         data = self.__phenotype(data, individual)
 
-        model = RandomForestClassifier()
+        model = RandomForestClassifier(random_state=get_seed())
         predictions = cross_val_predict(model, data.features.to_numpy(), data.targets.to_numpy().ravel(), cv=folds)
         predicted_data = update_dataset(data, targets=predictions)
 
@@ -137,7 +135,7 @@ class LGAFFS(Algorithm):
         self.sensitive_attribute = sensitive_attribute
 
     def transform(self, data: Dataset) -> Dataset:
-        folds = KFold(n_splits=self.n_splits)
+        folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []
 
         for i in range(self.genetic_parameters.num_generations):

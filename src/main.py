@@ -4,41 +4,21 @@ Project: Master's Thesis
 Last edited: 30-11-2023
 """
 
-import numpy as np
-import random
-
 from enum import Enum
 
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-
-from sklearn.utils import check_random_state
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LGAFFS,
-                        PermutationGeneticAlgorithm, LearnedFairRepresentations, AIF360LearningFairRepresentations)
+                        PermutationGeneticAlgorithm, AIF360LearningFairRepresentations)
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from algorithms.MultivalueLGAFFS import MultivalueLGAFFS
 from datasets.AIF360AdultIncome import AIF360AdultIncome
 from protocol import Pipeline
 from datasets import GermanCredit, AdultIncome, Compas
-from helpers import logger, extract_filename
+from helpers import logger, extract_filename, set_seed, get_seed
 from xgboost import XGBClassifier
-
-
-def set_seed(seed: int):
-    # random module
-    random.seed(seed)
-
-    # numpy
-    np.random.seed(seed)
-
-    # sklearn
-    random_state = check_random_state(seed)
-    random_state.seed(seed)
-
 
 class DatasetOptions(Enum):
     COMPAS = 0
@@ -58,7 +38,7 @@ def load_dataset(option: Enum):
                 'privileged_classes': ['Caucasian', 'Male'],
 
             }
-            return Compas(compas_info, seed=settings['seed'])
+            return Compas(compas_info)
         case DatasetOptions.GERMAN:
             german_info = {
                 'dataset_name': 'German Credit',
@@ -68,7 +48,7 @@ def load_dataset(option: Enum):
                 'privileged_classes': ['Male', 'Aged'],
 
             }
-            return GermanCredit(german_info, seed=settings['seed'])
+            return GermanCredit(german_info)
         case DatasetOptions.ADULT:
             adult_info = {
                 'dataset_name': 'Adult Income',
@@ -78,7 +58,7 @@ def load_dataset(option: Enum):
                 'privileged_classes': ['White', 'Male'],
 
             }
-            return AdultIncome(adult_info, seed=settings['seed'])
+            return AdultIncome(adult_info)
         case DatasetOptions.AIF360ADULT:
             adult_info = {
                 'dataset_name': 'Aif360 Adult Income',
@@ -118,12 +98,11 @@ def load_algorithm(option: Enum):
                 ax=1e-4,
                 ay=0.1,
                 az=1000,
-                seed=settings['seed'],
             )
         case AlgorithmOptions.LGAFFS:
             genetic_parameters = GeneticBasicParameters(
                 population_size=101,
-                num_generations=30,
+                num_generations=2,
                 tournament_size=2,
                 probability_crossover=0.9,
                 probability_mutation=0.05
@@ -137,7 +116,7 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
                 population_size=2,
-                num_generations=30,
+                num_generations=2,
                 tournament_size=2,
                 elite_size=2,
                 probability_crossover=0.9,
@@ -150,7 +129,7 @@ def load_algorithm(option: Enum):
         case AlgorithmOptions.MLGAFFS:
             genetic_parameters = GeneticBasicParameters(
                 population_size=101,
-                num_generations=30,
+                num_generations=2,
                 tournament_size=2,
                 probability_crossover=0.9,
                 probability_mutation=0.05
@@ -171,15 +150,15 @@ if __name__ == '__main__':
     results_path = 'results'
     settings = {
         'seed': 42,
-        'train_size': 0.8,
+        'train_size': 0.7,
         'validation_size': 0.1,
-        "test_size": 0.1,
+        "test_size": 0.2,
         "num_repetitions": 1
     }
 
     set_seed(settings['seed'])
 
-    test_classifier = XGBClassifier(random_state=settings['seed'])
+    test_classifier = XGBClassifier(random_state=get_seed())
     surrogate_models = {
         #'LR': LogisticRegression(),
         'SVC': SVC(),
@@ -191,7 +170,7 @@ if __name__ == '__main__':
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
-    run_all_dataset = False
+    run_all_dataset = True
     num_runs = 1
 
     if run_all:
@@ -211,8 +190,8 @@ if __name__ == '__main__':
             pipeline.run_and_save()
     else:
         for i in range(max(1, num_runs)):
-            dataset = load_dataset(DatasetOptions.ADULT)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.AIF360LFR)]
+            dataset = load_dataset(DatasetOptions.GERMAN)
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Reweighing)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 

@@ -8,7 +8,7 @@ from constants import UNPRIVILEGED, PRIVILEGED
 from datasets import Dataset, update_dataset
 
 from algorithms.Algorithm import Algorithm
-from helpers import logger
+from helpers import logger, get_seed
 
 
 class LearnedFairRepresentations(Algorithm):
@@ -18,13 +18,12 @@ class LearnedFairRepresentations(Algorithm):
                  ax: float = 0.01,
                  ay: float = 1.0,
                  az: float = 50.0,
-                 seed: int = None,
                  max_func_evals: int = 150000,
                  max_iterations: int = 150000):
         super().__init__()
 
         # define jit seed
-        set_numba_seed(seed)
+        set_numba_seed(get_seed())
 
         self.k = k
         self.Ax = ax

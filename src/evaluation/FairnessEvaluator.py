@@ -12,28 +12,7 @@ from sklearn.neighbors import NearestNeighbors
 from datasets import Dataset
 from helpers import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
-                       TRUE_OUTCOME, PRED_OUTCOME, NUM_DECIMALS)
-
-
-def to_dataframe(array, labels, stats: bool, metric_name='Value'):
-    def compute_stats(_array, _labels):
-        _array = np.array(_array, dtype=float)
-        mean_value = np.round(np.mean(_array), decimals=NUM_DECIMALS)
-        std_value = np.round(np.std(_array), decimals=NUM_DECIMALS)
-        _array = np.append(_array, [mean_value, std_value])
-        _labels = _labels + ['Average', 'Std']
-
-        return _array, _labels
-
-    if stats:
-        array, labels = compute_stats(array, labels)
-
-    label_series = pd.Series(labels, name='Label')
-    value_series = pd.Series(array, name=metric_name)
-
-    df = pd.concat([label_series, value_series], axis=1)
-
-    return df
+                       TRUE_OUTCOME, PRED_OUTCOME)
 
 
 class FairnessEvaluator(object):
@@ -100,22 +79,18 @@ class FairnessEvaluator(object):
     def true_positive_rate_diff(self):
         return abs_diff(1, self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME))
 
-    def consistency(self, k):
+    def consistency(self, k: int = 3):
+        data = self.data.to_numpy()
+        x = data[:, :-2]
+        y_pred = data[:, -1]
 
-        data_array = self.data.to_numpy()
+        model = NearestNeighbors(n_neighbors=k+1, algorithm='auto').fit(x)
+        neighbors = model.kneighbors(x, return_distance=False)[:, 1:]
 
-        model = NearestNeighbors(n_neighbors=k + 1, algorithm='auto').fit(data_array)
-        neighbors = model.kneighbors(data_array, return_distance=False)[:, 1:]
+        y_pred_knn = y_pred[neighbors]
+        mean_y_pred_knn = np.mean(y_pred_knn, axis=1)
 
-        n = data_array.shape[0]
-        sum_value = 0
-        pred_outcome_index = self.data.columns.get_loc(PRED_OUTCOME)
-
-        for i in range(n):
-            for j in neighbors[i]:
-                sum_value += abs(data_array[i][pred_outcome_index] - data_array[j][pred_outcome_index])
-
-        return diff(1, ratio(sum_value, n * k))
+        return diff(1, ratio(np.sum(np.abs(y_pred - mean_y_pred_knn)), data.shape[0]))
 
     def false_positive_error_rate_balance_score(self):
         return self.__compute_false_error_balance_score(POSITIVE_OUTCOME, NEGATIVE_OUTCOME)

@@ -93,7 +93,7 @@ class Pipeline:
         }
 
         if test_assessment:
-            decisions, test_classifier_df = assess_classifier(classifier=self.test_classifier,
+            _, test_classifier_df = assess_classifier(classifier=self.test_classifier,
                                                               train_data=train_set,
                                                               validation_data=validation_set,
                                                               protected_attribute=protected_attribute)
@@ -114,9 +114,9 @@ class Pipeline:
             return pd.concat([pipeline_df, surrogates_df], axis=1).reset_index(drop=True)
 
     def __binary_attribute_mitigation__(self, train_set: Dataset, validation_set: Dataset, test_set: Dataset,
-                                        unbiasing_algorithm: Algorithm, protected_attribute: str) -> pd.DataFrame:
+                                        unbiasing_algorithm: Algorithm, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
 
-        def _mitigate(_train_set: Dataset, _validation_set: Dataset, _protected_feature: str, _value: str) -> Dataset:
+        def _mitigate(_train_set: Dataset, _validation_set: Dataset, _protected_feature: str, _value: str) -> (Dataset, Dataset):
             _original_values = (_train_set.protected_attributes[_protected_feature],
                                 _validation_set.protected_attributes[_protected_feature])
 
@@ -132,25 +132,15 @@ class Pipeline:
             for _ in range(self.settings["num_repetitions"]):
                 unbiasing_algorithm.fit(_transformed_dataset, _protected_feature)
                 _transformed_dataset = unbiasing_algorithm.transform(_transformed_dataset)
+                # _validation_set = unbiasing_algorithm.transform(_validation_set)
 
-            print('Classes:')
-            print(f'Original Data: \n{_train_set.targets.value_counts()}')
-            print(f'Transformed Data: \n{_transformed_dataset.targets.value_counts()}')
-
-            print('Protected Attributes:')
-            print(f'Mapping:\n {_train_set.features_mapping[_protected_feature]}')
-            print(f'Original Protected Attributes: \n{_train_set.features[_protected_feature].value_counts()}')
-            print(f'Transformed Protected Attributes: \n{_train_set.features[_protected_feature].value_counts()}')
-
-            print('Data Description')
-            print(f'Original Data Description: \n{_train_set.features.describe().to_string()}')
-            print(f'Transformed Data Description: \n{_transformed_dataset.features.describe().to_string()}')
+            data_assessment(_train_set, _transformed_dataset, _protected_feature)
 
             _train_set.protected_attributes[_protected_feature] = _original_values[0]
             _transformed_dataset.protected_attributes[_protected_feature] = _original_values[0]
             _validation_set.protected_attributes[_protected_feature] = _original_values[1]
 
-            return _transformed_dataset
+            return _transformed_dataset, _validation_set
 
         logger.info("[INTERVENTION] Correcting bias with binary algorithm.")
 
@@ -162,7 +152,7 @@ class Pipeline:
                 f"{unbiasing_algorithm.__class__.__name__}")
 
             # bias mitigation
-            transformed_dataset = _mitigate(train_set, validation_set, protected_attribute, value)
+            transformed_dataset, validation_set = _mitigate(train_set, validation_set, protected_attribute, value)
 
             value_results = self.__post_intervention__(transformed_dataset, validation_set,
                                                        test_set, protected_attribute)

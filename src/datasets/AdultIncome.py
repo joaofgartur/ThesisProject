@@ -1,17 +1,17 @@
 import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
-from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
-from datasets import Dataset, is_privileged
+from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
+from datasets import Dataset
 from helpers import logger, extract_filename
 
 
 class AdultIncome(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/adult_income/adult.data"
 
-    def __init__(self, dataset_info: dict, seed: int):
+    def __init__(self, dataset_info: dict):
         logger.info(f'[{extract_filename(__file__)}] Loading...')
-        Dataset.__init__(self, dataset_info, seed=seed)
+        Dataset.__init__(self, dataset_info)
 
     def _load_dataset(self):
         try:
@@ -33,12 +33,6 @@ class AdultIncome(Dataset):
             return features, targets
 
     def _transform_protected_attributes(self):
-
-        # binarize attribute
-        """
-        for feature, value in zip(self.protected_features, self.privileged_classes):
-            self.features[feature] = self.features[feature].apply(lambda x, y=value: is_privileged(x, y))
-        """
 
         self.targets = (self.targets.replace("<=", NEGATIVE_OUTCOME, regex=True)
                         .replace(">", POSITIVE_OUTCOME, regex=True)

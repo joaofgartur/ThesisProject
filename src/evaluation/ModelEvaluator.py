@@ -1,9 +1,8 @@
 import numpy as np
-import pandas as pd
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, precision_score, \
     matthews_corrcoef, roc_curve, auc
 
-from constants import NUM_DECIMALS, POSITIVE_OUTCOME, NEGATIVE_OUTCOME
+from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
 from datasets import Dataset
 from helpers import dict_to_dataframe
 
@@ -23,29 +22,28 @@ class ModelEvaluator(object):
 
     def auc(self):
         fpr, tpr, _ = roc_curve(self.y, self.y_pred)
-        return np.round(auc(fpr, tpr), decimals=NUM_DECIMALS)
+        return auc(fpr, tpr)
 
     def accuracy(self):
-        return np.round(accuracy_score(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
+        return accuracy_score(y_true=self.y, y_pred=self.y_pred)
 
     def f1_score(self):
-        return np.round(f1_score(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
+        return f1_score(y_true=self.y, y_pred=self.y_pred)
 
     def recall(self):
-        return np.round(recall_score(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
+        return recall_score(y_true=self.y, y_pred=self.y_pred)
 
     def precision(self):
-        return np.round(precision_score(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
+        return precision_score(y_true=self.y, y_pred=self.y_pred)
 
     def mathews_cc(self):
-        return np.round(matthews_corrcoef(y_true=self.y, y_pred=self.y_pred), decimals=NUM_DECIMALS)
+        return matthews_corrcoef(y_true=self.y, y_pred=self.y_pred)
 
     def sensitivity(self):
-        return np.round(recall_score(y_true=self.y, y_pred=self.y_pred, pos_label=POSITIVE_OUTCOME), decimals=NUM_DECIMALS)
+        return recall_score(y_true=self.y, y_pred=self.y_pred, pos_label=POSITIVE_OUTCOME)
 
     def specificity(self):
-        return np.round(recall_score(y_true=self.y, y_pred=self.y_pred, pos_label=NEGATIVE_OUTCOME),
-                        decimals=NUM_DECIMALS)
+        return recall_score(y_true=self.y, y_pred=self.y_pred, pos_label=NEGATIVE_OUTCOME)
 
     def evaluate(self):
         result = {

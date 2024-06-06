@@ -7,18 +7,17 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import KBinsDiscretizer, LabelEncoder
 
 from constants import PRIVILEGED, UNPRIVILEGED
-from helpers import logger, extract_value, extract_filename
+from helpers import logger, extract_value, extract_filename, get_seed
 
 
 class Dataset(metaclass=abc.ABCMeta):
 
-    def __init__(self, dataset_info: dict, seed: int):
+    def __init__(self, dataset_info: dict):
         """Initializes class instance"""
         self.features_mapping = None
         self.targets_mapping = None
         self.instance_weights = None
         self.protected_attributes = None
-        self.seed = seed
 
         self.__parse_dataset_info(dataset_info)
 
@@ -106,16 +105,15 @@ class Dataset(metaclass=abc.ABCMeta):
                 df = df[df[columns[j]] == subgroups_to_remove[i][j]]
 
             indexes_to_remove.append(df.index.to_list()[0])
-            
+
         self.features = self.features.drop(index=indexes_to_remove)
         self.targets = self.targets.drop(index=indexes_to_remove)
-        
-        stratify_criteria = stratify_criteria.drop(index=indexes_to_remove)
 
+        stratify_criteria = stratify_criteria.drop(index=indexes_to_remove)
 
         x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,
                                                             train_size=settings.get('train_size'),
-                                                            random_state=self.seed,
+                                                            random_state=get_seed(),
                                                             shuffle=True,
                                                             stratify=stratify_criteria)
 
@@ -124,7 +122,7 @@ class Dataset(metaclass=abc.ABCMeta):
         stratify_criteria = pd.concat([x_test[self.protected_features_names], y_test], axis=1)
         x_val, x_test, y_val, y_test = train_test_split(x_test, y_test,
                                                         test_size=split_ratio,
-                                                        random_state=self.seed,
+                                                        random_state=get_seed(),
                                                         shuffle=True,
                                                         stratify=stratify_criteria)
 
@@ -190,24 +188,12 @@ class Dataset(metaclass=abc.ABCMeta):
         numerical_data = numerical_data.drop(columns=to_drop)
         categorical_data = self.features.drop(numerical_data, axis=1)
 
-        discretizer = KBinsDiscretizer(n_bins=n_bins, encode='ordinal', strategy='quantile')
+        discretizer = KBinsDiscretizer(n_bins=n_bins, encode='ordinal', strategy='quantile', random_state=get_seed())
         discretized_numerical_data = pd.DataFrame(discretizer.fit_transform(numerical_data),
                                                   columns=numerical_data.columns)
         processed_features = pd.concat([categorical_data, discretized_numerical_data], axis=1)
 
         self.features = processed_features
-
-    def __one_hot_encode_categorical_features(self):
-        numerical_data = self.features.select_dtypes(include=['number'])
-        categorical_data = self.features.drop(numerical_data, axis=1)
-
-        if categorical_data.shape[1]:
-            encoded_categorical_data = pd.get_dummies(categorical_data, columns=categorical_data.columns)
-            encoded_categorical_data *= 1.0
-
-            processed_features = pd.concat([numerical_data, encoded_categorical_data], axis=1)
-
-            self.features = processed_features
 
     def __label_encode_categorical(self, features=False, targets=True):
 

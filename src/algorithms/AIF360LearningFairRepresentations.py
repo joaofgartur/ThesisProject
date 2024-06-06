@@ -3,14 +3,14 @@ from aif360.algorithms.preprocessing import LFR
 from algorithms.Algorithm import Algorithm
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
 from datasets import Dataset, update_dataset
-from helpers import (convert_to_standard_dataset)
+from helpers import (convert_to_standard_dataset, get_seed, )
 
 import numpy as np
 
 
 class AIF360LearningFairRepresentations(Algorithm):
 
-    def __init__(self, seed: int,
+    def __init__(self,
                  k: int = 5,
                  ax: float = 0.01,
                  ay: float = 1.0,
@@ -20,7 +20,6 @@ class AIF360LearningFairRepresentations(Algorithm):
 
         super().__init__()
         self.transformer = None
-        self.seed = seed
         self.k = k
         self.Ax = ax
         self.Ay = ay
@@ -44,7 +43,7 @@ class AIF360LearningFairRepresentations(Algorithm):
                                Az=self.Az,
                                print_interval=self.print_interval,
                                verbose=1,
-                               seed=self.seed)
+                               seed=get_seed())
         self.transformer.fit(standard_data, 150000, 150000)
 
     def transform(self, data: Dataset, ) -> Dataset:

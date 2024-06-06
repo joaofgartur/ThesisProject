@@ -3,6 +3,8 @@ import itertools
 
 import numpy as np
 
+from helpers import get_generator
+
 
 class GeneticBasicParameters:
 
@@ -23,13 +25,13 @@ class GeneticBasicParameters:
 
 
 def uniform_crossover(parent1: list, parent2: list, probability_crossover: float):
-    value = np.random.random()
+    value = get_generator().random()
     if value < probability_crossover:
 
         offspring1 = [np.zeros(parent1[0].shape, dtype=int), {}, {}]
         offspring2 = [np.zeros(parent1[0].shape, dtype=int), {}, {}]
 
-        indexes_choice = np.random.rand(parent1[0].shape[0])
+        indexes_choice = get_generator().choice(parent1[0].shape[0])
         index_mask = indexes_choice < 0.5
 
         offspring1[0][index_mask] = parent1[0][index_mask]
@@ -44,14 +46,14 @@ def uniform_crossover(parent1: list, parent2: list, probability_crossover: float
 
 
 def pmx_cromossover(parent1: list, parent2: list, probability_crossover: float):
-    value = np.random.random()
+    value = get_generator().random()
     if value < probability_crossover:
         offspring1 = [parent1[0], {}, {}]
         offspring2 = [parent1[0], {}, {}]
 
         n = len(parent1[0])
-        cp1 = np.random.randint(0, n)
-        cp2 = np.random.randint(0, n - 1)
+        cp1 = get_generator().integers(0, n)
+        cp2 = get_generator().integers(0, n - 1)
 
         if cp2 == cp1:
             cp2 += 1
@@ -76,7 +78,7 @@ def pmx_cromossover(parent1: list, parent2: list, probability_crossover: float):
 
 def bit_flip_mutation(individual: list, probability_mutation: float):
     new_individual = copy.deepcopy(individual)
-    random_probs = np.random.rand(individual[0].shape[0])
+    random_probs = get_generator().random(individual[0].shape[0])
     for i in range(random_probs.shape[0]):
         if random_probs[i] < probability_mutation:
             new_individual[0][i] = 1 - new_individual[0][i]
@@ -87,10 +89,10 @@ def scramble_mutation(individual: list, probability_mutation: float):
     mutated_individual = copy.deepcopy(individual)
     n = individual[0].shape[0]
 
-    if np.random.random() < probability_mutation:
-        index_1, index_2 = np.random.choice(n, 2, replace=False)
+    if get_generator().random() < probability_mutation:
+        index_1, index_2 = get_generator().choice(n, 2, replace=False)
         segment = mutated_individual[0][index_1:index_2]
-        np.random.shuffle(segment)
+        get_generator().shuffle(segment)
         mutated_individual[0][index_1:index_2] = segment
 
     return mutated_individual

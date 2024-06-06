@@ -3,13 +3,14 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
+import numpy as np
+import pandas as pd
 from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset, update_dataset
-from helpers import convert_to_standard_dataset
-from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME, PRIVILEGED, UNPRIVILEGED
-from errors import error_check_dataset, error_check_sensitive_attribute
+from helpers import convert_to_standard_dataset, get_generator
+from constants import PRIVILEGED, UNPRIVILEGED
 
 
 class Reweighing(Algorithm):
@@ -18,6 +19,20 @@ class Reweighing(Algorithm):
         super().__init__()
         self.transformer = None
         self.sensitive_attribute = None
+
+    def __resample(self, data: pd.DataFrame, weights: np.array) -> pd.DataFrame:
+
+        privileged_group = data[data[self.sensitive_attribute] == PRIVILEGED]
+        unprivileged_group = data[data[self.sensitive_attribute] == UNPRIVILEGED]
+
+        n_samples = np.abs(len(privileged_group) - len(unprivileged_group))
+
+        sample_indexes = get_generator().choice(data.index, size=n_samples, replace=True, p=weights)
+        sampled_df = data.loc[sample_indexes]
+
+        sampled_data = pd.concat([data, sampled_df], ignore_index=True)
+
+        return sampled_data
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.sensitive_attribute = sensitive_attribute
@@ -55,11 +70,16 @@ class Reweighing(Algorithm):
         standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
         transformed_data = self.transformer.transform(standard_data)
+        normalized_weights = np.divide(transformed_data.instance_weights,
+                                       transformed_data.instance_weights.sum())
 
-        transformed_dataset = update_dataset(dataset=data,
-                                             features=transformed_data.features,
-                                             targets=transformed_data.labels)
+        np_array = np.concatenate((transformed_data.features, transformed_data.labels), axis=1)
+        resampling_data = pd.DataFrame(np_array,
+                                       columns=standard_data.feature_names + standard_data.label_names)
 
-        transformed_dataset.instance_weights = transformed_data.instance_weights
+        resampled_data = self.__resample(resampling_data, normalized_weights).to_numpy()
+        resampled_features, resampled_targets = resampled_data[:, :-1], resampled_data[:, -1]
+
+        transformed_dataset = update_dataset(dataset=data, features=resampled_features, targets=resampled_targets)
 
         return transformed_dataset

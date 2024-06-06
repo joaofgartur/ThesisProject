@@ -103,19 +103,18 @@ def data_value_counts(df: pd.DataFrame) -> pd.Series:
     return df.value_counts()
 
 
-def data_assessment(dataset: Dataset, fixed_dataset: Dataset, sensitive_attribute: str):
-    print(f' --------- Assessment for {bold(sensitive_attribute)} --------- ')
+def data_assessment(original_data: Dataset, transformed_data: Dataset, sensitive_attribute: str):
+    print(f' --------- Assessment for {bold(original_data.name)} --------- ')
 
-    # compare features
-    print(f'\t{bold("Features")}:')
-    print(
-        f'\t\t{bold("Data Description Differences")}: \n{data_description_diff(dataset.features, fixed_dataset.features).to_string()}')
-    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.features).to_string()}')
-    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.features).to_string()}')
+    print('Classes:')
+    print(f'Original Data: \n{original_data.targets.value_counts()}')
+    print(f'Transformed Data: \n{transformed_data.targets.value_counts()}')
 
-    # compare targets
-    print(f'\t{bold("Targets")}:')
-    print(
-        f'\t\t{bold("Data Description Differences")}: \n{data_description_diff(dataset.targets, fixed_dataset.targets).to_string()}')
-    print(f'\t\t{bold("Data Value Counts")}: \n{data_value_counts(dataset.targets).to_string()}')
-    print(f'\t\t{bold("Fixed Data Value Counts")}: \n{data_value_counts(fixed_dataset.targets).to_string()}')
+    print('Protected Attributes:')
+    print(f'Mapping:\n {original_data.features_mapping[sensitive_attribute]}')
+    print(f'Original Protected Attributes: \n{original_data.features[sensitive_attribute].value_counts()}')
+    print(f'Transformed Protected Attributes: \n{original_data.features[sensitive_attribute].value_counts()}')
+
+    print('Data Description')
+    print(f'Original Data Description: \n{original_data.features.describe().to_string()}')
+    print(f'Transformed Data Description: \n{transformed_data.features.describe().to_string()}')
