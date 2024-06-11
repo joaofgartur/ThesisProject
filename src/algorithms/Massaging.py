@@ -106,9 +106,10 @@ class Massaging(Algorithm):
 
         try:
             model = GaussianNB()
-            model.fit(dataset.features.to_numpy(), dataset.targets.to_numpy().ravel())
-
-            class_probabilities = model.predict_proba(dataset.features)
+            features = dataset.features.to_numpy()
+            targets = dataset.targets.to_numpy().ravel()
+            model.fit(features, targets)
+            class_probabilities = model.predict_proba(features)
 
             return class_probabilities
 

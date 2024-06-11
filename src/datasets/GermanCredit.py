@@ -2,7 +2,7 @@ import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
-from datasets import Dataset, is_privileged
+from datasets import Dataset
 from helpers import logger, extract_filename
 
 

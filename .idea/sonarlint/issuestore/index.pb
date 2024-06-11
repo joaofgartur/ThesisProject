@@ -57,8 +57,6 @@ H
 H
 src/protocol/__init__.py,2\a\2ad4c2cd1eb488cb5632bcfd473433f9648cf91a
 J
-src/protocol/correction.py,d\c\dc59681269bec81242093996ad587083c14a0c0d
-J
 src/assessment/__init__.py,5\e\5e30b50f07b2ef237d466d2187eb3a5831e34a9e
 J
 src/protocol/assessment.py,4\3\43ad472073a73c07826d862f8b8ecaf2bcbc1ecb
@@ -80,72 +78,6 @@ c
 3src/algorithms/AIF360LearningFairRepresentations.py,6\0\60d6a08d3a04907280422f431120d5e3df35dd05
 L
 src/algorithms/LFRhelpers.py,2\9\294cf48f46a4ba25f6f5391852d8316d10cc1176
-i
-9src/best_individuals/26_04_24-14_24_47-pga_Attribute9.csv,b\8\b8da723178b93f5587178ce6c369bc45c31c3538
-j
-:src/best_individuals/26_04_24-14_25_08-pga_Attribute13.csv,4\e\4e9361954e85087705ef81a267d345e28c79a6f9
-i
-9src/best_individuals/26_04_24-14_25_36-pga_Attribute9.csv,9\d\9d7bb1213fdb346423a0495b3d76ec6b7d49c2eb
-j
-:src/best_individuals/26_04_24-14_25_57-pga_Attribute13.csv,1\d\1d65f8d1ccc3849d562a7a6b8f1799f8a403e7e1
-q
-Asrc/results_german_27_04_2024/Massaging/Massaging_mean_values.csv,0\d\0d8c23e00f4cf1cb4547963c48c393bdce61d0bc
-s
-Csrc/results_german_27_04_2024/Reweighing/Reweighing_mean_values.csv,0\4\04d6afe606299ceff6bcdd6475f28be182da46d9
-ã
-[src/results_german_27_04_2024/DisparateImpactRemover/DisparateImpactRemover_mean_values.csv,e\7\e722640aebc5a1927ed845ca0f24f82bf6143e5c
-°
-qsrc/results_german_27_04_2024/AIF360LearningFairRepresentations/AIF360LearningFairRepresentations_mean_values.csv,e\e\ee3ba6a4acd183a06efd39f64531ed64c74743b6
-k
-;src/results_german_27_04_2024/LGAFFS/LGAFFS_mean_values.csv,a\9\a994f4f25241adb97c62d7e9d1d19236cc25d517
-ï
-esrc/results_german_27_04_2024/PermutationGeneticAlgorithm/PermutationGeneticAlgorithm_mean_values.csv,8\e\8e385cbfe330b5f170a93c57003d1dd5b3df6926
-ç
-]src/results_german_27_04_2024/PermutationGeneticAlgorithm/26_04_24-17_58_44-German Credit.csv,2\a\2a6d46762c1e48cf6168898454c81a46c3076df2
-x
-Hsrc/results_german_27_04_2024/LGAFFS/26_04_24-17_58_44-German Credit.csv,e\b\eb69845b3c30b57ce9ca9f45b39b21c6b231aff4
-q
-Asrc/results_german_28_04_2024/Massaging/Massaging_mean_values.csv,e\d\eddcbd2309741f48ae13c98d30c0054fd1f5d61e
-s
-Csrc/results_german_28_04_2024/Reweighing/Reweighing_mean_values.csv,3\9\39d997f1e1963b516015a9b9c1f30ab65b8305db
-ã
-[src/results_german_28_04_2024/DisparateImpactRemover/DisparateImpactRemover_mean_values.csv,2\c\2cd07176663b4fbfb0b09ee23285b1160ab0b93a
-°
-qsrc/results_german_28_04_2024/AIF360LearningFairRepresentations/AIF360LearningFairRepresentations_mean_values.csv,f\8\f8c37332a52f1b0ed9f2e867fc798a9cfa98cbf1
-k
-;src/results_german_28_04_2024/LGAFFS/LGAFFS_mean_values.csv,5\1\511130e0b61f6daa387e25565da4dae0fc54a189
-ï
-esrc/results_german_28_04_2024/PermutationGeneticAlgorithm/PermutationGeneticAlgorithm_mean_values.csv,f\a\fa981bc362a0441cc72fe48d4b94a3bf25e1515f
-ç
-]src/results_german_27_04_2024/PermutationGeneticAlgorithm/27_04_24-06_57_06-German Credit.csv,0\5\05e6c76fcf4f100db35c389739735d2d729c043b
-{
-Ksrc/best_individuals_german_27_04_2024/26_04_24-15_58_04-pga_Attribute9.csv,2\4\2450b9317cebbee4cf29168dcd7ca18b50f04bb2
-{
-Ksrc/results_german_27_04_2024/Massaging/26_04_24-17_58_44-German Credit.csv,e\c\ecb0c66d38e458c80368a695b0b6ca5aea3587f2
-r
-Bsrc/results_german_27_04_2024/Massaging/concatenated_Massaging.csv,4\5\456943f17e79d8bdd47fe93dd9471e4b1a7f83e0
-å
-\src/results_german_27_04_2024/DisparateImpactRemover/concatenated_DisparateImpactRemover.csv,f\3\f3ee26920036b3ab9f87dffa5d70848fd36ef37c
-t
-Dsrc/results_german_27_04_2024/Reweighing/concatenated_Reweighing.csv,7\c\7cae60446a31a469cebebd9729b2cecdfd972a16
-¢
-rsrc/results_german_27_04_2024/AIF360LearningFairRepresentations/concatenated_AIF360LearningFairRepresentations.csv,1\2\12bd8b79d09f38fa9c0bc59ddd6b9e6cc2bee052
-l
-<src/results_german_27_04_2024/LGAFFS/concatenated_LGAFFS.csv,e\d\edf5bbf84fb8f45fd475d97924c311f26e618674
-ñ
-fsrc/results_german_27_04_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,6\5\65cc98b0e5f33c16418f0a17b98511b7742cb81a
-r
-Bsrc/results_german_28_04_2024/Massaging/concatenated_Massaging.csv,8\6\86ded6d29e5352f19f61c688ba56e9a5ed694d5c
-t
-Dsrc/results_german_28_04_2024/Reweighing/concatenated_Reweighing.csv,4\9\49c4467b3d816c4873ebc220a7fa52ac036281de
-å
-\src/results_german_28_04_2024/DisparateImpactRemover/concatenated_DisparateImpactRemover.csv,5\d\5de9773c618f8d382bff75b1304174a13c0c8d4a
-l
-<src/results_german_28_04_2024/LGAFFS/concatenated_LGAFFS.csv,d\e\de49b76bff3ad44607565a166b2286a5b0591b92
-ñ
-fsrc/results_german_28_04_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,f\4\f42ae0933dad9c2c7b8cf4e6dbd52225a76a36fe
-¢
-rsrc/results_german_28_04_2024/AIF360LearningFairRepresentations/concatenated_AIF360LearningFairRepresentations.csv,6\5\6598dbf0f6ad74c0b231ee1eb5d7223fd4ef21a2
 @
 requirements.txt,1\9\19359a61ae2446b51b549167b014da2fcf265768
 R
@@ -226,23 +158,7 @@ iimportant_results/results_2_iteration_adult_21_05_2024/MultivalueLGAFFS/concate
 important_results/results_2_iteration_adult_21_05_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,d\3\d338cac124df38c50d06d42d7cac4fe772c9152a
 ª
 äimportant_results/results_1_iteration_adult_21_05_2024/AIF360LearningFairRepresentations/AIF360LearningFairRepresentations_mean_values.csv,0\e\0ed983852118551734124dd171387c7e65255604
-H
-src/output_analysis2.out,6\5\65cf5645a4cb8628fbb33e81d33b5a34ffd5445c
-j
-:src/results/Reweighing/06_06_24-10_18_07-German Credit.csv,f\5\f51f7508458da521ba78b474dfad7e7e2d260ca3
-D
-src/helpers/plots.py,f\5\f55e69c8944f8ffed15a0c3485f50cba955c9a72
-F
-src/helpers/numbers.py,a\7\a778334b5c6ae975763aa0f399f43a8c6d22e258
 M
 src/helpers/random_numbers.py,6\4\6492638ef0e75095bd6618056e1e9cc4ab614823
-
-Osrc/results/LGAFFS/06_06_24-11_20_54-German Credit_intermediary_Attribute9_.csv,5\6\563e1767745eb33ceea377e3f91cc8d96067da05
-{
-Ksrc/results/PermutationGeneticAlgorithm/06_06_24-11_37_35-German Credit.csv,a\1\a1c1ab9dd7fabf1efb8a6db03109787324ba5727
-j
-:src/best_individuals/06_06_24-11_36_39-pga_Attribute13.csv,a\8\a8c60b05ac65bc0f8e964e29adfb107c49fe96e0
-i
-9src/best_individuals/06_06_24-11_33_19-pga_Attribute9.csv,8\e\8ee8fe38eb411d630fba4d4394c2c5efe7eccb17
 J
 src/evaluation/__init__.py,1\9\1909ca346aabf7057fb38963460f2434bdc91b28

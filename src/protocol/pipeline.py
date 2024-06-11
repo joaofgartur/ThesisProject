@@ -134,7 +134,7 @@ class Pipeline:
                 _transformed_dataset = unbiasing_algorithm.transform(_transformed_dataset)
                 # _validation_set = unbiasing_algorithm.transform(_validation_set)
 
-            data_assessment(_train_set, _transformed_dataset, _protected_feature)
+            # data_assessment(_train_set, _transformed_dataset, _protected_feature)
 
             _train_set.protected_attributes[_protected_feature] = _original_values[0]
             _transformed_dataset.protected_attributes[_protected_feature] = _original_values[0]

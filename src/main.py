@@ -20,6 +20,7 @@ from datasets import GermanCredit, AdultIncome, Compas
 from helpers import logger, extract_filename, set_seed, get_seed
 from xgboost import XGBClassifier
 
+
 class DatasetOptions(Enum):
     COMPAS = 0
     ADULT = 1
@@ -82,6 +83,7 @@ class AlgorithmOptions(Enum):
     LGAFFS = 5
     PGA = 6
     MLGAFFS = 7
+    GPGA = 8
 
 
 def load_algorithm(option: Enum):
@@ -98,6 +100,7 @@ def load_algorithm(option: Enum):
                 ax=1e-4,
                 ay=0.1,
                 az=1000,
+                verbose=False
             )
         case AlgorithmOptions.LGAFFS:
             genetic_parameters = GeneticBasicParameters(
@@ -115,7 +118,7 @@ def load_algorithm(option: Enum):
             )
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
-                population_size=2,
+                population_size=20,
                 num_generations=2,
                 tournament_size=2,
                 elite_size=2,
@@ -124,7 +127,10 @@ def load_algorithm(option: Enum):
             )
             return PermutationGeneticAlgorithm(
                 genetic_parameters=genetic_parameters,
-                base_algorithm=Massaging()
+                unbiasing_algorithms_pool=[Massaging()],
+                surrogate_models_pool=[SVC(random_state=get_seed()),
+                                       GaussianNB(),
+                                       RandomForestClassifier(random_state=get_seed())]
             )
         case AlgorithmOptions.MLGAFFS:
             genetic_parameters = GeneticBasicParameters(
@@ -139,6 +145,28 @@ def load_algorithm(option: Enum):
                 n_splits=3,
                 min_feature_prob=0.1,
                 max_feature_prob=0.5,
+            )
+        case AlgorithmOptions.GPGA:
+            genetic_parameters = GeneticBasicParameters(
+                population_size=3,
+                num_generations=2,
+                tournament_size=2,
+                elite_size=2,
+                probability_crossover=0.9,
+                probability_mutation=0.05
+            )
+            return PermutationGeneticAlgorithm(
+                genetic_parameters=genetic_parameters,
+                unbiasing_algorithms_pool=[
+                    load_algorithm(AlgorithmOptions.Massaging),
+                    load_algorithm(AlgorithmOptions.Reweighing),
+                    load_algorithm(AlgorithmOptions.DisparateImpactRemover),
+                    load_algorithm(AlgorithmOptions.LGAFFS),
+                    load_algorithm(AlgorithmOptions.AIF360LFR)
+                ],
+                surrogate_models_pool=[SVC(random_state=get_seed()),
+                                       GaussianNB(),
+                                       RandomForestClassifier(random_state=get_seed())]
             )
         case _:
             logger.error('Algorithm option unknown!')
@@ -170,7 +198,7 @@ if __name__ == '__main__':
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
-    run_all_dataset = True
+    run_all_dataset = False
     num_runs = 1
 
     if run_all:
@@ -190,8 +218,8 @@ if __name__ == '__main__':
             pipeline.run_and_save()
     else:
         for i in range(max(1, num_runs)):
-            dataset = load_dataset(DatasetOptions.GERMAN)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.Reweighing)]
+            dataset = load_dataset(DatasetOptions.ADULT)
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.GPGA)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 

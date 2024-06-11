@@ -6,7 +6,6 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import KBinsDiscretizer, LabelEncoder
 
-from constants import PRIVILEGED, UNPRIVILEGED
 from helpers import logger, extract_value, extract_filename, get_seed
 
 
@@ -16,8 +15,9 @@ class Dataset(metaclass=abc.ABCMeta):
         """Initializes class instance"""
         self.features_mapping = None
         self.targets_mapping = None
-        self.instance_weights = None
         self.protected_attributes = None
+        self.sampled_indexes = None
+        self.error_flag = False
 
         self.__parse_dataset_info(dataset_info)
 
@@ -77,14 +77,6 @@ class Dataset(metaclass=abc.ABCMeta):
         outcome = self.targets.columns[0]
 
         return data, outcome
-
-    def get_train_sample_weights(self, train_set: np.ndarray) -> np.ndarray:
-        if self.instance_weights is None:
-            raise ValueError('Instance weights are none.')
-
-        indexes = self.features.index[self.features.isin(train_set).any(axis=1)]
-
-        return self.instance_weights[indexes]
 
     def split(self, settings: dict):
 
@@ -232,10 +224,6 @@ def update_dataset(dataset: Dataset, features: np.ndarray = None, targets: np.nd
         update_targets()
 
     return updated_dataset
-
-
-def is_privileged(instance: str, privileged: str):
-    return PRIVILEGED * 1.0 if instance == privileged else UNPRIVILEGED * 1.0
 
 
 def match_features(dataset_a: Dataset, dataset_b: Dataset):

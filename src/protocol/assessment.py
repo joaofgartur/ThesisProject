@@ -17,19 +17,16 @@ def get_classifier_predictions(model: object, train_data: Dataset, validation_da
 
     pipeline = Pipeline([
         ('classifier', model)
-    ])
+    ], memory=None)
 
     validation_data = match_features(train_data, validation_data)
 
-    x_train = train_data.features
+    x_train = train_data.features.to_numpy()
     y_train = train_data.targets.to_numpy().ravel()
 
-    if train_data.instance_weights is not None:
-        pipeline.fit(x_train, y_train, classifier__sample_weight=train_data.instance_weights)
-    else:
-        pipeline.fit(x_train, y_train)
+    pipeline.fit(x_train, y_train)
 
-    predictions = pipeline.predict(validation_data.features)
+    predictions = pipeline.predict(validation_data.features.to_numpy())
     predicted_data = update_dataset(validation_data, targets=predictions)
 
     return predicted_data
@@ -86,7 +83,7 @@ def assess_all_surrogates(train_set: Dataset,
             validation_set,
             protected_attribute)
         
-        print(f'Outcomes for surrogate {surrogate}: \n{decisions.value_counts()}')
+        # print(f'Outcomes for surrogate {surrogate}: \n{decisions.value_counts()}')
 
         df = pd.concat([df, surrogate_model_results]).reset_index(drop=True)
 

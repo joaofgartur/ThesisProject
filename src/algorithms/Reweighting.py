@@ -20,19 +20,17 @@ class Reweighing(Algorithm):
         self.transformer = None
         self.sensitive_attribute = None
 
-    def __resample(self, data: pd.DataFrame, weights: np.array) -> pd.DataFrame:
+    def __resample(self, data: pd.DataFrame, weights: np.array) -> (np.ndarray, np.ndarray):
 
         privileged_group = data[data[self.sensitive_attribute] == PRIVILEGED]
         unprivileged_group = data[data[self.sensitive_attribute] == UNPRIVILEGED]
-
         n_samples = np.abs(len(privileged_group) - len(unprivileged_group))
 
         sample_indexes = get_generator().choice(data.index, size=n_samples, replace=True, p=weights)
         sampled_df = data.loc[sample_indexes]
-
         sampled_data = pd.concat([data, sampled_df], ignore_index=True)
 
-        return sampled_data
+        return sampled_data.to_numpy(), sample_indexes
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.sensitive_attribute = sensitive_attribute
@@ -77,9 +75,10 @@ class Reweighing(Algorithm):
         resampling_data = pd.DataFrame(np_array,
                                        columns=standard_data.feature_names + standard_data.label_names)
 
-        resampled_data = self.__resample(resampling_data, normalized_weights).to_numpy()
+        resampled_data, indexes = self.__resample(resampling_data, normalized_weights)
         resampled_features, resampled_targets = resampled_data[:, :-1], resampled_data[:, -1]
 
         transformed_dataset = update_dataset(dataset=data, features=resampled_features, targets=resampled_targets)
+        transformed_dataset.sampled_indexes = indexes
 
         return transformed_dataset

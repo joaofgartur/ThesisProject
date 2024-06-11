@@ -1,6 +1,6 @@
 import pandas as pd
 
-from datasets import Dataset, is_privileged
+from datasets import Dataset
 from constants import POSITIVE_OUTCOME
 from helpers import logger, extract_filename
 

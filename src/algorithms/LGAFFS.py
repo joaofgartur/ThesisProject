@@ -1,4 +1,5 @@
 import copy
+import itertools
 import math
 import os
 from concurrent.futures import ThreadPoolExecutor
@@ -9,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
-from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters, uniform_crossover, bit_flip_mutation, select_best
+from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from constants import NUM_DECIMALS
 from datasets import Dataset, update_dataset
 from evaluation import FairnessEvaluator
@@ -41,7 +42,7 @@ class LGAFFS(Algorithm):
             # genome, performance, fairness
             return [np.array(
                 [1 if features_prob[i] > feature_prob else 0 for i in range(self.genetic_parameters.individual_size)]),
-                    [], []]
+                [], []]
         return [get_generator().randint(2, size=self.genetic_parameters.individual_size), {}, {}]
 
     def __gen_ramped_population(self):
@@ -49,10 +50,40 @@ class LGAFFS(Algorithm):
         pop_feature_probs = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob, size=n)
         return [self.__gen_individual(float(pop_feature_probs[i])) for i in range(n)]
 
-    def __uniform_crossover(self, parent1, parent2):
+    def __crossover(self, parent1, parent2):
+
+        def uniform_crossover(_parent1: list, _parent2: list, probability_crossover: float):
+            value = get_generator().random()
+            if value < probability_crossover:
+
+                offspring1 = [np.zeros(_parent1[0].shape, dtype=int), {}, {}]
+                offspring2 = [np.zeros(_parent1[0].shape, dtype=int), {}, {}]
+
+                indexes_choice = get_generator().choice(_parent1[0].shape[0])
+                index_mask = indexes_choice < 0.5
+
+                offspring1[0][index_mask] = _parent1[0][index_mask]
+                offspring2[0][index_mask] = _parent2[0][index_mask]
+
+                offspring1[0][~index_mask] = _parent2[0][~index_mask]
+                offspring2[0][~index_mask] = _parent1[0][~index_mask]
+
+                return offspring1, offspring2
+            else:
+                return _parent1, _parent2
+
         return uniform_crossover(parent1, parent2, self.genetic_parameters.probability_crossover)
 
     def __mutation(self, individual: list):
+
+        def bit_flip_mutation(_individual: list, probability_mutation: float):
+            new_individual = copy.deepcopy(_individual)
+            random_probs = get_generator().random(_individual[0].shape[0])
+            for i in range(random_probs.shape[0]):
+                if random_probs[i] < probability_mutation:
+                    new_individual[0][i] = 1 - new_individual[0][i]
+            return new_individual
+
         return bit_flip_mutation(individual, self.genetic_parameters.probability_mutation)
 
     def __tournament(self, population):
@@ -68,7 +99,51 @@ class LGAFFS(Algorithm):
         return mate_pool[0], mate_pool[1]
 
     def __select_best(self, population):
-        return select_best(population)
+
+        def sort_population(_population: list, objective: str, index: int):
+            _population.sort(key=lambda x: x[index][objective], reverse=True)
+            return _population
+
+        def select_top_individuals(_population, _metric, epsilon: float = 0.0, fairness_metric=False):
+            index = 1
+            if fairness_metric:
+                index = 2
+
+            _population = sort_population(_population, _metric, index)
+            best_value = _population[0][index][_metric] - epsilon
+            last_index = np.argmax([individual[index][_metric] < best_value - epsilon for individual in _population])
+            return _population[:last_index + 1]
+
+        def lexicographic_selection(_population, metrics):
+            for _metric in metrics:
+                if len(_population) == 1:
+                    break
+                _population = select_top_individuals(_population, _metric)
+
+            return _population[0]
+
+            # sort by performance metrics
+        for metric in list(population[0][1].keys()):
+            population = select_top_individuals(population, metric)
+
+        # lexicographic fairness selection
+        lexicographic_permutations = list(itertools.permutations(list(population[0][1].keys())))
+        winners = {}
+        winners_count = {}
+        for permutation in lexicographic_permutations:
+            best_individual = lexicographic_selection(population, permutation)
+
+            individual_key = str(best_individual[0])
+            if individual_key not in winners.keys():
+                winners.update({individual_key: best_individual})
+                winners_count.update({individual_key: 1})
+            else:
+                winners_count.update({individual_key: winners_count[individual_key] + 1})
+
+        # select the individual with the most wins
+        best_individual_key = max(winners_count, key=lambda x: winners_count[x])
+
+        return winners[best_individual_key]
 
     def __performance_fitness(self, data: Dataset, predictions: Dataset):
         performance_evaluator = ModelEvaluator(data, predictions)
@@ -110,7 +185,7 @@ class LGAFFS(Algorithm):
                 self.__fairness_fitness(data, predicted_data)]
 
     def __multithread_fitness(self, data: Dataset, population, folds: KFold):
-        num_threads = os.cpu_count()
+        num_threads = min(os.cpu_count(), 15)
 
         def evaluate_fitness(individual):
             return self.__fitness(data, individual, folds)
@@ -151,7 +226,7 @@ class LGAFFS(Algorithm):
                 individual_1, individual_2 = self.__tournament(self.population)
 
                 # crossover
-                new_individual_1, new_individual_2 = self.__uniform_crossover(individual_1, individual_2)
+                new_individual_1, new_individual_2 = self.__crossover(individual_1, individual_2)
 
                 # mutation
                 new_population.append(self.__mutation(new_individual_1))
