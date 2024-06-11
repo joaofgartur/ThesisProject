@@ -9,6 +9,8 @@ class Algorithm(metaclass=abc.ABCMeta):
         """"""
         self.is_binary = True
         self.sensitive_attribute = None
+        self.needs_auxiliary_data = False
+        self.auxiliary_data = None
 
     @abc.abstractmethod
     def fit(self, data: Dataset, sensitive_attribute: str):

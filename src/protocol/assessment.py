@@ -54,8 +54,8 @@ def performance_assessment(data: Dataset, predictions: Dataset) -> pd.DataFrame:
     return performance_evaluator.evaluate().reset_index(drop=True)
 
 
-def assess_classifier(classifier: object, train_data: Dataset, validation_data: Dataset,
-                      protected_attribute: str = 'NA') -> (pd.Series, pd.DataFrame):
+def classifier_assessment(classifier: object, train_data: Dataset, validation_data: Dataset,
+                          protected_attribute: str = 'NA') -> (pd.Series, pd.DataFrame):
 
     predictions = get_classifier_predictions(classifier, train_data, validation_data)
 
@@ -68,36 +68,6 @@ def assess_classifier(classifier: object, train_data: Dataset, validation_data: 
     results = concat_df(concat_df(classification_algorithm, fairness_metrics, axis=1), performance_metrics, axis=1)
 
     return predictions.targets, results
-
-
-def assess_all_surrogates(train_set: Dataset,
-                          validation_set: Dataset,
-                          surrogate_classifiers: dict,
-                          protected_attribute: str = 'NA') -> pd.DataFrame:
-    df = pd.DataFrame()
-
-    for surrogate in surrogate_classifiers:
-        decisions, surrogate_model_results = assess_classifier(
-            surrogate_classifiers[surrogate],
-            train_set,
-            validation_set,
-            protected_attribute)
-        
-        # print(f'Outcomes for surrogate {surrogate}: \n{decisions.value_counts()}')
-
-        df = pd.concat([df, surrogate_model_results]).reset_index(drop=True)
-
-    return df
-
-
-def data_description_diff(df: pd.DataFrame, fixed_df: pd.DataFrame) -> pd.DataFrame:
-    df_description = df.describe()
-    fixed_df_description = fixed_df.describe()
-    return df_description.compare(fixed_df_description)
-
-
-def data_value_counts(df: pd.DataFrame) -> pd.Series:
-    return df.value_counts()
 
 
 def data_assessment(original_data: Dataset, transformed_data: Dataset, sensitive_attribute: str):

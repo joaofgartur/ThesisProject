@@ -7,8 +7,10 @@ Last edited: 30-11-2023
 from enum import Enum
 
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
 
 from algorithms import (Massaging, Reweighing, DisparateImpactRemover, LGAFFS,
                         PermutationGeneticAlgorithm, AIF360LearningFairRepresentations)
@@ -118,7 +120,7 @@ def load_algorithm(option: Enum):
             )
         case AlgorithmOptions.PGA:
             genetic_parameters = GeneticBasicParameters(
-                population_size=20,
+                population_size=5,
                 num_generations=2,
                 tournament_size=2,
                 elite_size=2,
@@ -187,18 +189,18 @@ if __name__ == '__main__':
     set_seed(settings['seed'])
 
     test_classifier = XGBClassifier(random_state=get_seed())
-    surrogate_models = {
-        #'LR': LogisticRegression(),
-        'SVC': SVC(),
-        'GNB': GaussianNB(),
-        #"DT": DecisionTreeClassifier(),
-        "RF": RandomForestClassifier(),
-    }
+    surrogate_models = [
+        # LogisticRegression(),
+        SVC(random_state=get_seed()),
+        GaussianNB(),
+        # DecisionTreeClassifier(random_state=get_seed()),
+        RandomForestClassifier(random_state=get_seed()),
+    ]
 
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     run_all = False
-    run_all_dataset = False
+    run_all_dataset = True
     num_runs = 1
 
     if run_all:
@@ -219,7 +221,7 @@ if __name__ == '__main__':
     else:
         for i in range(max(1, num_runs)):
             dataset = load_dataset(DatasetOptions.ADULT)
-            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.GPGA)]
+            unbiasing_algorithms = [load_algorithm(AlgorithmOptions.PGA)]
             pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, settings)
             pipeline.run_and_save(results_path)
 

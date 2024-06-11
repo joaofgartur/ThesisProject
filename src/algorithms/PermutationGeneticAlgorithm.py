@@ -21,9 +21,9 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         super().__init__()
         self.is_binary = False
+        self.needs_auxiliary_data = True
 
         self.genetic_parameters = genetic_parameters
-        self.validation_data = None
 
         self.unbiasing_algorithms_pool = unbiasing_algorithms_pool
         self.surrogate_models_pool = surrogate_models_pool
@@ -235,10 +235,10 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         if _is_invalid(individual) or data.error_flag:
             for model in self.surrogate_models_pool:
-                individual[1].update({model.__class__.__name__: self.__performance_fitness(self.validation_data,
-                                                                                            self.validation_data)})
-                individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.validation_data,
-                                                                                        self.validation_data)})
+                individual[1].update({model.__class__.__name__: self.__performance_fitness(self.auxiliary_data,
+                                                                                           self.auxiliary_data)})
+                individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
+                                                                                        self.auxiliary_data)})
 
             for model, metrics in individual[1].items():
                 for metric in metrics:
@@ -247,10 +247,10 @@ class PermutationGeneticAlgorithm(Algorithm):
             return individual
 
         for model in self.surrogate_models_pool:
-            model_predictions = get_classifier_predictions(model, data, self.validation_data)
-            individual[1].update({model.__class__.__name__: self.__performance_fitness(self.validation_data,
+            model_predictions = get_classifier_predictions(model, data, self.auxiliary_data)
+            individual[1].update({model.__class__.__name__: self.__performance_fitness(self.auxiliary_data,
                                                                                        model_predictions)})
-            individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.validation_data,
+            individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
                                                                                     model_predictions)})
 
         return individual
@@ -266,7 +266,8 @@ class PermutationGeneticAlgorithm(Algorithm):
                 break
 
             if self.sensitive_attribute not in transformed_data.features.columns:
-                sensitive_attribute = pd.DataFrame(dummy_values[self.decoder[value]], columns=[self.sensitive_attribute])
+                sensitive_attribute = pd.DataFrame(dummy_values[self.decoder[value]],
+                                                   columns=[self.sensitive_attribute])
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
             if transformed_data.features.shape[0] != dimensions[0]:
@@ -286,9 +287,6 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         return transformed_data
 
-    def set_validation_data(self, validation_data: Dataset):
-        self.validation_data = validation_data
-
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.decoder = data.features_mapping[sensitive_attribute]
         self.genetic_parameters.individual_size = len(data.features_mapping[sensitive_attribute])
@@ -302,7 +300,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         best_individual = self.__select_best(population)
         best_individuals = self.__decode_individual(best_individual)
 
-        logger.info(f'[PGA] Generation {0}/{self.genetic_parameters.num_generations} '
+        logger.info(f'[PGA] Generation {1}/{self.genetic_parameters.num_generations} '
                     f'Best Individual: {best_individuals.iloc[-1]["Genotype"]}')
 
         for i in range(1, self.genetic_parameters.num_generations):
@@ -329,7 +327,7 @@ class PermutationGeneticAlgorithm(Algorithm):
             best_individuals = pd.concat([best_individuals, self.__decode_individual(best_individual)])
 
             logger.info(
-                f'[PGA] Generation {i}/{self.genetic_parameters.num_generations} '
+                f'[PGA] Generation {i+1}/{self.genetic_parameters.num_generations} '
                 f'Best Individual: {best_individuals.iloc[-1]["Genotype"]}')
 
         write_dataframe_to_csv(best_individuals, f'pga_{self.sensitive_attribute}', 'best_individuals')
