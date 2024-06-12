@@ -9,7 +9,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from constants import NUM_DECIMALS
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import logger, write_dataframe_to_csv, get_generator
+from helpers import write_dataframe_to_csv, get_generator
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -17,11 +17,13 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters,
                  unbiasing_algorithms_pool: [Algorithm],
-                 surrogate_models_pool: [object]):
+                 surrogate_models_pool: [object],
+                 verbose: bool = False):
 
         super().__init__()
         self.is_binary = False
         self.needs_auxiliary_data = True
+        self.algorithm_name = 'PermutationGeneticAlgorithm'
 
         self.genetic_parameters = genetic_parameters
 
@@ -30,6 +32,8 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.sensitive_attribute = ''
         self.population = []
         self.decoder = {}
+
+        self.verbose = verbose
 
     def __generate_individual(self) -> list:
         """
@@ -300,8 +304,9 @@ class PermutationGeneticAlgorithm(Algorithm):
         best_individual = self.__select_best(population)
         best_individuals = self.__decode_individual(best_individual)
 
-        logger.info(f'[PGA] Generation {1}/{self.genetic_parameters.num_generations} '
-                    f'Best Individual: {best_individuals.iloc[-1]["Genotype"]}')
+        if self.verbose:
+            print(f'[PGA] Generation {1}/{self.genetic_parameters.num_generations} '
+                  f'Best Individual: {best_individuals.iloc[-1]["Genotype"]}')
 
         for i in range(1, self.genetic_parameters.num_generations):
             parents = self.__tournament(population)
@@ -326,10 +331,10 @@ class PermutationGeneticAlgorithm(Algorithm):
             best_individual = self.__select_best(population)
             best_individuals = pd.concat([best_individuals, self.__decode_individual(best_individual)])
 
-            logger.info(
-                f'[PGA] Generation {i+1}/{self.genetic_parameters.num_generations} '
-                f'Best Individual: {best_individuals.iloc[-1]["Genotype"]}')
+            if self.verbose:
+                print(f'[PGA] Generation {i + 1}/{self.genetic_parameters.num_generations} '
+                      f'Best Individual: {best_individuals.iloc[-1]["Genotype"]}')
 
-        write_dataframe_to_csv(best_individuals, f'pga_{self.sensitive_attribute}', 'best_individuals')
+        write_dataframe_to_csv(best_individuals, f'{self.algorithm_name}_{self.sensitive_attribute}', 'best_individuals')
 
         return self.__phenotype(dataset, best_individual)

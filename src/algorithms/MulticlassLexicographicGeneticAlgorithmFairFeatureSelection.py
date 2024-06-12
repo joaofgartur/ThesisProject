@@ -4,28 +4,28 @@ import pandas as pd
 from constants import NUM_DECIMALS
 from datasets import Dataset
 
-from algorithms import LGAFFS
+from algorithms import LexicographicGeneticAlgorithmFairFeatureSelection
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from evaluation import FairnessEvaluator
 from helpers import dict_to_dataframe
-from protocol.assessment import fairness_assessment
 
 
-class MultivalueLGAFFS(Algorithm):
+class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters, min_feature_prob: float = 0.0,
-                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01):
+                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01, verbose: bool = False):
         super().__init__()
 
         # genetic parameters
         self.epsilon = epsilon
         self.is_binary = False
-        self.algorithm = LGAFFS(
+        self.algorithm = LexicographicGeneticAlgorithmFairFeatureSelection(
             genetic_parameters=genetic_parameters,
             n_splits=n_splits,
             min_feature_prob=min_feature_prob,
             max_feature_prob=max_feature_prob,
+            verbose=verbose
         )
 
         self.algorithm.__fairness_fitness = self.__fairness_fitness
@@ -59,12 +59,11 @@ class MultivalueLGAFFS(Algorithm):
         metrics = pd.DataFrame()
         for value in dummy_values:
             data.protected_attributes[self.sensitive_attribute] = dummy_values[value]
-            value_df = pd.concat([dict_to_dataframe({'value': value}), self.__fitness_metrics(data, predictions, self.sensitive_attribute)], axis=1)
+            value_df = pd.concat([dict_to_dataframe({'value': value}),
+                                  self.__fitness_metrics(data, predictions, self.sensitive_attribute)], axis=1)
             metrics = pd.concat([metrics, value_df])
 
         data.protected_attributes[self.sensitive_attribute] = original_attribute_values
-
-        # metrics = fairness_assessment(data, predictions, self.sensitive_attribute)
 
         result = {}
         for metric in metrics.columns:

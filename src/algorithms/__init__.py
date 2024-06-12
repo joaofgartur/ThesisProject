@@ -7,7 +7,7 @@ Last edited: 20-11-2023
 from .Massaging import Massaging
 from .Reweighting import Reweighing
 from .DisparateImpactRemover import DisparateImpactRemover
-from .AIF360LearningFairRepresentations import AIF360LearningFairRepresentations
-from .LGAFFS import LGAFFS
+from .LearnedFairRepresentations import LearnedFairRepresentations
+from .LexicographicGeneticAlgorithmFairFeatureSelection import LexicographicGeneticAlgorithmFairFeatureSelection
 from .PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
-from .LearningFairRepresentations import LearnedFairRepresentations
+from .pga_variants import *

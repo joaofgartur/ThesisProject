@@ -15,13 +15,13 @@ from constants import NUM_DECIMALS
 from datasets import Dataset, update_dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import logger, get_generator, get_seed
+from helpers import get_generator, get_seed
 
 
-class LGAFFS(Algorithm):
+class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters, min_feature_prob: float = 0.0,
-                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01):
+                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01, verbose: bool = False):
         super().__init__()
 
         # genetic parameters
@@ -31,6 +31,8 @@ class LGAFFS(Algorithm):
         self.max_feature_prob = max_feature_prob
         self.n_splits = n_splits
         self.epsilon = epsilon
+
+        self.verbose = verbose
 
         self.sensitive_attribute = None
         self.population = None
@@ -214,7 +216,6 @@ class LGAFFS(Algorithm):
         best_individual = []
 
         for i in range(self.genetic_parameters.num_generations):
-            logger.info(f'[LGAFFS] Generation {i + 1}/{self.genetic_parameters.num_generations}')
 
             for j, individual in enumerate(self.__multithread_fitness(data, self.population, folds)):
                 self.population[j] = individual
@@ -234,9 +235,11 @@ class LGAFFS(Algorithm):
 
             self.population = new_population
 
+            if self.verbose:
+                print(f'Generation {i + 1}/{self.genetic_parameters.num_generations} -'
+                      f' Best individual: {best_individual[0]}')
+
         if not best_individual:
             return data
-
-        print(f'[LGAFFS] Best individual: {best_individual[0]}')
 
         return self.__phenotype(data, best_individual)

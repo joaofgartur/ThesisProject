@@ -6,12 +6,24 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import KBinsDiscretizer, LabelEncoder
 
-from helpers import logger, extract_value, extract_filename, get_seed
+from helpers import logger, extract_filename, get_seed
+
+
+class DatasetConfig:
+
+    def __init__(self, name: str, protected_attributes: list[str], target: str,
+                 train_size: float, test_size: float, validation_size: float):
+        self.name = name
+        self.protected_attributes = protected_attributes
+        self.target = target
+        self.train_size = train_size
+        self.validation_size = validation_size
+        self.test_size = test_size
 
 
 class Dataset(metaclass=abc.ABCMeta):
 
-    def __init__(self, dataset_info: dict):
+    def __init__(self, config: DatasetConfig):
         """Initializes class instance"""
         self.features_mapping = None
         self.targets_mapping = None
@@ -19,7 +31,7 @@ class Dataset(metaclass=abc.ABCMeta):
         self.sampled_indexes = None
         self.error_flag = False
 
-        self.__parse_dataset_info(dataset_info)
+        self.__parse_dataset_config(config)
 
         # load raw data into dataframe
         self.features, self.targets = self._load_dataset()
@@ -78,7 +90,7 @@ class Dataset(metaclass=abc.ABCMeta):
 
         return data, outcome
 
-    def split(self, settings: dict):
+    def split(self):
 
         # split into train and validation/test sets
         stratify_criteria = pd.concat([self.features[self.protected_features_names], self.targets], axis=1)
@@ -104,13 +116,13 @@ class Dataset(metaclass=abc.ABCMeta):
         stratify_criteria = stratify_criteria.drop(index=indexes_to_remove)
 
         x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,
-                                                            train_size=settings.get('train_size'),
+                                                            train_size=self.train_size,
                                                             random_state=get_seed(),
                                                             shuffle=True,
                                                             stratify=stratify_criteria)
 
         # split into validation and test sets
-        split_ratio = settings['test_size'] / (settings['validation_size'] + settings['test_size'])
+        split_ratio = self.test_size / (self.validation_size + self.test_size)
         stratify_criteria = pd.concat([x_test[self.protected_features_names], y_test], axis=1)
         x_val, x_test, y_val, y_test = train_test_split(x_test, y_test,
                                                         test_size=split_ratio,
@@ -144,7 +156,6 @@ class Dataset(metaclass=abc.ABCMeta):
             self.__drop_invalid_instances()
             self.__quantize_numerical_features()
             self._transform_protected_attributes()
-            # self.__one_hot_encode_categorical_features()
             self.__label_encode_categorical(features=True, targets=True)
 
         logger.info("[DATASET] Pre-processing complete.")
@@ -154,18 +165,14 @@ class Dataset(metaclass=abc.ABCMeta):
         self.features = self.features.drop(drop_indexes).reset_index(drop=True)
         self.targets = self.targets.drop(drop_indexes).reset_index(drop=True)
 
-    def __parse_dataset_info(self, dataset_info: dict):
-        dataset_name = 'dataset_name'
-        protected_attributes = 'protected_attributes'
-        explanatory_attributes = 'explanatory_attributes'
-        privileged_classes = 'privileged_classes'
-        target = 'target'
+    def __parse_dataset_config(self, config: DatasetConfig):
 
-        self.name = extract_value(dataset_name, dataset_info)
-        self.protected_features_names = extract_value(protected_attributes, dataset_info)
-        self.explanatory_features = extract_value(explanatory_attributes, dataset_info)
-        self.privileged_classes = extract_value(privileged_classes, dataset_info)
-        self.target = extract_value(target, dataset_info)
+        self.name = config.name
+        self.protected_features_names = config.protected_attributes
+        self.target = config.target
+        self.train_size = config.train_size
+        self.validation_size = config.validation_size
+        self.test_size = config.test_size
 
     def __reset_indexes(self):
         self.features = self.features.reset_index(drop=True)

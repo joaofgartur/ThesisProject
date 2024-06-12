@@ -2,16 +2,16 @@ import pandas as pd
 from ucimlrepo import fetch_ucirepo
 
 from constants import NEGATIVE_OUTCOME, POSITIVE_OUTCOME
-from datasets import Dataset
+from datasets import Dataset, DatasetConfig
 from helpers import logger, extract_filename
 
 
 class AdultIncome(Dataset):
     _LOCAL_DATA_FILE = "datasets/local_storage/adult_income/adult.data"
 
-    def __init__(self, dataset_info: dict):
+    def __init__(self, config: DatasetConfig):
         logger.info(f'[{extract_filename(__file__)}] Loading...')
-        Dataset.__init__(self, dataset_info)
+        Dataset.__init__(self, config)
 
     def _load_dataset(self):
         try:

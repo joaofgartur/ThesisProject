@@ -15,9 +15,8 @@ class Pipeline:
 
     def __init__(self, dataset: Dataset,
                  unbiasing_algorithms: [Algorithm],
-                 surrogate_classifiers: dict,
-                 test_classifier: object,
-                 settings: dict) -> None:
+                 surrogate_classifiers: list[object],
+                 test_classifier: object) -> None:
 
         self.dataset = dataset
         self.train_set = None
@@ -25,7 +24,6 @@ class Pipeline:
         self.test_set = None
 
         self.unbiasing_algorithms = unbiasing_algorithms
-        self.settings = settings
 
         self.surrogate_classifiers = surrogate_classifiers
         self.test_classifier = test_classifier
@@ -40,7 +38,8 @@ class Pipeline:
         scaler.fit(self.train_set.features)
 
         self.train_data = update_dataset(self.train_set, features=scaler.transform(self.train_set.features))
-        self.validation_data = update_dataset(self.validation_set, features=scaler.transform(self.validation_set.features))
+        self.validation_data = update_dataset(self.validation_set,
+                                              features=scaler.transform(self.validation_set.features))
         self.test_data = update_dataset(self.test_set, features=scaler.transform(self.test_set.features))
 
     def __pre_intervention__(self, train_set: Dataset) -> pd.DataFrame:
@@ -105,21 +104,22 @@ class Pipeline:
 
         return pd.concat([pipeline_df, results], axis=1).reset_index(drop=True)
 
-    def __bias_reduction__(self, train_set: Dataset, validation_set: Dataset, test_set: Dataset,
+    def __bias_reduction__(self, train_set: Dataset, validation_set: Dataset,
                            unbiasing_algorithm: Algorithm, protected_attribute: str) -> pd.DataFrame:
 
         unbiasing_algorithm_type = 'binary' if unbiasing_algorithm.is_binary else 'multi-class'
-        logger.info(f'[INTERVENTION] Reducing bias with unbiasing algorithm for {unbiasing_algorithm_type} '
-                    f'sensitive attribute {protected_attribute}.')
+        logger.info(f'[INTERVENTION] Reducing bias for {unbiasing_algorithm_type} '
+                    f'sensitive attribute {protected_attribute} with unbiasing algorithm'
+                    f' {unbiasing_algorithm.__class__.__name__}.')
 
         metrics_df = pd.DataFrame()
         if unbiasing_algorithm.is_binary:
             attribute_values = train_set.get_dummy_protected_feature(protected_attribute)
         else:
-            attribute_values = pd.DataFrame(train_set.get_protected_feature(protected_attribute), columns=[protected_attribute])
+            attribute_values = pd.DataFrame(train_set.get_protected_feature(protected_attribute),
+                                            columns=[protected_attribute])
 
         for value in attribute_values:
-            print(f'Value {value}')
             if unbiasing_algorithm.is_binary:
                 logger.info(
                     f"[INTERVENTION] Correcting bias w.r.t. attribute {protected_attribute} for {value} with "
@@ -133,6 +133,11 @@ class Pipeline:
 
             unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
             transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
+
+            if transformed_dataset.error_flag:
+                logger.error(f'[INTERVENTION] Error occurred bias correction w.r.t. attribute {protected_attribute} '
+                             f'for {value} with "{unbiasing_algorithm.__class__.__name__}"')
+                continue
 
             value_results = self.__post_intervention__(transformed_dataset, protected_attribute)
 
@@ -148,7 +153,7 @@ class Pipeline:
             logger.info("[PIPELINE] Start.")
 
             # split
-            self.train_set, self.validation_set, self.test_set = self.dataset.split(self.settings)
+            self.train_set, self.validation_set, self.test_set = self.dataset.split()
 
             # scale
             self.__scale__(MinMaxScaler())
@@ -166,7 +171,6 @@ class Pipeline:
 
                 attribute_results = self.__bias_reduction__(self.train_set,
                                                             self.validation_set,
-                                                            self.test_set,
                                                             unbiasing_algorithm,
                                                             attribute)
 

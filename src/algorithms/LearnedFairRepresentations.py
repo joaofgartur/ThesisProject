@@ -10,7 +10,7 @@ from helpers import (convert_to_standard_dataset, get_seed, )
 import numpy as np
 
 
-class AIF360LearningFairRepresentations(Algorithm):
+class LearnedFairRepresentations(Algorithm):
 
     def __init__(self,
                  k: int = 5,
