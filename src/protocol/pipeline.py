@@ -6,8 +6,9 @@ import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 
 from algorithms.Algorithm import Algorithm
+from constants import NUM_DECIMALS
 from datasets import Dataset, update_dataset
-from helpers import logger, write_dataframe_to_csv, dict_to_dataframe
+from helpers import logger, write_dataframe_to_csv, dict_to_dataframe, round_df
 from .assessment import classifier_assessment
 
 
@@ -188,7 +189,7 @@ class Pipeline:
     def save(self, path: str = 'results') -> None:
         if self.results is not None:
             for key, result in self.results.items():
-                write_dataframe_to_csv(df=result, dataset_name=self.dataset.name,
+                write_dataframe_to_csv(df=round_df(result, NUM_DECIMALS), dataset_name=self.dataset.name,
                                        path=f'{path}/{key}')
         else:
             raise KeyError('Results are empty!')
@@ -196,7 +197,7 @@ class Pipeline:
     def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results') -> None:
         if self.results is not None:
             suffix = f'_intermediary_{attribute}_'
-            write_dataframe_to_csv(df=self.results[algorithm],
+            write_dataframe_to_csv(df=round_df(self.results[algorithm], NUM_DECIMALS),
                                    dataset_name=self.dataset.name + suffix,
                                    path=f'{path}/{algorithm}')
         else:

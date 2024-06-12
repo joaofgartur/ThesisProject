@@ -47,15 +47,8 @@ class ModelEvaluator(object):
 
     def evaluate(self):
         result = {
-            'confusion_matrix': self.confusion_matrix(),
-            'accuracy': self.accuracy(),
-            'f1_score': self.f1_score(),
-            'recall': self.recall(),
-            'precision': self.precision(),
-            'mathews_cc': self.mathews_cc(),
-            'roc_curve': self.roc_curve(),
-            'auc': self.auc(),
-            'sensitivity': self.sensitivity(),
-            'specificity': self.specificity()
+            'performance_accuracy': self.accuracy(),
+            'performance_f1_score': self.f1_score(),
+            'performance_auc': self.auc(),
         }
         return dict_to_dataframe(result)

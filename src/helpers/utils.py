@@ -27,3 +27,10 @@ def dict_to_dataframe(dictionary: dict) -> pd.DataFrame:
 
 def concat_df(df1: pd.DataFrame, df2: pd.DataFrame, axis: int = 0) -> pd.DataFrame:
     return pd.concat([df1, df2], axis=axis).reset_index(drop=True)
+
+
+def round_df(df: pd.DataFrame, decimals: int) -> pd.DataFrame:
+    df = df.round(decimals)
+    padding_columns = df.select_dtypes(include=['float']).columns
+    df[padding_columns] = df[padding_columns].applymap(lambda x: f"{x:.4f}")
+    return df

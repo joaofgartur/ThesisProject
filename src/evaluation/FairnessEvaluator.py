@@ -101,13 +101,13 @@ class FairnessEvaluator(object):
     def evaluate(self):
 
         result = {
-            'disparate_impact': self.disparate_impact(),
-            'discrimination_score': self.discrimination_score(),
-            'true_positive_rate_diff': self.true_positive_rate_diff(),
-            'false_positive_rate_diff': self.false_positive_rate_diff(),
-            'false_positive_error_rate_balance_score': self.false_positive_error_rate_balance_score(),
-            'false_negative_error_rate_balance_score': self.false_negative_error_rate_balance_score(),
-            'consistency': self.consistency(k=3),
+            'fairness_disparate_impact': self.disparate_impact(),
+            'fairness_discrimination_score': self.discrimination_score(),
+            'fairness_true_positive_rate_diff': self.true_positive_rate_diff(),
+            'fairness_false_positive_rate_diff': self.false_positive_rate_diff(),
+            'fairness_false_positive_error_rate_balance_score': self.false_positive_error_rate_balance_score(),
+            'fairness_false_negative_error_rate_balance_score': self.false_negative_error_rate_balance_score(),
+            'fairness_consistency': self.consistency(k=3),
         }
 
         return dict_to_dataframe(result)

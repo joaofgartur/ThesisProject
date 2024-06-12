@@ -33,8 +33,6 @@ L
 src/datasets/GermanCredit.py,9\4\94413888708506ccc98818a7c7408ae21c95a8ab
 K
 src/algorithms/Massaging.py,0\4\0453dbec9e5f7fc542b2b0af462bc272f66b0362
-]
--src/algorithms/LearningFairRepresentations.py,e\3\e359cafcd842eb17255a4b8e8c49eb03a8e2fce7
 F
 src/helpers/logging.py,6\d\6dae6ffd28b18daac2e23f1fb508bee153a53e5d
 D
@@ -66,22 +64,14 @@ S
 #src/evaluation/FairnessEvaluator.py,7\6\7696999961a97a1cb8771953b104c0e37a7ad1fa
 P
  src/evaluation/ModelEvaluator.py,0\0\00b623ed9c1755f3c5e2bbb69a7706fe4798513b
-H
-src/algorithms/LGAFFS.py,9\b\9bd1039a293c80d8706ef3499573d3b248f5f944
 D
 src/helpers/maths.py,2\e\2e9e2f47b55e25c6c4f65a22520efc87753e0f00
 ]
 -src/algorithms/PermutationGeneticAlgorithm.py,b\4\b40f1f7fc3173337b8489856c984ae98af91ea76
 Y
 )src/algorithms/GeneticAlgorithmHelpers.py,c\1\c1cf3719a0d1c1d894dc9899e835b3b8719edc85
-c
-3src/algorithms/AIF360LearningFairRepresentations.py,6\0\60d6a08d3a04907280422f431120d5e3df35dd05
-L
-src/algorithms/LFRhelpers.py,2\9\294cf48f46a4ba25f6f5391852d8316d10cc1176
 @
 requirements.txt,1\9\19359a61ae2446b51b549167b014da2fcf265768
-R
-"src/algorithms/MultivalueLGAFFS.py,4\6\46033432cc888f37247e7d530f6656a90776d10c
 f
 6important_results/results_processing_scripts/input.tex,6\8\6824cd80e3330b0059f51af36f05c22ede3afab7
 y
@@ -164,38 +154,16 @@ J
 src/evaluation/__init__.py,1\9\1909ca346aabf7057fb38963460f2434bdc91b28
 H
 src/configs/datasets.cfg,2\f\2fc1e3afb1e0d5ab5efe82eb0de15fc0f66e2253
-I
-src/configs/algorithms.cf,9\b\9b79a753a331115d6c5d84661501f5d608335237
-?
-src/configs.cfg,f\3\f32347f53ea05398e81bed37a4b76f526b598531
-B
-src/main_helper.py,d\b\dbf58873d88540372c03ad120d278bba1ee65473
 >
 src/configs.py,a\8\a861de7665832b46ea05a70694e778592878d9e2
-@
-src/datasets.cfg,5\e\5e979ee8e24be280f633a1d02b2be51fd751c1ff
-B
-src/algorithms.cfg,f\8\f85156211a6710b6f840e2b15f4f748a5ebf052d
 \
 ,src/algorithms/LearnedFairRepresentations.py,8\6\868b3b273f6493b296868b5b837c2228e1790e3d
-N
-src/algorithms/PGAMassaging.py,b\6\b6df2d13271ef55181eb4bfda0b8b82a8a6061c4
-O
-src/algorithms/PGAReweighing.py,4\9\4979e06d951ec3affd3a656c2fede35c591c08e0
-^
-.src/algorithms/PGALearnedFairRepresentation.py,1\f\1f8e8c468e2b67127ef02ad1b44c31be9f1b6cc1
-[
-+src/algorithms/PGADisparateImpactRemover.py,e\3\e3a5ab43375875aaed975a259837f0ca120a51bf
-K
-src/algorithms/PGALGAFFS.py,6\5\65875c1cb1cca2094dee8261350528be1094954a
 W
 'src/algorithms/pga_variants/__init__.py,f\1\f1c1f114a94174879dcf4b57552b0d5a95d107be
 \
 ,src/algorithms/pga_variants/PGAReweighing.py,c\8\c8db6dd89a5a06dcd2da015f973a371f44ee0d1b
 [
 +src/algorithms/pga_variants/PGAMassaging.py,d\2\d2816a4f498b6d9a6ceb2fdf44cdd974cf20917c
-X
-(src/algorithms/pga_variants/PGALGAFFS.py,8\8\8807e65aafb9ed8a07e7b7273fc1972dded4fd63
 k
 ;src/algorithms/pga_variants/PGALearnedFairRepresentation.py,7\6\7604cbc37b79585b80dbeec1f0520b94b20ecbff
 h
@@ -208,7 +176,21 @@ s
 Csrc/algorithms/LexicographicGeneticAlgorithmFairFeatureSelection.py,d\f\dfb37da026a5e822f5456a48b1f1b408950c9fd2
 }
 Msrc/algorithms/MulticlassLexicographicGeneticAlgorithmFairFeatureSelection.py,b\0\b095046a58acf05d1f2d6d282d7af8bfacf48c04
-”
-dsrc/results/PermutationGeneticAlgorithm/12_06_24-17_48_39-German Credit_intermediary_Attribute9_.csv,d\c\dcb90288b6cd0e86ad9efd71b2069704ffed9ff6
 ƒ
 Ssrc/algorithms/pga_variants/PGALexicographicGeneticAlgorithmFairFeatureSelection.py,f\1\f11c148633839f88e453b4ecb4ea24c8c1d48778
+‚
+Rsrc/results/Massaging/12_06_24-18_54_24-German Credit_intermediary_Attribute9_.csv,d\6\d62d778e93156995ffcd64b3b24bd13511b99034
+i
+9src/results/Massaging/12_06_24-18_54_27-German Credit.csv,b\c\bc1c32b900f6c56ab0ece9ab9e7440bb27cef7ca
+ƒ
+Ssrc/results/Massaging/12_06_24-19_00_43-German Credit_intermediary_Attribute13_.csv,6\8\685c137c4e5ae5024a92afaa31c63404f62819e4
+i
+9src/results/Massaging/12_06_24-19_00_43-German Credit.csv,7\b\7b11a96adc93b166a4d5cb88b2dad0d0596d06ed
+i
+9src/results/Massaging/12_06_24-21_16_27-German Credit.csv,c\8\c8bc5947f0eeb4539103778bf4b3bca9edba76bf
+m
+=important_results/results_processing_scripts/process_table.py,8\a\8a8dd320937a4c4e3df7418310bf14bd7e2b0cf5
+i
+9src/results/Massaging/12_06_24-21_24_11-German Credit.csv,c\6\c6de6ae27635a0218342ebe45eff527e37c8dd14
+A
+src/run_script.py,4\d\4d781858035ec593a35a6bd7a83710c54e768233
