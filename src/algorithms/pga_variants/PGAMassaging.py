@@ -16,6 +16,8 @@ class PGAMassaging(Algorithm):
                                                                surrogate_models_pool,
                                                                verbose)
         self.unbiasing_algorithm.algorithm_name = 'PGAMassaging'
+        self.is_binary = False
+        self.needs_auxiliary_data = True
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         return self.unbiasing_algorithm.fit(data, sensitive_attribute)

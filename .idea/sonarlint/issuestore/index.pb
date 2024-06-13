@@ -43,8 +43,6 @@ b
 2src/datasets/local_storage/adult_income/adult.data,d\1\d15c00c9dc1bd5142fed3c88ee957605a47ffc3c
 d
 4src/datasets/local_storage/german_credit/german.data,3\f\3ffe8fda61f5a1da419ee2db65ca203c15474f6c
-G
-src/assessment/plots.py,6\a\6acc1ba0a15439842f3dbcd2b9179ac6da9404ef
 m
 =src/datasets/local_storage/compas/compas-scores-two-years.csv,9\0\90d12a6812b49d484cc83d4102f04bbf58bd2379
 :
@@ -54,8 +52,6 @@ H
 src/protocol/pipeline.py,e\5\e5b3ebec9dfd2676e9394b1d11f40d53e5bc4b42
 H
 src/protocol/__init__.py,2\a\2ad4c2cd1eb488cb5632bcfd473433f9648cf91a
-J
-src/assessment/__init__.py,5\e\5e30b50f07b2ef237d466d2187eb3a5831e34a9e
 J
 src/protocol/assessment.py,4\3\43ad472073a73c07826d862f8b8ecaf2bcbc1ecb
 Q
@@ -76,78 +72,14 @@ f
 6important_results/results_processing_scripts/input.tex,6\8\6824cd80e3330b0059f51af36f05c22ede3afab7
 y
 Iimportant_results/results_processing_scripts/compute_agregated_metrics.py,d\b\db3a636c1c8bd722d596d77fa6bb4f7e4b0c97c8
-ã
-[important_results/results_1_iteration_german_10_05_2024/Massaging/Massaging_mean_values.csv,a\d\adef1b3e2d6b0d15e28a37594371a3baafa28851
-å
-\important_results/results_2_iterations_german_11_05_2024/Massaging/Massaging_mean_values.csv,b\a\ba365f13f051dcdf11f7ec362660285ad127fdbe
 Ç
 Rimportant_results/results_processing_scripts/concat_validation_and_test_metrics.py,a\6\a686933d36cab715c7a3d9ffdbea8c1aba30fbf6
 U
 %important_results/temp_files/Test.csv,3\2\3246ca257adb2c47e9a6cdc49dffec15f09c6cf4
 [
 +important_results/temp_files/Validation.csv,9\3\93f8a04bb4fb82938f11a77f295b3a2bedc3056c
-å
-\important_results/results_1_iteration_german_10_05_2024/Massaging/concatenated_Massaging.csv,7\f\7f54f0b37a0db088b0e0b01f019b8a5d57f1f7a3
-ç
-]important_results/results_2_iterations_german_11_05_2024/Massaging/concatenated_Massaging.csv,f\1\f1030161bd36b20d142d344ae3a01dd23d1d3d04
-é
-^important_results/results_1_iteration_german_10_05_2024/Reweighing/concatenated_Reweighing.csv,7\2\7204ac8a03e861c28c0d353f7d52b0e9a7a2cb35
-è
-_important_results/results_2_iterations_german_11_05_2024/Reweighing/concatenated_Reweighing.csv,4\5\452cc7bbf79a219137384c53cc3de85e35b0dfe1
-¶
-vimportant_results/results_1_iteration_german_10_05_2024/DisparateImpactRemover/concatenated_DisparateImpactRemover.csv,4\c\4c0df79f8fb7f820c0ab3f0bdaecebcf472b946c
-ß
-wimportant_results/results_2_iterations_german_11_05_2024/DisparateImpactRemover/concatenated_DisparateImpactRemover.csv,c\7\c7682a15ec1ef729eb281e171f86f3df955f19db
-æ
-çimportant_results/results_2_iterations_german_11_05_2024/AIF360LearningFairRepresentations/concatenated_AIF360LearningFairRepresentations.csv,0\1\01fe2f33d44d286036401214ee66d9aef75d1206
-Ü
-Vimportant_results/results_1_iteration_german_10_05_2024/LGAFFS/concatenated_LGAFFS.csv,4\8\48d7dd607ca369c47fdef7a9533b316ed8000ef7
-á
-Wimportant_results/results_2_iterations_german_11_05_2024/LGAFFS/concatenated_LGAFFS.csv,c\a\ca777b332544d66aa00d4cb9f5b55a0de0a23776
-ö
-jimportant_results/results_1_iteration_german_10_05_2024/MultivalueLGAFFS/concatenated_MultivalueLGAFFS.csv,1\b\1b1f3dcf4e06d2010a67c97a5ce469ed9aea600b
-õ
-kimportant_results/results_2_iterations_german_11_05_2024/MultivalueLGAFFS/concatenated_MultivalueLGAFFS.csv,b\f\bf3f76655f462b7b19cf14238cb7324db7a1ed49
-±
-Äimportant_results/results_1_iteration_german_10_05_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,7\b\7b7bbc3e2c676d9f317746bc893f641e68d63737
-≤
-Åimportant_results/results_2_iterations_german_11_05_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,8\1\8106a8dc497b4f09da07d2f4da81bbf77a8fbca3
 g
 7important_results/results_processing_scripts/output.tex,d\b\dbf4cc200ba05caff8728f304db1a89b72ab9e49
-ï
-eimportant_results/results_1_iteration_german_10_05_2024/Massaging/09_05_24-20_32_30-German Credit.csv,e\3\e3a40e5f14274f350eb361d39faae9a8a11c5c6a
-ã
-[important_results/results_1_iteration_adult_21_05_2024/Massaging/concatenated_Massaging.csv,5\2\5296f6636c728b71a984f4efb48d138abebca5e5
-ç
-]important_results/results_1_iteration_adult_21_05_2024/Reweighing/concatenated_Reweighing.csv,c\4\c43cbd282916b4e8d88ef73fe08119a609af5134
-•
-uimportant_results/results_1_iteration_adult_21_05_2024/DisparateImpactRemover/concatenated_DisparateImpactRemover.csv,c\4\c4234f6b7181b5bfca5dc70d8eaa75ec1e200bb7
-º
-ãimportant_results/results_1_iteration_adult_21_05_2024/AIF360LearningFairRepresentations/concatenated_AIF360LearningFairRepresentations.csv,b\2\b2c7f8e51d4b884ec404d705db60eb9b150b7fc9
-Ö
-Uimportant_results/results_1_iteration_adult_21_05_2024/LGAFFS/concatenated_LGAFFS.csv,c\2\c22fea6e8278b148dec2976adae8c7b0fa12e16f
-ô
-iimportant_results/results_1_iteration_adult_21_05_2024/MultivalueLGAFFS/concatenated_MultivalueLGAFFS.csv,2\f\2f61c8869a9a19d98c7075f5fb38ddf5711c651e
-Ø
-important_results/results_1_iteration_adult_21_05_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,b\d\bd5dbd539f2da0d2af0c703c887c0b64ed97162c
-ã
-[important_results/results_2_iteration_adult_21_05_2024/Massaging/concatenated_Massaging.csv,0\5\0592923e9f088c04c2a1400919b5e778100b4715
-ç
-]important_results/results_2_iteration_adult_21_05_2024/Reweighing/concatenated_Reweighing.csv,e\c\ec2d3e7583841510d5cbd87ac656a6366b530a53
-•
-uimportant_results/results_2_iteration_adult_21_05_2024/DisparateImpactRemover/concatenated_DisparateImpactRemover.csv,4\8\48e5a6496d9c936bd5dd8c1335da948af5dde5f1
-ª
-äimportant_results/results_2_iteration_adult_21_05_2024/AIF360LearningFairRepresentations/AIF360LearningFairRepresentations_mean_values.csv,e\5\e5aa15c6cf72ef3509521f7440179168033d8821
-º
-ãimportant_results/results_2_iteration_adult_21_05_2024/AIF360LearningFairRepresentations/concatenated_AIF360LearningFairRepresentations.csv,6\5\65454004b6cdfd576fc6090f09a2722f9bd9d956
-Ö
-Uimportant_results/results_2_iteration_adult_21_05_2024/LGAFFS/concatenated_LGAFFS.csv,1\3\13e1e51bf420cb4b23830df329c9d46473b03081
-ô
-iimportant_results/results_2_iteration_adult_21_05_2024/MultivalueLGAFFS/concatenated_MultivalueLGAFFS.csv,d\3\d3d309146c5a5e4cdb5bdf931c3b5f4028bc7e5d
-Ø
-important_results/results_2_iteration_adult_21_05_2024/PermutationGeneticAlgorithm/concatenated_PermutationGeneticAlgorithm.csv,d\3\d338cac124df38c50d06d42d7cac4fe772c9152a
-ª
-äimportant_results/results_1_iteration_adult_21_05_2024/AIF360LearningFairRepresentations/AIF360LearningFairRepresentations_mean_values.csv,0\e\0ed983852118551734124dd171387c7e65255604
 M
 src/helpers/random_numbers.py,6\4\6492638ef0e75095bd6618056e1e9cc4ab614823
 J
@@ -178,19 +110,7 @@ Csrc/algorithms/LexicographicGeneticAlgorithmFairFeatureSelection.py,d\f\dfb37d
 Msrc/algorithms/MulticlassLexicographicGeneticAlgorithmFairFeatureSelection.py,b\0\b095046a58acf05d1f2d6d282d7af8bfacf48c04
 É
 Ssrc/algorithms/pga_variants/PGALexicographicGeneticAlgorithmFairFeatureSelection.py,f\1\f11c148633839f88e453b4ecb4ea24c8c1d48778
-Ç
-Rsrc/results/Massaging/12_06_24-18_54_24-German Credit_intermediary_Attribute9_.csv,d\6\d62d778e93156995ffcd64b3b24bd13511b99034
-i
-9src/results/Massaging/12_06_24-18_54_27-German Credit.csv,b\c\bc1c32b900f6c56ab0ece9ab9e7440bb27cef7ca
-É
-Ssrc/results/Massaging/12_06_24-19_00_43-German Credit_intermediary_Attribute13_.csv,6\8\685c137c4e5ae5024a92afaa31c63404f62819e4
-i
-9src/results/Massaging/12_06_24-19_00_43-German Credit.csv,7\b\7b11a96adc93b166a4d5cb88b2dad0d0596d06ed
-i
-9src/results/Massaging/12_06_24-21_16_27-German Credit.csv,c\8\c8bc5947f0eeb4539103778bf4b3bca9edba76bf
 m
 =important_results/results_processing_scripts/process_table.py,8\a\8a8dd320937a4c4e3df7418310bf14bd7e2b0cf5
-i
-9src/results/Massaging/12_06_24-21_24_11-German Credit.csv,c\6\c6de6ae27635a0218342ebe45eff527e37c8dd14
 A
 src/run_script.py,4\d\4d781858035ec593a35a6bd7a83710c54e768233

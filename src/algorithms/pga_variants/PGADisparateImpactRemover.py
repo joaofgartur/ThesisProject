@@ -16,6 +16,8 @@ class PGADisparateImpactRemover(Algorithm):
                                                                surrogate_models_pool,
                                                                verbose)
         self.unbiasing_algorithm.algorithm_name = 'PGADisparateImpactRemover'
+        self.needs_auxiliary_data = True
+        self.is_binary = False
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         return self.unbiasing_algorithm.fit(data, sensitive_attribute)
