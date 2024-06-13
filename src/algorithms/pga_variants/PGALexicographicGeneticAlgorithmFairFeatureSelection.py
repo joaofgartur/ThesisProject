@@ -20,6 +20,7 @@ class PGALexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.needs_auxiliary_data = True
 
     def fit(self, data: Dataset, sensitive_attribute: str):
+        self.unbiasing_algorithm.auxiliary_data = self.auxiliary_data
         return self.unbiasing_algorithm.fit(data, sensitive_attribute)
 
     def transform(self, dataset: Dataset) -> Dataset:
