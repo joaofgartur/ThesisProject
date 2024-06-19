@@ -16,6 +16,7 @@ from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection impo
 from algorithms.pga_variants.PGALexicographicGeneticAlgorithmFairFeatureSelection import \
     PGALexicographicGeneticAlgorithmFairFeatureSelection
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
+from datasets.LawSchoolAdmissions import LawSchoolAdmissions
 from helpers import logger, set_seed, get_seed
 
 
@@ -144,6 +145,8 @@ def load_dataset(_dataset: str, configs_file: str) -> Dataset:
             return GermanCredit(get_dataset_configs('GERMAN_CREDIT', configs_file))
         case "ADULT_INCOME":
             return AdultIncome(get_dataset_configs('ADULT_INCOME', configs_file))
+        case "LAW_SCHOOL_ADMISSION":
+            return LawSchoolAdmissions(get_dataset_configs('LAW_SCHOOL_ADMISSION', configs_file))
         case _:
             logger.error('Dataset unknown! Currently supported datasets are: GERMAN_CREDIT, ADULT_INCOME.')
             raise NotImplementedError

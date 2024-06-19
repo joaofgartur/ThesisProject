@@ -7,14 +7,54 @@ from helpers import logger, extract_filename
 
 
 class GermanCredit(Dataset):
+    """
+    Representation of the German Credit dataset [1].
+
+    Attributes
+    ----------
+    _LOCAL_DATA_FILE : str
+        The local path to the dataset file.
+
+    Methods
+    -------
+    __init__(self, config: DatasetConfig):
+        Initializes the GermanCredit object with the provided dataset information.
+    _load_dataset(self):
+        Loads the dataset from an online source or local file, filters the data, and separates features and targets.
+    _transform_protected_attributes(self):
+        Transforms the protected attributes in the dataset.
+
+    References
+    ----------
+    [1] Hans Hofmann. Statlog (German Credit Data). UCI Machine Learning Repository, 1994.
+     DOI: https://doi.org/10.24432/C5NC77 URL https://archive.ics.uci.edu/ml/datasets/statlog+(german+credit+data)
+    """
 
     _LOCAL_DATA_FILE = "datasets/local_storage/german_credit/german.data"
 
     def __init__(self, config: DatasetConfig):
+        """
+        Initializes the GermanCredit object with the provided dataset information.
+
+        Parameters
+        ----------
+        config : DatasetConfig
+            The configuration information for the dataset.
+        """
         logger.info(f'[{extract_filename(__file__)}] Loading...')
         Dataset.__init__(self, config)
 
-    def _load_dataset(self):
+    def _load_dataset(self) -> (pd.DataFrame, pd.DataFrame):
+        """
+        Loads the dataset from an online source or local file, filters the data, and separates features and targets.
+
+        Returns
+        -------
+        features : pd.DataFrame
+            The features from the dataset.
+        targets : pd.DataFrame
+            The target values from the dataset.
+        """
         try:
             dataset = fetch_ucirepo(id=144)
             return dataset.data.features, dataset.data.targets
@@ -35,7 +75,20 @@ class GermanCredit(Dataset):
 
             return features, targets
 
-    def _transform_protected_attributes(self):
+    def _transform_dataset(self):
+        """
+        Transforms the dataset.
+
+        The transformations include deriving age and sex values, and renaming the target column. The sensitive
+        attributes were selected following the study of the dataset in [2]. The sex feature was transformed according to
+        the dataset's documentation [1]. The age feature was transformed based on the age cutoff
+        provided in [2].
+
+        References
+        ----------
+        [2] Tai Le Quy, Arjun Roy, Vasileios Iosifidis, and Eirini Ntoutsi. A survey on datasets for fairness-aware
+             machine learning. CoRR, abs/2110.00530, 2021. URL https://arxiv.org/abs/2110.00530.
+        """
 
         def derive_age(x, cutoff=25):
             return 'Young' if x < cutoff else 'Aged'
