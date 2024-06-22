@@ -9,12 +9,9 @@ from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
 from algorithms import GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover, \
-    LearnedFairRepresentations, LexicographicGeneticAlgorithmFairFeatureSelection, PermutationGeneticAlgorithm, \
-    PGAMassaging, PGAReweighing, PGADisparateImpactRemover, PGALearnedFairRepresentations
+    LearnedFairRepresentations, LexicographicGeneticAlgorithmFairFeatureSelection, PermutationGeneticAlgorithm
 from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection import \
     MulticlassLexicographicGeneticAlgorithmFairFeatureSelection
-from algorithms.pga_variants.PGALexicographicGeneticAlgorithmFairFeatureSelection import \
-    PGALexicographicGeneticAlgorithmFairFeatureSelection
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
 from datasets.LawSchoolAdmissions import LawSchoolAdmissions
 from helpers import logger, set_seed, get_seed
@@ -28,17 +25,12 @@ class AlgorithmOptions(Enum):
     LGAFFS = 5
     MulticlassLGAFFS = 6
     PermutationGeneticAlgorithm = 7
-    PGAMassaging = 8
-    PGAReweighing = 9
-    PGADisparateImpactRemover = 10
-    PGALearnedFairRepresentations = 11
-    PGALexicographicGeneticAlgorithmFairFeatureSelection = 12
 
 
 test_classifier = XGBClassifier(random_state=get_seed())
 
 surrogate_models = [
-    LogisticRegression(),
+    LogisticRegression(random_state=get_seed()),
     SVC(random_state=get_seed()),
     GaussianNB(),
     DecisionTreeClassifier(random_state=get_seed()),
@@ -46,7 +38,7 @@ surrogate_models = [
 ]
 
 
-def get_global_configs(configs_file: str) -> tuple[str, str, str]:
+def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
     global_configs = configparser.ConfigParser()
     global_configs.read(configs_file)
 
@@ -59,7 +51,9 @@ def get_global_configs(configs_file: str) -> tuple[str, str, str]:
         seed = global_configs.getint('GLOBAL', 'seed')
         set_seed(seed)
 
-        return dataset_configs, algorithms_configs, results_path
+        num_iterations = global_configs.getint('GLOBAL', 'num_iterations')
+
+        return dataset_configs, algorithms_configs, results_path, num_iterations
 
     except configparser.NoSectionError as e:
         logger.error(f'Section [{e.section}] does not exist in the configuration file.')
@@ -114,20 +108,9 @@ def get_algorithms_configs(configs_file: str, algorithm: AlgorithmOptions):
             return genetic_parameters, n_splits, min_feature_prob, max_feature_prob, verbose
         case AlgorithmOptions.PermutationGeneticAlgorithm:
             verbose = configs.getboolean('PermutationGeneticAlgorithm', 'verbose')
-            return verbose, GeneticBasicParameters(
+            threshold_k = configs.getint('PermutationGeneticAlgorithm', 'threshold_k')
+            return verbose, threshold_k, GeneticBasicParameters(
                 population_size=configs.getint('PermutationGeneticAlgorithm', 'population_size'),
-                num_generations=configs.getint('PermutationGeneticAlgorithm', 'num_generations'),
-                tournament_size=configs.getint('PermutationGeneticAlgorithm', 'tournament_size'),
-                elite_size=configs.getint('PermutationGeneticAlgorithm', 'elite_size'),
-                probability_crossover=configs.getfloat('PermutationGeneticAlgorithm', 'probability_crossover'),
-                probability_mutation=configs.getfloat('PermutationGeneticAlgorithm', 'probability_mutation')
-            )
-        case AlgorithmOptions.PGAMassaging | AlgorithmOptions.PGAReweighing | \
-             AlgorithmOptions.PGADisparateImpactRemover | AlgorithmOptions.PGALearnedFairRepresentations | \
-             AlgorithmOptions.PGALexicographicGeneticAlgorithmFairFeatureSelection:
-            verbose = configs.getboolean('PermutationGeneticAlgorithm', 'verbose')
-            return verbose, GeneticBasicParameters(
-                population_size=configs.getint('PermutationGeneticAlgorithmVariant', 'population_size'),
                 num_generations=configs.getint('PermutationGeneticAlgorithm', 'num_generations'),
                 tournament_size=configs.getint('PermutationGeneticAlgorithm', 'tournament_size'),
                 elite_size=configs.getint('PermutationGeneticAlgorithm', 'elite_size'),
@@ -148,7 +131,8 @@ def load_dataset(_dataset: str, configs_file: str) -> Dataset:
         case "LAW_SCHOOL_ADMISSION":
             return LawSchoolAdmissions(get_dataset_configs('LAW_SCHOOL_ADMISSION', configs_file))
         case _:
-            logger.error('Dataset unknown! Currently supported datasets are: GERMAN_CREDIT, ADULT_INCOME.')
+            logger.error('Dataset unknown! Currently supported datasets are: '
+                         'GERMAN_CREDIT, ADULT_INCOME, LAW_SCHOOL_ADMISSION.')
             raise NotImplementedError
 
 
@@ -192,8 +176,8 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                     verbose=verbose
                 )
         case AlgorithmOptions.PermutationGeneticAlgorithm:
-            verbose, genetic_parameters = get_algorithms_configs(algorithm_configs_file,
-                                                                 AlgorithmOptions.PermutationGeneticAlgorithm)
+            verbose, threshold_k, genetic_parameters = (
+                get_algorithms_configs(algorithm_configs_file, AlgorithmOptions.PermutationGeneticAlgorithm))
             unbiasing_algorithms_pool = [
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.Massaging),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.Reweighing),
@@ -206,60 +190,9 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                 genetic_parameters=genetic_parameters,
                 unbiasing_algorithms_pool=unbiasing_algorithms_pool,
                 surrogate_models_pool=surrogate_models,
-                verbose=verbose
+                verbose=verbose,
+                threshold_k=threshold_k
             )
-        case AlgorithmOptions.PGAMassaging | AlgorithmOptions.PGAReweighing | AlgorithmOptions.PGADisparateImpactRemover | AlgorithmOptions.PGALearnedFairRepresentations | AlgorithmOptions.PGALexicographicGeneticAlgorithmFairFeatureSelection:
-
-            verbose, genetic_parameters = get_algorithms_configs(algorithm_configs_file, AlgorithmOptions.PGAMassaging)
-
-            match unbiasing_algorithm:
-                case AlgorithmOptions.PGAMassaging:
-                    unbiasing_algorithms_pool = [load_algorithm(algorithm_configs_file, AlgorithmOptions.Massaging)]
-                    return PGAMassaging(
-                        genetic_parameters=genetic_parameters,
-                        unbiasing_algorithms_pool=unbiasing_algorithms_pool,
-                        surrogate_models_pool=surrogate_models,
-                        verbose=verbose
-                    )
-                case AlgorithmOptions.PGAReweighing:
-                    unbiasing_algorithms_pool = [load_algorithm(algorithm_configs_file, AlgorithmOptions.Reweighing)]
-                    return PGAReweighing(
-                        genetic_parameters=genetic_parameters,
-                        unbiasing_algorithms_pool=unbiasing_algorithms_pool,
-                        surrogate_models_pool=surrogate_models,
-                        verbose=verbose
-                    )
-                case AlgorithmOptions.PGADisparateImpactRemover:
-                    unbiasing_algorithms_pool = [load_algorithm(algorithm_configs_file,
-                                                                AlgorithmOptions.DisparateImpactRemover)]
-                    return PGADisparateImpactRemover(
-                        genetic_parameters=genetic_parameters,
-                        unbiasing_algorithms_pool=unbiasing_algorithms_pool,
-                        surrogate_models_pool=surrogate_models,
-                        verbose=verbose
-                    )
-                case AlgorithmOptions.PGALearnedFairRepresentations:
-                    unbiasing_algorithms_pool = [load_algorithm(algorithm_configs_file,
-                                                                AlgorithmOptions.LearnedFairRepresentations)]
-                    return PGALearnedFairRepresentations(
-                        genetic_parameters=genetic_parameters,
-                        unbiasing_algorithms_pool=unbiasing_algorithms_pool,
-                        surrogate_models_pool=surrogate_models,
-                        verbose=verbose
-                    )
-                case AlgorithmOptions.PGALexicographicGeneticAlgorithmFairFeatureSelection:
-                    unbiasing_algorithms_pool = [load_algorithm(algorithm_configs_file, AlgorithmOptions.LGAFFS)]
-                    unbiasing_algorithms_pool[0].verbose = False
-                    return PGALexicographicGeneticAlgorithmFairFeatureSelection(
-                        genetic_parameters=genetic_parameters,
-                        unbiasing_algorithms_pool=unbiasing_algorithms_pool,
-                        surrogate_models_pool=surrogate_models,
-                        verbose=verbose
-                    )
-                case _:
-                    logger.error('Algorithm option unknown 2!')
-                    raise ValueError
-
         case _:
             logger.error('Algorithm option unknown!')
             raise ValueError

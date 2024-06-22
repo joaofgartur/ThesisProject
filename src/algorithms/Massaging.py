@@ -153,20 +153,20 @@ class Massaging(Algorithm):
         positive_class_probabilities = class_probabilities[:, 0]
 
         data, outcome_label = dataset.merge_features_and_targets()
+        data.reset_index(drop=True)
 
         # select candidates for promotion
         pr_candidates_indexes = data.index[
             (data[sensitive_attribute] == UNPRIVILEGED) & (data[outcome_label] == NEGATIVE_OUTCOME)].tolist()
 
-        promotion_candidates = pd.DataFrame({_INDEX: data.index, _CLASS_PROBABILITY: positive_class_probabilities})
-
+        promotion_candidates = pd.DataFrame({_CLASS_PROBABILITY: positive_class_probabilities})
         promotion_candidates = promotion_candidates.iloc[pr_candidates_indexes].sort_values(by=_CLASS_PROBABILITY,
                                                                                             ascending=False)
 
         # select candidates for demotion
         dem_candidates_indexes = data.index[
             (data[sensitive_attribute] == PRIVILEGED) & (data[outcome_label] == POSITIVE_OUTCOME)].tolist()
-        demotion_candidates = pd.DataFrame({_INDEX: data.index, _CLASS_PROBABILITY: positive_class_probabilities})
+        demotion_candidates = pd.DataFrame({_CLASS_PROBABILITY: positive_class_probabilities})
         demotion_candidates = demotion_candidates.iloc[dem_candidates_indexes].sort_values(by=_CLASS_PROBABILITY)
 
         return promotion_candidates, demotion_candidates
@@ -201,13 +201,12 @@ class Massaging(Algorithm):
 
         transformed_dataset = copy.deepcopy(data)
 
-        for __ in range(self.m):
-            top_promotion = self.promotion_candidates.iloc[0]
-            pr_index = top_promotion["index"].astype('int32')
+        for _ in range(self.m):
+
+            pr_index = self.promotion_candidates.index[0]
             transformed_dataset.targets.iloc[pr_index] = POSITIVE_OUTCOME
 
-            top_demotion = self.demotion_candidates.iloc[0]
-            dem_index = top_demotion["index"].astype('int32')
+            dem_index = self.demotion_candidates.index[0]
             transformed_dataset.targets.iloc[dem_index] = NEGATIVE_OUTCOME
 
             self.promotion_candidates = self.promotion_candidates.drop(index=pr_index)

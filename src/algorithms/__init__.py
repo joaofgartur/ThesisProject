@@ -10,4 +10,4 @@ from .DisparateImpactRemover import DisparateImpactRemover
 from .LearnedFairRepresentations import LearnedFairRepresentations
 from .LexicographicGeneticAlgorithmFairFeatureSelection import LexicographicGeneticAlgorithmFairFeatureSelection
 from .PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
-from .pga_variants import *
+from .GeneticAlgorithmHelpers import *

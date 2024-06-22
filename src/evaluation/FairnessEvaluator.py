@@ -81,6 +81,7 @@ class FairnessEvaluator(object):
 
     def consistency(self, k: int = 3):
         data = self.data.to_numpy()
+
         x = data[:, :-2]
         y_pred = data[:, -1]
 

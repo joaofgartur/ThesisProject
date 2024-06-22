@@ -37,6 +37,9 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.sensitive_attribute = None
         self.population = None
 
+        self.evaluated_individuals = {}
+        self.decoded_individuals = {}
+
     def __gen_individual(self, feature_prob: float = 1.0):
         if feature_prob:
             features_prob = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob,
@@ -46,6 +49,9 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
                 [1 if features_prob[i] > feature_prob else 0 for i in range(self.genetic_parameters.individual_size)]),
                 [], []]
         return [get_generator().randint(2, size=self.genetic_parameters.individual_size), {}, {}]
+
+    def __genotype_to_tuple(self, individual):
+        return tuple(individual[0])
 
     def __gen_ramped_population(self):
         n = self.genetic_parameters.population_size
@@ -174,6 +180,10 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __fitness(self, data: Dataset, individual, folds: KFold):
 
+        genotype = self.__genotype_to_tuple(individual)
+        if genotype in self.evaluated_individuals:
+            return self.evaluated_individuals[genotype]
+
         if sum(individual[0]) == 0:
             return [individual[0], {'performance': -1}, {}]
 
@@ -183,11 +193,15 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         predictions = cross_val_predict(model, data.features.to_numpy(), data.targets.to_numpy().ravel(), cv=folds)
         predicted_data = update_dataset(data, targets=predictions)
 
-        return [individual[0], self.__performance_fitness(data, predicted_data),
-                self.__fairness_fitness(data, predicted_data)]
+        individual = [individual[0], self.__performance_fitness(data, predicted_data),
+                      self.__fairness_fitness(data, predicted_data)]
+
+        self.evaluated_individuals.update({genotype: individual})
+
+        return individual
 
     def __multithread_fitness(self, data: Dataset, population, folds: KFold):
-        num_threads = min(os.cpu_count(), 15)
+        num_threads = min(os.cpu_count(), 10)
 
         def evaluate_fitness(individual):
             return self.__fitness(data, individual, folds)
@@ -198,11 +212,18 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         return fitness_results
 
     def __phenotype(self, data: Dataset, individual: list) -> Dataset:
+
+        genotype = self.__genotype_to_tuple(individual)
+        if genotype in self.decoded_individuals:
+            return self.decoded_individuals[genotype]
+
         transformed_data = copy.deepcopy(data)
 
         features_to_drop = np.argwhere(individual[0] == 0).ravel()
         selected_features = data.features.drop(data.features.columns[features_to_drop], axis=1)
         transformed_data.features = selected_features
+
+        self.decoded_individuals.update({genotype: transformed_data})
 
         return transformed_data
 
@@ -210,6 +231,8 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.genetic_parameters.individual_size = data.features.shape[1]
         self.population = self.__gen_ramped_population()
         self.sensitive_attribute = sensitive_attribute
+        self.evaluated_individuals = {}
+        self.decoded_individuals = {}
 
     def transform(self, data: Dataset) -> Dataset:
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
@@ -242,4 +265,4 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         if not best_individual:
             return data
 
-        return self.__phenotype(data, best_individual)
+        return self.decoded_individuals[self.__genotype_to_tuple(best_individual)]

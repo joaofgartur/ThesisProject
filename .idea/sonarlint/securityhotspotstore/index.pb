@@ -23,8 +23,6 @@ I
 src/constants/__init__.py,7\5\759baa1b866c04f6b795a03f972f85641a097846
 H
 src/datasets/__init__.py,f\1\f10a54a9c09c9c3488d27a914f41e81099c22703
-F
-src/datasets/Compas.py,9\4\9499d9394dbaa59c7c4168b88fdd4c008ea3fcda
 D
 src/helpers/utils.py,e\5\e59a096e87dc6a3060fa8d752cdc6695b73b1317
 K
@@ -54,8 +52,6 @@ H
 src/protocol/__init__.py,2\a\2ad4c2cd1eb488cb5632bcfd473433f9648cf91a
 J
 src/protocol/assessment.py,4\3\43ad472073a73c07826d862f8b8ecaf2bcbc1ecb
-Q
-!src/datasets/AIF360AdultIncome.py,6\2\6249ca113b72ac5bfbbd5fe8af7ccc2e9024d686
 S
 #src/evaluation/FairnessEvaluator.py,7\6\7696999961a97a1cb8771953b104c0e37a7ad1fa
 P
@@ -90,16 +86,6 @@ H
 src/configs.py,a\8\a861de7665832b46ea05a70694e778592878d9e2
 \
 ,src/algorithms/LearnedFairRepresentations.py,8\6\868b3b273f6493b296868b5b837c2228e1790e3d
-W
-'src/algorithms/pga_variants/__init__.py,f\1\f1c1f114a94174879dcf4b57552b0d5a95d107be
-\
-,src/algorithms/pga_variants/PGAReweighing.py,c\8\c8db6dd89a5a06dcd2da015f973a371f44ee0d1b
-[
-+src/algorithms/pga_variants/PGAMassaging.py,d\2\d2816a4f498b6d9a6ceb2fdf44cdd974cf20917c
-k
-;src/algorithms/pga_variants/PGALearnedFairRepresentation.py,7\6\7604cbc37b79585b80dbeec1f0520b94b20ecbff
-h
-8src/algorithms/pga_variants/PGADisparateImpactRemover.py,0\b\0b12ac361f068c961a2cdc90b2de1dea1b496747
 G
 src/configs/configs.cfg,7\0\70bf5d76fd59c6388b86e8872a5d38dbeda7cc9f
 J
@@ -108,8 +94,6 @@ s
 Csrc/algorithms/LexicographicGeneticAlgorithmFairFeatureSelection.py,d\f\dfb37da026a5e822f5456a48b1f1b408950c9fd2
 }
 Msrc/algorithms/MulticlassLexicographicGeneticAlgorithmFairFeatureSelection.py,b\0\b095046a58acf05d1f2d6d282d7af8bfacf48c04
-É
-Ssrc/algorithms/pga_variants/PGALexicographicGeneticAlgorithmFairFeatureSelection.py,f\1\f11c148633839f88e453b4ecb4ea24c8c1d48778
 m
 =important_results/results_processing_scripts/process_table.py,8\a\8a8dd320937a4c4e3df7418310bf14bd7e2b0cf5
 A
@@ -118,3 +102,35 @@ x
 Hsrc/datasets/local_storage/law_school_admissions/bar_pass_prediction.csv,2\2\22cde94e13fa899ca8c0c4e2dbcd5e5b360b025a
 S
 #src/datasets/LawSchoolAdmissions.py,4\1\41751c58512c27e552d42338ec11f7d464950b0e
+Å
+Qsrc/best_individuals/22_06_24-18_37_21-PermutationGeneticAlgorithm_Attribute9.csv,f\c\fc2a22de5bd638c7afe72d6bb93373b3f10b5691
+ç
+]src/best_individuals/1_iteration/22_06_24-18_45_13-PermutationGeneticAlgorithm_Attribute9.csv,c\4\c4afb6a48c8e669622f24197ad4e087a732a3de3
+ç
+]src/best_individuals/1_iteration/22_06_24-18_48_20-PermutationGeneticAlgorithm_Attribute9.csv,5\5\55bade06164e452019e7cfe4d99e99491ee80aa5
+ç
+]src/best_individuals/1_iteration/22_06_24-18_50_51-PermutationGeneticAlgorithm_Attribute9.csv,f\0\f03a4710dbbc8cec8470d3acd4c2c4ff6d11124c
+ç
+]src/best_individuals/1_iteration/22_06_24-18_54_47-PermutationGeneticAlgorithm_Attribute9.csv,a\3\a315631fe27c08bfdeea40bad1b7ca90067d662b
+ç
+]src/best_individuals/1_iteration/22_06_24-18_56_20-PermutationGeneticAlgorithm_Attribute9.csv,3\1\315dc24d254b4ad7973870402bb3e2f5171d86dc
+Ç
+Rsrc/results/Massaging/22_06_24-19_20_52-German Credit_intermediary_Attribute9_.csv,5\0\506bd96db038b68e917fb8e5eadc38959e2bad76
+â
+Ysrc/results/Massaging/distribution/22_06_24-23_35_04-Law School Admission Bar Passage.csv,9\5\95edad670ff4963ddc12adcaec20c79cecdb9eae
+v
+Fsrc/results/Massaging/distribution/22_06_24-23_46_06-German Credit.csv,4\6\4601a5f1ac0e8fa56821342646182c263e6f562f
+v
+Fsrc/results/Massaging/distribution/22_06_24-23_51_59-German Credit.csv,7\5\75c0a70040fc58fb81ccba631a88160764e5f267
+v
+Fsrc/results/Massaging/distribution/22_06_24-23_55_40-German Credit.csv,1\0\10ce53195c53538b5e02c8dacd77279d1c64e58c
+v
+Fsrc/results/Massaging/distribution/23_06_24-00_01_31-German Credit.csv,f\c\fcbd64a1f582249fa83695b4dac7114029bf5a66
+v
+Fsrc/results/Massaging/distribution/23_06_24-00_03_59-German Credit.csv,1\9\1931aa9def4c9bdb056446f652bf95ca40348cd6
+v
+Fsrc/results/Massaging/distribution/23_06_24-00_05_16-German Credit.csv,9\9\99b6f2c298d5c6f077af8446929953333a68bde3
+v
+Fsrc/results/Massaging/distribution/23_06_24-00_07_07-German Credit.csv,6\4\64e204367596875c3d41b7b5ed6c8456d4012aef
+i
+9src/results/Massaging/23_06_24-00_07_07-German Credit.csv,b\8\b8d89b4fb3c083445a19d032c36ad31928dfc4fe

@@ -24,7 +24,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     global_configs = configparser.ConfigParser()
-    dataset_configs_file, algorithms_configs_file, results_path = get_global_configs(args.configs)
+    dataset_configs_file, algorithms_configs_file, results_path, num_iterations = get_global_configs(args.configs)
 
     num_runs = args.runs
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         else:
             unbiasing_algorithms = [load_algorithm(algorithms_configs_file, AlgorithmOptions(args.algorithm))]
 
-        pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier)
+        pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, num_iterations)
         pipeline.run_and_save()
 
     logger.info(f'[{extract_filename(__file__)}] End of program.')
