@@ -2,6 +2,8 @@ import os
 import pandas as pd
 from datetime import datetime
 
+from .random_numbers import get_seed
+
 
 def extract_filename(filename):
     filename = filename.split(os.path.sep)[-1]
@@ -22,7 +24,7 @@ def write_dataframe_to_csv(df: pd.DataFrame, dataset_name: str, path: str) -> No
     c = datetime.now()
     time = c.strftime('%d_%m_%y-%H_%M_%S')
 
-    filename = time + f'-{dataset_name}.csv'
+    filename = f'seed_{get_seed()}_{dataset_name}_{time}.csv'
 
     if os.path.exists(path) & os.path.isdir(path):
         path = os.path.join(path, filename)

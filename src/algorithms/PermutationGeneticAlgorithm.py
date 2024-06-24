@@ -12,7 +12,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from constants import NUM_DECIMALS
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe
+from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -82,16 +82,6 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         return [genotype, {}, {}]
 
-    def __delete_individual(self, population, individual):
-        for i in range(len(population)):
-            is_match = (all(population[i][0]) == all(individual[0])
-                        and all(population[i][1]) == all(individual[1])
-                        and all(population[i][2]) == all(individual[2]))
-            if is_match:
-                population.pop(i)
-                break
-        return population
-
     def __decode_individual(self, individual) -> pd.DataFrame:
         genome = [[self.decoder[val],
                    self.unbiasing_algorithms_pool[algo].__class__.__name__] for val, algo in individual[0]]
@@ -144,36 +134,39 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __crossover(self, parent1: list, parent2: list):
 
-        def pmx_crossover(_parent1, _parent2, crossover_probability):
-            if get_generator().random() < crossover_probability:
+        def uniform_crossover(_parent1, _parent2, probability_crossover):
+            value = get_generator().random()
+            if value < probability_crossover:
+                len1 = len(parent1[0])
+                len2 = len(parent2[0])
+                max_length = max(len1, len2)
 
-                offspring1 = [_parent1[0], {}, {}]
-                offspring2 = [_parent1[0], {}, {}]
+                crossover_mask = get_generator().integers(0, 2, size=max_length)
 
-                cp1 = get_generator().integers(0, len(_parent1[0]))
-                cp2 = get_generator().integers(0, len(_parent2[0]))
+                offspring1_genotype = [None] * max_length
+                offspring2_genotype = [None] * max_length
 
-                if cp2 == cp1:
-                    cp2 += 1
-                elif cp2 < cp1:
-                    cp1, cp2 = cp2, cp1
+                for i in range(max_length):
+                    if i < len1 and i < len2:
+                        if crossover_mask[i] == 0:
+                            offspring1_genotype[i] = parent1[0][i]
+                            offspring2_genotype[i] = parent2[0][i]
+                        else:
+                            offspring1_genotype[i] = parent2[0][i]
+                            offspring2_genotype[i] = parent1[0][i]
+                    elif i < len1:
+                        offspring1_genotype[i] = parent1[0][i]
+                    elif i < len2:
+                        offspring2_genotype[i] = parent2[0][i]
 
-                for i in range(cp1, cp2):
-                    gene1 = _parent1[0][i]
-                    gene2 = _parent2[0][i]
+                offspring1_genotype = list(filter(lambda item: item is not None, offspring1_genotype))
+                offspring2_genotype = list(filter(lambda item: item is not None, offspring2_genotype))
 
-                    if gene1 in _parent2[0]:
-                        index = _parent2[0].index(gene2)
-                        offspring1[0][index] = gene1
-                    if gene2 in _parent1[0]:
-                        index = _parent1[0].index(gene1)
-                        offspring2[0][index] = gene2
+                return [(offspring1_genotype, {}), {}, {}], [(offspring2_genotype, {}), {}, {}]
 
-                return offspring1, offspring2
-            else:
-                return _parent1, _parent2
+            return _parent1, _parent2
 
-        return pmx_crossover(parent1, parent2, self.genetic_parameters.probability_crossover)
+        return uniform_crossover(parent1, parent2, self.genetic_parameters.probability_crossover)
 
     def __mutation(self, individual):
 
@@ -242,16 +235,17 @@ class PermutationGeneticAlgorithm(Algorithm):
             population = lexicographic_selection(population, (1, model))
             population = lexicographic_selection(population, (2, model))
 
-        return population[0]
+        return population
 
     def __new_population(self, elite_pop, offsprings):
         offset = len(offsprings) - len(elite_pop)
 
         best_offspring = []
         for _ in range(len(offsprings)):
-            best = self.__select_best(offsprings)
+            sorted_offsprings = self.__select_best(offsprings)
+            best = sorted_offsprings[0]
             best_offspring.append(best)
-            offsprings = self.__delete_individual(offsprings, best)
+            sorted_offsprings.pop(0)
 
         new_population = elite_pop + best_offspring[:offset]
         return new_population
@@ -260,7 +254,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         def one_tour(local_population):
             pool = sample(local_population, self.genetic_parameters.tournament_size)
-            return self.__select_best(pool)
+            return self.__select_best(pool)[0]
 
         mate_pool = []
         for _ in range(len(population)):
@@ -322,6 +316,15 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         return individual
 
+    def __evaluate_population(self, dataset, population):
+
+        for j, individual in enumerate(population):
+            if self.verbose and not self.genetic_search_flag and j % 50 == 0:
+                print(f'\t[PGA] Evaluating individual {j + 1}/{len(population)} with genotype {individual[0]}.')
+            population[j] = self.__fitness(dataset, individual)
+
+        return population
+
     def __phenotype(self, data: Dataset, individual):
 
         genotype = self.__genotype_to_tuple(individual[0])
@@ -368,6 +371,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.sensitive_attribute = sensitive_attribute
         self.genetic_search_flag = self.__do_genetic_search()
         self.population = self.__generate_population()
+        print(self.population)
         self.evaluated_individuals = {}
         self.decoded_individuals = {}
 
@@ -378,12 +382,9 @@ class PermutationGeneticAlgorithm(Algorithm):
                   f'{self.genetic_parameters.population_size * self.genetic_parameters.num_generations} '
                   f'evaluations out of {self.problem_dimension} possible combinations.')
 
-        population = self.population
+        population = self.__evaluate_population(dataset, self.population)
 
-        for j, individual in enumerate(population):
-            population[j] = self.__fitness(dataset, individual)
-
-        best_individual = self.__select_best(population)
+        best_individual = self.__select_best(population)[0]
         decoded_best_individual = self.__decode_individual(best_individual)
         population_average = self.__compute_population_average_fitness(population)
         evolution = pd.concat([decoded_best_individual, population_average], axis=1)
@@ -408,20 +409,19 @@ class PermutationGeneticAlgorithm(Algorithm):
                 offsprings.append(mutated_individual)
                 # offsprings.append(self.__fitness(dataset, mutated_individual))
 
-            for j, offspring in enumerate(offsprings):
-                offsprings[j] = self.__fitness(dataset, offspring)
+            offsprings = self.__evaluate_population(dataset, offsprings)
 
             # Survivors selection - elitism
             elite_pop = population[:self.genetic_parameters.elite_size]
             population = self.__new_population(elite_pop, offsprings)
 
-            best_individual = self.__select_best(population)
+            best_individual = self.__select_best(population)[0]
             decoded_best_individual = self.__decode_individual(best_individual)
             population_average = self.__compute_population_average_fitness(population)
             generation = pd.concat([decoded_best_individual, population_average], axis=1)
             evolution = pd.concat([evolution, generation], axis=0)
 
-            if self.verbose:
+            if self.verbose and i % 5 == 0:
                 print(f'[PGA] Generation {i + 1}/{self.genetic_parameters.num_generations}')
 
         write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}',
@@ -434,12 +434,9 @@ class PermutationGeneticAlgorithm(Algorithm):
         if self.verbose:
             print(f'[PGA] Performing extensive search. Testing {self.problem_dimension} combinations')
 
-        population = self.population
+        population = self.__evaluate_population(dataset, self.population)
 
-        for j, individual in enumerate(population):
-            population[j] = self.__fitness(dataset, individual)
-
-        best_individual = self.__select_best(population)
+        best_individual = self.__select_best(population)[0]
         decoded_best_individual = self.__decode_individual(best_individual)
         population_average = self.__compute_population_average_fitness(population)
         evolution = pd.concat([decoded_best_individual, population_average], axis=1)

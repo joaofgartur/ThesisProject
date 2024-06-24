@@ -1,8 +1,6 @@
 import copy
 import itertools
 import math
-import os
-from concurrent.futures import ThreadPoolExecutor
 from random import sample
 
 import numpy as np
@@ -200,16 +198,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         return individual
 
-    def __multithread_fitness(self, data: Dataset, population, folds: KFold):
-        num_threads = min(os.cpu_count(), 10)
+    def __evaluate_population(self, data: Dataset, population, folds: KFold):
+        for j, individual in enumerate(population):
+            population[j] = self.__fitness(data, individual, folds)
 
-        def evaluate_fitness(individual):
-            return self.__fitness(data, individual, folds)
-
-        with ThreadPoolExecutor(max_workers=num_threads) as executor:
-            fitness_results = list(executor.map(evaluate_fitness, population))
-
-        return fitness_results
+        return population
 
     def __phenotype(self, data: Dataset, individual: list) -> Dataset:
 
@@ -240,8 +233,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         for i in range(self.genetic_parameters.num_generations):
 
-            for j, individual in enumerate(self.__multithread_fitness(data, self.population, folds)):
-                self.population[j] = individual
+            self.population = self.__evaluate_population(data, self.population, folds)
 
             best_individual = self.__select_best(self.population)
             new_population = [best_individual]
@@ -258,8 +250,8 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
             self.population = new_population
 
-            if self.verbose:
-                print(f'Generation {i + 1}/{self.genetic_parameters.num_generations} -'
+            if self.verbose and i % 5 == 0:
+                print(f'\t[LGAFFS]Generation {i + 1}/{self.genetic_parameters.num_generations} -'
                       f' Best individual: {best_individual[0]}')
 
         if not best_individual:
