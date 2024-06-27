@@ -12,7 +12,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from constants import NUM_DECIMALS
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger
+from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -59,8 +59,8 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         return self.problem_dimension >= factorial(self.threshold_k - 1)
 
-    def __genotype_to_tuple(self, _genome):
-        return tuple((c_k, a_k) for c_k, a_k in _genome)
+    def __flatten_genotype(self, genotype: list[(int, int)]) -> str:
+        return ''.join(f'{gene}{value}' for gene, value in genotype)
 
     def __generate_individual(self) -> list:
         """
@@ -288,9 +288,9 @@ class PermutationGeneticAlgorithm(Algorithm):
         def _is_invalid(_individual):
             return len(_individual[0]) > 2 * self.num_classes
 
-        genotype = self.__genotype_to_tuple(individual[0])
-        if genotype in self.evaluated_individuals:
-            return self.evaluated_individuals[genotype]
+        flattened_genotype = self.__flatten_genotype(individual[0])
+        if flattened_genotype in self.evaluated_individuals:
+            return self.evaluated_individuals[flattened_genotype]
 
         data = self.__phenotype(data, individual)
 
@@ -312,27 +312,35 @@ class PermutationGeneticAlgorithm(Algorithm):
                 individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
                                                                                         model_predictions)})
 
-        self.evaluated_individuals.update({genotype: individual})
+        self.evaluated_individuals.update({flattened_genotype: individual})
 
         return individual
 
     def __evaluate_population(self, dataset, population):
 
         for j, individual in enumerate(population):
-            if self.verbose and not self.genetic_search_flag and j % 50 == 0:
+            if self.verbose and not self.genetic_search_flag:
                 print(f'\t[PGA] Evaluating individual {j + 1}/{len(population)} with genotype {individual[0]}.')
             population[j] = self.__fitness(dataset, individual)
 
         return population
 
+    def __find_longest_genotype_match(self, flattened_genotype) -> str:
+
+        sorted_genotypes = sorted(self.decoded_individuals.keys(), key=len, reverse=True)
+        for key in sorted_genotypes:
+            if flattened_genotype.startswith(key):
+                return str(key)
+
+        return "None"
+
     def __phenotype(self, data: Dataset, individual):
 
-        genotype = self.__genotype_to_tuple(individual[0])
-        if genotype in self.decoded_individuals:
-            return self.decoded_individuals[genotype]
+        flattened_genotype = self.__flatten_genotype(individual[0])
+        longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
+        transformed_data = copy.deepcopy(self.decoded_individuals.get(longest_matching_genotype, data))
 
         dummy_values = data.get_dummy_protected_feature(self.sensitive_attribute)
-        transformed_data = copy.deepcopy(data)
         dimensions = transformed_data.features.shape
 
         for value, algorithm in individual[0]:
@@ -361,7 +369,7 @@ class PermutationGeneticAlgorithm(Algorithm):
                 sensitive_attribute = values.rename(columns={self.decoder[value]: self.sensitive_attribute})
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
-        self.decoded_individuals.update({genotype: transformed_data})
+        self.decoded_individuals.update({flattened_genotype: transformed_data})
 
         return transformed_data
 
@@ -371,7 +379,6 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.sensitive_attribute = sensitive_attribute
         self.genetic_search_flag = self.__do_genetic_search()
         self.population = self.__generate_population()
-        print(self.population)
         self.evaluated_individuals = {}
         self.decoded_individuals = {}
 
@@ -427,7 +434,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}',
                                f'best_individuals/{self.iteration_number}_iteration/')
 
-        return self.decoded_individuals[self.__genotype_to_tuple(best_individual[0])]
+        return self.decoded_individuals[self.__flatten_genotype(best_individual[0])]
 
     def __extensive_search(self, dataset: Dataset) -> Dataset:
 
@@ -444,7 +451,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}',
                                f'best_individuals/{self.iteration_number}_iteration/')
 
-        return self.decoded_individuals[self.__genotype_to_tuple(best_individual[0])]
+        return self.decoded_individuals[self.__flatten_genotype(best_individual[0])]
 
     def transform(self, dataset: Dataset) -> Dataset:
 
