@@ -249,44 +249,26 @@ class Dataset(metaclass=abc.ABCMeta):
 
         return data, outcome
 
-    def split(self):
+    def split(self, sensitive_attributes: list[str] = None):
         """
         Splits the dataset into train, validation, and test sets. The split datasets are returned as separate Dataset
         objects. The split is stratified based on the protected attributes and the target.
         """
 
         # split into train and validation/test sets
-        stratify_criteria = pd.concat([self.features[self.protected_features_names], self.targets], axis=1)
+        if sensitive_attributes is None:
+            sensitive_attributes = self.protected_features_names
 
-        # Assuming 'subgroup_column' contains the subgroup identifiers
-        subgroup_counts = stratify_criteria.value_counts()
-
-        # Identify subgroups with dimensionality 1
-        subgroups_to_remove = subgroup_counts[subgroup_counts == 1].index
-
-        indexes_to_remove = []
-        columns = subgroups_to_remove.names
-        for i in range(len(subgroups_to_remove)):
-            df = copy.deepcopy(stratify_criteria)
-            for j in range(len(columns)):
-                df = df[df[columns[j]] == subgroups_to_remove[i][j]]
-
-            indexes_to_remove.append(df.index.to_list()[0])
-
-        self.features = self.features.drop(index=indexes_to_remove)
-        self.targets = self.targets.drop(index=indexes_to_remove)
-
-        stratify_criteria = stratify_criteria.drop(index=indexes_to_remove)
-
+        stratify_criteria = pd.concat([self.features[sensitive_attributes], self.targets], axis=1)
         x_train, x_test, y_train, y_test = train_test_split(self.features, self.targets,
                                                             train_size=self.train_size,
                                                             random_state=get_seed(),
                                                             shuffle=True,
                                                             stratify=stratify_criteria)
 
-        # split into validation and test sets
         split_ratio = self.test_size / (self.validation_size + self.test_size)
-        stratify_criteria = pd.concat([x_test[self.protected_features_names], y_test], axis=1)
+        stratify_criteria = pd.concat([x_test[sensitive_attributes], y_test], axis=1)
+
         x_val, x_test, y_val, y_test = train_test_split(x_test, y_test,
                                                         test_size=split_ratio,
                                                         random_state=get_seed(),

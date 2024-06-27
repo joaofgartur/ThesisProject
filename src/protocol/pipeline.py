@@ -46,15 +46,14 @@ class Pipeline:
                                               features=scaler.transform(self.validation_set.features))
         self.test_data = update_dataset(self.test_set, features=scaler.transform(self.test_set.features))
 
-    def __pre_intervention__(self, train_data: Dataset) -> (pd.DataFrame, pd.DataFrame):
+    def __pre_intervention__(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
         logger.info("[PRE-INTERVENTION] Assessment.")
 
         all_metrics_df = pd.DataFrame()
         all_distribution_df = pd.DataFrame()
-        for attribute in train_data.protected_attributes:
-            metrics_df, distribution_df = self.__attribute_assessment(train_data, attribute)
-            all_metrics_df = pd.concat([all_metrics_df, metrics_df])
-            all_distribution_df = pd.concat([all_distribution_df, distribution_df])
+        metrics_df, distribution_df = self.__attribute_assessment(train_data, protected_attribute)
+        all_metrics_df = pd.concat([all_metrics_df, metrics_df])
+        all_distribution_df = pd.concat([all_distribution_df, distribution_df])
 
         return all_metrics_df, all_distribution_df
 
@@ -182,35 +181,43 @@ class Pipeline:
         try:
             logger.info("[PIPELINE] Start.")
 
-            # split
-            self.train_set, self.validation_set, self.test_set = self.dataset.split()
-
-            # scale
-            self.__scale__(MinMaxScaler())
-
-            # pre-intervention
-            pre_intervention_metrics, pre_intervention_distribution = self.__pre_intervention__(self.train_set)
             self.metrics_dict.update(
-                {unbiasing_algorithm.__class__.__name__: pre_intervention_metrics
+                {unbiasing_algorithm.__class__.__name__: pd.DataFrame()
                  for unbiasing_algorithm in self.unbiasing_algorithms})
             self.distribution_dict.update(
-                {unbiasing_algorithm.__class__.__name__: pre_intervention_distribution
+                {unbiasing_algorithm.__class__.__name__: pd.DataFrame()
                  for unbiasing_algorithm in self.unbiasing_algorithms})
 
-            # correction
-            for attribute, unbiasing_algorithm in list(itertools.product(self.train_set.protected_features_names,
-                                                                         self.unbiasing_algorithms)):
-                self.unbiasing_algorithm = unbiasing_algorithm.__class__.__name__
+            for sensitive_attribute in self.dataset.protected_features_names:
 
-                attribute_metrics_df, attribute_distribution_df = self.__bias_reduction__(self.train_set,
-                                                                                          self.validation_set,
-                                                                                          unbiasing_algorithm,
-                                                                                          attribute)
+                # split
+                self.train_set, self.validation_set, self.test_set = self.dataset.split([sensitive_attribute])
 
-                self.metrics_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
-                    [self.metrics_dict[unbiasing_algorithm.__class__.__name__], attribute_metrics_df])
-                self.distribution_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
-                    [self.distribution_dict[unbiasing_algorithm.__class__.__name__], attribute_distribution_df])
+                # scale
+                self.__scale__(MinMaxScaler())
+
+                # pre-intervention
+                pre_intervention_metrics, pre_intervention_distribution = self.__pre_intervention__(self.train_set,
+                                                                                                    sensitive_attribute)
+
+                # correction
+                for unbiasing_algorithm in self.unbiasing_algorithms:
+                    self.metrics_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
+                        [self.metrics_dict[unbiasing_algorithm.__class__.__name__], pre_intervention_metrics])
+                    self.distribution_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
+                        [self.distribution_dict[unbiasing_algorithm.__class__.__name__], pre_intervention_distribution])
+
+                    self.unbiasing_algorithm = unbiasing_algorithm.__class__.__name__
+
+                    attribute_metrics_df, attribute_distribution_df = self.__bias_reduction__(self.train_set,
+                                                                                              self.validation_set,
+                                                                                              unbiasing_algorithm,
+                                                                                              sensitive_attribute)
+
+                    self.metrics_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
+                        [self.metrics_dict[unbiasing_algorithm.__class__.__name__], attribute_metrics_df])
+                    self.distribution_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
+                        [self.distribution_dict[unbiasing_algorithm.__class__.__name__], attribute_distribution_df])
 
             logger.info("[PIPELINE] End.")
 

@@ -82,6 +82,15 @@ class AdultIncome(Dataset):
         documentation [1].
         """
 
+        def derive_age(x, lower_limit=25, upper_limit=60):
+            if lower_limit < x < upper_limit:
+                return 'Adult'
+            elif x >= upper_limit:
+                return 'Aged'
+            return 'Young'
+
+        age_column = 'age'
+        self.features[age_column] = self.features[age_column].apply(lambda x: derive_age(x))
         self.targets = (self.targets.replace("<=", NEGATIVE_OUTCOME, regex=True)
                         .replace(">", POSITIVE_OUTCOME, regex=True)
                         .astype('int64'))

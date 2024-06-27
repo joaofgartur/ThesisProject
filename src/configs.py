@@ -185,7 +185,7 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.LGAFFS),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.LearnedFairRepresentations)
             ]
-            # unbiasing_algorithms_pool[3].verbose = False
+            unbiasing_algorithms_pool[3].verbose = False
             return PermutationGeneticAlgorithm(
                 genetic_parameters=genetic_parameters,
                 unbiasing_algorithms_pool=unbiasing_algorithms_pool,
