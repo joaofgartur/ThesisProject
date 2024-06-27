@@ -121,7 +121,6 @@ class PermutationGeneticAlgorithm(Algorithm):
             return [self.__generate_individual() for _ in range(self.genetic_parameters.population_size)]
 
         num_algorithms = len(self.unbiasing_algorithms_pool)
-
         genes_pool = list(product(range(self.num_classes), range(num_algorithms)))
         population = []
         max_individual_length = 2 * self.num_classes
@@ -325,25 +324,32 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         return population
 
-    def __find_longest_genotype_match(self, flattened_genotype) -> str:
+    def __find_longest_genotype_match(self, flattened_genotype) -> str | None:
 
         sorted_genotypes = sorted(self.decoded_individuals.keys(), key=len, reverse=True)
         for key in sorted_genotypes:
             if flattened_genotype.startswith(key):
                 return str(key)
 
-        return "None"
+        return None
 
     def __phenotype(self, data: Dataset, individual):
 
         flattened_genotype = self.__flatten_genotype(individual[0])
         longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
-        transformed_data = copy.deepcopy(self.decoded_individuals.get(longest_matching_genotype, data))
 
-        dummy_values = data.get_dummy_protected_feature(self.sensitive_attribute)
+        if longest_matching_genotype is None:
+            genotype_to_decode = individual[0]
+            transformed_data = copy.deepcopy(data)
+        else:
+            match_length = len(self.evaluated_individuals[longest_matching_genotype][0])
+            genotype_to_decode = individual[0][match_length:]
+            transformed_data = copy.deepcopy(self.decoded_individuals.get(longest_matching_genotype, data))
+
+        dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
 
-        for value, algorithm in individual[0]:
+        for value, algorithm in genotype_to_decode:
 
             if transformed_data.error_flag:
                 break

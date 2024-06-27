@@ -193,6 +193,8 @@ class Pipeline:
                 # split
                 self.train_set, self.validation_set, self.test_set = self.dataset.split([sensitive_attribute])
 
+                print(self.train_set.features)
+
                 # scale
                 self.__scale__(MinMaxScaler())
 
