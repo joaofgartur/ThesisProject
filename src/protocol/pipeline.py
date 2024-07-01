@@ -153,6 +153,7 @@ class Pipeline:
             for i in range(self.num_iterations):
                 logger.info(f"[INTERVENTION] Iteration {i + 1} / {self.num_iterations}.")
                 unbiasing_algorithm.iteration_number = i + 1
+                transformed_dataset.set_feature(protected_attribute, attribute_values[value])
                 unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
                 transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
 
@@ -192,8 +193,6 @@ class Pipeline:
 
                 # split
                 self.train_set, self.validation_set, self.test_set = self.dataset.split([sensitive_attribute])
-
-                print(self.train_set.features)
 
                 # scale
                 self.__scale__(MinMaxScaler())

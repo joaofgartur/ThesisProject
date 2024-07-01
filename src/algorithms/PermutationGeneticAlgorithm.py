@@ -318,7 +318,7 @@ class PermutationGeneticAlgorithm(Algorithm):
     def __evaluate_population(self, dataset, population):
 
         for j, individual in enumerate(population):
-            if self.verbose and not self.genetic_search_flag:
+            if self.verbose and not self.genetic_search_flag and j % 50 == 0:
                 print(f'\t[PGA] Evaluating individual {j + 1}/{len(population)} with genotype {individual[0]}.')
             population[j] = self.__fitness(dataset, individual)
 
@@ -348,6 +348,12 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
+
+        if self.sensitive_attribute not in transformed_data.features.columns:
+            previous_value = self.evaluated_individuals[longest_matching_genotype][0][-1][0]
+            values = dummy_values[self.decoder[previous_value]].to_frame()
+            sensitive_attribute = values.rename(columns={self.decoder[previous_value]: self.sensitive_attribute})
+            transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
         for value, algorithm in genotype_to_decode:
 

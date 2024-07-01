@@ -72,7 +72,7 @@ if __name__ == '__main__':
     dataset_configs_file, algorithms_configs_file, results_path, num_iterations = get_global_configs(args.configs)
 
     num_runs = args.runs
-    max_workers = 6
+    max_workers = 5
 
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
