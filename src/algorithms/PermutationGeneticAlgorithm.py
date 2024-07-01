@@ -9,7 +9,6 @@ import pandas as pd
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
-from constants import NUM_DECIMALS
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe
@@ -170,28 +169,28 @@ class PermutationGeneticAlgorithm(Algorithm):
     def __mutation(self, individual):
 
         def scramble_mutation(_individual: list, probability_mutation: float):
+            genome = copy.deepcopy(_individual[0])
+            n = len(genome)
 
-            if len(_individual[0]) < 2:
+            if n < 2:
                 return _individual
-
-            _mutated_individual = copy.deepcopy(_individual)
-            n = len(_individual[0])
 
             if get_generator().random() < probability_mutation:
                 index_1, index_2 = get_generator().choice(n, 2, replace=False)
-                segment = _mutated_individual[0][index_1:index_2]
+                segment = genome[index_1:index_2]
                 get_generator().shuffle(segment)
-                _mutated_individual[0][index_1:index_2] = segment
+                genome[index_1:index_2] = segment
 
-            return _mutated_individual
+            return [genome, {}, {}]
 
         # attribute values mutation
         mutated_individual = scramble_mutation(individual, self.genetic_parameters.probability_mutation)
 
         # unbiasing algorithms mutation
-        for i in range(len(mutated_individual[0])):
-            if get_generator().random() < self.genetic_parameters.probability_mutation:
-                mutated_individual[0][i][1] = get_generator().integers(0, len(self.unbiasing_algorithms_pool))
+        mutation_probabilities = get_generator().random(len(mutated_individual[0]))
+        mutation_indices = np.where(mutation_probabilities < self.genetic_parameters.probability_mutation)[0]
+        for i in mutation_indices:
+            mutated_individual[0][i][1] = get_generator().integers(0, len(self.unbiasing_algorithms_pool))
 
         return mutated_individual
 
@@ -231,8 +230,8 @@ class PermutationGeneticAlgorithm(Algorithm):
         for model in surrogate_models_order:
             if len(population) == 1:
                 break
-            population = lexicographic_selection(population, (1, model))
-            population = lexicographic_selection(population, (2, model))
+            population = lexicographic_selection(population, (1, model)) # performance
+            population = lexicographic_selection(population, (2, model)) # fairness
 
         return population
 
@@ -274,18 +273,12 @@ class PermutationGeneticAlgorithm(Algorithm):
         metrics = fairness_assessment(data, predictions, self.sensitive_attribute)
 
         result = {}
-        for metric in metrics.columns:
-            if metrics[metric].dtype == 'object':
-                continue
-            sum_of_squares = np.round(np.sum((metrics[metric] - 1.0) ** 2), decimals=NUM_DECIMALS)
-            result.update({metric: sum_of_squares})
-
+        numerical_columns = metrics.select_dtypes(include=[np.number]).columns
+        for metric in numerical_columns:
+            result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
 
     def __fitness(self, data: Dataset, individual):
-
-        def _is_invalid(_individual):
-            return len(_individual[0]) > 2 * self.num_classes
 
         flattened_genotype = self.__flatten_genotype(individual[0])
         if flattened_genotype in self.evaluated_individuals:
@@ -293,15 +286,14 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         data = self.__phenotype(data, individual)
 
-        if _is_invalid(individual) or data.error_flag:
+        if len(individual[0]) > 2 * self.num_classes or data.error_flag:
             for model in self.surrogate_models_pool:
-                individual[1].update({model.__class__.__name__: self.__performance_fitness(self.auxiliary_data,
-                                                                                           self.auxiliary_data)})
-                individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
-                                                                                        self.auxiliary_data)})
-            for model, metrics in individual[1].items():
-                for metric in metrics:
-                    individual[1][model][metric] = -1.0
+                individual[1][model.__class__.__name__] = self.__performance_fitness(self.auxiliary_data,
+                                                                                     self.auxiliary_data)
+                individual[2][model.__class__.__name__] = self.__fairness_fitness(self.auxiliary_data,
+                                                                                  self.auxiliary_data)
+                for metric in individual[1][model.__class__.__name__]:
+                    individual[1][model.__class__.__name__][metric] = -1.0
 
         else:
             for model in self.surrogate_models_pool:
@@ -311,7 +303,7 @@ class PermutationGeneticAlgorithm(Algorithm):
                 individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
                                                                                         model_predictions)})
 
-        self.evaluated_individuals.update({flattened_genotype: individual})
+        self.evaluated_individuals[flattened_genotype] = individual
 
         return individual
 
@@ -319,7 +311,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         for j, individual in enumerate(population):
             if self.verbose and not self.genetic_search_flag and j % 50 == 0:
-                print(f'\t[PGA] Evaluating individual {j + 1}/{len(population)} with genotype {individual[0]}.')
+                print(f'\t[PGA] Evaluating individual {j}/{len(population)} with genotype {individual[0]}.')
             population[j] = self.__fitness(dataset, individual)
 
         return population
@@ -351,8 +343,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         if self.sensitive_attribute not in transformed_data.features.columns:
             previous_value = self.evaluated_individuals[longest_matching_genotype][0][-1][0]
-            values = dummy_values[self.decoder[previous_value]].to_frame()
-            sensitive_attribute = values.rename(columns={self.decoder[previous_value]: self.sensitive_attribute})
+            sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[previous_value]]})
             transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
         for value, algorithm in genotype_to_decode:
@@ -370,11 +361,10 @@ class PermutationGeneticAlgorithm(Algorithm):
                 dimensions = transformed_data.features.shape
 
             if self.sensitive_attribute not in transformed_data.features.columns:
-                values = dummy_values[self.decoder[value]].to_frame()
-                sensitive_attribute = values.rename(columns={self.decoder[value]: self.sensitive_attribute})
+                sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[value]]})
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
-        self.decoded_individuals.update({flattened_genotype: transformed_data})
+        self.decoded_individuals[flattened_genotype] = transformed_data
 
         return transformed_data
 

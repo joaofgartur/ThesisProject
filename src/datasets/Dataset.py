@@ -174,8 +174,7 @@ class Dataset(metaclass=abc.ABCMeta):
             The new values for the feature.
         """
         if feature not in self.features.columns:
-            raise ValueError(f'Feature {feature} does not exist.')
-
+            self.features = pd.concat([self.features, pd.DataFrame({feature: series})], axis=1)
         self.features[feature] = series
 
     def get_protected_attributes(self) -> pd.DataFrame:

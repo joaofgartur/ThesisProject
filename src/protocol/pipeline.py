@@ -123,8 +123,18 @@ class Pipeline:
 
         return pipeline_metrics_df, pipeline_distribution_df
 
+    def __set_feature(self, unbiasing_algorithm, dataset, protected_attribute, value):
+        if unbiasing_algorithm.is_binary:
+            dataset.set_feature(protected_attribute, dataset.get_dummy_protected_feature(protected_attribute)[value])
+        else:
+            dataset.set_feature(protected_attribute, pd.DataFrame(dataset.get_protected_feature(protected_attribute),
+                                                                  columns=[protected_attribute])[value])
+        return dataset
+
     def __bias_reduction__(self, train_set: Dataset, validation_set: Dataset,
                            unbiasing_algorithm: Algorithm, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
+
+
 
         unbiasing_algorithm_type = 'binary' if unbiasing_algorithm.is_binary else 'multi-class'
         logger.info(f'[INTERVENTION] Reducing bias for {unbiasing_algorithm_type} '
@@ -145,7 +155,6 @@ class Pipeline:
                     f"{unbiasing_algorithm.__class__.__name__}")
 
             transformed_dataset = copy.deepcopy(train_set)
-            transformed_dataset.set_feature(protected_attribute, attribute_values[value])
 
             if unbiasing_algorithm.needs_auxiliary_data:
                 unbiasing_algorithm.auxiliary_data = validation_set
@@ -153,7 +162,8 @@ class Pipeline:
             for i in range(self.num_iterations):
                 logger.info(f"[INTERVENTION] Iteration {i + 1} / {self.num_iterations}.")
                 unbiasing_algorithm.iteration_number = i + 1
-                transformed_dataset.set_feature(protected_attribute, transformed_dataset.get_dummy_protected_feature(protected_attribute)[value])
+                transformed_dataset = self.__set_feature(unbiasing_algorithm, transformed_dataset, protected_attribute, value)
+
                 unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
                 transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
 

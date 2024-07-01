@@ -1,6 +1,8 @@
 import copy
 import itertools
 import math
+from concurrent.futures import ThreadPoolExecutor
+from multiprocessing import Pool, cpu_count
 from random import sample
 
 import numpy as np
@@ -9,11 +11,10 @@ from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
-from constants import NUM_DECIMALS
 from datasets import Dataset, update_dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import get_generator, get_seed
+from helpers import get_generator, get_seed, logger
 
 
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
@@ -38,15 +39,10 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.evaluated_individuals = {}
         self.decoded_individuals = {}
 
-    def __gen_individual(self, feature_prob: float = 1.0):
-        if feature_prob:
-            features_prob = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob,
-                                                    size=self.genetic_parameters.individual_size)
-            # genome, performance, fairness
-            return [np.array(
-                [1 if features_prob[i] > feature_prob else 0 for i in range(self.genetic_parameters.individual_size)]),
-                [], []]
-        return [get_generator().randint(2, size=self.genetic_parameters.individual_size), {}, {}]
+    def __gen_individual(self, feature_prob: float):
+        features_prob = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob,
+                                                size=self.genetic_parameters.individual_size)
+        return [np.where(features_prob > feature_prob, 1, 0), [], []]
 
     def __genotype_to_tuple(self, individual):
         return tuple(individual[0])
@@ -54,55 +50,25 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
     def __gen_ramped_population(self):
         n = self.genetic_parameters.population_size
         pop_feature_probs = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob, size=n)
-        return [self.__gen_individual(float(pop_feature_probs[i])) for i in range(n)]
+        return [self.__gen_individual(float(prob)) for prob in pop_feature_probs]
 
     def __crossover(self, parent1, parent2):
-
-        def uniform_crossover(_parent1: list, _parent2: list, probability_crossover: float):
-            value = get_generator().random()
-            if value < probability_crossover:
-
-                offspring1 = [np.zeros(_parent1[0].shape, dtype=int), {}, {}]
-                offspring2 = [np.zeros(_parent1[0].shape, dtype=int), {}, {}]
-
-                indexes_choice = get_generator().choice(_parent1[0].shape[0])
-                index_mask = indexes_choice < 0.5
-
-                offspring1[0][index_mask] = _parent1[0][index_mask]
-                offspring2[0][index_mask] = _parent2[0][index_mask]
-
-                offspring1[0][~index_mask] = _parent2[0][~index_mask]
-                offspring2[0][~index_mask] = _parent1[0][~index_mask]
-
-                return offspring1, offspring2
-            else:
-                return _parent1, _parent2
-
-        return uniform_crossover(parent1, parent2, self.genetic_parameters.probability_crossover)
+        if get_generator().random() < self.genetic_parameters.probability_crossover:
+            mask = get_generator().random(parent1[0].shape[0]) < 0.5
+            offspring1 = np.where(mask, parent1[0], parent2[0])
+            offspring2 = np.where(mask, parent2[0], parent1[0])
+            return [offspring1, {}, {}], [offspring2, {}, {}]
+        return parent1, parent2
 
     def __mutation(self, individual: list):
-
-        def bit_flip_mutation(_individual: list, probability_mutation: float):
-            new_individual = copy.deepcopy(_individual)
-            random_probs = get_generator().random(_individual[0].shape[0])
-            for i in range(random_probs.shape[0]):
-                if random_probs[i] < probability_mutation:
-                    new_individual[0][i] = 1 - new_individual[0][i]
-            return new_individual
-
-        return bit_flip_mutation(individual, self.genetic_parameters.probability_mutation)
+        mutation_mask = get_generator().random(individual[0].shape[0]) < self.genetic_parameters.probability_mutation
+        mutated_genome = np.where(mutation_mask, 1 - individual[0], individual[0])
+        return [mutated_genome, {}, {}]
 
     def __tournament(self, population):
-
-        def one_tour(local_population):
-            pool = sample(local_population, self.genetic_parameters.tournament_size)
-            return self.__select_best(pool)
-
-        mate_pool = []
-        for _ in range(2):
-            winner = one_tour(population)
-            mate_pool.append(winner)
-        return mate_pool[0], mate_pool[1]
+        pool1 = sample(population, self.genetic_parameters.tournament_size)
+        pool2 = sample(population, self.genetic_parameters.tournament_size)
+        return self.__select_best(pool1), self.__select_best(pool2)
 
     def __select_best(self, population):
 
@@ -111,10 +77,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             return _population
 
         def select_top_individuals(_population, _metric, epsilon: float = 0.0, fairness_metric=False):
-            index = 1
-            if fairness_metric:
-                index = 2
-
+            index = 2 if fairness_metric else 1
             _population = sort_population(_population, _metric, index)
             best_value = _population[0][index][_metric] - epsilon
             last_index = np.argmax([individual[index][_metric] < best_value - epsilon for individual in _population])
@@ -124,44 +87,34 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             for _metric in metrics:
                 if len(_population) == 1:
                     break
-                _population = select_top_individuals(_population, _metric)
-
+                _population = select_top_individuals(_population, _metric, True)
             return _population[0]
 
-            # sort by performance metrics
-        for metric in list(population[0][1].keys()):
-            population = select_top_individuals(population, metric)
+        performance_metrics = list(population[0][1].keys())
+        population = select_top_individuals(population, performance_metrics[0])
 
-        # lexicographic fairness selection
-        lexicographic_permutations = list(itertools.permutations(list(population[0][1].keys())))
+        lexicographic_permutations = np.array(list(itertools.permutations(performance_metrics)))
         winners = {}
         winners_count = {}
         for permutation in lexicographic_permutations:
             best_individual = lexicographic_selection(population, permutation)
-
-            individual_key = str(best_individual[0])
-            if individual_key not in winners.keys():
-                winners.update({individual_key: best_individual})
-                winners_count.update({individual_key: 1})
-            else:
-                winners_count.update({individual_key: winners_count[individual_key] + 1})
+            key = self.__genotype_to_tuple(best_individual)
+            winners[key] = best_individual
+            winners_count[key] = 1 + winners_count.get(key, 0)
 
         # select the individual with the most wins
-        best_individual_key = max(winners_count, key=lambda x: winners_count[x])
-
+        best_individual_key = max(winners_count, key=winners_count.get)
         return winners[best_individual_key]
 
     def __performance_fitness(self, data: Dataset, predictions: Dataset):
         performance_evaluator = ModelEvaluator(data, predictions)
-
-        performance_metric = np.round(
-            math.sqrt(performance_evaluator.specificity() * performance_evaluator.sensitivity()), decimals=NUM_DECIMALS)
-
+        specificity = performance_evaluator.specificity()
+        sensitivity = performance_evaluator.sensitivity()
+        performance_metric = math.sqrt(specificity * sensitivity)
         return {'performance': performance_metric}
 
     def __fairness_fitness(self, data: Dataset, predictions: Dataset):
         fairness_evaluator = FairnessEvaluator(data, predictions, self.sensitive_attribute)
-
         ds = fairness_evaluator.discrimination_score()
         di = fairness_evaluator.disparate_impact()
         consistency = fairness_evaluator.consistency(k=3)
@@ -182,7 +135,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         if genotype in self.evaluated_individuals:
             return self.evaluated_individuals[genotype]
 
-        if sum(individual[0]) == 0:
+        if np.sum(individual[0]) == 0:
             return [individual[0], {'performance': -1}, {}]
 
         data = self.__phenotype(data, individual)
@@ -194,15 +147,16 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         individual = [individual[0], self.__performance_fitness(data, predicted_data),
                       self.__fairness_fitness(data, predicted_data)]
 
-        self.evaluated_individuals.update({genotype: individual})
+        self.evaluated_individuals[genotype] = individual
 
         return individual
 
-    def __evaluate_population(self, data: Dataset, population, folds: KFold):
-        for j, individual in enumerate(population):
-            population[j] = self.__fitness(data, individual, folds)
+    def __evaluate_population(self, data: Dataset, population, folds: KFold, pool):
 
-        return population
+        def evaluate_fitness(individual):
+            return self.__fitness(data, individual, folds)
+
+        return list(pool.map(evaluate_fitness, population))
 
     def __phenotype(self, data: Dataset, individual: list) -> Dataset:
 
@@ -211,12 +165,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             return self.decoded_individuals[genotype]
 
         transformed_data = copy.deepcopy(data)
-
         features_to_drop = np.argwhere(individual[0] == 0).ravel()
         selected_features = data.features.drop(data.features.columns[features_to_drop], axis=1)
         transformed_data.features = selected_features
 
-        self.decoded_individuals.update({genotype: transformed_data})
+        self.decoded_individuals[genotype] = transformed_data
 
         return transformed_data
 
@@ -231,20 +184,17 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []
 
-        for i in range(self.genetic_parameters.num_generations):
+        pool = ThreadPoolExecutor(max_workers=min(10, cpu_count()))
 
-            self.population = self.__evaluate_population(data, self.population, folds)
+        for i in range(self.genetic_parameters.num_generations):
+            self.population = self.__evaluate_population(data, self.population, folds, pool)
 
             best_individual = self.__select_best(self.population)
             new_population = [best_individual]
 
             while len(new_population) < len(self.population):
                 individual_1, individual_2 = self.__tournament(self.population)
-
-                # crossover
                 new_individual_1, new_individual_2 = self.__crossover(individual_1, individual_2)
-
-                # mutation
                 new_population.append(self.__mutation(new_individual_1))
                 new_population.append(self.__mutation(new_individual_2))
 
@@ -256,5 +206,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         if not best_individual:
             return data
+
+        pool.shutdown()
 
         return self.decoded_individuals[self.__genotype_to_tuple(best_individual)]
