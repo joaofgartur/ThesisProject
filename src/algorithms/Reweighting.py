@@ -79,6 +79,9 @@ class Reweighing(Algorithm):
         resampled_features, resampled_targets = resampled_data[:, :-1], resampled_data[:, -1]
 
         transformed_dataset = update_dataset(dataset=data, features=resampled_features, targets=resampled_targets)
-        transformed_dataset.sampled_indexes = indexes
+
+        sampled_values = transformed_dataset.protected_attributes.loc[indexes]
+        new_sensitive_values = pd.concat([transformed_dataset.get_protected_attributes(), sampled_values]).reset_index(drop=True)
+        transformed_dataset.protected_attributes = new_sensitive_values
 
         return transformed_dataset

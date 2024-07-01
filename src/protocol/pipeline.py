@@ -153,7 +153,7 @@ class Pipeline:
             for i in range(self.num_iterations):
                 logger.info(f"[INTERVENTION] Iteration {i + 1} / {self.num_iterations}.")
                 unbiasing_algorithm.iteration_number = i + 1
-                transformed_dataset.set_feature(protected_attribute, attribute_values[value])
+                transformed_dataset.set_feature(protected_attribute, transformed_dataset.get_dummy_protected_feature(protected_attribute)[value])
                 unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
                 transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
 

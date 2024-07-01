@@ -128,7 +128,6 @@ class Dataset(metaclass=abc.ABCMeta):
         self.features_mapping = None
         self.targets_mapping = None
         self.protected_attributes = None
-        self.sampled_indexes = None
         self.error_flag = False
 
         self.__parse_dataset_config(config)

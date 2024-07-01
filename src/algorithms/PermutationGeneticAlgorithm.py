@@ -366,14 +366,7 @@ class PermutationGeneticAlgorithm(Algorithm):
             transformed_data = unbiasing_algorithm.transform(transformed_data)
 
             if transformed_data.features.shape[0] != dimensions[0]:
-                sensitive_values = transformed_data.get_protected_attributes()
-                sampled_values = transformed_data.protected_attributes.loc[transformed_data.sampled_indexes]
-
-                new_sensitive_values = pd.concat([sensitive_values, sampled_values]).reset_index(drop=True)
-
-                transformed_data.protected_attributes = new_sensitive_values
                 dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
-
                 dimensions = transformed_data.features.shape
 
             if self.sensitive_attribute not in transformed_data.features.columns:
