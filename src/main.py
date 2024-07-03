@@ -7,21 +7,22 @@ import argparse
 import configparser
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
-from configs import (get_global_configs, load_dataset, AlgorithmOptions, load_algorithm, surrogate_models,
-                     test_classifier)
+from configs import (get_global_configs, load_dataset, AlgorithmOptions, load_algorithm, get_surrogate_classifiers, get_test_classifier)
 
 from protocol import Pipeline
 from helpers import logger, extract_filename, set_seed, get_seed
 
 
 # Function to load dataset and algorithms, and run the pipeline
-def run_pipeline(seed, args, dataset_configs_file, algorithms_configs_file, surrogate_models, test_classifier,
-                 num_iterations):
+def run_pipeline(seed, args, dataset_configs_file, algorithms_configs_file, num_iterations):
     # Set the random seed for reproducibility
     set_seed(seed)
 
     # Load dataset
     dataset = load_dataset(args.dataset, dataset_configs_file)
+    n = dataset.features.shape[0]
+    surrogate_classifiers = get_surrogate_classifiers()
+    test_classifier = get_test_classifier(n)
 
     # Load unbiasing algorithms
     if args.all:
@@ -30,7 +31,7 @@ def run_pipeline(seed, args, dataset_configs_file, algorithms_configs_file, surr
         unbiasing_algorithms = [load_algorithm(algorithms_configs_file, AlgorithmOptions(args.algorithm))]
 
     # Initialize and run the pipeline
-    pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_models, test_classifier, num_iterations)
+    pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_classifiers, test_classifier, num_iterations)
     pipeline.run_and_save()
 
 
@@ -58,7 +59,6 @@ def execute_runs_with_limit(num_runs, base_seed, args, dataset_configs_file, alg
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser(description='Run the pipeline for the thesis.')
     parser.add_argument('-dataset', type=str, default='-1', help='Dataset for bias reduction.')
     parser.add_argument('-algorithm', type=int, default='-1', help='Algorithm for bias reduction.')
@@ -72,11 +72,10 @@ if __name__ == '__main__':
     dataset_configs_file, algorithms_configs_file, results_path, num_iterations = get_global_configs(args.configs)
 
     num_runs = args.runs
-    max_workers = 10
+    run_pipeline(get_seed(), args, dataset_configs_file, algorithms_configs_file, num_iterations)
 
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
-    execute_runs_with_limit(num_runs, get_seed(), args, dataset_configs_file, algorithms_configs_file, surrogate_models,
-                            test_classifier, num_iterations, max_workers)
+    # execute_runs_with_limit(num_runs, get_seed(), args, dataset_configs_file, algorithms_configs_file, surrogate_models,test_classifier, num_iterations, max_workers)
 
     logger.info(f'[{extract_filename(__file__)}] End of program.')

@@ -6,6 +6,10 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+from cuml.linear_model import LogisticRegression as LogisticRegression_GPU
+from cuml.ensemble import RandomForestClassifier as RandomForestClassifier_GPU
+from cuml.naive_bayes import GaussianNB as GaussianNB_GPU
+from cuml.svm import SVC as SVC_GPU
 from xgboost import XGBClassifier
 
 from algorithms import GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover, \
@@ -15,6 +19,9 @@ from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection impo
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
 from datasets.LawSchoolAdmissions import LawSchoolAdmissions
 from helpers import logger, set_seed, get_seed
+
+
+GPU_LIMIT = 100
 
 
 class AlgorithmOptions(Enum):
@@ -27,15 +34,20 @@ class AlgorithmOptions(Enum):
     PermutationGeneticAlgorithm = 7
 
 
-test_classifier = XGBClassifier(random_state=get_seed())
+def get_surrogate_classifiers() -> list:
+    return [
+        LogisticRegression(random_state=get_seed()),
+        SVC(random_state=get_seed()),
+        GaussianNB(),
+        DecisionTreeClassifier(random_state=get_seed()),
+        RandomForestClassifier(random_state=get_seed()),
+    ]
 
-surrogate_models = [
-    LogisticRegression(random_state=get_seed()),
-    SVC(random_state=get_seed()),
-    GaussianNB(),
-    DecisionTreeClassifier(random_state=get_seed()),
-    RandomForestClassifier(random_state=get_seed()),
-]
+
+def get_test_classifier(n) -> object:
+    if n < GPU_LIMIT:
+        return XGBClassifier(random_state=get_seed())
+    return XGBClassifier(random_state=get_seed(), tree_method='gpu_hist')
 
 
 def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
@@ -165,6 +177,7 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                     n_splits=n_splits,
                     min_feature_prob=min_feature_prob,
                     max_feature_prob=max_feature_prob,
+                    data_size_limit=GPU_LIMIT,
                     verbose=verbose
                 )
             else:
@@ -173,7 +186,8 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                     n_splits=n_splits,
                     min_feature_prob=min_feature_prob,
                     max_feature_prob=max_feature_prob,
-                    verbose=verbose
+                    verbose=verbose,
+                    data_size_limit=GPU_LIMIT
                 )
         case AlgorithmOptions.PermutationGeneticAlgorithm:
             verbose, threshold_k, genetic_parameters = (
@@ -189,7 +203,7 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
             return PermutationGeneticAlgorithm(
                 genetic_parameters=genetic_parameters,
                 unbiasing_algorithms_pool=unbiasing_algorithms_pool,
-                surrogate_models_pool=surrogate_models,
+                surrogate_models_pool=get_surrogate_classifiers(),
                 verbose=verbose,
                 threshold_k=threshold_k
             )

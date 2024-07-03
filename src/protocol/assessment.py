@@ -3,7 +3,7 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-
+import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
 
@@ -21,8 +21,8 @@ def get_classifier_predictions(model: object, train_data: Dataset, validation_da
 
     validation_data = match_features(train_data, validation_data)
 
-    x_train = train_data.features.to_numpy()
-    y_train = train_data.targets.to_numpy().ravel()
+    x_train = train_data.features.to_numpy().astype(np.float32)
+    y_train = train_data.targets.to_numpy().astype(np.float32).ravel()
 
     pipeline.fit(x_train, y_train)
 

@@ -2,11 +2,12 @@ import copy
 import itertools
 import math
 from concurrent.futures import ThreadPoolExecutor
-from multiprocessing import Pool, cpu_count
+from multiprocessing import cpu_count
 from random import sample
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from cuml import RandomForestClassifier as RandomForestClassifier_GPU
 from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
@@ -20,7 +21,8 @@ from helpers import get_generator, get_seed, logger
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters, min_feature_prob: float = 0.0,
-                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01, verbose: bool = False):
+                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01, data_size_limit: int = 10000,
+                 verbose: bool = False):
         super().__init__()
 
         # genetic parameters
@@ -30,6 +32,8 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.max_feature_prob = max_feature_prob
         self.n_splits = n_splits
         self.epsilon = epsilon
+
+        self.data_size_limit = data_size_limit
 
         self.verbose = verbose
 
@@ -140,8 +144,15 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         data = self.__phenotype(data, individual)
 
-        model = RandomForestClassifier(random_state=get_seed())
-        predictions = cross_val_predict(model, data.features.to_numpy(), data.targets.to_numpy().ravel(), cv=folds)
+        if data.features.shape[0] < self.data_size_limit:
+            model = RandomForestClassifier(random_state=get_seed())
+        else:
+            print("using gpu")
+            model = RandomForestClassifier_GPU(random_state=get_seed(), n_streams=1)
+
+        x = data.features.to_numpy().astype(np.float32)
+        y = data.targets.to_numpy().astype(np.float32).ravel()
+        predictions = cross_val_predict(model, x, y, cv=folds)
         predicted_data = update_dataset(data, targets=predictions)
 
         individual = [individual[0], self.__performance_fitness(data, predicted_data),
@@ -184,7 +195,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []
 
-        pool = ThreadPoolExecutor(max_workers=min(10, cpu_count()))
+        pool = ThreadPoolExecutor(max_workers=min(16, cpu_count()))
 
         for i in range(self.genetic_parameters.num_generations):
             self.population = self.__evaluate_population(data, self.population, folds, pool)
@@ -201,7 +212,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             self.population = new_population
 
             if self.verbose and i % 5 == 0:
-                print(f'\t[LGAFFS]Generation {i + 1}/{self.genetic_parameters.num_generations} -'
+                logger.info(f'\t[LGAFFS]Generation {i + 1}/{self.genetic_parameters.num_generations} -'
                       f' Best individual: {best_individual[0]}')
 
         if not best_individual:
