@@ -14,7 +14,7 @@ from helpers import dict_to_dataframe
 class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters, min_feature_prob: float = 0.0,
-                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01, data_size_limit: int = 10000,
+                 max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01,
                  verbose: bool = False):
         super().__init__()
 

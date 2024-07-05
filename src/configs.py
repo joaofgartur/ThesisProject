@@ -6,10 +6,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
-from cuml.linear_model import LogisticRegression as LogisticRegression_GPU
-from cuml.ensemble import RandomForestClassifier as RandomForestClassifier_GPU
-from cuml.naive_bayes import GaussianNB as GaussianNB_GPU
-from cuml.svm import SVC as SVC_GPU
 from xgboost import XGBClassifier
 
 from algorithms import GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover, \
@@ -18,10 +14,7 @@ from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection impo
     MulticlassLexicographicGeneticAlgorithmFairFeatureSelection
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
 from datasets.LawSchoolAdmissions import LawSchoolAdmissions
-from helpers import logger, set_seed, get_seed
-
-
-GPU_LIMIT = 100
+from helpers import logger, set_seed, get_seed, set_gpu_device, get_gpu_device, set_num_processes, set_num_threads
 
 
 class AlgorithmOptions(Enum):
@@ -44,10 +37,11 @@ def get_surrogate_classifiers() -> list:
     ]
 
 
-def get_test_classifier(n) -> object:
-    if n < GPU_LIMIT:
+def get_test_classifier() -> object:
+    gpu_device = get_gpu_device()
+    if gpu_device is None:
         return XGBClassifier(random_state=get_seed())
-    return XGBClassifier(random_state=get_seed(), tree_method='gpu_hist')
+    return XGBClassifier(random_state=get_seed(), tree_method='gpu_hist', gpu_id=gpu_device)
 
 
 def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
@@ -57,13 +51,20 @@ def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
     try:
         dataset_configs = global_configs.get("GLOBAL", 'dataset_configs').strip('"')
         algorithms_configs = global_configs.get('GLOBAL', 'algorithms_configs').strip('"')
-
+        num_iterations = global_configs.getint('GLOBAL', 'num_iterations')
         results_path = global_configs.get('GLOBAL', 'results_path')
 
-        seed = global_configs.getint('GLOBAL', 'seed')
-        set_seed(seed)
+        if get_seed() is None:
+            seed = global_configs.getint('GLOBAL', 'seed')
+            set_seed(seed)
 
-        num_iterations = global_configs.getint('GLOBAL', 'num_iterations')
+        enable_gpu = global_configs.getboolean('GPU', 'enable')
+        if enable_gpu:
+            gpu_device_id = global_configs.getint('GPU', 'device_id')
+            set_gpu_device(gpu_device_id)
+
+        set_num_processes(global_configs.getint('MULTIPROCESSING', 'num_process_workers'))
+        set_num_threads(global_configs.getint('MULTIPROCESSING', 'num_thread_workers'))
 
         return dataset_configs, algorithms_configs, results_path, num_iterations
 
@@ -177,7 +178,6 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                     n_splits=n_splits,
                     min_feature_prob=min_feature_prob,
                     max_feature_prob=max_feature_prob,
-                    data_size_limit=GPU_LIMIT,
                     verbose=verbose
                 )
             else:
@@ -187,7 +187,6 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                     min_feature_prob=min_feature_prob,
                     max_feature_prob=max_feature_prob,
                     verbose=verbose,
-                    data_size_limit=GPU_LIMIT
                 )
         case AlgorithmOptions.PermutationGeneticAlgorithm:
             verbose, threshold_k, genetic_parameters = (
