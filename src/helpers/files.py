@@ -1,6 +1,7 @@
 import os
+import shutil
+
 import pandas as pd
-from datetime import datetime
 
 from .random_numbers import get_seed
 
@@ -19,12 +20,13 @@ def create_directory(directory: str) -> None:
             os.mkdir(base_directory, mode)
 
 
-def write_dataframe_to_csv(df: pd.DataFrame, dataset_name: str, path: str) -> None:
-    # use date and time to create path
-    c = datetime.now()
-    time = c.strftime('%d_%m_%y-%H_%M_%S')
+def delete_directory(path: str) -> None:
+    if os.path.exists(path) and os.path.isdir(path):
+        shutil.rmtree(path)
 
-    filename = f'seed_{get_seed()}_{dataset_name}_{time}.csv'
+
+def write_dataframe_to_csv(df: pd.DataFrame, filename: str, path: str) -> None:
+    filename = f'seed_{get_seed()}_{filename}.csv'
 
     if os.path.exists(path) & os.path.isdir(path):
         path = os.path.join(path, filename)
@@ -32,4 +34,11 @@ def write_dataframe_to_csv(df: pd.DataFrame, dataset_name: str, path: str) -> No
         create_directory(path)
         path = os.path.join(path, filename)
 
-    df.to_csv(path, sep=',', index=False, encoding='utf-8')
+    file_exists = os.path.isfile(path)
+    df.to_csv(path, sep=',', index=False, encoding='utf-8', mode='a', header=not file_exists)
+
+
+def read_csv_to_dataframe(filename: str, path: str) -> pd.DataFrame:
+    filename = f'seed_{get_seed()}_{filename}.csv'
+    path = os.path.join(path, filename)
+    return pd.read_csv(path)

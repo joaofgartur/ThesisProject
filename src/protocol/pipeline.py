@@ -1,5 +1,4 @@
 import copy
-import itertools
 
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
@@ -29,13 +28,11 @@ class Pipeline:
         self.surrogate_classifiers = surrogate_classifiers
         self.test_classifier = test_classifier
 
-        self.metrics_dict = {}
-        self.distribution_dict = {}
-
         self.num_iterations = num_iterations
 
         self.unbiasing_algorithm: str = 'NA'
         self.set: str = 'NA'
+        self.results_save_path = 'results'
 
     def __scale__(self, scaler: MinMaxScaler):
 
@@ -123,7 +120,7 @@ class Pipeline:
 
         return pipeline_metrics_df, pipeline_distribution_df
 
-    def __set_feature(self, unbiasing_algorithm, dataset, protected_attribute, value):
+    def __set_protected_feature__(self, unbiasing_algorithm, dataset, protected_attribute, value):
         if unbiasing_algorithm.is_binary:
             dataset.set_feature(protected_attribute, dataset.get_dummy_protected_feature(protected_attribute)[value])
         else:
@@ -160,8 +157,8 @@ class Pipeline:
             for i in range(self.num_iterations):
                 logger.info(f"[INTERVENTION] Iteration {i + 1} / {self.num_iterations}.")
                 unbiasing_algorithm.iteration_number = i + 1
-                transformed_dataset = self.__set_feature(unbiasing_algorithm, transformed_dataset, protected_attribute,
-                                                         value)
+                transformed_dataset = self.__set_protected_feature__(unbiasing_algorithm, transformed_dataset,
+                                                                     protected_attribute, value)
 
                 unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
                 transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
@@ -183,20 +180,8 @@ class Pipeline:
         return metrics_df, distro_df
 
     def run(self) -> None:
-        self.metrics_dict.update({unbiasing_algorithm.__class__.__name__: pd.DataFrame()
-                                  for unbiasing_algorithm in self.unbiasing_algorithms})
-        self.distribution_dict.update({unbiasing_algorithm.__class__.__name__: pd.DataFrame()
-                                       for unbiasing_algorithm in self.unbiasing_algorithms})
-
         try:
             logger.info("[PIPELINE] Start.")
-
-            self.metrics_dict.update(
-                {unbiasing_algorithm.__class__.__name__: pd.DataFrame()
-                 for unbiasing_algorithm in self.unbiasing_algorithms})
-            self.distribution_dict.update(
-                {unbiasing_algorithm.__class__.__name__: pd.DataFrame()
-                 for unbiasing_algorithm in self.unbiasing_algorithms})
 
             for sensitive_attribute in self.dataset.protected_features_names:
 
@@ -207,27 +192,30 @@ class Pipeline:
                 self.__scale__(MinMaxScaler())
 
                 # pre-intervention
-                pre_intervention_metrics, pre_intervention_distribution = self.__pre_intervention__(self.train_set,
-                                                                                                    sensitive_attribute)
+                metrics, distribution = self.__pre_intervention__(self.train_set, sensitive_attribute)
+
+                base_path = f'{self.results_save_path}'
+                for unbiasing_algorithm in self.unbiasing_algorithms:
+                    metrics_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}'
+                    self.save(metrics, metrics_path)
+
+                    distribution_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
+                    distribution.fillna(0, inplace=True)
+                    self.save(distribution, distribution_path)
 
                 # correction
                 for unbiasing_algorithm in self.unbiasing_algorithms:
-                    self.metrics_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
-                        [self.metrics_dict[unbiasing_algorithm.__class__.__name__], pre_intervention_metrics])
-                    self.distribution_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
-                        [self.distribution_dict[unbiasing_algorithm.__class__.__name__], pre_intervention_distribution])
-
                     self.unbiasing_algorithm = unbiasing_algorithm.__class__.__name__
 
-                    attribute_metrics_df, attribute_distribution_df = self.__bias_reduction__(self.train_set,
-                                                                                              self.validation_set,
-                                                                                              unbiasing_algorithm,
-                                                                                              sensitive_attribute)
+                    metrics, distribution = self.__bias_reduction__(self.train_set, self.validation_set,
+                                                                    unbiasing_algorithm, sensitive_attribute)
 
-                    self.metrics_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
-                        [self.metrics_dict[unbiasing_algorithm.__class__.__name__], attribute_metrics_df])
-                    self.distribution_dict[unbiasing_algorithm.__class__.__name__] = pd.concat(
-                        [self.distribution_dict[unbiasing_algorithm.__class__.__name__], attribute_distribution_df])
+                    metrics_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}'
+                    self.save(metrics, metrics_path)
+
+                    distribution_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
+                    distribution.fillna(0.0, inplace=True)
+                    self.save(distribution, distribution_path)
 
             logger.info("[PIPELINE] End.")
 
@@ -235,27 +223,9 @@ class Pipeline:
             logger.error(f'An error occurred in the pipeline: \n {e}')
             raise
 
-    def save(self, path: str = 'results') -> None:
-        if self.metrics_dict is not None:
-            for key, result in self.metrics_dict.items():
-                write_dataframe_to_csv(df=round_df(result, NUM_DECIMALS), dataset_name=self.dataset.name,
-                                       path=f'{path}/{key}')
-            for key, result in self.distribution_dict.items():
-                result = result.fillna(0.0)
-                write_dataframe_to_csv(df=round_df(result, NUM_DECIMALS), dataset_name=self.dataset.name,
-                                       path=f'{path}/{key}/distribution')
-        else:
-            raise KeyError('Results are empty!')
-
-    def save_algorithm_results(self, algorithm: str, attribute: str, path: str = 'results') -> None:
-        if self.metrics_dict is not None:
-            suffix = f'_intermediary_{attribute}_'
-            write_dataframe_to_csv(df=round_df(self.metrics_dict[algorithm], NUM_DECIMALS),
-                                   dataset_name=self.dataset.name + suffix,
-                                   path=f'{path}/{algorithm}')
-        else:
-            raise KeyError('Results are empty!')
+    def save(self, df: pd.DataFrame, path: str = 'results') -> None:
+        write_dataframe_to_csv(df=round_df(df, NUM_DECIMALS), filename=self.dataset.name, path=path)
 
     def run_and_save(self, path: str = 'results') -> None:
+        self.results_save_path = path
         self.run()
-        self.save(path)

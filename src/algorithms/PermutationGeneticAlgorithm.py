@@ -1,5 +1,5 @@
 import copy
-import sys
+import os
 from itertools import product, combinations_with_replacement
 from math import factorial
 
@@ -12,7 +12,8 @@ from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe
+from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, read_csv_to_dataframe, \
+    delete_directory
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -48,9 +49,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __do_genetic_search(self):
         num_algorithms = len(self.unbiasing_algorithms_pool)
-
         max_length = 2 * self.num_classes
-
         n = self.num_classes * num_algorithms
 
         self.problem_dimension = 0
@@ -102,6 +101,38 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         return decoded_individual
 
+    def __save_individual__(self, individual, transformed_dataset: Dataset):
+        genome = self.__flatten_genotype(individual[0])
+        base_path = os.path.join(self.algorithm_name, transformed_dataset.name, self.sensitive_attribute)
+
+        features_file = f'features_{genome}'
+        write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=base_path)
+
+        targets_file = f'targets_{genome}'
+        write_dataframe_to_csv(df=transformed_dataset.targets, filename=targets_file, path=base_path)
+
+        protected_features_file = f'protected_features_{genome}'
+        write_dataframe_to_csv(df=transformed_dataset.protected_features, filename=protected_features_file,
+                               path=base_path)
+
+    def __fetch_individual__(self, individual: list[list], dataset: Dataset):
+        genome = self.__flatten_genotype(individual[0])
+        base_path = os.path.join(self.algorithm_name, dataset.name, self.sensitive_attribute)
+
+        features_file = f'features_{genome}'
+        dataset.features = read_csv_to_dataframe(features_file, base_path)
+
+        targets_file = f'targets_{genome}'
+        dataset.targets = read_csv_to_dataframe(targets_file, base_path)
+
+        protected_features_file = f'protected_features_{genome}'
+        dataset.protected_features = read_csv_to_dataframe(protected_features_file, base_path)
+
+        return dataset
+
+    def __clean_cache__(self):
+        delete_directory(f'{self.algorithm_name}')
+
     def __compute_population_average_fitness(self, population):
 
         decoded_population = pd.DataFrame()
@@ -132,40 +163,36 @@ class PermutationGeneticAlgorithm(Algorithm):
         return population
 
     def __crossover(self, parent1: list, parent2: list):
+        value = get_generator().random()
+        if value < self.genetic_parameters.probability_crossover:
+            len1 = len(parent1[0])
+            len2 = len(parent2[0])
+            max_length = max(len1, len2)
 
-        def uniform_crossover(_parent1, _parent2, probability_crossover):
-            value = get_generator().random()
-            if value < probability_crossover:
-                len1 = len(parent1[0])
-                len2 = len(parent2[0])
-                max_length = max(len1, len2)
+            crossover_mask = get_generator().integers(0, 2, size=max_length)
 
-                crossover_mask = get_generator().integers(0, 2, size=max_length)
+            offspring1_genotype = [None] * max_length
+            offspring2_genotype = [None] * max_length
 
-                offspring1_genotype = [None] * max_length
-                offspring2_genotype = [None] * max_length
-
-                for i in range(max_length):
-                    if i < len1 and i < len2:
-                        if crossover_mask[i] == 0:
-                            offspring1_genotype[i] = parent1[0][i]
-                            offspring2_genotype[i] = parent2[0][i]
-                        else:
-                            offspring1_genotype[i] = parent2[0][i]
-                            offspring2_genotype[i] = parent1[0][i]
-                    elif i < len1:
+            for i in range(max_length):
+                if i < len1 and i < len2:
+                    if crossover_mask[i] == 0:
                         offspring1_genotype[i] = parent1[0][i]
-                    elif i < len2:
                         offspring2_genotype[i] = parent2[0][i]
+                    else:
+                        offspring1_genotype[i] = parent2[0][i]
+                        offspring2_genotype[i] = parent1[0][i]
+                elif i < len1:
+                    offspring1_genotype[i] = parent1[0][i]
+                elif i < len2:
+                    offspring2_genotype[i] = parent2[0][i]
 
-                offspring1_genotype = list(filter(lambda item: item is not None, offspring1_genotype))
-                offspring2_genotype = list(filter(lambda item: item is not None, offspring2_genotype))
+            offspring1_genotype = list(filter(lambda item: item is not None, offspring1_genotype))
+            offspring2_genotype = list(filter(lambda item: item is not None, offspring2_genotype))
 
-                return [(offspring1_genotype, {}), {}, {}], [(offspring2_genotype, {}), {}, {}]
+            return [(offspring1_genotype, {}), {}, {}], [(offspring2_genotype, {}), {}, {}]
 
-            return _parent1, _parent2
-
-        return uniform_crossover(parent1, parent2, self.genetic_parameters.probability_crossover)
+        return parent1, parent2
 
     def __mutation(self, individual):
 
@@ -231,8 +258,8 @@ class PermutationGeneticAlgorithm(Algorithm):
         for model in surrogate_models_order:
             if len(population) == 1:
                 break
-            population = lexicographic_selection(population, (1, model)) # performance
-            population = lexicographic_selection(population, (2, model)) # fairness
+            population = lexicographic_selection(population, (1, model))  # performance
+            population = lexicographic_selection(population, (2, model))  # fairness
 
         return population
 
@@ -318,8 +345,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         return population
 
     def __find_longest_genotype_match(self, flattened_genotype) -> str | None:
-
-        sorted_genotypes = sorted(self.decoded_individuals.keys(), key=len, reverse=True)
+        sorted_genotypes = sorted(self.evaluated_individuals.keys(), key=len, reverse=True)
         for key in sorted_genotypes:
             if flattened_genotype.startswith(key):
                 return str(key)
@@ -331,13 +357,13 @@ class PermutationGeneticAlgorithm(Algorithm):
         flattened_genotype = self.__flatten_genotype(individual[0])
         longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
 
+        transformed_data = copy.deepcopy(data)
         if longest_matching_genotype is None:
             genotype_to_decode = individual[0]
-            transformed_data = copy.deepcopy(data)
         else:
             match_length = len(self.evaluated_individuals[longest_matching_genotype][0])
             genotype_to_decode = individual[0][match_length:]
-            transformed_data = copy.deepcopy(self.decoded_individuals.get(longest_matching_genotype, data))
+            transformed_data = self.__fetch_individual__(self.evaluated_individuals[longest_matching_genotype], data)
 
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
@@ -365,21 +391,9 @@ class PermutationGeneticAlgorithm(Algorithm):
                 sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[value]]})
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
-        self.decoded_individuals[flattened_genotype] = transformed_data
-
-        size = sys.getsizeof(transformed_data)
-        print(f"Size of the object: {size} bytes")
+        self.__save_individual__(individual, transformed_data)
 
         return transformed_data
-
-    def fit(self, data: Dataset, sensitive_attribute: str):
-        self.decoder = data.features_mapping[sensitive_attribute]
-        self.num_classes = len(data.features_mapping[sensitive_attribute])
-        self.sensitive_attribute = sensitive_attribute
-        self.genetic_search_flag = self.__do_genetic_search()
-        self.population = self.__generate_population()
-        self.evaluated_individuals = {}
-        self.decoded_individuals = {}
 
     def __genetic_search(self, dataset: Dataset) -> Dataset:
 
@@ -413,7 +427,6 @@ class PermutationGeneticAlgorithm(Algorithm):
             for individual in parents:
                 mutated_individual = self.__mutation(individual)
                 offsprings.append(mutated_individual)
-                # offsprings.append(self.__fitness(dataset, mutated_individual))
 
             offsprings = self.__evaluate_population(dataset, offsprings)
 
@@ -430,10 +443,10 @@ class PermutationGeneticAlgorithm(Algorithm):
             if self.verbose and i % 5 == 0:
                 print(f'[PGA] Generation {i + 1}/{self.genetic_parameters.num_generations}')
 
-        write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}',
-                               f'best_individuals/{self.iteration_number}_iteration/')
+        evolution_path = os.path.join('best_individuals', f'{dataset.name}', f'{self.iteration_number}_iteration')
+        write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}', evolution_path)
 
-        return self.decoded_individuals[self.__flatten_genotype(best_individual[0])]
+        return self.__fetch_individual__(best_individual, dataset)
 
     def __extensive_search(self, dataset: Dataset) -> Dataset:
 
@@ -447,14 +460,25 @@ class PermutationGeneticAlgorithm(Algorithm):
         population_average = self.__compute_population_average_fitness(population)
         evolution = pd.concat([decoded_best_individual, population_average], axis=1)
 
-        write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}',
-                               f'best_individuals/{self.iteration_number}_iteration/')
+        evolution_path = os.path.join('best_individuals', f'{dataset.name}', f'{self.iteration_number}_iteration')
+        write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}', evolution_path)
 
-        return self.decoded_individuals[self.__flatten_genotype(best_individual[0])]
+        return self.__fetch_individual__(best_individual, dataset)
+
+    def fit(self, data: Dataset, sensitive_attribute: str):
+        self.decoder = data.features_mapping[sensitive_attribute]
+        self.num_classes = len(data.features_mapping[sensitive_attribute])
+        self.sensitive_attribute = sensitive_attribute
+        self.genetic_search_flag = self.__do_genetic_search()
+        self.population = self.__generate_population()
+        self.evaluated_individuals = {}
+        self.decoded_individuals = {}
 
     def transform(self, dataset: Dataset) -> Dataset:
-
         if self.genetic_search_flag:
-            return self.__genetic_search(dataset)
+            transformed_dataset = self.__genetic_search(dataset)
         else:
-            return self.__extensive_search(dataset)
+            transformed_dataset = self.__extensive_search(dataset)
+
+        self.__clean_cache__()
+        return transformed_dataset
