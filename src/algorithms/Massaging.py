@@ -55,23 +55,23 @@ class Massaging(Algorithm):
         error_check_dataset(dataset)
         error_check_sensitive_attribute(dataset, sensitive_attribute)
 
-        data, outcome_label = dataset.merge_features_and_targets()
+        data = pd.concat([dataset.features, dataset.targets], axis='columns').reset_index(drop=True)
+        target = dataset.targets.columns[0]
 
         count_unprivileged = data[data[sensitive_attribute] == UNPRIVILEGED].shape[0]
         count_unprivileged_positive = data[(data[sensitive_attribute] == UNPRIVILEGED) &
-                                           (data[outcome_label] == POSITIVE_OUTCOME)].shape[0]
+                                           (data[target] == POSITIVE_OUTCOME)].shape[0]
 
         count_privileged = data[data[sensitive_attribute] == PRIVILEGED].shape[0]
         count_privileged_positive = data[(data[sensitive_attribute] == PRIVILEGED)
-                                         & (data[outcome_label] == POSITIVE_OUTCOME)].shape[0]
+                                         & (data[target] == POSITIVE_OUTCOME)].shape[0]
 
         if count_privileged + count_unprivileged == 0:
             raise ValueError("There are no data instances that match the context in the dataset.")
 
-        m = (((count_unprivileged * count_privileged_positive) - (count_privileged * count_unprivileged_positive))
-             // (count_privileged + count_unprivileged))
-
-        return m
+        return int(np.divide((count_unprivileged * count_privileged_positive)
+                             - (count_privileged * count_unprivileged_positive),
+                             count_privileged + count_unprivileged))
 
     def __compute_class_probabilities__(self, dataset: Dataset) -> np.ndarray:
         """
@@ -152,12 +152,12 @@ class Massaging(Algorithm):
         class_probabilities = self.__compute_class_probabilities__(dataset)
         positive_class_probabilities = class_probabilities[:, 0]
 
-        data, outcome_label = dataset.merge_features_and_targets()
-        data.reset_index(drop=True)
+        data = pd.concat([dataset.features, dataset.targets], axis='columns').reset_index(drop=True)
+        target = dataset.targets.columns[0]
 
         # select candidates for promotion
         pr_candidates_indexes = data.index[
-            (data[sensitive_attribute] == UNPRIVILEGED) & (data[outcome_label] == NEGATIVE_OUTCOME)].tolist()
+            (data[sensitive_attribute] == UNPRIVILEGED) & (data[target] == NEGATIVE_OUTCOME)].tolist()
 
         promotion_candidates = pd.DataFrame({_CLASS_PROBABILITY: positive_class_probabilities})
         promotion_candidates = promotion_candidates.iloc[pr_candidates_indexes].sort_values(by=_CLASS_PROBABILITY,
@@ -165,7 +165,7 @@ class Massaging(Algorithm):
 
         # select candidates for demotion
         dem_candidates_indexes = data.index[
-            (data[sensitive_attribute] == PRIVILEGED) & (data[outcome_label] == POSITIVE_OUTCOME)].tolist()
+            (data[sensitive_attribute] == PRIVILEGED) & (data[target] == POSITIVE_OUTCOME)].tolist()
         demotion_candidates = pd.DataFrame({_CLASS_PROBABILITY: positive_class_probabilities})
         demotion_candidates = demotion_candidates.iloc[dem_candidates_indexes].sort_values(by=_CLASS_PROBABILITY)
 

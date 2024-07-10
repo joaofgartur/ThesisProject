@@ -134,8 +134,6 @@ class Pipeline:
     def __bias_reduction__(self, train_set: Dataset, validation_set: Dataset,
                            unbiasing_algorithm: Algorithm, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
 
-
-
         unbiasing_algorithm_type = 'binary' if unbiasing_algorithm.is_binary else 'multi-class'
         logger.info(f'[INTERVENTION] Reducing bias for {unbiasing_algorithm_type} '
                     f'sensitive attribute {protected_attribute} with unbiasing algorithm'
@@ -162,7 +160,8 @@ class Pipeline:
             for i in range(self.num_iterations):
                 logger.info(f"[INTERVENTION] Iteration {i + 1} / {self.num_iterations}.")
                 unbiasing_algorithm.iteration_number = i + 1
-                transformed_dataset = self.__set_feature(unbiasing_algorithm, transformed_dataset, protected_attribute, value)
+                transformed_dataset = self.__set_feature(unbiasing_algorithm, transformed_dataset, protected_attribute,
+                                                         value)
 
                 unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
                 transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)

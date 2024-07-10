@@ -53,18 +53,18 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __fairness_fitness(self, data: Dataset, predictions: Dataset):
 
-        original_attribute_values = data.protected_attributes[self.sensitive_attribute]
+        original_attribute_values = data.protected_features[self.sensitive_attribute]
 
         dummy_values = data.get_dummy_protected_feature(self.sensitive_attribute)
 
         metrics = pd.DataFrame()
         for value in dummy_values:
-            data.protected_attributes[self.sensitive_attribute] = dummy_values[value]
+            data.protected_features[self.sensitive_attribute] = dummy_values[value]
             value_df = pd.concat([dict_to_dataframe({'value': value}),
                                   self.__fitness_metrics(data, predictions, self.sensitive_attribute)], axis=1)
             metrics = pd.concat([metrics, value_df])
 
-        data.protected_attributes[self.sensitive_attribute] = original_attribute_values
+        data.protected_features[self.sensitive_attribute] = original_attribute_values
 
         result = {}
         for metric in metrics.columns:

@@ -5,13 +5,11 @@ Last edited: 30-11-2023
 """
 import argparse
 import configparser
-from concurrent.futures import ProcessPoolExecutor, as_completed
 
-from configs import (get_global_configs, load_dataset, AlgorithmOptions, load_algorithm, get_surrogate_classifiers,
-                     get_test_classifier)
+from configs import (get_global_configs, load_dataset, AlgorithmOptions, load_algorithm)
 
 from protocol import Pipeline
-from helpers import logger, extract_filename, set_seed, get_seed, get_gpu_device, get_num_processes
+from helpers import logger, extract_filename, set_seed, get_seed, get_surrogate_classifiers, get_test_classifier
 
 
 def run_pipeline(seed, args, dataset_configs_file, algorithms_configs_file, num_iterations):
@@ -28,23 +26,6 @@ def run_pipeline(seed, args, dataset_configs_file, algorithms_configs_file, num_
 
     pipeline = Pipeline(dataset, unbiasing_algorithms, surrogate_classifiers, test_classifier, num_iterations)
     pipeline.run_and_save()
-
-
-def run_pipeline_in_parallel(num_runs, base_seed, args, dataset_configs_file, algorithms_configs_file, num_iterations):
-    seeds = [base_seed + i for i in range(num_runs)]
-
-    with ProcessPoolExecutor(max_workers=get_num_processes()) as executor:
-        futures = []
-        for seed in seeds:
-            future = executor.submit(run_pipeline, seed, args, dataset_configs_file, algorithms_configs_file,
-                                     num_iterations)
-            futures.append(future)
-
-        for future in as_completed(futures):
-            try:
-                future.result()
-            except Exception as e:
-                logger.error(f"An error occurred: {e}")
 
 
 if __name__ == '__main__':
@@ -68,13 +49,9 @@ if __name__ == '__main__':
 
     num_runs = args.runs
     base_seed = get_seed()
-    if get_gpu_device() is not None:
-        logger.info(f'[{extract_filename(__file__)}] Using GPU acceleration.')
-        for i in range(num_runs):
-            run_seed = base_seed + i
-            run_pipeline(run_seed, args, dataset_cfg_file, algorithms_cfg_file, num_iters)
-    else:
-        run_pipeline_in_parallel(num_runs, base_seed, args, dataset_cfg_file, algorithms_cfg_file,
-                                 num_iters)
+    for i in range(num_runs):
+        logger.info(f'[{extract_filename(__file__)}] Starting run {i + 1}/{num_runs}.')
+        run_seed = base_seed + i
+        run_pipeline(run_seed, args, dataset_cfg_file, algorithms_cfg_file, num_iters)
 
     logger.info(f'[{extract_filename(__file__)}] End of program.')

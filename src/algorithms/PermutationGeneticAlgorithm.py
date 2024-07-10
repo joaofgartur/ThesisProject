@@ -1,4 +1,5 @@
 import copy
+import sys
 from itertools import product, combinations_with_replacement
 from math import factorial
 
@@ -308,7 +309,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         return individual
 
     def __evaluate_population(self, dataset, population):
-
+        population = sorted(population, key=lambda x: len(x[0]))
         for j, individual in enumerate(population):
             if self.verbose and not self.genetic_search_flag and j % 50 == 0:
                 print(f'\t[PGA] Evaluating individual {j}/{len(population)} with genotype {individual[0]}.')
@@ -352,7 +353,7 @@ class PermutationGeneticAlgorithm(Algorithm):
                 break
 
             transformed_data.set_feature(self.sensitive_attribute, dummy_values[self.decoder[value]])
-            unbiasing_algorithm = copy.deepcopy(self.unbiasing_algorithms_pool[algorithm])
+            unbiasing_algorithm = self.unbiasing_algorithms_pool[algorithm]
             unbiasing_algorithm.fit(transformed_data, self.sensitive_attribute)
             transformed_data = unbiasing_algorithm.transform(transformed_data)
 
@@ -365,6 +366,9 @@ class PermutationGeneticAlgorithm(Algorithm):
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
         self.decoded_individuals[flattened_genotype] = transformed_data
+
+        size = sys.getsizeof(transformed_data)
+        print(f"Size of the object: {size} bytes")
 
         return transformed_data
 

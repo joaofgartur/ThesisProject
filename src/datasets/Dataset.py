@@ -4,7 +4,7 @@ import copy
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import KBinsDiscretizer, LabelEncoder
+from sklearn.preprocessing import KBinsDiscretizer
 
 from helpers import logger, extract_filename, get_seed
 
@@ -17,7 +17,7 @@ class DatasetConfig:
     ----------
     name : str
         The name of the dataset.
-    protected_attributes : list[str]
+    protected_features : list[str]
         The list of protected attributes in the dataset.
     target : str
         The target attribute in the dataset.
@@ -29,7 +29,7 @@ class DatasetConfig:
         The proportion of the dataset to include in the test split.
     """
 
-    def __init__(self, name: str, protected_attributes: list[str], target: str,
+    def __init__(self, name: str, protected_features: list[str], target: str,
                  train_size: float, test_size: float, validation_size: float):
         """
         Initializes the DatasetConfig object with the provided dataset information.
@@ -38,7 +38,7 @@ class DatasetConfig:
         ----------
         name : str
             The name of the dataset.
-        protected_attributes : list[str]
+        protected_features : list[str]
             The list of protected attributes in the dataset.
         target : str
             The target attribute in the dataset.
@@ -50,7 +50,7 @@ class DatasetConfig:
             The proportion of the dataset to include in the test split.
         """
         self.name = name
-        self.protected_attributes = protected_attributes
+        self.protected_features = protected_features
         self.target = target
         self.train_size = train_size
         self.validation_size = validation_size
@@ -67,10 +67,8 @@ class Dataset(metaclass=abc.ABCMeta):
         A dictionary mapping the original feature names to the encoded feature names.
     targets_mapping : dict
         A dictionary mapping the original target names to the encoded target names.
-    protected_attributes : pd.DataFrame
+    protected_features : pd.DataFrame
         A DataFrame containing the protected attributes.
-    sampled_indexes : list
-        A list of indexes that have been sampled.
     error_flag : bool
         A flag indicating if an error has occurred.
 
@@ -84,11 +82,11 @@ class Dataset(metaclass=abc.ABCMeta):
         Abstract method to transform the dataset. The specific transformations depend on the
         dataset and can include operations such as deriving new attributes, renaming attributes,
         or encoding attribute values.
-    save_protected_attributes(self):
+    save_protected_features(self):
         Saves the protected attributes in the dataset.
     set_feature(self, feature: str, series: pd.DataFrame):
         Sets a feature in the dataset.
-    get_protected_attributes(self):
+    get_protected_features(self):
         Gets the protected attributes in the dataset.
     get_protected_feature(self, feature) -> pd.DataFrame:
         Gets a protected feature in the dataset.
@@ -127,18 +125,13 @@ class Dataset(metaclass=abc.ABCMeta):
         """
         self.features_mapping = None
         self.targets_mapping = None
-        self.protected_attributes = None
+        self.protected_features = None
         self.error_flag = False
 
         self.__parse_dataset_config(config)
-
-        # load raw data into dataframe
         self.features, self.targets = self._load_dataset()
-
-        # preprocess dataset
         self._preprocessing()
-
-        self.save_protected_attributes()
+        self.save_protected_features()
 
         logger.info(f'[{extract_filename(__file__)}] Loaded.')
 
@@ -155,12 +148,12 @@ class Dataset(metaclass=abc.ABCMeta):
         operations such as deriving new attributes, renaming attributes, or encoding attribute values.
         """
 
-    def save_protected_attributes(self):
+    def save_protected_features(self):
         """
         Saves the protected attributes in the dataset. The protected attributes are stored in a separate DataFrame
         for easy access and manipulation.
         """
-        self.protected_attributes = self.features.loc[:, self.protected_features_names]
+        self.protected_features = self.features.loc[:, self.protected_features_names]
 
     def set_feature(self, feature: str, series: pd.DataFrame):
         """
@@ -173,11 +166,9 @@ class Dataset(metaclass=abc.ABCMeta):
         series : pd.DataFrame
             The new values for the feature.
         """
-        if feature not in self.features.columns:
-            self.features = pd.concat([self.features, pd.DataFrame({feature: series})], axis=1)
         self.features[feature] = series
 
-    def get_protected_attributes(self) -> pd.DataFrame:
+    def get_protected_features(self) -> pd.DataFrame:
         """
         Gets the protected attributes in the dataset.
 
@@ -186,7 +177,7 @@ class Dataset(metaclass=abc.ABCMeta):
         pd.DataFrame
             The protected attributes.
         """
-        return self.protected_attributes.loc[:, self.protected_features_names]
+        return self.protected_features.loc[:, self.protected_features_names]
 
     def get_protected_feature(self, feature) -> pd.DataFrame:
         """
@@ -202,11 +193,10 @@ class Dataset(metaclass=abc.ABCMeta):
         pd.DataFrame
             The protected feature.
         """
-
-        if feature not in self.protected_features_names:
+        try:
+            return self.protected_features[feature]
+        except KeyError:
             raise ValueError(f'Feature {feature} is not a protected feature.')
-
-        return self.protected_attributes[feature]
 
     def get_dummy_protected_feature(self, feature) -> pd.DataFrame:
         """
@@ -223,29 +213,12 @@ class Dataset(metaclass=abc.ABCMeta):
         pd.DataFrame
             The DataFrame containing the dummy encoded protected feature.
         """
-        if feature not in self.protected_features_names:
-            raise ValueError(f'Attribute {feature} is not a protected attribute.')
-
-        protected_feature = self.get_protected_feature(feature)
-        dummy_protected_feature = pd.get_dummies(protected_feature, dtype=float)
-        dummy_protected_feature = dummy_protected_feature.rename(columns=self.features_mapping[feature])
-
-        return dummy_protected_feature
-
-    def merge_features_and_targets(self) -> (pd.DataFrame, str):
-        """
-        Merges the features and targets into a single DataFrame. The merged DataFrame and the name of the target
-        column are returned.
-
-        Returns
-        -------
-        pd.DataFrame, str
-            The DataFrame containing the merged features and targets, and the name of the target column.
-        """
-        data = pd.concat([self.features, self.targets], axis='columns')
-        outcome = self.targets.columns[0]
-
-        return data, outcome
+        try:
+            protected_feature = self.get_protected_feature(feature)
+            dummy_protected_feature = pd.get_dummies(protected_feature, dtype=float)
+            return dummy_protected_feature.rename(columns=self.features_mapping[feature])
+        except (KeyError, ValueError):
+            raise ValueError(f'Feature {feature} is not a protected feature.')
 
     def split(self, sensitive_attributes: list[str] = None):
         """
@@ -274,16 +247,13 @@ class Dataset(metaclass=abc.ABCMeta):
                                                         stratify=stratify_criteria)
 
         train_set = update_dataset(self, features=x_train, targets=y_train)
-        train_set.__reset_indexes()
-        train_set.save_protected_attributes()
+        train_set.save_protected_features()
 
         validation_set = update_dataset(self, features=x_val, targets=y_val)
-        validation_set.__reset_indexes()
-        validation_set.save_protected_attributes()
+        validation_set.save_protected_features()
 
         test_set = update_dataset(self, features=x_test, targets=y_test)
-        test_set.__reset_indexes()
-        test_set.save_protected_attributes()
+        test_set.save_protected_features()
 
         return train_set, validation_set, test_set
 
@@ -306,9 +276,11 @@ class Dataset(metaclass=abc.ABCMeta):
         """
         Drops invalid instances from the dataset. An instance is considered invalid if it contains any missing values.
         """
-        drop_indexes = [index for index, row in self.features.iterrows() if row.isnull().any()]
-        self.features = self.features.drop(drop_indexes).reset_index(drop=True)
-        self.targets = self.targets.drop(drop_indexes).reset_index(drop=True)
+        invalid_indexes = self.features[self.features.isnull().any(axis=1)].index
+        self.features.drop(invalid_indexes, inplace=True)
+        self.features.reset_index(drop=True, inplace=True)
+        self.targets.drop(invalid_indexes, inplace=True)
+        self.targets.reset_index(drop=True, inplace=True)
 
     def __parse_dataset_config(self, config: DatasetConfig):
         """
@@ -322,19 +294,11 @@ class Dataset(metaclass=abc.ABCMeta):
         """
 
         self.name = config.name
-        self.protected_features_names = config.protected_attributes
+        self.protected_features_names = config.protected_features
         self.target = config.target
         self.train_size = config.train_size
         self.validation_size = config.validation_size
         self.test_size = config.test_size
-
-    def __reset_indexes(self):
-        """
-        Resets the indexes of the dataset. This method ensures that the indexes of the features and targets DataFrames
-        are in sync after any operations that may have modified them.
-        """
-        self.features = self.features.reset_index(drop=True)
-        self.targets = self.targets.reset_index(drop=True)
 
     def __quantize_numerical_features(self, n_bins=4):
         """
@@ -347,19 +311,13 @@ class Dataset(metaclass=abc.ABCMeta):
             The number of bins to divide each numerical feature into. The default is 4.
         """
         numerical_data = self.features.select_dtypes(include=['number'])
-        to_drop = []
-        for attribute in self.protected_features_names:
-            if attribute in numerical_data.columns:
-                to_drop.append(attribute)
-        numerical_data = numerical_data.drop(columns=to_drop)
+        numerical_data = numerical_data.drop(columns=self.protected_features_names, errors='ignore')
         categorical_data = self.features.drop(numerical_data, axis=1)
 
         discretizer = KBinsDiscretizer(n_bins=n_bins, encode='ordinal', strategy='quantile', random_state=get_seed())
-        discretized_numerical_data = pd.DataFrame(discretizer.fit_transform(numerical_data),
-                                                  columns=numerical_data.columns)
-        processed_features = pd.concat([categorical_data, discretized_numerical_data], axis=1)
+        numerical_data = pd.DataFrame(discretizer.fit_transform(numerical_data), columns=numerical_data.columns)
 
-        self.features = processed_features
+        self.features = pd.concat([categorical_data, numerical_data], axis=1)
 
     def __label_encode_categorical(self, features=False, targets=True):
         """
@@ -374,23 +332,23 @@ class Dataset(metaclass=abc.ABCMeta):
             Whether to label encode the targets. The default is True.
         """
 
-        def __label_encode(df: pd.DataFrame):
-            encoder = LabelEncoder()
+        def label_encode(df: pd.DataFrame):
             mapping = {}
+            encoded_df = pd.DataFrame(df.copy(), columns=df.columns)
 
-            for column in df.columns:
-                if df[column].dtype == object:
-                    df[column] = encoder.fit_transform(df[column])
-                    local_mapping = dict(zip(encoder.transform(encoder.classes_), encoder.classes_))
-                    mapping.update({column: local_mapping})
+            columns_to_encode = encoded_df.select_dtypes(include=['object']).columns
+            for column in columns_to_encode:
+                unique_vals, encoded_labels = np.unique(encoded_df[column], return_inverse=True)
+                encoded_df[column] = encoded_labels
+                mapping[column] = {i: val for i, val in enumerate(unique_vals)}
 
-            return df, mapping
+            return encoded_df, mapping
 
         if features:
-            self.features, self.features_mapping = __label_encode(self.features)
+            self.features, self.features_mapping = label_encode(self.features)
 
         if targets:
-            self.targets, self.targets_mapping = __label_encode(self.targets)
+            self.targets, self.targets_mapping = label_encode(self.targets)
 
 
 def update_dataset(dataset: Dataset, features: np.ndarray = None, targets: np.ndarray = None) -> Dataset:
@@ -411,19 +369,15 @@ def update_dataset(dataset: Dataset, features: np.ndarray = None, targets: np.nd
     updated_dataset : Dataset
         The updated dataset with the new features and targets.
     """
-    def update_features():
-        updated_dataset.features = pd.DataFrame(features, columns=dataset.features.columns)
-
-    def update_targets():
-        updated_dataset.targets = pd.DataFrame(targets, columns=dataset.targets.columns)
 
     updated_dataset = copy.deepcopy(dataset)
-
     if features is not None:
-        update_features()
+        updated_dataset.features = pd.DataFrame(features, columns=dataset.features.columns)
+        updated_dataset.features.reset_index(drop=True, inplace=True)
 
     if targets is not None:
-        update_targets()
+        updated_dataset.targets = pd.DataFrame(targets, columns=dataset.targets.columns)
+        updated_dataset.targets.reset_index(drop=True, inplace=True)
 
     return updated_dataset
 

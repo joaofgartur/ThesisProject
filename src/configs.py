@@ -1,47 +1,24 @@
 import configparser
 from enum import Enum
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.naive_bayes import GaussianNB
-from sklearn.svm import SVC
-from sklearn.tree import DecisionTreeClassifier
-from xgboost import XGBClassifier
-
 from algorithms import GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover, \
     LearnedFairRepresentations, LexicographicGeneticAlgorithmFairFeatureSelection, PermutationGeneticAlgorithm
 from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection import \
     MulticlassLexicographicGeneticAlgorithmFairFeatureSelection
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
 from datasets.LawSchoolAdmissions import LawSchoolAdmissions
-from helpers import logger, set_seed, get_seed, set_gpu_device, get_gpu_device, set_num_processes, set_num_threads
+from helpers import logger, set_seed, get_seed, set_gpu_device, set_num_threads, set_gpu_allocated_memory, \
+    get_surrogate_classifiers, enable_gpu_acceleration, disable_gpu_acceleration
 
 
 class AlgorithmOptions(Enum):
     Massaging = 0
     Reweighing = 1
     DisparateImpactRemover = 2
-    LearnedFairRepresentations = 4
-    LGAFFS = 5
-    MulticlassLGAFFS = 6
-    PermutationGeneticAlgorithm = 7
-
-
-def get_surrogate_classifiers() -> list:
-    return [
-        LogisticRegression(random_state=get_seed()),
-        SVC(random_state=get_seed()),
-        GaussianNB(),
-        DecisionTreeClassifier(random_state=get_seed()),
-        RandomForestClassifier(random_state=get_seed()),
-    ]
-
-
-def get_test_classifier() -> object:
-    gpu_device = get_gpu_device()
-    if gpu_device is None:
-        return XGBClassifier(random_state=get_seed())
-    return XGBClassifier(random_state=get_seed(), tree_method='gpu_hist', gpu_id=gpu_device)
+    LearnedFairRepresentations = 3
+    LGAFFS = 4
+    MulticlassLGAFFS = 5
+    PermutationGeneticAlgorithm = 6
 
 
 def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
@@ -58,13 +35,9 @@ def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
             seed = global_configs.getint('GLOBAL', 'seed')
             set_seed(seed)
 
-        enable_gpu = global_configs.getboolean('GPU', 'enable')
-        if enable_gpu:
-            gpu_device_id = global_configs.getint('GPU', 'device_id')
-            set_gpu_device(gpu_device_id)
+        set_gpu_acceleration(global_configs)
 
-        set_num_processes(global_configs.getint('MULTIPROCESSING', 'num_process_workers'))
-        set_num_threads(global_configs.getint('MULTIPROCESSING', 'num_thread_workers'))
+        set_num_threads(global_configs.getint('MULTITHREADING', 'num_thread_workers'))
 
         return dataset_configs, algorithms_configs, results_path, num_iterations
 
@@ -76,13 +49,26 @@ def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
         raise ValueError
 
 
+def set_gpu_acceleration(configs: configparser.ConfigParser):
+    enable_gpu = configs.getboolean('GPU', 'enable')
+
+    if enable_gpu:
+        enable_gpu_acceleration()
+        gpu_device_id = configs.getint('GPU', 'device_id')
+        set_gpu_device(gpu_device_id)
+        gpu_allocated_memory = configs.getint('GPU', 'allocated_memory')
+        set_gpu_allocated_memory(gpu_allocated_memory)
+    else:
+        disable_gpu_acceleration()
+
+
 def get_dataset_configs(dataset: str, configs_file: str):
     configs = configparser.ConfigParser()
     configs.read(configs_file)
 
     return DatasetConfig(name=configs.get(dataset, 'name'),
                          target=configs.get(dataset, 'target'),
-                         protected_attributes=configs.get(dataset, 'protected_attributes').split(','),
+                         protected_features=configs.get(dataset, 'protected_attributes').split(','),
                          train_size=configs.getfloat(dataset, 'train_size'),
                          validation_size=configs.getfloat(dataset, 'validation_size'),
                          test_size=configs.getfloat(dataset, 'test_size'))

@@ -24,7 +24,7 @@ class FairnessEvaluator(object):
         else:
             x = original_data.features
 
-        s = original_data.protected_attributes[sensitive_attribute]
+        s = original_data.protected_features[sensitive_attribute]
 
         y = original_data.targets.squeeze().rename(TRUE_OUTCOME)
         y_pred = predicted_data.targets.squeeze().rename(PRED_OUTCOME)

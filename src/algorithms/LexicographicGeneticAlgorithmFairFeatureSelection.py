@@ -2,19 +2,18 @@ import copy
 import itertools
 import math
 from concurrent.futures import ThreadPoolExecutor
-from multiprocessing import cpu_count
 from random import sample
 
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
+from algorithms.LGAFFSHelpers import get_random_forest
 from datasets import Dataset, update_dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import get_generator, get_seed, logger, GPU_LIMIT, get_gpu_random_forest, get_num_threads
+from helpers import get_generator, get_seed, logger, get_num_threads
 
 
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
@@ -24,7 +23,6 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
                  verbose: bool = False):
         super().__init__()
 
-        # genetic parameters
         self.genetic_parameters = genetic_parameters
 
         self.min_feature_prob = min_feature_prob
@@ -38,15 +36,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.population = None
 
         self.evaluated_individuals = {}
-        self.decoded_individuals = {}
 
     def __gen_individual(self, feature_prob: float):
         features_prob = get_generator().uniform(low=self.min_feature_prob, high=self.max_feature_prob,
                                                 size=self.genetic_parameters.individual_size)
         return [np.where(features_prob > feature_prob, 1, 0), [], []]
-
-    def __genotype_to_tuple(self, individual):
-        return tuple(individual[0])
 
     def __gen_ramped_population(self):
         n = self.genetic_parameters.population_size
@@ -99,7 +93,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         winners_count = {}
         for permutation in lexicographic_permutations:
             best_individual = lexicographic_selection(population, permutation)
-            key = self.__genotype_to_tuple(best_individual)
+            key = tuple(best_individual[0])
             winners[key] = best_individual
             winners_count[key] = 1 + winners_count.get(key, 0)
 
@@ -132,7 +126,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
     def __fitness(self, data: Dataset, individual, folds: KFold):
 
-        genotype = self.__genotype_to_tuple(individual)
+        genotype = tuple(individual[0])
         if genotype in self.evaluated_individuals:
             return self.evaluated_individuals[genotype]
 
@@ -141,11 +135,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         data = self.__phenotype(data, individual)
 
-        gpu_acceleration = data.features.shape[0] >= GPU_LIMIT
-        model = get_gpu_random_forest() if gpu_acceleration else RandomForestClassifier(random_state=get_seed())
+        model = get_random_forest(data.features.shape[0])
 
         x = data.features.to_numpy().astype(np.float32)
         y = data.targets.to_numpy().astype(np.float32).ravel()
+
         predictions = cross_val_predict(model, x, y, cv=folds)
         predicted_data = update_dataset(data, targets=predictions)
 
@@ -164,17 +158,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         return list(pool.map(evaluate_fitness, population))
 
     def __phenotype(self, data: Dataset, individual: list) -> Dataset:
-
-        genotype = self.__genotype_to_tuple(individual)
-        if genotype in self.decoded_individuals:
-            return self.decoded_individuals[genotype]
-
         transformed_data = copy.deepcopy(data)
+
         features_to_drop = np.argwhere(individual[0] == 0).ravel()
         selected_features = data.features.drop(data.features.columns[features_to_drop], axis=1)
         transformed_data.features = selected_features
-
-        self.decoded_individuals[genotype] = transformed_data
 
         return transformed_data
 
@@ -183,7 +171,6 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.population = self.__gen_ramped_population()
         self.sensitive_attribute = sensitive_attribute
         self.evaluated_individuals = {}
-        self.decoded_individuals = {}
 
     def transform(self, data: Dataset) -> Dataset:
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
@@ -214,4 +201,4 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         pool.shutdown()
 
-        return self.decoded_individuals[self.__genotype_to_tuple(best_individual)]
+        return self.__phenotype(data, best_individual)

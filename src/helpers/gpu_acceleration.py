@@ -1,38 +1,78 @@
-import pynvml
-import rmm
-from cuml import RandomForestClassifier as RandomForestClassifier_GPU
+from helpers import logger, get_seed, extract_filename
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import GaussianNB
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
 
-from helpers import get_seed
+# --- GPU Acceleration ---
 
+gpu_enabled = False
 gpu_device_id = None
+gpu_allocated_memory = 0
 GPU_LIMIT = 10000
 
 
+def enable_gpu_acceleration():
+    global gpu_enabled
+    gpu_enabled = True
+
+
+def disable_gpu_acceleration():
+    global gpu_enabled
+    gpu_enabled = False
+
+
+def is_gpu_enabled():
+    return gpu_enabled
+
+
+def get_gpu_device():
+    return gpu_device_id
+
+
 def set_gpu_device(device_id: int = 0):
+    try:
+        import rmm
+    except ImportError:
+        logger.error("[GPU] RMM is not installed. Please install RMM to use GPU acceleration.")
+        raise ImportError
+
+    logger.info(f'[{extract_filename(__file__)}] Using GPU acceleration.')
+
     global gpu_device_id
+    global gpu_allocated_memory
     gpu_device_id = device_id
-    gpu_memory_limits = get_gpu_memory_limits(device_id)
     rmm.reinitialize(
         pool_allocator=True,
-        initial_pool_size=gpu_memory_limits,
+        initial_pool_size=gpu_allocated_memory * 1024 ** 3,
         devices=[device_id]
     )
 
 
-def get_gpu_device():
-    global gpu_device_id
-    return gpu_device_id
+def get_gpu_allocated_memory():
+    return gpu_allocated_memory
 
 
-def get_gpu_memory_limits(device_id: int = 0):
-    pynvml.nvmlInit()
-
-    handle = pynvml.nvmlDeviceGetHandleByIndex(device_id)
-    meminfo = pynvml.nvmlDeviceGetMemoryInfo(handle)
-    gpu_memory_limit = meminfo.total
-
-    return gpu_memory_limit
+def set_gpu_allocated_memory(memory: int):
+    global gpu_allocated_memory
+    gpu_allocated_memory = memory
 
 
-def get_gpu_random_forest():
-    return RandomForestClassifier_GPU(random_state=get_seed(), n_streams=1)
+# ---- CPU/GPU classifiers ----
+
+def get_surrogate_classifiers() -> list[object]:
+    return [
+        LogisticRegression(random_state=get_seed()),
+        SVC(random_state=get_seed()),
+        GaussianNB(),
+        DecisionTreeClassifier(random_state=get_seed()),
+        RandomForestClassifier(random_state=get_seed()),
+    ]
+
+
+def get_test_classifier() -> object:
+    if is_gpu_enabled():
+        return XGBClassifier(random_state=get_seed(), tree_method='gpu_hist', gpu_id=get_gpu_device())
+    return XGBClassifier(random_state=get_seed())

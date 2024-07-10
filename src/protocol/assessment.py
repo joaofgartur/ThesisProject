@@ -33,18 +33,18 @@ def get_classifier_predictions(model: object, train_data: Dataset, validation_da
 
 
 def fairness_assessment(data: Dataset, predictions: Dataset, sensitive_attribute: str) -> pd.DataFrame:
-    original_attribute_values = data.protected_attributes[sensitive_attribute]
+    original_attribute_values = data.protected_features[sensitive_attribute]
 
     dummy_values = data.get_dummy_protected_feature(sensitive_attribute)
 
     assessment_df = pd.DataFrame()
     for value in dummy_values:
-        data.protected_attributes[sensitive_attribute] = dummy_values[value]
+        data.protected_features[sensitive_attribute] = dummy_values[value]
         fairness_evaluator = FairnessEvaluator(data, predictions, sensitive_attribute)
         value_df = pd.concat([dict_to_dataframe({'value': value}), fairness_evaluator.evaluate()], axis=1)
         assessment_df = pd.concat([assessment_df, value_df])
 
-    data.protected_attributes[sensitive_attribute] = original_attribute_values
+    data.protected_features[sensitive_attribute] = original_attribute_values
 
     return assessment_df.reset_index(drop=True)
 
@@ -62,18 +62,18 @@ def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predic
     def map_protected_attribute(value):
         return train_data.features_mapping[protected_attribute][value]
 
-    train_pg = pd.concat([train_data.protected_attributes[protected_attribute].apply(map_protected_attribute),
+    train_pg = pd.concat([train_data.protected_features[protected_attribute].apply(map_protected_attribute),
                           train_data.targets], axis=1)
     train_pg_ratios = get_value_counts(train_pg)
     train_pg_ratios = train_pg_ratios.add_suffix('_a_train_set_')
 
-    predicted_pg = pd.concat([predicted_data.protected_attributes[protected_attribute].apply(map_protected_attribute),
+    predicted_pg = pd.concat([predicted_data.protected_features[protected_attribute].apply(map_protected_attribute),
                               predicted_data.targets], axis=1)
     predicted_pg_ratios = get_value_counts(predicted_pg)
     predicted_pg_ratios = predicted_pg_ratios.add_suffix('_b_predicted_set_')
 
     predictions_pg = pd.concat(
-        [predictions_data.protected_attributes[protected_attribute].apply(map_protected_attribute),
+        [predictions_data.protected_features[protected_attribute].apply(map_protected_attribute),
          predictions_data.targets * 1.0], axis=1)
     predictions_pg_ratios = get_value_counts(predictions_pg)
     predictions_pg_ratios = predictions_pg_ratios.add_suffix('_c_predictions_set_')
@@ -106,20 +106,3 @@ def classifier_assessment(classifier: object, train_data: Dataset, validation_da
     distribution = pd.concat([pd.concat([classifier_df] * len(distribution), ignore_index=True), distribution], axis=1)
 
     return predictions.targets, metrics, distribution
-
-
-def data_assessment(original_data: Dataset, transformed_data: Dataset, sensitive_attribute: str):
-    print(f' --------- Assessment for {bold(original_data.name)} --------- ')
-
-    print('Classes:')
-    print(f'Original Data: \n{original_data.targets.value_counts()}')
-    print(f'Transformed Data: \n{transformed_data.targets.value_counts()}')
-
-    print('Protected Attributes:')
-    print(f'Mapping:\n {original_data.features_mapping[sensitive_attribute]}')
-    print(f'Original Protected Attributes: \n{original_data.features[sensitive_attribute].value_counts()}')
-    print(f'Transformed Protected Attributes: \n{original_data.features[sensitive_attribute].value_counts()}')
-
-    print('Data Description')
-    print(f'Original Data Description: \n{original_data.features.describe().to_string()}')
-    print(f'Transformed Data Description: \n{transformed_data.features.describe().to_string()}')
