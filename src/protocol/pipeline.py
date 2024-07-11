@@ -203,6 +203,8 @@ class Pipeline:
                     distribution.fillna(0, inplace=True)
                     self.save(distribution, distribution_path)
 
+                del metrics, distribution
+
                 # correction
                 for unbiasing_algorithm in self.unbiasing_algorithms:
                     self.unbiasing_algorithm = unbiasing_algorithm.__class__.__name__
@@ -216,6 +218,8 @@ class Pipeline:
                     distribution_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
                     distribution.fillna(0.0, inplace=True)
                     self.save(distribution, distribution_path)
+
+                    del metrics, distribution
 
             logger.info("[PIPELINE] End.")
 
