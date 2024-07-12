@@ -373,6 +373,10 @@ class PermutationGeneticAlgorithm(Algorithm):
             sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[previous_value]]})
             transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
+        target_classes = np.unique(transformed_data.targets)
+        if len(target_classes) == 1 and (target_classes[0] == 0 or target_classes[0] == 1):
+            transformed_data.error_flag = True
+
         for value, algorithm in genotype_to_decode:
 
             if transformed_data.error_flag:
