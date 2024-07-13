@@ -35,7 +35,9 @@ def write_dataframe_to_csv(df: pd.DataFrame, filename: str, path: str) -> None:
         path = os.path.join(path, filename)
 
     file_exists = os.path.isfile(path)
-    df.to_csv(path, sep=',', index=False, encoding='utf-8', mode='a', header=not file_exists)
+    with open(path, 'a', buffering=1) as f:
+        df.to_csv(f, sep=',', index=False, encoding='utf-8', mode='a', header=not file_exists)
+        f.flush()
 
 
 def read_csv_to_dataframe(filename: str, path: str) -> pd.DataFrame:
