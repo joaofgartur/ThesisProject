@@ -13,7 +13,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, read_csv_to_dataframe, \
-    delete_directory
+    delete_directory, get_seed
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -103,7 +103,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __save_individual__(self, individual, transformed_dataset: Dataset):
         genome = self.__flatten_genotype(individual[0])
-        base_path = os.path.join(self.algorithm_name, transformed_dataset.name, self.sensitive_attribute)
+        base_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', transformed_dataset.name, self.sensitive_attribute)
 
         features_file = f'features_{genome}'
         write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=base_path)
@@ -117,7 +117,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __fetch_individual__(self, individual: list[list], dataset: Dataset):
         genome = self.__flatten_genotype(individual[0])
-        base_path = os.path.join(self.algorithm_name, dataset.name, self.sensitive_attribute)
+        base_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', transformed_dataset.name, self.sensitive_attribute)
 
         features_file = f'features_{genome}'
         dataset.features = read_csv_to_dataframe(features_file, base_path)
@@ -457,6 +457,8 @@ class PermutationGeneticAlgorithm(Algorithm):
         if self.verbose:
             print(f'[PGA] Performing extensive search. Testing {self.problem_dimension} combinations')
 
+        print("[PGA] Extensive search.")
+
         population = self.__evaluate_population(dataset, self.population)
 
         best_individual = self.__select_best(population)[0]
@@ -466,6 +468,8 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         evolution_path = os.path.join('best_individuals', f'{dataset.name}', f'{self.iteration_number}_iteration')
         write_dataframe_to_csv(evolution, f'{self.algorithm_name}_{self.sensitive_attribute}', evolution_path)
+
+        print(best_individual)
 
         return self.__fetch_individual__(best_individual, dataset)
 
