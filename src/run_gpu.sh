@@ -4,6 +4,7 @@
 DATASET=$1
 BASE_SEED=$2
 N=$3
+CUDA_DEVICE=$4
 
 # Loop to create N tmux sessions
 for ((i=0; i<N; i++)); do
@@ -14,7 +15,7 @@ for ((i=0; i<N; i++)); do
     tmux new-session -d -s "${DATASET}_${SEED}"
     
     # Construct the Python command
-    PYTHON_COMMAND="python main.py -dataset ${DATASET} -configs configs/configs.cfg -all -runs 1 -seed $SEED >> log_seed_${SEED}.out 2>&1"
+    PYTHON_COMMAND="CUDA_VISIBLE_DEVICES=${CUDA_DEVICE} python main.py -dataset ${DATASET} -configs configs/configs.cfg -all -runs 1 -seed $SEED >> log_seed_${SEED}.out 2>&1"
     
     # Send command to the session
     tmux send-keys -t "${DATASET}_${SEED}" "$PYTHON_COMMAND" Enter

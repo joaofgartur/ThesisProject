@@ -74,5 +74,5 @@ def get_surrogate_classifiers() -> list[object]:
 
 def get_test_classifier() -> object:
     if is_gpu_enabled():
-        return XGBClassifier(random_state=get_seed(), tree_method='gpu_hist', gpu_id=get_gpu_device())
+        return XGBClassifier(random_state=get_seed(), device=f'cuda:{get_gpu_device()}')
     return XGBClassifier(random_state=get_seed())
