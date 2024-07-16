@@ -483,7 +483,7 @@ class PermutationGeneticAlgorithm(Algorithm):
     def __mount_individual(self, individual: list[list], dataset: Dataset) -> Dataset:
         genotype = self.__flatten_genotype(individual[0])
         individual_dataset = self.__fetch_individual__(individual, dataset)
-        individual_dataset.error_flag = self.valid_individuals[genotype]
+        individual_dataset.error_flag = not self.valid_individuals[genotype]
 
         return individual_dataset
 
