@@ -30,6 +30,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.is_binary = False
         self.needs_auxiliary_data = True
         self.algorithm_name = 'PermutationGeneticAlgorithm'
+        self.cache_path = None
 
         self.genetic_parameters = genetic_parameters
 
@@ -103,35 +104,33 @@ class PermutationGeneticAlgorithm(Algorithm):
 
     def __save_individual__(self, individual, transformed_dataset: Dataset):
         genome = self.__flatten_genotype(individual[0])
-        base_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', transformed_dataset.name, self.sensitive_attribute)
 
         features_file = f'features_{genome}'
-        write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=base_path)
+        write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=self.cache_path)
 
         targets_file = f'targets_{genome}'
-        write_dataframe_to_csv(df=transformed_dataset.targets, filename=targets_file, path=base_path)
+        write_dataframe_to_csv(df=transformed_dataset.targets, filename=targets_file, path=self.cache_path)
 
         protected_features_file = f'protected_features_{genome}'
         write_dataframe_to_csv(df=transformed_dataset.protected_features, filename=protected_features_file,
-                               path=base_path)
+                               path=self.cache_path)
 
     def __fetch_individual__(self, individual: list[list], dataset: Dataset):
         genome = self.__flatten_genotype(individual[0])
-        base_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', dataset.name, self.sensitive_attribute)
 
         features_file = f'features_{genome}'
-        dataset.features = read_csv_to_dataframe(features_file, base_path)
+        dataset.features = read_csv_to_dataframe(features_file, self.cache_path)
 
         targets_file = f'targets_{genome}'
-        dataset.targets = read_csv_to_dataframe(targets_file, base_path)
+        dataset.targets = read_csv_to_dataframe(targets_file, self.cache_path)
 
         protected_features_file = f'protected_features_{genome}'
-        dataset.protected_features = read_csv_to_dataframe(protected_features_file, base_path)
+        dataset.protected_features = read_csv_to_dataframe(protected_features_file, self.cache_path)
 
         return dataset
 
     def __clean_cache__(self):
-        delete_directory(f'{self.algorithm_name}')
+        delete_directory(self.cache_path)
 
     def __compute_population_average_fitness(self, population):
 
@@ -495,6 +494,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.population = self.__generate_population()
         self.evaluated_individuals = {}
         self.valid_individuals = {}
+        self.cache_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', data.name, self.sensitive_attribute)
 
     def transform(self, dataset: Dataset) -> Dataset:
         if self.genetic_search_flag:
