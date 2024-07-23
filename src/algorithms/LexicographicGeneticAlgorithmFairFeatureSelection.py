@@ -1,7 +1,6 @@
 import copy
 import itertools
 import math
-from concurrent.futures import ThreadPoolExecutor
 from random import sample
 
 import numpy as np
@@ -13,7 +12,7 @@ from algorithms.LGAFFSHelpers import get_random_forest
 from datasets import Dataset, update_dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import get_generator, get_seed, logger, get_num_threads
+from helpers import get_generator, get_seed, logger
 
 
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
@@ -150,12 +149,12 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         return individual
 
-    def __evaluate_population(self, data: Dataset, population, folds: KFold, pool):
+    def __evaluate_population(self, data: Dataset, population, folds: KFold):
 
-        def evaluate_fitness(individual):
-            return self.__fitness(data, individual, folds)
+        for i, individual in enumerate(population):
+            population[i] = self.__fitness(data, individual, folds)
 
-        return list(pool.map(evaluate_fitness, population))
+        return population
 
     def __phenotype(self, data: Dataset, individual: list) -> Dataset:
         transformed_data = copy.deepcopy(data)
@@ -176,10 +175,8 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []
 
-        pool = ThreadPoolExecutor(max_workers=get_num_threads())
-
         for i in range(self.genetic_parameters.num_generations):
-            self.population = self.__evaluate_population(data, self.population, folds, pool)
+            self.population = self.__evaluate_population(data, self.population, folds)
 
             best_individual = self.__select_best(self.population)
             new_population = [best_individual]
@@ -193,12 +190,15 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             self.population = new_population
 
             if self.verbose and i % 5 == 0:
-                logger.info(f'\t[LGAFFS]Generation {i + 1}/{self.genetic_parameters.num_generations} -'
+                logger.info(f'\t[LGAFFS] Generation {i + 1}/{self.genetic_parameters.num_generations} -'
                             f' Best individual: {best_individual[0]}')
 
-        if not best_individual:
-            return data
+        if self.verbose:
+            logger.info(f'\t[LGAFFS] Generation {self.genetic_parameters.num_generations}/'
+                        f'{self.genetic_parameters.num_generations} - Best individual: {best_individual[0]}')
 
-        pool.shutdown()
+        if not best_individual:
+            data.error_flag = True
+            return data
 
         return self.__phenotype(data, best_individual)

@@ -1,6 +1,3 @@
-from multiprocessing import Pool
-
-
 class GeneticBasicParameters:
 
     def __init__(self, num_generations: int = 1,

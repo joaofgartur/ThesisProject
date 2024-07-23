@@ -170,14 +170,26 @@ class Pipeline:
                     continue
 
                 metrics, distribution = self.__post_intervention__(transformed_dataset, protected_attribute)
+
                 metrics['num_iterations'], distribution['num_iterations'] = ([i + 1] * metrics.shape[0],
                                                                              [i + 1] * distribution.shape[0])
                 metrics['protected_class'], distribution['protected_class'] = ([value] * metrics.shape[0],
                                                                                [value] * distribution.shape[0])
 
-                metrics_df, distro_df = pd.concat([metrics_df, metrics]), pd.concat([distro_df, distribution])
+                self.save_metrics_and_distribution(metrics, distribution, unbiasing_algorithm)
 
         return metrics_df, distro_df
+
+    def save_metrics_and_distribution(self, metrics: pd.DataFrame, distribution: pd.DataFrame,
+                                      unbiasing_algorithm: Algorithm) -> None:
+
+        metrics_path = f'{self.results_save_path}/{unbiasing_algorithm.__class__.__name__}/metrics'
+        self.save(metrics, metrics_path)
+
+        distribution_path = f'{self.results_save_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
+        distribution.fillna(0.0, inplace=True)
+
+        self.save(distribution, distribution_path)
 
     def run(self) -> None:
         try:
@@ -194,32 +206,15 @@ class Pipeline:
                 # pre-intervention
                 metrics, distribution = self.__pre_intervention__(self.train_set, sensitive_attribute)
 
-                base_path = f'{self.results_save_path}'
                 for unbiasing_algorithm in self.unbiasing_algorithms:
-                    metrics_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}'
-                    self.save(metrics, metrics_path)
-
-                    distribution_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
-                    distribution.fillna(0, inplace=True)
-                    self.save(distribution, distribution_path)
-
-                del metrics, distribution
+                    self.save_metrics_and_distribution(metrics, distribution, unbiasing_algorithm)
 
                 # correction
                 for unbiasing_algorithm in self.unbiasing_algorithms:
                     self.unbiasing_algorithm = unbiasing_algorithm.__class__.__name__
 
-                    metrics, distribution = self.__bias_reduction__(self.train_set, self.validation_set,
-                                                                    unbiasing_algorithm, sensitive_attribute)
-
-                    metrics_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}'
-                    self.save(metrics, metrics_path)
-
-                    distribution_path = f'{base_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
-                    distribution.fillna(0.0, inplace=True)
-                    self.save(distribution, distribution_path)
-
-                    del metrics, distribution
+                    self.__bias_reduction__(self.train_set, self.validation_set, unbiasing_algorithm,
+                                            sensitive_attribute)
 
             logger.info("[PIPELINE] End.")
 
