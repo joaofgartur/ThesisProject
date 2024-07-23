@@ -11,3 +11,4 @@ sklearnex_logger = logging.getLogger('sklearnex')
 sklearnex_logger.setLevel(logging.ERROR)
 
 warnings.filterwarnings("ignore", module="daal4py")
+warnings.filterwarnings("ignore", module="sklearn", category=FutureWarning)
