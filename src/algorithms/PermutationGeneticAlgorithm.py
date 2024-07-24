@@ -13,7 +13,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, read_csv_to_dataframe, \
-    delete_directory, get_seed
+    delete_directory, get_seed, logger
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -401,20 +401,20 @@ class PermutationGeneticAlgorithm(Algorithm):
         population = sorted(population, key=lambda x: len(x[0]))
         for j, individual in enumerate(population):
             if self.verbose and not self.genetic_search_flag and j % 50 == 0:
-                print(f'\t[PGA] Individual {j}/{len(population)}.', flush=True)
+                logger.info(f'\t[PGA] Individual {j}/{len(population)}.')
             population[j] = self.__fitness(dataset, individual)
 
         if self.verbose and not self.genetic_search_flag:
-            print(f'\t[PGA] Individual {len(population)}/{len(population)}.', flush=True)
+            logger.info(f'\t[PGA] Individual {len(population)}/{len(population)}.')
 
         return population
 
     def __genetic_search(self, dataset: Dataset) -> Dataset:
 
         if self.verbose:
-            print(f'\t[PGA] Performing genetic search. Doing '
+            logger.info(f'\t[PGA] Performing genetic search. Doing '
                   f'{self.genetic_parameters.population_size * self.genetic_parameters.num_generations} '
-                  f'evaluations out of {self.problem_dimension} possible combinations.', flush=True)
+                  f'evaluations out of {self.problem_dimension} possible combinations.')
 
         population = self.__evaluate_population(dataset, self.population)
 
@@ -424,7 +424,7 @@ class PermutationGeneticAlgorithm(Algorithm):
         evolution = pd.concat([decoded_best_individual, population_average], axis=1)
 
         if self.verbose:
-            print(f'\t[PGA] Generation {1}/{self.genetic_parameters.num_generations}.', flush=True)
+            logger.info(f'\t[PGA] Generation {1}/{self.genetic_parameters.num_generations}.')
 
         for i in range(1, self.genetic_parameters.num_generations):
             parents = self.__tournament(population)
@@ -455,11 +455,11 @@ class PermutationGeneticAlgorithm(Algorithm):
             evolution = pd.concat([evolution, generation], axis=0)
 
             if self.verbose and i % 5 == 0:
-                print(f'\t[PGA] Generation {i + 1}/{self.genetic_parameters.num_generations}.', flush=True)
+                logger.info(f'\t[PGA] Generation {i + 1}/{self.genetic_parameters.num_generations}.')
 
         if self.verbose:
-            print(f'\t[PGA] Generation {self.genetic_parameters.num_generations}'
-                  f'/{self.genetic_parameters.num_generations}.', flush=True)
+            logger.info(f'\t[PGA] Generation {self.genetic_parameters.num_generations}'
+                  f'/{self.genetic_parameters.num_generations}.')
 
         self.__save_fitness_evolution(evolution, dataset.name)
 
@@ -468,7 +468,7 @@ class PermutationGeneticAlgorithm(Algorithm):
     def __extensive_search(self, dataset: Dataset) -> Dataset:
 
         if self.verbose:
-            print(f'\t[PGA] Performing extensive search. Testing {self.problem_dimension} combinations.', flush=True)
+            logger.info(f'\t[PGA] Performing extensive search. Testing {self.problem_dimension} combinations.')
 
         population = self.__evaluate_population(dataset, self.population)
 

@@ -5,7 +5,7 @@ from aif360.algorithms.preprocessing import LFR
 from algorithms.Algorithm import Algorithm
 from constants import PRIVILEGED, UNPRIVILEGED
 from datasets import Dataset, update_dataset
-from helpers import (convert_to_standard_dataset, get_seed, )
+from helpers import (convert_to_standard_dataset, get_seed, logger, )
 
 import numpy as np
 
@@ -31,7 +31,8 @@ class LearnedFairRepresentations(Algorithm):
     def __check_error(self, transformed_data) -> bool:
         target_classes = np.unique(transformed_data.targets)
 
-        print(f"\t[LFR] Target classes: {target_classes}", flush=True)
+        if self.verbose:
+            logger.info(f"\t[LFR] Target classes: {target_classes}")
 
         return len(target_classes) == 1 and (target_classes[0] == 0 or target_classes[0] == 1)
 
