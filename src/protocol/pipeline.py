@@ -58,6 +58,17 @@ class Pipeline:
         logger.info("[POST-INTERVENTION] Assessment.")
         return self.__attribute_assessment(train_data, protected_attribute)
 
+    def __handle_correction_error__(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
+        logger.info("[ERROR] Correction error handling.")
+        metrics, distribution = self.__attribute_assessment(train_data, protected_attribute)
+
+        metrics_columns = [col for col in metrics.columns if col.startswith('fairness') or col.startswith('performance')]
+        metrics[metrics_columns] = 0.0
+
+        metrics['error'], distribution['error'] = True, True
+
+        return metrics, distribution
+
     def __attribute_assessment(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
         self.set = 'Validation'
         val_surrogate_metrics, val_surrogate_distro = self.__assessment__(train_data, self.validation_set,
@@ -92,12 +103,13 @@ class Pipeline:
         # Surrogate Classifiers
         pipeline_details = {
             'dataset': self.dataset.name,
-            'protected_attribute': protected_attribute,
-            'protected_class': 'NA',
-            'unbiasing_algorithm': self.unbiasing_algorithm,
-            'data': self.set,
+            'attribute': protected_attribute,
+            'class': 'NA',
+            'algorithm': self.unbiasing_algorithm,
+            'set': self.set,
+            'num_iterations': 0,
+            'error': False,
             'classifier_type': 'Test' if test_assessment else 'Surrogate',
-            'num_iterations': 0
         }
 
         classifiers = [self.test_classifier] if test_assessment else self.surrogate_classifiers
@@ -127,6 +139,13 @@ class Pipeline:
             dataset.set_feature(protected_attribute, pd.DataFrame(dataset.get_protected_feature(protected_attribute),
                                                                   columns=[protected_attribute])[value])
         return dataset
+
+    def __set_protected_group_and_num_iterations__(self, metrics_df, distribution_df, protected_group, iteration):
+        metrics_df['class'], distribution_df['class'] = ([protected_group] * metrics_df.shape[0],
+                                                                             [protected_group] * distribution_df.shape[0])
+        metrics_df['num_iterations'], distribution_df['num_iterations'] = ([iteration] * metrics_df.shape[0],
+                                                                           [iteration] * distribution_df.shape[0])
+        return metrics_df, distribution_df
 
     def __bias_reduction__(self, train_set: Dataset, validation_set: Dataset,
                            unbiasing_algorithm: Algorithm, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
@@ -167,15 +186,13 @@ class Pipeline:
                     logger.error(
                         f'[INTERVENTION] Error occurred bias correction w.r.t. attribute {protected_attribute} '
                         f'for {value} with "{unbiasing_algorithm.__class__.__name__}"')
-                    continue
+                    metrics, distribution = self.__handle_correction_error__(train_set, protected_attribute)
 
-                metrics, distribution = self.__post_intervention__(transformed_dataset, protected_attribute)
+                else:
+                    metrics, distribution = self.__post_intervention__(transformed_dataset, protected_attribute)
 
-                metrics['num_iterations'], distribution['num_iterations'] = ([i + 1] * metrics.shape[0],
-                                                                             [i + 1] * distribution.shape[0])
-                metrics['protected_class'], distribution['protected_class'] = ([value] * metrics.shape[0],
-                                                                               [value] * distribution.shape[0])
-
+                metrics, distribution = self.__set_protected_group_and_num_iterations__(metrics, distribution, value,
+                                                                                        i + 1)
                 self.save_metrics_and_distribution(metrics, distribution, unbiasing_algorithm)
 
         return metrics_df, distro_df

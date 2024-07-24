@@ -94,15 +94,22 @@ def classifier_assessment(classifier: object, train_data: Dataset, validation_da
 
     predictions = get_classifier_predictions(classifier, train_data, validation_data)
 
+    # fairness metrics
     fairness_metrics = fairness_assessment(validation_data, predictions, protected_attribute)
+    n_rows = fairness_metrics.shape[0]
+
+    # performance metrics
     performance_metrics = performance_assessment(validation_data, predictions)
+    performance_metrics = pd.concat([performance_metrics] * n_rows, ignore_index=True)
+
+    # metadata
+    metadata = dict_to_dataframe({'classification_algorithm': classifier.__class__.__name__})
+    n_rows_metadata = pd.concat([metadata] * n_rows, ignore_index=True)
+
+    metrics = pd.concat([n_rows_metadata, fairness_metrics, performance_metrics], axis=1)
+
+    # distribution
     distribution = distribution_assessment(train_data, validation_data, predictions, protected_attribute)
-
-    rows = max(len(fairness_metrics), len(performance_metrics))
-    classifier_df = dict_to_dataframe({'classification_algorithm': classifier.__class__.__name__})
-    metrics_info_df = pd.concat([classifier_df] * rows, ignore_index=True)
-    metrics = pd.concat([pd.concat([metrics_info_df, fairness_metrics], axis=1), performance_metrics], axis=1)
-
-    distribution = pd.concat([pd.concat([classifier_df] * len(distribution), ignore_index=True), distribution], axis=1)
+    distribution = pd.concat([pd.concat([metadata] * distribution.shape[0], ignore_index=True), distribution], axis=1)
 
     return predictions.targets, metrics, distribution
