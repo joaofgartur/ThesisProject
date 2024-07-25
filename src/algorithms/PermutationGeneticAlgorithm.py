@@ -156,43 +156,28 @@ class PermutationGeneticAlgorithm(Algorithm):
             offspring1_genotype = list(filter(lambda item: item is not None, offspring1_genotype))
             offspring2_genotype = list(filter(lambda item: item is not None, offspring2_genotype))
 
-            return [(offspring1_genotype, {}), {}, {}], [(offspring2_genotype, {}), {}, {}]
+            return [offspring1_genotype, {}, {}], [offspring2_genotype, {}, {}]
 
         return parent1, parent2
 
     def __mutation(self, individual):
+        genotype = individual[0][:]
 
-        def scramble_mutation(_individual: list, probability_mutation: float):
-            genome = copy.deepcopy(_individual[0])
-            n = len(genome)
+        mutation_indexes = np.where(get_generator().random(len(genotype))
+                                    < self.genetic_parameters.probability_mutation)[0]
 
-            if n < 2:
-                return _individual
+        generator = get_generator()
+        for i in mutation_indexes:
+            genotype[i][0] = generator.integers(0, self.num_classes)
+            genotype[i][1] = generator.integers(0, len(self.unbiasing_algorithms_pool))
 
-            if get_generator().random() < probability_mutation:
-                index_1, index_2 = get_generator().choice(n, 2, replace=False)
-                segment = genome[index_1:index_2]
-                get_generator().shuffle(segment)
-                genome[index_1:index_2] = segment
-
-            return [genome, {}, {}]
-
-        # attribute values mutation
-        mutated_individual = scramble_mutation(individual, self.genetic_parameters.probability_mutation)
-
-        # unbiasing algorithms mutation
-        mutation_probabilities = get_generator().random(len(mutated_individual[0]))
-        mutation_indices = np.where(mutation_probabilities < self.genetic_parameters.probability_mutation)[0]
-        for i in mutation_indices:
-            mutated_individual[0][i][1] = get_generator().integers(0, len(self.unbiasing_algorithms_pool))
-
-        return mutated_individual
+        return [genotype, {}, {}]
 
     def __select_best(self, population):
 
         def sort_population(_population, objective: tuple):
             index, model, metric = objective
-            _population.sort(key=lambda x: x[index][model][metric], reverse=True)
+            _population.sort(key=lambda x: x[index][model][metric], reverse=reverse)
             return _population
 
         def select_top_individuals(_population, objective: tuple, epsilon):
@@ -224,23 +209,13 @@ class PermutationGeneticAlgorithm(Algorithm):
         for model in surrogate_models_order:
             if len(population) == 1:
                 break
+
+            reverse = True
             population = lexicographic_selection(population, (1, model))  # performance
+            reverse = False
             population = lexicographic_selection(population, (2, model))  # fairness
 
         return population
-
-    def __new_population(self, elite_pop, offsprings):
-        offset = len(offsprings) - len(elite_pop)
-
-        best_offspring = []
-        for _ in range(len(offsprings)):
-            sorted_offsprings = self.__select_best(offsprings)
-            best = sorted_offsprings[0]
-            best_offspring.append(best)
-            sorted_offsprings.pop(0)
-
-        new_population = elite_pop + best_offspring[:offset]
-        return new_population
 
     def __tournament(self, population):
 
@@ -310,16 +285,16 @@ class PermutationGeneticAlgorithm(Algorithm):
             data = self.__phenotype(data, individual)
         except ValueError:
             for model in self.surrogate_models_pool:
-                individual[1][model.__class__.__name__] = {'performance_accuracy': -1.0,
-                                                           'performance_f1_score': -1.0,
-                                                           'performance_auc': -1.0}
-                individual[2][model.__class__.__name__] = {'fairness_disparate_impact': -1.0,
-                                                           'fairness_discrimination_score': -1.0,
-                                                           'fairness_true_positive_rate_diff': -1.0,
-                                                           'fairness_false_positive_rate_diff': -1.0,
-                                                           'fairness_false_positive_error_rate_balance_score': -1.0,
-                                                           'fairness_false_negative_error_rate_balance_score': -1.0,
-                                                           'fairness_consistency': -1.0}
+                individual[1][model.__class__.__name__] = {'performance_accuracy': 0.0,
+                                                           'performance_f1_score': 0.0,
+                                                           'performance_auc': 0.0}
+                individual[2][model.__class__.__name__] = {'fairness_disparate_impact': np.inf,
+                                                           'fairness_discrimination_score': np.inf,
+                                                           'fairness_true_positive_rate_diff': np.inf,
+                                                           'fairness_false_positive_rate_diff': np.inf,
+                                                           'fairness_false_positive_error_rate_balance_score': np.inf,
+                                                           'fairness_false_negative_error_rate_balance_score': np.inf,
+                                                           'fairness_consistency': np.inf}
         else:
             for model in self.surrogate_models_pool:
                 model_predictions = get_classifier_predictions(model, data, self.auxiliary_data)
@@ -333,10 +308,11 @@ class PermutationGeneticAlgorithm(Algorithm):
         return individual
 
     def __evaluate_population(self, dataset, population):
-        population = sorted(population, key=lambda x: len(x[0]))
         for j, individual in enumerate(population):
+
             if self.verbose and not self.genetic_search_flag and j % 25 == 0:
                 logger.info(f'\t[PGA] Individual {j}/{len(population)}.')
+
             population[j] = self.__fitness(dataset, individual)
 
         if self.verbose and not self.genetic_search_flag:
@@ -354,43 +330,44 @@ class PermutationGeneticAlgorithm(Algorithm):
         population = self.__evaluate_population(dataset, self.population)
 
         best_individual = self.__select_best(population)[0]
+
         decoded_best_individual = self.__decode_individual(best_individual)
         population_average = self.__compute_population_average_fitness(population)
         evolution = pd.concat([decoded_best_individual, population_average], axis=1)
 
         if self.verbose:
-            logger.info(f'\t[PGA] Generation {1}/{self.genetic_parameters.num_generations}.')
+            logger.info(f'\t[PGA] Generation {0}/{self.genetic_parameters.num_generations}.')
 
         for i in range(1, self.genetic_parameters.num_generations):
             parents = self.__tournament(population)
 
             # Crossover
-            new_parents = []
+            offspring = []
             for j in range(0, len(population) - 1, 2):
                 child1, child2 = self.__crossover(parents[j], parents[j + 1])
-                new_parents.append(child1)
-                new_parents.append(child2)
+                offspring.append(child1)
+                offspring.append(child2)
 
             # Mutation
-            offsprings = []
-            for individual in parents:
-                mutated_individual = self.__mutation(individual)
-                offsprings.append(mutated_individual)
+            offspring = [self.__mutation(individual) for individual in offspring]
 
-            offsprings = self.__evaluate_population(dataset, offsprings)
+            print(f'Offspring: {len(offspring)}')
 
-            # Survivors selection - elitism
-            elite_pop = population[:self.genetic_parameters.elite_size]
-            population = self.__new_population(elite_pop, offsprings)
+            offspring = self.__evaluate_population(dataset, offspring)
+
+            # Elitism
+            population = (parents[:self.genetic_parameters.elite_size] +
+                          offspring[:len(population) - self.genetic_parameters.elite_size])
 
             best_individual = self.__select_best(population)[0]
+
             decoded_best_individual = self.__decode_individual(best_individual)
             population_average = self.__compute_population_average_fitness(population)
             generation = pd.concat([decoded_best_individual, population_average], axis=1)
             evolution = pd.concat([evolution, generation], axis=0)
 
-            if self.verbose and i % 5 == 0:
-                logger.info(f'\t[PGA] Generation {i + 1}/{self.genetic_parameters.num_generations}.')
+            if self.verbose:
+                logger.info(f'\t[PGA] Generation {i}/{self.genetic_parameters.num_generations}.')
 
         if self.verbose:
             logger.info(f'\t[PGA] Generation {self.genetic_parameters.num_generations}'
