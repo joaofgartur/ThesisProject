@@ -15,7 +15,6 @@ class AlgorithmOptions(Enum):
     Massaging = 0
     Reweighing = 1
     DisparateImpactRemover = 2
-    # LearnedFairRepresentations = 3
     LGAFFS = 4
     MulticlassLGAFFS = 5
     PermutationGeneticAlgorithm = 6
@@ -81,15 +80,6 @@ def get_algorithms_configs(configs_file: str, algorithm: AlgorithmOptions):
     match algorithm:
         case AlgorithmOptions.DisparateImpactRemover:
             return configs.getfloat('DisparateImpactRemover', 'repair_level')
-        case AlgorithmOptions.LearnedFairRepresentations:
-            k = configs.getint('LearnedFairRepresentations', 'k')
-            ax = configs.getfloat('LearnedFairRepresentations', 'ax')
-            ay = configs.getfloat('LearnedFairRepresentations', 'ay')
-            az = configs.getfloat('LearnedFairRepresentations', 'az')
-            verbose = configs.getboolean('LearnedFairRepresentations', 'verbose')
-
-            return k, ax, ay, az, verbose
-
         case AlgorithmOptions.LGAFFS:
             section = 'LexicographicGeneticAlgorithmFairFeatureSelection'
             genetic_parameters = GeneticBasicParameters(
@@ -144,16 +134,6 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
         case AlgorithmOptions.DisparateImpactRemover:
             repair_level = get_algorithms_configs(algorithm_configs_file, AlgorithmOptions.DisparateImpactRemover)
             return DisparateImpactRemover(repair_level=repair_level)
-        case AlgorithmOptions.LearnedFairRepresentations:
-            k, ax, ay, az, verbose = get_algorithms_configs(algorithm_configs_file,
-                                                            AlgorithmOptions.LearnedFairRepresentations)
-            return LearnedFairRepresentations(
-                k=k,
-                ax=ax,
-                ay=ay,
-                az=az,
-                verbose=verbose
-            )
         case AlgorithmOptions.LGAFFS | AlgorithmOptions.MulticlassLGAFFS:
             genetic_parameters, n_splits, min_feature_prob, max_feature_prob, verbose = (
                 get_algorithms_configs(algorithm_configs_file, AlgorithmOptions.LGAFFS))
@@ -182,10 +162,8 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.Reweighing),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.DisparateImpactRemover),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.LGAFFS),
-                # load_algorithm(algorithm_configs_file, AlgorithmOptions.LearnedFairRepresentations)
             ]
             unbiasing_algorithms_pool[3].verbose = False
-            # unbiasing_algorithms_pool[4].verbose = False
             return PermutationGeneticAlgorithm(
                 genetic_parameters=genetic_parameters,
                 unbiasing_algorithms_pool=unbiasing_algorithms_pool,
