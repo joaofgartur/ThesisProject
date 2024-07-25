@@ -15,7 +15,7 @@ class AlgorithmOptions(Enum):
     Massaging = 0
     Reweighing = 1
     DisparateImpactRemover = 2
-    LearnedFairRepresentations = 3
+    # LearnedFairRepresentations = 3
     LGAFFS = 4
     MulticlassLGAFFS = 5
     PermutationGeneticAlgorithm = 6
@@ -182,10 +182,10 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.Reweighing),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.DisparateImpactRemover),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.LGAFFS),
-                load_algorithm(algorithm_configs_file, AlgorithmOptions.LearnedFairRepresentations)
+                # load_algorithm(algorithm_configs_file, AlgorithmOptions.LearnedFairRepresentations)
             ]
             unbiasing_algorithms_pool[3].verbose = False
-            unbiasing_algorithms_pool[4].verbose = False
+            # unbiasing_algorithms_pool[4].verbose = False
             return PermutationGeneticAlgorithm(
                 genetic_parameters=genetic_parameters,
                 unbiasing_algorithms_pool=unbiasing_algorithms_pool,
