@@ -28,13 +28,14 @@ class LearnedFairRepresentations(Algorithm):
         self.print_interval = print_interval
         self.verbose = verbose
 
-    def __check_error(self, transformed_data) -> bool:
+    def __check_error(self, transformed_data):
         target_classes = np.unique(transformed_data.targets)
 
         if self.verbose:
             logger.info(f"\t[LFR] Target classes: {target_classes}")
 
-        return len(target_classes) == 1 and (target_classes[0] == 0 or target_classes[0] == 1)
+        if len(target_classes) == 1:
+            raise ValueError("Only one class in the target data.")
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.sensitive_attribute = sensitive_attribute

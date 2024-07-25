@@ -73,7 +73,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         num_attribute_classes = self.num_classes
         m = len(self.unbiasing_algorithms_pool)
-        length = rng.integers(1,  2 * num_attribute_classes)
+        length = rng.integers(1, 2 * num_attribute_classes)
 
         genotype = [[rng.integers(0, num_attribute_classes), rng.integers(0, m)] for _ in range(length)]
 
@@ -261,11 +261,14 @@ class PermutationGeneticAlgorithm(Algorithm):
         dimensions = transformed_data.features.shape
 
         for value, algorithm in individual[0]:
-
             transformed_data.set_feature(self.sensitive_attribute, dummy_values[self.decoder[value]])
             unbiasing_algorithm = self.unbiasing_algorithms_pool[algorithm]
-            unbiasing_algorithm.fit(transformed_data, self.sensitive_attribute)
-            transformed_data = unbiasing_algorithm.transform(transformed_data)
+
+            try:
+                unbiasing_algorithm.fit(transformed_data, self.sensitive_attribute)
+                transformed_data = unbiasing_algorithm.transform(transformed_data)
+            except ValueError:
+                raise ValueError(f'[PGA] Invalid individual: {individual[0]}.')
 
             if transformed_data.features.shape[0] != dimensions[0]:
                 dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
@@ -274,9 +277,6 @@ class PermutationGeneticAlgorithm(Algorithm):
             if self.sensitive_attribute not in transformed_data.features.columns:
                 sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[value]]})
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
-
-            if transformed_data.error_flag:
-                break
 
         return transformed_data
 
@@ -304,9 +304,11 @@ class PermutationGeneticAlgorithm(Algorithm):
         if flattened_genotype in self.evaluated_individuals:
             return self.evaluated_individuals[flattened_genotype]
 
-        data = self.__phenotype(data, individual)
-
-        if len(individual[0]) > 2 * self.num_classes or data.error_flag:
+        try:
+            if len(individual[0]) > 2 * self.num_classes:
+                raise ValueError(f'[PGA] Invalid individual: {individual[0]}.')
+            data = self.__phenotype(data, individual)
+        except ValueError:
             for model in self.surrogate_models_pool:
                 individual[1][model.__class__.__name__] = {'performance_accuracy': -1.0,
                                                            'performance_f1_score': -1.0,
@@ -333,7 +335,7 @@ class PermutationGeneticAlgorithm(Algorithm):
     def __evaluate_population(self, dataset, population):
         population = sorted(population, key=lambda x: len(x[0]))
         for j, individual in enumerate(population):
-            if self.verbose and not self.genetic_search_flag and j % 50 == 0:
+            if self.verbose and not self.genetic_search_flag and j % 25 == 0:
                 logger.info(f'\t[PGA] Individual {j}/{len(population)}.')
             population[j] = self.__fitness(dataset, individual)
 
@@ -346,8 +348,8 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         if self.verbose:
             logger.info(f'\t[PGA] Performing genetic search. Doing '
-                  f'{self.genetic_parameters.population_size * self.genetic_parameters.num_generations} '
-                  f'evaluations out of {self.problem_dimension} possible combinations.')
+                        f'{self.genetic_parameters.population_size * self.genetic_parameters.num_generations} '
+                        f'evaluations out of {self.problem_dimension} possible combinations.')
 
         population = self.__evaluate_population(dataset, self.population)
 
@@ -392,7 +394,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         if self.verbose:
             logger.info(f'\t[PGA] Generation {self.genetic_parameters.num_generations}'
-                  f'/{self.genetic_parameters.num_generations}.')
+                        f'/{self.genetic_parameters.num_generations}.')
 
         self.__save_fitness_evolution(evolution, dataset.name)
 

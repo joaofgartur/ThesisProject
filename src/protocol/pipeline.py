@@ -179,15 +179,14 @@ class Pipeline:
                 transformed_dataset = self.__set_protected_feature__(unbiasing_algorithm, transformed_dataset,
                                                                      protected_attribute, value)
 
-                unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
-                transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
-
-                if transformed_dataset.error_flag:
+                try:
+                    unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
+                    transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
+                except ValueError:
                     logger.error(
                         f'[INTERVENTION] Error occurred bias correction w.r.t. attribute {protected_attribute} '
                         f'for {value} with "{unbiasing_algorithm.__class__.__name__}"')
                     metrics, distribution = self.__handle_correction_error__(train_set, protected_attribute)
-
                 else:
                     metrics, distribution = self.__post_intervention__(transformed_dataset, protected_attribute)
 
