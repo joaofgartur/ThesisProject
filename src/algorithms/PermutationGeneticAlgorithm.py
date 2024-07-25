@@ -12,8 +12,7 @@ from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, read_csv_to_dataframe, \
-    delete_directory, get_seed, logger
+from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -30,7 +29,6 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.is_binary = False
         self.needs_auxiliary_data = True
         self.algorithm_name = 'PermutationGeneticAlgorithm'
-        self.cache_path = None
 
         self.genetic_parameters = genetic_parameters
 
@@ -46,7 +44,6 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         self.verbose = verbose
         self.evaluated_individuals = {}
-        self.valid_individuals = {}
 
     def __do_genetic_search(self):
         num_algorithms = len(self.unbiasing_algorithms_pool)
@@ -101,36 +98,6 @@ class PermutationGeneticAlgorithm(Algorithm):
         decoded_individual = pd.concat([decoded_individual, metrics], axis=1)
 
         return decoded_individual
-
-    def __save_individual__(self, individual, transformed_dataset: Dataset):
-        genome = self.__flatten_genotype(individual[0])
-
-        features_file = f'features_{genome}'
-        write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=self.cache_path)
-
-        targets_file = f'targets_{genome}'
-        write_dataframe_to_csv(df=transformed_dataset.targets, filename=targets_file, path=self.cache_path)
-
-        protected_features_file = f'protected_features_{genome}'
-        write_dataframe_to_csv(df=transformed_dataset.protected_features, filename=protected_features_file,
-                               path=self.cache_path)
-
-    def __fetch_individual__(self, individual: list[list], dataset: Dataset):
-        genome = self.__flatten_genotype(individual[0])
-
-        features_file = f'features_{genome}'
-        dataset.features = read_csv_to_dataframe(features_file, self.cache_path)
-
-        targets_file = f'targets_{genome}'
-        dataset.targets = read_csv_to_dataframe(targets_file, self.cache_path)
-
-        protected_features_file = f'protected_features_{genome}'
-        dataset.protected_features = read_csv_to_dataframe(protected_features_file, self.cache_path)
-
-        return dataset
-
-    def __clean_cache__(self):
-        delete_directory(self.cache_path)
 
     def __compute_population_average_fitness(self, population):
 
@@ -287,43 +254,13 @@ class PermutationGeneticAlgorithm(Algorithm):
             mate_pool.append(winner)
         return mate_pool
 
-    def __find_longest_genotype_match(self, flattened_genotype) -> str | None:
-        sorted_genotypes = sorted(self.evaluated_individuals.keys(), key=len, reverse=True)
-        for key in sorted_genotypes:
-            if flattened_genotype.startswith(key):
-                return str(key)
-
-        return None
-
     def __phenotype(self, data: Dataset, individual):
-
-        flattened_genotype = self.__flatten_genotype(individual[0])
-        longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
-
         transformed_data = copy.deepcopy(data)
-        self.valid_individuals[flattened_genotype] = True
-
-        if longest_matching_genotype is None:
-            genotype_to_decode = individual[0]
-        else:
-            match_length = len(self.evaluated_individuals[longest_matching_genotype][0])
-
-            if not self.valid_individuals[longest_matching_genotype]:
-                self.valid_individuals[flattened_genotype] = False
-                return data
-
-            genotype_to_decode = individual[0][match_length:]
-            transformed_data = self.__fetch_individual__(self.evaluated_individuals[longest_matching_genotype], data)
 
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
 
-        if self.sensitive_attribute not in transformed_data.features.columns:
-            previous_value = self.evaluated_individuals[longest_matching_genotype][0][-1][0]
-            sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[previous_value]]})
-            transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
-
-        for value, algorithm in genotype_to_decode:
+        for value, algorithm in individual[0]:
 
             transformed_data.set_feature(self.sensitive_attribute, dummy_values[self.decoder[value]])
             unbiasing_algorithm = self.unbiasing_algorithms_pool[algorithm]
@@ -339,10 +276,7 @@ class PermutationGeneticAlgorithm(Algorithm):
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
             if transformed_data.error_flag:
-                self.valid_individuals[flattened_genotype] = False
                 break
-
-        self.__save_individual__(individual, transformed_data)
 
         return transformed_data
 
@@ -372,7 +306,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         data = self.__phenotype(data, individual)
 
-        if len(individual[0]) > 2 * self.num_classes or not self.valid_individuals[flattened_genotype]:
+        if len(individual[0]) > 2 * self.num_classes or data.error_flag:
             for model in self.surrogate_models_pool:
                 individual[1][model.__class__.__name__] = {'performance_accuracy': -1.0,
                                                            'performance_f1_score': -1.0,
@@ -384,7 +318,6 @@ class PermutationGeneticAlgorithm(Algorithm):
                                                            'fairness_false_positive_error_rate_balance_score': -1.0,
                                                            'fairness_false_negative_error_rate_balance_score': -1.0,
                                                            'fairness_consistency': -1.0}
-
         else:
             for model in self.surrogate_models_pool:
                 model_predictions = get_classifier_predictions(model, data, self.auxiliary_data)
@@ -463,7 +396,7 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         self.__save_fitness_evolution(evolution, dataset.name)
 
-        return self.__mount_individual(best_individual, dataset)
+        return self.__phenotype(dataset, best_individual)
 
     def __extensive_search(self, dataset: Dataset) -> Dataset:
 
@@ -479,19 +412,12 @@ class PermutationGeneticAlgorithm(Algorithm):
 
         self.__save_fitness_evolution(evolution, dataset.name)
 
-        return self.__mount_individual(best_individual, dataset)
+        return self.__phenotype(dataset, best_individual)
 
     def __save_fitness_evolution(self, fitness_evolution: pd.DataFrame, dataset_name: str):
         save_path = os.path.join('best_individuals', f'{dataset_name}', f'{self.iteration_number}_iteration')
         filename = f'{self.algorithm_name}_{self.sensitive_attribute}_fitness_evolution'
         write_dataframe_to_csv(fitness_evolution, filename, save_path)
-
-    def __mount_individual(self, individual: list[list], dataset: Dataset) -> Dataset:
-        genotype = self.__flatten_genotype(individual[0])
-        individual_dataset = self.__fetch_individual__(individual, dataset)
-        individual_dataset.error_flag = not self.valid_individuals[genotype]
-
-        return individual_dataset
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.decoder = data.features_mapping[sensitive_attribute]
@@ -500,8 +426,6 @@ class PermutationGeneticAlgorithm(Algorithm):
         self.genetic_search_flag = self.__do_genetic_search()
         self.population = self.__generate_population()
         self.evaluated_individuals = {}
-        self.valid_individuals = {}
-        self.cache_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', data.name, self.sensitive_attribute)
 
     def transform(self, dataset: Dataset) -> Dataset:
         if self.genetic_search_flag:
@@ -509,5 +433,4 @@ class PermutationGeneticAlgorithm(Algorithm):
         else:
             transformed_dataset = self.__extensive_search(dataset)
 
-        self.__clean_cache__()
         return transformed_dataset
