@@ -17,6 +17,18 @@ from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, lo
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
+def backup_dataset(dataset, path):
+    write_dataframe_to_csv(dataset.features, 'features', path)
+    write_dataframe_to_csv(dataset.targets, 'targets', path)
+    write_dataframe_to_csv(dataset.protected_features, 'protected_features', path)
+
+
+def restore_dataset(dataset, path):
+    dataset.features = read_csv_to_dataframe('features', path)
+    dataset.targets = read_csv_to_dataframe('targets', path)
+    dataset.protected_features = read_csv_to_dataframe('protected_features', path)
+
+
 class FairGenes(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters,
@@ -276,9 +288,8 @@ class FairGenes(Algorithm):
                 return str(key)
 
     def __phenotype(self, data: Dataset, individual):
-        flattened_genotype = self.__flatten_genotype(individual[0])
 
-        transformed_data = copy.deepcopy(data)
+        flattened_genotype = self.__flatten_genotype(individual[0])
         self.valid_individuals[flattened_genotype] = True
 
         longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
@@ -292,8 +303,9 @@ class FairGenes(Algorithm):
                 return data
 
             genotype_to_decode = individual[0][match_length:]
-            transformed_data = self.__fetch_individual__(self.evaluated_individuals[longest_matching_genotype], data)
+            data = self.__fetch_individual__(self.evaluated_individuals[longest_matching_genotype], data)
 
+        transformed_data = copy.copy(data)
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
 
@@ -352,7 +364,9 @@ class FairGenes(Algorithm):
         try:
             if len(individual[0]) > 2 * self.num_classes:
                 raise ValueError(f'[FairGenes] Invalid individual: {individual[0]}.')
-            data = self.__phenotype(data, individual)
+
+            transformed_data = self.__phenotype(data, individual)
+
         except ValueError:
             for model in self.surrogate_models_pool:
                 individual[1][model.__class__.__name__] = {'performance_accuracy': 0.0,
@@ -367,7 +381,7 @@ class FairGenes(Algorithm):
                                                            'fairness_consistency': np.inf}
         else:
             for model in self.surrogate_models_pool:
-                model_predictions = get_classifier_predictions(model, data, self.auxiliary_data)
+                model_predictions = get_classifier_predictions(model, transformed_data, self.auxiliary_data)
                 individual[1].update({model.__class__.__name__: self.__performance_fitness(self.auxiliary_data,
                                                                                            model_predictions)})
                 individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
@@ -382,7 +396,7 @@ class FairGenes(Algorithm):
 
             if self.verbose and not self.genetic_search_flag and j % 25 == 0:
                 logger.info(f'\t[FairGenes] Individual {j+1}/{len(population)}.')
-
+            restore_dataset(dataset, self.cache_path) # Restore dataset to original state
             population[j] = self.__fitness(dataset, individual)
 
         return population
@@ -478,9 +492,13 @@ class FairGenes(Algorithm):
         self.genetic_search_flag = self.__do_genetic_search()
         self.population = self.__generate_population()
         self.evaluated_individuals = {}
+
         self.cache_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', data.name, self.sensitive_attribute)
 
     def transform(self, dataset: Dataset) -> Dataset:
+
+        backup_dataset(dataset, self.cache_path)
+
         if self.genetic_search_flag:
             transformed_dataset = self.__genetic_search(dataset)
         else:
