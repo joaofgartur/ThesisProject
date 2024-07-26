@@ -9,5 +9,5 @@ from .Reweighting import Reweighing
 from .DisparateImpactRemover import DisparateImpactRemover
 from .LearnedFairRepresentations import LearnedFairRepresentations
 from .LexicographicGeneticAlgorithmFairFeatureSelection import LexicographicGeneticAlgorithmFairFeatureSelection
-from .PermutationGeneticAlgorithm import PermutationGeneticAlgorithm
+from .FairGenes import FairGenes
 from .GeneticAlgorithmHelpers import *

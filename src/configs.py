@@ -2,7 +2,7 @@ import configparser
 from enum import Enum
 
 from algorithms import GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover, \
-    LearnedFairRepresentations, LexicographicGeneticAlgorithmFairFeatureSelection, PermutationGeneticAlgorithm
+    LearnedFairRepresentations, LexicographicGeneticAlgorithmFairFeatureSelection, FairGenes
 from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection import \
     MulticlassLexicographicGeneticAlgorithmFairFeatureSelection
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
@@ -17,7 +17,7 @@ class AlgorithmOptions(Enum):
     DisparateImpactRemover = 2
     LGAFFS = 4
     MulticlassLGAFFS = 5
-    PermutationGeneticAlgorithm = 6
+    FairGenes = 6
 
 
 def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
@@ -95,16 +95,16 @@ def get_algorithms_configs(configs_file: str, algorithm: AlgorithmOptions):
             verbose = configs.getboolean(section, 'verbose')
 
             return genetic_parameters, n_splits, min_feature_prob, max_feature_prob, verbose
-        case AlgorithmOptions.PermutationGeneticAlgorithm:
-            verbose = configs.getboolean('PermutationGeneticAlgorithm', 'verbose')
-            threshold_k = configs.getint('PermutationGeneticAlgorithm', 'threshold_k')
+        case AlgorithmOptions.FairGenes:
+            verbose = configs.getboolean('FairGenes', 'verbose')
+            threshold_k = configs.getint('FairGenes', 'threshold_k')
             return verbose, threshold_k, GeneticBasicParameters(
-                population_size=configs.getint('PermutationGeneticAlgorithm', 'population_size'),
-                num_generations=configs.getint('PermutationGeneticAlgorithm', 'num_generations'),
-                tournament_size=configs.getint('PermutationGeneticAlgorithm', 'tournament_size'),
-                elite_size=configs.getint('PermutationGeneticAlgorithm', 'elite_size'),
-                probability_crossover=configs.getfloat('PermutationGeneticAlgorithm', 'probability_crossover'),
-                probability_mutation=configs.getfloat('PermutationGeneticAlgorithm', 'probability_mutation')
+                population_size=configs.getint('FairGenes', 'population_size'),
+                num_generations=configs.getint('FairGenes', 'num_generations'),
+                tournament_size=configs.getint('FairGenes', 'tournament_size'),
+                elite_size=configs.getint('FairGenes', 'elite_size'),
+                probability_crossover=configs.getfloat('FairGenes', 'probability_crossover'),
+                probability_mutation=configs.getfloat('FairGenes', 'probability_mutation')
             )
         case _:
             logger.error(f'Algorithm {algorithm} not recognized.')
@@ -154,9 +154,9 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                     max_feature_prob=max_feature_prob,
                     verbose=verbose,
                 )
-        case AlgorithmOptions.PermutationGeneticAlgorithm:
+        case AlgorithmOptions.FairGenes:
             verbose, threshold_k, genetic_parameters = (
-                get_algorithms_configs(algorithm_configs_file, AlgorithmOptions.PermutationGeneticAlgorithm))
+                get_algorithms_configs(algorithm_configs_file, AlgorithmOptions.FairGenes))
             unbiasing_algorithms_pool = [
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.Massaging),
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.Reweighing),
@@ -164,7 +164,7 @@ def load_algorithm(algorithm_configs_file: str, unbiasing_algorithm: Enum):
                 load_algorithm(algorithm_configs_file, AlgorithmOptions.LGAFFS),
             ]
             unbiasing_algorithms_pool[3].verbose = False
-            return PermutationGeneticAlgorithm(
+            return FairGenes(
                 genetic_parameters=genetic_parameters,
                 unbiasing_algorithms_pool=unbiasing_algorithms_pool,
                 surrogate_models_pool=get_surrogate_classifiers(),

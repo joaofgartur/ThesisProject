@@ -16,7 +16,7 @@ from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, lo
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
-class PermutationGeneticAlgorithm(Algorithm):
+class FairGenes(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters,
                  unbiasing_algorithms_pool: [Algorithm],
@@ -326,6 +326,7 @@ class PermutationGeneticAlgorithm(Algorithm):
             logger.info(f'\t[PGA] Performing genetic search. Doing '
                         f'{self.genetic_parameters.population_size * self.genetic_parameters.num_generations} '
                         f'evaluations out of {self.problem_dimension} possible combinations.')
+            logger.info(f'\t[PGA] Generation {1}/{self.genetic_parameters.num_generations}.')
 
         population = self.__evaluate_population(dataset, self.population)
 
@@ -335,10 +336,11 @@ class PermutationGeneticAlgorithm(Algorithm):
         population_average = self.__compute_population_average_fitness(population)
         evolution = pd.concat([decoded_best_individual, population_average], axis=1)
 
-        if self.verbose:
-            logger.info(f'\t[PGA] Generation {0}/{self.genetic_parameters.num_generations}.')
-
         for i in range(1, self.genetic_parameters.num_generations):
+
+            if self.verbose:
+                logger.info(f'\t[PGA] Generation {i+1}/{self.genetic_parameters.num_generations}.')
+
             parents = self.__tournament(population)
 
             # Crossover
@@ -351,13 +353,24 @@ class PermutationGeneticAlgorithm(Algorithm):
             # Mutation
             offspring = [self.__mutation(individual) for individual in offspring]
 
-            print(f'Offspring: {len(offspring)}')
-
             offspring = self.__evaluate_population(dataset, offspring)
 
             # Elitism
-            population = (parents[:self.genetic_parameters.elite_size] +
-                          offspring[:len(population) - self.genetic_parameters.elite_size])
+            elite_parents = []
+            for j in range(self.genetic_parameters.elite_size):
+                best = self.__select_best(parents)[0]
+                parents.remove(best)
+                elite_parents.append(best)
+
+            best_offspring = []
+            for j in range(len(population) - self.genetic_parameters.elite_size):
+                best = self.__select_best(offspring)[0]
+                offspring.remove(best)
+                best_offspring.append(best)
+
+            population = elite_parents + best_offspring
+
+            print(population)
 
             best_individual = self.__select_best(population)[0]
 
@@ -365,13 +378,6 @@ class PermutationGeneticAlgorithm(Algorithm):
             population_average = self.__compute_population_average_fitness(population)
             generation = pd.concat([decoded_best_individual, population_average], axis=1)
             evolution = pd.concat([evolution, generation], axis=0)
-
-            if self.verbose:
-                logger.info(f'\t[PGA] Generation {i}/{self.genetic_parameters.num_generations}.')
-
-        if self.verbose:
-            logger.info(f'\t[PGA] Generation {self.genetic_parameters.num_generations}'
-                        f'/{self.genetic_parameters.num_generations}.')
 
         self.__save_fitness_evolution(evolution, dataset.name)
 
