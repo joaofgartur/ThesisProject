@@ -1,7 +1,6 @@
 
 import gc
 import os
-import tracemalloc
 from itertools import product, combinations_with_replacement
 from math import factorial
 
@@ -288,6 +287,8 @@ class FairGenes(Algorithm):
         flattened_genotype = self.__flatten_genotype(individual[0])
         self.valid_individuals[flattened_genotype] = True
 
+        print(f'Individual: {individual[0]}')
+
         longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
         if longest_matching_genotype is None:
             genotype_to_decode = individual[0]
@@ -330,6 +331,10 @@ class FairGenes(Algorithm):
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
         self.__save_individual__(individual, transformed_data)
+
+        print(transformed_data.features)
+        print(transformed_data.targets)
+        print(transformed_data.protected_features)
 
         return transformed_data
 
@@ -391,7 +396,7 @@ class FairGenes(Algorithm):
 
         for j, individual in enumerate(population):
 
-            if self.verbose and not self.genetic_search_flag and j % 25 == 0:
+            if self.verbose and not self.genetic_search_flag:
                 logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
             restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
             population[j] = self.__fitness(dataset, individual)
@@ -489,7 +494,7 @@ class FairGenes(Algorithm):
         self.genetic_search_flag = self.__do_genetic_search()
         self.population = self.__generate_population()
         self.evaluated_individuals = {}
-
+        self.valid_individuals = {}
         self.cache_path = f'{self.algorithm_name}_{data.name}_{get_seed()}_{self.sensitive_attribute}'
 
     def transform(self, dataset: Dataset) -> Dataset:
