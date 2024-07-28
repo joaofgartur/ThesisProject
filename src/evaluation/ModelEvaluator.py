@@ -1,17 +1,17 @@
 import numpy as np
+import pandas as pd
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, precision_score, \
     matthews_corrcoef, roc_curve, auc
 
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
-from datasets import Dataset
 from helpers import dict_to_dataframe
 
 
 class ModelEvaluator(object):
 
-    def __init__(self, original_data: Dataset, predicted_data: Dataset):
-        self.y = original_data.targets.squeeze()
-        self.y_pred = predicted_data.targets.squeeze()
+    def __init__(self, targets: pd.DataFrame, predictions: pd.DataFrame):
+        self.y = targets.squeeze()
+        self.y_pred = predictions.squeeze()
 
     def confusion_matrix(self):
         return [list(np.concatenate(confusion_matrix(y_true=self.y, y_pred=self.y_pred)).flat)]

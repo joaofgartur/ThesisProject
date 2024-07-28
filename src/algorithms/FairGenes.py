@@ -1,5 +1,7 @@
-import copy
+
+import gc
 import os
+import tracemalloc
 from itertools import product, combinations_with_replacement
 from math import factorial
 
@@ -13,20 +15,8 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, read_csv_to_dataframe, \
-    delete_directory, get_seed
+    delete_directory, get_seed, restore_dataset, backup_dataset
 from protocol.assessment import get_classifier_predictions, fairness_assessment
-
-
-def backup_dataset(dataset, path):
-    write_dataframe_to_csv(dataset.features, 'features', path)
-    write_dataframe_to_csv(dataset.targets, 'targets', path)
-    write_dataframe_to_csv(dataset.protected_features, 'protected_features', path)
-
-
-def restore_dataset(dataset, path):
-    dataset.features = read_csv_to_dataframe('features', path)
-    dataset.targets = read_csv_to_dataframe('targets', path)
-    dataset.protected_features = read_csv_to_dataframe('protected_features', path)
 
 
 class FairGenes(Algorithm):
@@ -42,8 +32,8 @@ class FairGenes(Algorithm):
         self.is_binary = False
         self.needs_auxiliary_data = True
         self.algorithm_name = 'FairGenes'
-        self.cache_path = None
 
+        self.cache_path = None
         self.genetic_parameters = genetic_parameters
 
         self.num_classes = 0
@@ -116,27 +106,29 @@ class FairGenes(Algorithm):
 
     def __save_individual__(self, individual, transformed_dataset: Dataset):
         genome = self.__flatten_genotype(individual[0])
+        seed = get_seed()
 
-        features_file = f'features_{genome}'
+        features_file = f'{seed}_features_{genome}.csv'
         write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=self.cache_path)
 
-        targets_file = f'targets_{genome}'
+        targets_file = f'{seed}_targets_{genome}.csv'
         write_dataframe_to_csv(df=transformed_dataset.targets, filename=targets_file, path=self.cache_path)
 
-        protected_features_file = f'protected_features_{genome}'
+        protected_features_file = f'{seed}_protected_features_{genome}.csv'
         write_dataframe_to_csv(df=transformed_dataset.protected_features, filename=protected_features_file,
                                path=self.cache_path)
 
     def __fetch_individual__(self, individual: list[list], dataset: Dataset):
         genome = self.__flatten_genotype(individual[0])
+        seed = get_seed()
 
-        features_file = f'features_{genome}'
+        features_file = f'{seed}_features_{genome}.csv'
         dataset.features = read_csv_to_dataframe(features_file, self.cache_path)
 
-        targets_file = f'targets_{genome}'
+        targets_file = f'{seed}_targets_{genome}.csv'
         dataset.targets = read_csv_to_dataframe(targets_file, self.cache_path)
 
-        protected_features_file = f'protected_features_{genome}'
+        protected_features_file = f'{seed}_protected_features_{genome}.csv'
         dataset.protected_features = read_csv_to_dataframe(protected_features_file, self.cache_path)
 
         return dataset
@@ -149,6 +141,10 @@ class FairGenes(Algorithm):
         return individual_dataset
 
     def __clean_cache__(self):
+        self.population = None
+        self.evaluated_individuals = None
+        self.valid_individuals = None
+        self.decoder = None
         delete_directory(self.cache_path)
 
     def __compute_population_average_fitness(self, population):
@@ -305,7 +301,7 @@ class FairGenes(Algorithm):
             genotype_to_decode = individual[0][match_length:]
             data = self.__fetch_individual__(self.evaluated_individuals[longest_matching_genotype], data)
 
-        transformed_data = copy.copy(data)
+        transformed_data = data
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
 
@@ -337,8 +333,8 @@ class FairGenes(Algorithm):
 
         return transformed_data
 
-    def __performance_fitness(self, data: Dataset, predictions: Dataset):
-        performance_evaluator = ModelEvaluator(data, predictions)
+    def __performance_fitness(self, data: Dataset, predictions: pd.DataFrame):
+        performance_evaluator = ModelEvaluator(data.targets, predictions)
 
         return {
             'performance_accuracy': performance_evaluator.accuracy(),
@@ -346,7 +342,7 @@ class FairGenes(Algorithm):
             'performance_auc': performance_evaluator.auc()
         }
 
-    def __fairness_fitness(self, data: Dataset, predictions: Dataset):
+    def __fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
         metrics = fairness_assessment(data, predictions, self.sensitive_attribute)
 
         result = {}
@@ -392,12 +388,15 @@ class FairGenes(Algorithm):
         return individual
 
     def __evaluate_population(self, dataset, population):
+
         for j, individual in enumerate(population):
 
             if self.verbose and not self.genetic_search_flag and j % 25 == 0:
-                logger.info(f'\t[FairGenes] Individual {j+1}/{len(population)}.')
-            restore_dataset(dataset, self.cache_path) # Restore dataset to original state
+                logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
+            restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
             population[j] = self.__fitness(dataset, individual)
+
+            gc.collect()
 
         return population
 
@@ -420,7 +419,7 @@ class FairGenes(Algorithm):
         for i in range(1, self.genetic_parameters.num_generations):
 
             if self.verbose:
-                logger.info(f'\t[FairGenes] Generation {i+1}/{self.genetic_parameters.num_generations}.')
+                logger.info(f'\t[FairGenes] Generation {i + 1}/{self.genetic_parameters.num_generations}.')
 
             parents = self.__tournament(population)
 
@@ -450,8 +449,6 @@ class FairGenes(Algorithm):
                 best_offspring.append(best)
 
             population = elite_parents + best_offspring
-
-            print(population)
 
             best_individual = self.__select_best(population)[0]
 
@@ -493,7 +490,7 @@ class FairGenes(Algorithm):
         self.population = self.__generate_population()
         self.evaluated_individuals = {}
 
-        self.cache_path = os.path.join(f'{self.algorithm_name}_{get_seed()}', data.name, self.sensitive_attribute)
+        self.cache_path = f'{self.algorithm_name}_{data.name}_{get_seed()}_{self.sensitive_attribute}'
 
     def transform(self, dataset: Dataset) -> Dataset:
 

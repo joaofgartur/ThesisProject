@@ -148,6 +148,16 @@ class Dataset(metaclass=abc.ABCMeta):
         operations such as deriving new attributes, renaming attributes, or encoding attribute values.
         """
 
+    def update(self, features: np.ndarray = None, targets: np.ndarray = None):
+
+        if features is not None:
+            self.features = pd.DataFrame(features, columns=self.features.columns)
+            self.features.reset_index(drop=True, inplace=True)
+
+        if targets is not None:
+            self.targets = pd.DataFrame(targets, columns=self.targets.columns)
+            self.targets.reset_index(drop=True, inplace=True)
+
     def save_protected_features(self):
         """
         Saves the protected attributes in the dataset. The protected attributes are stored in a separate DataFrame
@@ -246,13 +256,16 @@ class Dataset(metaclass=abc.ABCMeta):
                                                         shuffle=True,
                                                         stratify=stratify_criteria)
 
-        train_set = update_dataset(self, features=x_train, targets=y_train)
+        train_set = copy.deepcopy(self)
+        train_set.update(features=x_train, targets=y_train)
         train_set.save_protected_features()
 
-        validation_set = update_dataset(self, features=x_val, targets=y_val)
+        validation_set = copy.deepcopy(self)
+        validation_set.update(features=x_val, targets=y_val)
         validation_set.save_protected_features()
 
-        test_set = update_dataset(self, features=x_test, targets=y_test)
+        test_set = copy.deepcopy(self)
+        test_set.update(features=x_test, targets=y_test)
         test_set.save_protected_features()
 
         return train_set, validation_set, test_set
@@ -334,7 +347,7 @@ class Dataset(metaclass=abc.ABCMeta):
 
         def label_encode(df: pd.DataFrame):
             mapping = {}
-            encoded_df = pd.DataFrame(df.copy(), columns=df.columns)
+            encoded_df = pd.DataFrame(df, columns=df.columns)
 
             columns_to_encode = encoded_df.select_dtypes(include=['object']).columns
             for column in columns_to_encode:
@@ -349,57 +362,3 @@ class Dataset(metaclass=abc.ABCMeta):
 
         if targets:
             self.targets, self.targets_mapping = label_encode(self.targets)
-
-
-def update_dataset(dataset: Dataset, features: np.ndarray = None, targets: np.ndarray = None) -> Dataset:
-    """
-    Updates the features and targets of a given dataset.
-
-    Parameters
-    ----------
-    dataset : Dataset
-        The original dataset to be updated.
-    features : np.ndarray, optional
-        The new features to be set in the dataset. If not provided, the original features are kept.
-    targets : np.ndarray, optional
-        The new targets to be set in the dataset. If not provided, the original targets are kept.
-
-    Returns
-    -------
-    updated_dataset : Dataset
-        The updated dataset with the new features and targets.
-    """
-
-    updated_dataset = copy.deepcopy(dataset)
-    if features is not None:
-        updated_dataset.features = pd.DataFrame(features, columns=dataset.features.columns)
-        updated_dataset.features.reset_index(drop=True, inplace=True)
-
-    if targets is not None:
-        updated_dataset.targets = pd.DataFrame(targets, columns=dataset.targets.columns)
-        updated_dataset.targets.reset_index(drop=True, inplace=True)
-
-    return updated_dataset
-
-
-def match_features(dataset_a: Dataset, dataset_b: Dataset) -> Dataset:
-    """
-    Matches the features of two datasets.
-
-    Parameters
-    ----------
-    dataset_a : Dataset
-        The first dataset.
-    dataset_b : Dataset
-        The second dataset.
-
-    Returns
-    -------
-    df : Dataset
-        The second dataset with its features updated to match the features of the first dataset.
-    """
-    df = copy.deepcopy(dataset_b)
-    common_columns = dataset_a.features.columns.intersection(dataset_b.features.columns)
-    df.features = dataset_b.features.drop(columns=dataset_b.features.columns.difference(common_columns))
-
-    return df

@@ -7,49 +7,51 @@ import numpy as np
 import pandas as pd
 from sklearn.pipeline import Pipeline
 
-from datasets import Dataset, update_dataset, match_features
+from constants import PRED_OUTCOME
+from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import bold, dict_to_dataframe, concat_df
+from helpers import dict_to_dataframe
 from evaluation import FairnessEvaluator
 
 
-def get_classifier_predictions(model: object, train_data: Dataset, validation_data: Dataset) -> Dataset:
+def get_classifier_predictions(model: object, train: Dataset, validation: Dataset) -> pd.DataFrame:
 
     pipeline = Pipeline([
         ('classifier', model)
     ], memory=None)
 
-    validation_data = match_features(train_data, validation_data)
+    x_train = train.features.copy()
+    x_val = validation.features.copy()
 
-    x_train = train_data.features.to_numpy().astype(np.float32)
-    y_train = train_data.targets.to_numpy().astype(np.float32).ravel()
+    # match features
+    common = x_train.columns.intersection(x_val.columns)
+    x_val = x_val.drop(columns=x_val.columns.difference(common))
+
+    x_train = x_train.to_numpy().astype(np.float32)
+    y_train = train.targets.to_numpy().astype(np.float32).ravel()
 
     pipeline.fit(x_train, y_train)
 
-    predictions = pipeline.predict(validation_data.features.to_numpy())
-    predicted_data = update_dataset(validation_data, targets=predictions)
+    predictions = pipeline.predict(x_val.to_numpy())
+    predictions = pd.DataFrame(predictions, columns=[PRED_OUTCOME])
 
-    return predicted_data
+    return predictions
 
 
-def fairness_assessment(data: Dataset, predictions: Dataset, sensitive_attribute: str) -> pd.DataFrame:
-    original_attribute_values = data.protected_features[sensitive_attribute]
-
+def fairness_assessment(data: Dataset, predictions: pd.DataFrame, sensitive_attribute: str) -> pd.DataFrame:
     dummy_values = data.get_dummy_protected_feature(sensitive_attribute)
-
-    assessment_df = pd.DataFrame()
+    metrics = pd.DataFrame()
     for value in dummy_values:
-        data.protected_features[sensitive_attribute] = dummy_values[value]
-        fairness_evaluator = FairnessEvaluator(data, predictions, sensitive_attribute)
-        value_df = pd.concat([dict_to_dataframe({'value': value}), fairness_evaluator.evaluate()], axis=1)
-        assessment_df = pd.concat([assessment_df, value_df])
+        df = pd.DataFrame(dummy_values[value], columns=[value])
+        fairness_evaluator = FairnessEvaluator(data.features, data.targets, predictions, df)
+        value_metrics = pd.concat([dict_to_dataframe({'value': value}), fairness_evaluator.evaluate()], axis=1)
+        metrics = pd.concat([metrics, value_metrics])
 
-    data.protected_features[sensitive_attribute] = original_attribute_values
-
-    return assessment_df.reset_index(drop=True)
+    return metrics.reset_index(drop=True)
 
 
-def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predictions_data: Dataset, protected_attribute: str = 'NA') -> pd.DataFrame:
+def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predictions: pd.DataFrame, protected_attribute: str = 'NA') -> pd.DataFrame:
+
     def get_value_counts(df: pd.DataFrame) -> pd.DataFrame:
         ratios = df.value_counts(normalize=True).reset_index()
         attribute, target = ratios.columns[0], ratios.columns[1]
@@ -67,14 +69,12 @@ def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predic
     train_pg_ratios = get_value_counts(train_pg)
     train_pg_ratios = train_pg_ratios.add_suffix('_a_train_set_')
 
-    predicted_pg = pd.concat([predicted_data.protected_features[protected_attribute].apply(map_protected_attribute),
-                              predicted_data.targets], axis=1)
+    predicted_s = predicted_data.protected_features[protected_attribute].apply(map_protected_attribute)
+    predicted_pg = pd.concat([predicted_s, predicted_data.targets], axis=1)
     predicted_pg_ratios = get_value_counts(predicted_pg)
     predicted_pg_ratios = predicted_pg_ratios.add_suffix('_b_predicted_set_')
 
-    predictions_pg = pd.concat(
-        [predictions_data.protected_features[protected_attribute].apply(map_protected_attribute),
-         predictions_data.targets * 1.0], axis=1)
+    predictions_pg = pd.concat([predicted_s, predictions * 1.0], axis=1)
     predictions_pg_ratios = get_value_counts(predictions_pg)
     predictions_pg_ratios = predictions_pg_ratios.add_suffix('_c_predictions_set_')
 
@@ -84,22 +84,19 @@ def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predic
     return df
 
 
-def performance_assessment(data: Dataset, predictions: Dataset) -> pd.DataFrame:
-    performance_evaluator = ModelEvaluator(data, predictions)
-    return performance_evaluator.evaluate().reset_index(drop=True)
-
-
 def classifier_assessment(classifier: object, train_data: Dataset, validation_data: Dataset,
-                          protected_attribute: str = 'NA') -> (pd.Series, pd.DataFrame):
+                          sensitive_attribute: str = 'NA') -> (pd.Series, pd.DataFrame):
 
     predictions = get_classifier_predictions(classifier, train_data, validation_data)
 
     # fairness metrics
-    fairness_metrics = fairness_assessment(validation_data, predictions, protected_attribute)
+
+    fairness_metrics = fairness_assessment(validation_data, predictions, sensitive_attribute)
     n_rows = fairness_metrics.shape[0]
 
     # performance metrics
-    performance_metrics = performance_assessment(validation_data, predictions)
+    evaluator = ModelEvaluator(validation_data.targets, predictions)
+    performance_metrics = evaluator.evaluate().reset_index(drop=True)
     performance_metrics = pd.concat([performance_metrics] * n_rows, ignore_index=True)
 
     # metadata
@@ -109,7 +106,7 @@ def classifier_assessment(classifier: object, train_data: Dataset, validation_da
     metrics = pd.concat([n_rows_metadata, fairness_metrics, performance_metrics], axis=1)
 
     # distribution
-    distribution = distribution_assessment(train_data, validation_data, predictions, protected_attribute)
+    distribution = distribution_assessment(train_data, validation_data, predictions, sensitive_attribute)
     distribution = pd.concat([pd.concat([metadata] * distribution.shape[0], ignore_index=True), distribution], axis=1)
 
-    return predictions.targets, metrics, distribution
+    return predictions, metrics, distribution

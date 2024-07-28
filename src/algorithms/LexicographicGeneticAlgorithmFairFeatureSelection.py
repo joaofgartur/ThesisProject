@@ -1,18 +1,19 @@
-import copy
 import itertools
 import math
 from random import sample
 
 import numpy as np
+import pandas as pd
 from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from algorithms.LGAFFSHelpers import get_random_forest
-from datasets import Dataset, update_dataset
+from constants import PRED_OUTCOME
+from datasets import Dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import get_generator, get_seed, logger
+from helpers import get_generator, get_seed, logger, delete_directory, backup_dataset, restore_dataset
 
 
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
@@ -21,6 +22,8 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
                  max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01,
                  verbose: bool = False):
         super().__init__()
+
+        self.algorithm_name = 'LGAFFS'
 
         self.genetic_parameters = genetic_parameters
 
@@ -33,6 +36,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         self.sensitive_attribute = None
         self.population = None
+        self.cache_path = None
 
         self.evaluated_individuals = {}
 
@@ -100,20 +104,22 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         best_individual_key = max(winners_count, key=winners_count.get)
         return winners[best_individual_key]
 
-    def __performance_fitness(self, data: Dataset, predictions: Dataset):
-        performance_evaluator = ModelEvaluator(data, predictions)
+    def __performance_fitness(self, targets: pd.DataFrame, predictions: pd.DataFrame):
+        performance_evaluator = ModelEvaluator(targets, predictions)
         specificity = performance_evaluator.specificity()
         sensitivity = performance_evaluator.sensitivity()
         performance_metric = math.sqrt(specificity * sensitivity)
         return {'performance': performance_metric}
 
-    def __fairness_fitness(self, data: Dataset, predictions: Dataset):
-        fairness_evaluator = FairnessEvaluator(data, predictions, self.sensitive_attribute)
-        ds = fairness_evaluator.discrimination_score()
-        di = fairness_evaluator.disparate_impact()
-        consistency = fairness_evaluator.consistency(k=3)
-        false_positive_error_rate_balance_score = fairness_evaluator.false_positive_error_rate_balance_score()
-        false_negative_error_rate_balance_score = fairness_evaluator.false_negative_error_rate_balance_score()
+    def __fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
+        df = pd.DataFrame(data.protected_features[self.sensitive_attribute], columns=[self.sensitive_attribute])
+        evaluator = FairnessEvaluator(data.features, data.targets, predictions, df)
+
+        ds = evaluator.discrimination_score()
+        di = evaluator.disparate_impact()
+        consistency = evaluator.consistency(k=3)
+        false_positive_error_rate_balance_score = evaluator.false_positive_error_rate_balance_score()
+        false_negative_error_rate_balance_score = evaluator.false_negative_error_rate_balance_score()
 
         return {
             'di': di,
@@ -132,18 +138,17 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         if np.sum(individual[0]) == 0:
             return [individual[0], {'performance': -1}, {}]
 
-        data = self.__phenotype(data, individual)
+        features = self.__phenotype(data, individual)
 
-        model = get_random_forest(data.features.shape[0])
+        model = get_random_forest(features.shape[0])
 
-        x = data.features.to_numpy().astype(np.float32)
+        x = features.to_numpy().astype(np.float32)
         y = data.targets.to_numpy().astype(np.float32).ravel()
 
-        predictions = cross_val_predict(model, x, y, cv=folds)
-        predicted_data = update_dataset(data, targets=predictions)
+        predictions = pd.DataFrame(cross_val_predict(model, x, y, cv=folds), columns=[PRED_OUTCOME])
 
-        individual = [individual[0], self.__performance_fitness(data, predicted_data),
-                      self.__fairness_fitness(data, predicted_data)]
+        individual = [individual[0], self.__performance_fitness(data.targets, predictions),
+                      self.__fairness_fitness(data, predictions)]
 
         self.evaluated_individuals[genotype] = individual
 
@@ -156,14 +161,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         return population
 
-    def __phenotype(self, data: Dataset, individual: list) -> Dataset:
-        transformed_data = copy.deepcopy(data)
-
+    def __phenotype(self, data: Dataset, individual: list) -> pd.DataFrame:
+        restore_dataset(data, self.cache_path)
         features_to_drop = np.argwhere(individual[0] == 0).ravel()
-        selected_features = data.features.drop(data.features.columns[features_to_drop], axis=1)
-        transformed_data.features = selected_features
 
-        return transformed_data
+        return data.features.drop(data.features.columns[features_to_drop], axis=1)
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.genetic_parameters.individual_size = data.features.shape[1]
@@ -171,7 +173,17 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.sensitive_attribute = sensitive_attribute
         self.evaluated_individuals = {}
 
+        self.cache_path = f'{self.algorithm_name}_{data.name}_{get_seed()}_{self.sensitive_attribute}'
+
+    def __clean_cache__(self):
+        self.evaluated_individuals = None
+        self.population = None
+        delete_directory(self.cache_path)
+
     def transform(self, data: Dataset) -> Dataset:
+
+        backup_dataset(data, self.cache_path)
+
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []
 
@@ -199,6 +211,11 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         if not best_individual:
             data.error_flag = True
+            self.__clean_cache__()
             return data
 
-        return self.__phenotype(data, best_individual)
+        data.features = self.__phenotype(data, best_individual)
+
+        self.__clean_cache__()
+
+        return data

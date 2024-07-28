@@ -3,8 +3,6 @@ Author: João Artur
 Project: Master's Thesis
 Last edited: 20-11-2023
 """
-
-import copy
 import logging
 from typing import Tuple
 
@@ -199,17 +197,19 @@ class Massaging(Algorithm):
             - If the sensitive attribute is not present in the dataset.
         """
 
-        transformed_dataset = copy.deepcopy(data)
-
         for _ in range(self.m):
 
             pr_index = self.promotion_candidates.index[0]
-            transformed_dataset.targets.iloc[pr_index] = POSITIVE_OUTCOME
+            data.targets.iloc[pr_index] = POSITIVE_OUTCOME
 
             dem_index = self.demotion_candidates.index[0]
-            transformed_dataset.targets.iloc[dem_index] = NEGATIVE_OUTCOME
+            data.targets.iloc[dem_index] = NEGATIVE_OUTCOME
 
             self.promotion_candidates = self.promotion_candidates.drop(index=pr_index)
             self.demotion_candidates = self.demotion_candidates.drop(index=dem_index)
 
-        return transformed_dataset
+        self.promotion_candidates = None
+        self.demotion_candidates = None
+        self.m = None
+
+        return data

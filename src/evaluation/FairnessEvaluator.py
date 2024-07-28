@@ -8,8 +8,6 @@ import numpy as np
 import pandas as pd
 
 from sklearn.neighbors import NearestNeighbors
-
-from datasets import Dataset
 from helpers import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
                        TRUE_OUTCOME, PRED_OUTCOME)
@@ -17,20 +15,17 @@ from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTC
 
 class FairnessEvaluator(object):
 
-    def __init__(self, original_data: Dataset, predicted_data: Dataset, sensitive_attribute: str):
+    def __init__(self, features: pd.DataFrame, targets: pd.DataFrame, predictions: pd.DataFrame,
+                 sensitive_attribute: pd.DataFrame):
 
-        if sensitive_attribute in original_data.features:
-            x = original_data.features.drop(columns=[sensitive_attribute])
-        else:
-            x = original_data.features
+        x = features.drop(columns=[sensitive_attribute.columns[0]]) if sensitive_attribute.columns[0] in features \
+            else features
 
-        s = original_data.protected_features[sensitive_attribute]
+        self.sensitive_attribute = sensitive_attribute.columns[0]
+        self.data = pd.concat([x, sensitive_attribute, targets.squeeze().rename(TRUE_OUTCOME),
+                               predictions.squeeze().rename(PRED_OUTCOME)], axis=1)
 
-        y = original_data.targets.squeeze().rename(TRUE_OUTCOME)
-        y_pred = predicted_data.targets.squeeze().rename(PRED_OUTCOME)
-
-        self.sensitive_attribute = sensitive_attribute
-        self.data = pd.concat([x, s, y, y_pred], axis=1)
+        del features
 
     def __get_counts(self, predicted_outcome, true_outcome, group_type, sensitive_attribute):
         filtered_data = self.data[(self.data[PRED_OUTCOME] == predicted_outcome) &

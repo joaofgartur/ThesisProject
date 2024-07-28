@@ -1,12 +1,12 @@
 import copy
+import os
 
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler
 
 from algorithms.Algorithm import Algorithm
 from constants import NUM_DECIMALS
-from datasets import Dataset, update_dataset
-from helpers import logger, write_dataframe_to_csv, dict_to_dataframe, round_df
+from datasets import Dataset
+from helpers import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed
 from .assessment import classifier_assessment
 
 
@@ -15,197 +15,160 @@ class Pipeline:
     def __init__(self, dataset: Dataset,
                  unbiasing_algorithms: [Algorithm],
                  surrogate_classifiers: list[object],
-                 test_classifier: object,
+                 target_classifier: object,
                  num_iterations: int = 1) -> None:
 
         self.dataset = dataset
+
         self.train_set = None
         self.validation_set = None
         self.test_set = None
 
         self.unbiasing_algorithms = unbiasing_algorithms
-
         self.surrogate_classifiers = surrogate_classifiers
-        self.test_classifier = test_classifier
-
+        self.target_classifier = target_classifier
         self.num_iterations = num_iterations
 
-        self.unbiasing_algorithm: str = 'NA'
-        self.set: str = 'NA'
-        self.results_save_path = 'results'
-
-    def __scale__(self, scaler: MinMaxScaler):
-
-        scaler.fit(self.train_set.features)
-
-        self.train_data = update_dataset(self.train_set, features=scaler.transform(self.train_set.features))
-        self.validation_data = update_dataset(self.validation_set,
-                                              features=scaler.transform(self.validation_set.features))
-        self.test_data = update_dataset(self.test_set, features=scaler.transform(self.test_set.features))
+        self.metadata = {'algorithm': 'NA', 'set': 'NA', 'save_path': 'results', 'sensitive_attribute': 'NA'}
 
     def __pre_intervention__(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
         logger.info("[PRE-INTERVENTION] Assessment.")
-
-        all_metrics_df = pd.DataFrame()
-        all_distribution_df = pd.DataFrame()
-        metrics_df, distribution_df = self.__attribute_assessment(train_data, protected_attribute)
-        all_metrics_df = pd.concat([all_metrics_df, metrics_df])
-        all_distribution_df = pd.concat([all_distribution_df, distribution_df])
-
-        return all_metrics_df, all_distribution_df
+        return self.__assess_sensitive_attribute(train_data, protected_attribute)
 
     def __post_intervention__(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
         logger.info("[POST-INTERVENTION] Assessment.")
-        return self.__attribute_assessment(train_data, protected_attribute)
+        return self.__assess_sensitive_attribute(train_data, protected_attribute)
 
-    def __handle_correction_error__(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
+    def __handle_correction_error__(self, train_data: Dataset, protected_attribute: str) -> (
+    pd.DataFrame, pd.DataFrame):
         logger.info("[ERROR] Correction error handling.")
-        metrics, distribution = self.__attribute_assessment(train_data, protected_attribute)
-
-        metrics_columns = [col for col in metrics.columns if col.startswith('fairness') or col.startswith('performance')]
-        metrics[metrics_columns] = 0.0
-
+        metrics, distribution = self.__assess_sensitive_attribute(train_data, protected_attribute)
+        columns = [col for col in metrics.columns if col.startswith('fairness') or col.startswith('performance')]
+        metrics[columns] = 0.0
         metrics['error'], distribution['error'] = True, True
 
         return metrics, distribution
 
-    def __attribute_assessment(self, train_data: Dataset, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
-        self.set = 'Validation'
-        val_surrogate_metrics, val_surrogate_distro = self.__assessment__(train_data, self.validation_set,
-                                                                          protected_attribute)
-        val_final_metrics, val_final_distro = self.__assessment__(train_data, self.validation_set, protected_attribute,
-                                                                  True)
+    def __assess_sensitive_attribute(self, train: Dataset, sensitive_attribute: str) -> (pd.DataFrame, pd.DataFrame):
 
-        self.set = 'Test'
-        test_surrogate_metrics, test_surrogate_distro = self.__assessment__(train_data, self.test_set,
-                                                                            protected_attribute)
-        test_final_metrics, test_final_distro = self.__assessment__(train_data, self.test_set, protected_attribute,
-                                                                    True)
+        def assess(to_predict: Dataset, test: bool = False) -> (pd.DataFrame, pd.DataFrame):
+            return self.__assessment__(train, to_predict, sensitive_attribute, test)
 
-        metrics_df = pd.concat([val_surrogate_metrics, test_surrogate_metrics, val_final_metrics, test_final_metrics])
-        distribution_df = pd.concat([val_surrogate_distro, test_surrogate_distro, val_final_distro, test_final_distro])
+        self.metadata['set'] = 'Validation'
+        val_metrics, val_distro = assess(self.validation_set)
+        val_final_metrics, val_final_distro = assess(self.validation_set, True)
 
-        return metrics_df, distribution_df
+        self.metadata['set'] = 'Test'
+        test_metrics, test_distro = assess(self.test_set)
+        test_final_metrics, test_final_distro = assess(self.test_set, True)
+
+        metrics = pd.concat([val_metrics, test_metrics, val_final_metrics, test_final_metrics])
+        distribution = pd.concat([val_distro, test_distro, val_final_distro, test_final_distro])
+
+        return metrics, distribution
 
     def __assessment__(self,
-                       train_set: Dataset,
-                       validation_set: Dataset,
-                       protected_attribute: str,
-                       test_assessment: bool = False) -> (pd.DataFrame, pd.DataFrame):
-
-        def classifier_assessment_wrapper(_args: tuple) -> (pd.DataFrame, pd.DataFrame):
-            _classifier, _train_data, _validation_data, _protected_attribute = _args
-            _, _metrics, _distribution = classifier_assessment(_classifier, _train_data, _validation_data,
-                                                               _protected_attribute)
-
-            return _metrics, _distribution
+                       train: Dataset,
+                       validation: Dataset,
+                       sensitive_attribute: str,
+                       target_classifier: bool = False) -> (pd.DataFrame, pd.DataFrame):
 
         # Surrogate Classifiers
-        pipeline_details = {
+        metadata = {
             'dataset': self.dataset.name,
-            'attribute': protected_attribute,
-            'class': 'NA',
-            'algorithm': self.unbiasing_algorithm,
-            'set': self.set,
-            'num_iterations': 0,
+            'attribute': sensitive_attribute,
+            'group': 'NA',
+            'algorithm': self.metadata['algorithm'],
+            'set': self.metadata['set'],
+            'iterations': 0,
             'error': False,
-            'classifier_type': 'Test' if test_assessment else 'Surrogate',
+            'classifier_type': 'Target' if target_classifier else 'Surrogate',
         }
+        metadata_row = dict_to_dataframe(metadata)
 
-        classifiers = [self.test_classifier] if test_assessment else self.surrogate_classifiers
+        classifiers = [self.target_classifier] if target_classifier else self.surrogate_classifiers
 
-        args_list = [(classifier, train_set, validation_set, protected_attribute) for classifier in classifiers]
-        all_metrics, all_distributions = pd.DataFrame(), pd.DataFrame()
-        for args in args_list:
-            metrics, distribution = classifier_assessment_wrapper(args)
-            all_metrics = pd.concat([all_metrics, metrics]).reset_index(drop=True)
-            all_distributions = pd.concat([all_distributions, distribution]).reset_index(drop=True)
+        metrics, distributions = pd.DataFrame(), pd.DataFrame()
+        for classifier in classifiers:
+            x = copy.deepcopy(train)
+            y = copy.deepcopy(validation)
+            _, c_metrics, c_distro = classifier_assessment(classifier, x, y, sensitive_attribute)
+            metrics = pd.concat([metrics, c_metrics]).reset_index(drop=True)
+            distributions = pd.concat([distributions, c_distro]).reset_index(drop=True)
 
-        pipeline_details_df = dict_to_dataframe(pipeline_details)
+        metrics = pd.concat([pd.concat([metadata_row] * len(metrics), ignore_index=True), metrics],
+                            axis=1).reset_index(drop=True)
+        distributions = (pd.concat([pd.concat([metadata_row] * len(distributions), ignore_index=True),
+                                    distributions], axis=1).reset_index(drop=True))
 
-        pipeline_metrics_df = pd.concat([pipeline_details_df] * len(all_metrics), ignore_index=True)
-        pipeline_metrics_df = pd.concat([pipeline_metrics_df, all_metrics], axis=1).reset_index(drop=True)
+        return metrics, distributions
 
-        pipeline_distribution_df = pd.concat([pipeline_details_df] * len(all_distributions), ignore_index=True)
-        pipeline_distribution_df = (pd.concat([pipeline_distribution_df, all_distributions], axis=1)
-                                    .reset_index(drop=True))
-
-        return pipeline_metrics_df, pipeline_distribution_df
-
-    def __set_protected_feature__(self, unbiasing_algorithm, dataset, protected_attribute, value):
-        if unbiasing_algorithm.is_binary:
-            dataset.set_feature(protected_attribute, dataset.get_dummy_protected_feature(protected_attribute)[value])
+    def __set_sensitive_attribute(self, algorithm: Algorithm, data: Dataset, sensitive_attribute: str, key: str) \
+            -> Dataset:
+        if algorithm.is_binary:
+            data.set_feature(sensitive_attribute, data.get_dummy_protected_feature(sensitive_attribute)[key])
         else:
-            dataset.set_feature(protected_attribute, pd.DataFrame(dataset.get_protected_feature(protected_attribute),
-                                                                  columns=[protected_attribute])[value])
-        return dataset
+            data.set_feature(sensitive_attribute, pd.DataFrame(data.get_protected_feature(sensitive_attribute),
+                                                               columns=[sensitive_attribute])[key])
+        return data
 
     def __set_protected_group_and_num_iterations__(self, metrics_df, distribution_df, protected_group, iteration):
-        metrics_df['class'], distribution_df['class'] = ([protected_group] * metrics_df.shape[0],
-                                                                             [protected_group] * distribution_df.shape[0])
-        metrics_df['num_iterations'], distribution_df['num_iterations'] = ([iteration] * metrics_df.shape[0],
-                                                                           [iteration] * distribution_df.shape[0])
+        metrics_df['group'], distribution_df['group'] = ([protected_group] * metrics_df.shape[0],
+                                                         [protected_group] * distribution_df.shape[0])
+        metrics_df['iterations'], distribution_df['iterations'] = ([iteration] * metrics_df.shape[0],
+                                                                   [iteration] * distribution_df.shape[0])
         return metrics_df, distribution_df
 
-    def __bias_reduction__(self, train_set: Dataset, validation_set: Dataset,
-                           unbiasing_algorithm: Algorithm, protected_attribute: str) -> (pd.DataFrame, pd.DataFrame):
+    def __bias_reduction__(self, train: Dataset, validation: Dataset,
+                           algorithm: Algorithm, sensitive_attribute: str):
 
-        unbiasing_algorithm_type = 'binary' if unbiasing_algorithm.is_binary else 'multi-class'
-        logger.info(f'[INTERVENTION] Reducing bias for {unbiasing_algorithm_type} '
-                    f'sensitive attribute {protected_attribute} with unbiasing algorithm'
-                    f' {unbiasing_algorithm.__class__.__name__}.')
+        logger.info(f'[INTERVENTION] Reducing bias for sensitive attribute {sensitive_attribute} with'
+                    f' algorithm {algorithm.__class__.__name__}.')
 
-        metrics_df, distro_df = pd.DataFrame(), pd.DataFrame()
-        if unbiasing_algorithm.is_binary:
-            attribute_values = train_set.get_dummy_protected_feature(protected_attribute)
+        if algorithm.is_binary:
+            protected_groups = train.get_dummy_protected_feature(sensitive_attribute)
         else:
-            attribute_values = pd.DataFrame(train_set.get_protected_feature(protected_attribute),
-                                            columns=[protected_attribute])
+            protected_groups = pd.DataFrame(train.get_protected_feature(sensitive_attribute),
+                                            columns=[sensitive_attribute])
 
-        for value in attribute_values:
-            if unbiasing_algorithm.is_binary:
+        for group in protected_groups:
+
+            if algorithm.is_binary:
                 logger.info(
-                    f"[INTERVENTION] Correcting bias w.r.t. attribute {protected_attribute} for {value} with "
-                    f"{unbiasing_algorithm.__class__.__name__}")
+                    f"[INTERVENTION] Correcting bias w.r.t. attribute {sensitive_attribute} for {group} with "
+                    f"{algorithm.__class__.__name__}")
 
-            transformed_dataset = copy.deepcopy(train_set)
+            transformed = copy.deepcopy(train)
 
-            if unbiasing_algorithm.needs_auxiliary_data:
-                unbiasing_algorithm.auxiliary_data = validation_set
+            if algorithm.needs_auxiliary_data:
+                algorithm.auxiliary_data = validation
 
             for i in range(self.num_iterations):
                 logger.info(f"[INTERVENTION] Iteration {i + 1} / {self.num_iterations}.")
-                unbiasing_algorithm.iteration_number = i + 1
-                transformed_dataset = self.__set_protected_feature__(unbiasing_algorithm, transformed_dataset,
-                                                                     protected_attribute, value)
+                transformed = self.__set_sensitive_attribute(algorithm, transformed,
+                                                             sensitive_attribute, group)
 
                 try:
-                    unbiasing_algorithm.fit(transformed_dataset, protected_attribute)
-                    transformed_dataset = unbiasing_algorithm.transform(transformed_dataset)
+                    algorithm.fit(transformed, sensitive_attribute)
+                    transformed = algorithm.transform(transformed)
                 except ValueError:
                     logger.error(
-                        f'[INTERVENTION] Error occurred bias correction w.r.t. attribute {protected_attribute} '
-                        f'for {value} with "{unbiasing_algorithm.__class__.__name__}"')
-                    metrics, distribution = self.__handle_correction_error__(train_set, protected_attribute)
+                        f'[INTERVENTION] Error occurred bias correction w.r.t. attribute {sensitive_attribute} '
+                        f'for {group} with "{algorithm.__class__.__name__}"')
+                    metrics, distribution = self.__handle_correction_error__(train, sensitive_attribute)
                 else:
-                    metrics, distribution = self.__post_intervention__(transformed_dataset, protected_attribute)
+                    metrics, distribution = self.__post_intervention__(transformed, sensitive_attribute)
 
-                metrics, distribution = self.__set_protected_group_and_num_iterations__(metrics, distribution, value,
+                metrics, distribution = self.__set_protected_group_and_num_iterations__(metrics, distribution, group,
                                                                                         i + 1)
-                self.save_metrics_and_distribution(metrics, distribution, unbiasing_algorithm)
+                self.save_metrics_and_distribution(metrics, distribution)
 
-        return metrics_df, distro_df
+            del transformed, metrics, distribution
 
-    def save_metrics_and_distribution(self, metrics: pd.DataFrame, distribution: pd.DataFrame,
-                                      unbiasing_algorithm: Algorithm) -> None:
-
-        metrics_path = f'{self.results_save_path}/{unbiasing_algorithm.__class__.__name__}/metrics'
-        self.save(metrics, metrics_path)
-
-        distribution_path = f'{self.results_save_path}/{unbiasing_algorithm.__class__.__name__}/distribution'
+    def save_metrics_and_distribution(self, metrics: pd.DataFrame, distribution: pd.DataFrame) -> None:
+        self.save(metrics, os.path.join(self.metadata['save_path'], 'metrics'))
         distribution.fillna(0.0, inplace=True)
-
-        self.save(distribution, distribution_path)
+        self.save(distribution, os.path.join(self.metadata['save_path'], 'distributions'))
 
     def run(self) -> None:
         try:
@@ -213,22 +176,20 @@ class Pipeline:
 
             for sensitive_attribute in self.dataset.protected_features_names:
 
+                self.metadata['sensitive_attribute'] = sensitive_attribute
+                self.metadata['algorithm'] = 'NA'
+
                 # split
                 self.train_set, self.validation_set, self.test_set = self.dataset.split([sensitive_attribute])
 
-                # scale
-                self.__scale__(MinMaxScaler())
-
                 # pre-intervention
                 metrics, distribution = self.__pre_intervention__(self.train_set, sensitive_attribute)
-
-                for unbiasing_algorithm in self.unbiasing_algorithms:
-                    self.save_metrics_and_distribution(metrics, distribution, unbiasing_algorithm)
+                self.save_metrics_and_distribution(metrics, distribution)
+                del metrics, distribution
 
                 # correction
                 for unbiasing_algorithm in self.unbiasing_algorithms:
-                    self.unbiasing_algorithm = unbiasing_algorithm.__class__.__name__
-
+                    self.metadata['algorithm'] = unbiasing_algorithm.__class__.__name__
                     self.__bias_reduction__(self.train_set, self.validation_set, unbiasing_algorithm,
                                             sensitive_attribute)
 
@@ -239,8 +200,9 @@ class Pipeline:
             raise
 
     def save(self, df: pd.DataFrame, path: str = 'results') -> None:
-        write_dataframe_to_csv(df=round_df(df, NUM_DECIMALS), filename=self.dataset.name, path=path)
+        filename = f'{self.dataset.name}_{get_seed()}_{self.metadata["sensitive_attribute"]}.csv'
+        write_dataframe_to_csv(df=round_df(df, NUM_DECIMALS), filename=filename, path=path)
 
     def run_and_save(self, path: str = 'results') -> None:
-        self.results_save_path = path
+        self.metadata['save_path'] = path
         self.run()

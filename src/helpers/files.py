@@ -6,6 +6,20 @@ import pandas as pd
 from .random_numbers import get_seed
 
 
+def backup_dataset(dataset, path):
+    seed = get_seed()
+    write_dataframe_to_csv(dataset.features, f'{seed}_features', path)
+    write_dataframe_to_csv(dataset.targets, f'{seed}_targets', path)
+    write_dataframe_to_csv(dataset.protected_features, f'{seed}_protected_features', path)
+
+
+def restore_dataset(dataset, path):
+    seed = get_seed()
+    dataset.features = read_csv_to_dataframe(f'{seed}_features', path)
+    dataset.targets = read_csv_to_dataframe(f'{seed}_targets', path)
+    dataset.protected_features = read_csv_to_dataframe(f'{seed}_protected_features', path)
+
+
 def extract_filename(filename):
     filename = filename.split(os.path.sep)[-1]
     return filename.split('.')[0].upper()
@@ -26,8 +40,6 @@ def delete_directory(path: str) -> None:
 
 
 def write_dataframe_to_csv(df: pd.DataFrame, filename: str, path: str) -> None:
-    filename = f'seed_{get_seed()}_{filename}.csv'
-
     if os.path.exists(path) & os.path.isdir(path):
         path = os.path.join(path, filename)
     else:
@@ -41,6 +53,5 @@ def write_dataframe_to_csv(df: pd.DataFrame, filename: str, path: str) -> None:
 
 
 def read_csv_to_dataframe(filename: str, path: str) -> pd.DataFrame:
-    filename = f'seed_{get_seed()}_{filename}.csv'
     path = os.path.join(path, filename)
     return pd.read_csv(path)

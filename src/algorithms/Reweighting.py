@@ -8,7 +8,7 @@ import pandas as pd
 from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
 
 from algorithms.Algorithm import Algorithm
-from datasets import Dataset, update_dataset
+from datasets import Dataset
 from helpers import convert_to_standard_dataset, get_generator
 from constants import PRIVILEGED, UNPRIVILEGED
 
@@ -78,10 +78,10 @@ class Reweighing(Algorithm):
         resampled_data, indexes = self.__resample(resampling_data, normalized_weights)
         resampled_features, resampled_targets = resampled_data[:, :-1], resampled_data[:, -1]
 
-        transformed_dataset = update_dataset(dataset=data, features=resampled_features, targets=resampled_targets)
+        data.update(features=resampled_features, targets=resampled_targets)
 
-        sampled_values = transformed_dataset.protected_features.loc[indexes]
-        new_sensitive_values = pd.concat([transformed_dataset.get_protected_features(), sampled_values]).reset_index(drop=True)
-        transformed_dataset.protected_features = new_sensitive_values
+        sampled_values = data.protected_features.loc[indexes]
+        new_sensitive_values = pd.concat([data.get_protected_features(), sampled_values]).reset_index(drop=True)
+        data.protected_features = new_sensitive_values
 
-        return transformed_dataset
+        return data

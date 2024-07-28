@@ -34,8 +34,8 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.sensitive_attribute = None
         self.population = None
 
-    def __fitness_metrics(self, data: Dataset, predictions: Dataset, sensitive_attribute):
-        fairness_evaluator = FairnessEvaluator(data, predictions, sensitive_attribute)
+    def __fitness_metrics(self, data: Dataset, predictions: pd.DataFrame, sensitive_attribute):
+        fairness_evaluator = FairnessEvaluator(data.features, data.targets, predictions, sensitive_attribute)
 
         ds = fairness_evaluator.discrimination_score()
         di = fairness_evaluator.disparate_impact()
@@ -51,7 +51,7 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             'false_negative_error_rate_balance_score': false_negative_error_rate_balance_score
         }
 
-    def __fairness_fitness(self, data: Dataset, predictions: Dataset):
+    def __fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
 
         original_attribute_values = data.protected_features[self.sensitive_attribute]
 
@@ -60,8 +60,9 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         metrics = pd.DataFrame()
         for value in dummy_values:
             data.protected_features[self.sensitive_attribute] = dummy_values[value]
+            df = pd.DataFrame(dummy_values[value], columns=[value])
             value_df = pd.concat([dict_to_dataframe({'value': value}),
-                                  self.__fitness_metrics(data, predictions, self.sensitive_attribute)], axis=1)
+                                  self.__fitness_metrics(data, predictions, df)], axis=1)
             metrics = pd.concat([metrics, value_df])
 
         data.protected_features[self.sensitive_attribute] = original_attribute_values

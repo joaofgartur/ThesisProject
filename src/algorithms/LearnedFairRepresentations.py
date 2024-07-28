@@ -1,10 +1,8 @@
-import copy
-
 from aif360.algorithms.preprocessing import LFR
 
 from algorithms.Algorithm import Algorithm
 from constants import PRIVILEGED, UNPRIVILEGED
-from datasets import Dataset, update_dataset
+from datasets import Dataset
 from helpers import (convert_to_standard_dataset, get_seed, logger, )
 
 import numpy as np
@@ -60,15 +58,11 @@ class LearnedFairRepresentations(Algorithm):
     def transform(self, data: Dataset, ) -> Dataset:
         standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 
-        transformed_dataset = copy.deepcopy(data)
         try:
             transformed_data = self.transformer.transform(standard_data)
-            transformed_dataset = update_dataset(dataset=data,
-                                                 features=transformed_data.features,
-                                                 targets=transformed_data.labels)
+            data.update(transformed_data.features, transformed_data.labels)
+            self.__check_error(data)
         except ValueError:
-            transformed_dataset.error_flag = True
+            raise ValueError("Only one class in the target data.")
 
-        transformed_dataset.error_flag = self.__check_error(transformed_dataset)
-
-        return transformed_dataset
+        return data
