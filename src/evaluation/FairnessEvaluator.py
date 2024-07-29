@@ -79,11 +79,9 @@ class FairnessEvaluator(object):
         x = data[:, :-2]
         y_pred = data[:, -1]
 
-        nbrs = NearestNeighbors(n_neighbors=k, algorithm='auto')
-
-        x_sparse = csr_matrix(x)
-        nbrs.fit(x_sparse)
-        indices = nbrs.kneighbors(x_sparse, return_distance=False)
+        nbrs = NearestNeighbors(n_neighbors=k, algorithm='ball_tree')
+        nbrs.fit(x)
+        indices = nbrs.kneighbors(x, return_distance=False)
 
         y_pred_knn = y_pred[indices]
         mean_y_pred_knn = np.mean(y_pred_knn, axis=1)
