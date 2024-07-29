@@ -14,7 +14,7 @@ from constants import PRED_OUTCOME
 from datasets import Dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import get_generator, get_seed, logger, delete_directory, backup_dataset, restore_dataset
+from helpers import get_generator, get_seed, logger
 
 
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
@@ -179,7 +179,6 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
     def __clean_cache__(self):
         self.evaluated_individuals = None
         self.population = None
-        delete_directory(self.cache_path)
 
     def transform(self, data: Dataset) -> Dataset:
 
