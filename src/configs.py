@@ -1,13 +1,13 @@
 import configparser
 from enum import Enum
 
-from algorithms import GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover, \
-    LearnedFairRepresentations, LexicographicGeneticAlgorithmFairFeatureSelection, FairGenes
+from algorithms import (GeneticBasicParameters, Massaging, Reweighing, DisparateImpactRemover,
+                        LexicographicGeneticAlgorithmFairFeatureSelection, FairGenes)
 from algorithms.MulticlassLexicographicGeneticAlgorithmFairFeatureSelection import \
     MulticlassLexicographicGeneticAlgorithmFairFeatureSelection
 from datasets import DatasetConfig, Dataset, GermanCredit, AdultIncome
 from datasets.LawSchoolAdmissions import LawSchoolAdmissions
-from helpers import logger, set_seed, get_seed, set_gpu_device, set_num_threads, set_gpu_allocated_memory, \
+from helpers import logger, set_seed, get_seed, set_gpu_device, set_gpu_allocated_memory, \
     get_surrogate_classifiers, enable_gpu_acceleration, disable_gpu_acceleration
 
 
@@ -35,8 +35,6 @@ def get_global_configs(configs_file: str) -> tuple[str, str, str, int]:
             set_seed(seed)
 
         set_gpu_acceleration(global_configs)
-
-        set_num_threads(global_configs.getint('MULTITHREADING', 'num_thread_workers'))
 
         return dataset_configs, algorithms_configs, results_path, num_iterations
 

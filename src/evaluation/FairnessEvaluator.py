@@ -80,7 +80,7 @@ class FairnessEvaluator(object):
         x = data[:, :-2]
         y_pred = data[:, -1]
 
-        model = NearestNeighbors(n_neighbors=k+1, algorithm='auto').fit(x)
+        model = NearestNeighbors(n_neighbors=k+1, algorithm='kd_tree').fit(x)
         neighbors = model.kneighbors(x, return_distance=False)[:, 1:]
 
         y_pred_knn = y_pred[neighbors]
