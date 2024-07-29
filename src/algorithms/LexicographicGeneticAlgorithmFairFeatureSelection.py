@@ -1,3 +1,4 @@
+
 import itertools
 import math
 from random import sample
@@ -162,10 +163,10 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         return population
 
     def __phenotype(self, data: Dataset, individual: list) -> pd.DataFrame:
-        restore_dataset(data, self.cache_path)
+        features = data.features.copy()
         features_to_drop = np.argwhere(individual[0] == 0).ravel()
 
-        return data.features.drop(data.features.columns[features_to_drop], axis=1)
+        return features.drop(data.features.columns[features_to_drop], axis=1)
 
     def fit(self, data: Dataset, sensitive_attribute: str):
         self.genetic_parameters.individual_size = data.features.shape[1]
@@ -181,8 +182,6 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         delete_directory(self.cache_path)
 
     def transform(self, data: Dataset) -> Dataset:
-
-        backup_dataset(data, self.cache_path)
 
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []

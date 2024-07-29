@@ -6,8 +6,9 @@ Last edited: 20-11-2023
 
 import numpy as np
 import pandas as pd
-
+from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
+
 from helpers import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
                        TRUE_OUTCOME, PRED_OUTCOME)
@@ -17,7 +18,6 @@ class FairnessEvaluator(object):
 
     def __init__(self, features: pd.DataFrame, targets: pd.DataFrame, predictions: pd.DataFrame,
                  sensitive_attribute: pd.DataFrame):
-
         x = features.drop(columns=[sensitive_attribute.columns[0]]) if sensitive_attribute.columns[0] in features \
             else features
 
@@ -54,7 +54,6 @@ class FairnessEvaluator(object):
         return diff(rate_privileged, rate_unprivileged)
 
     def disparate_impact(self):
-
         unprivileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
                                                               self.sensitive_attribute: UNPRIVILEGED})
         privileged_cp = conditional_probability(self.data, {PRED_OUTCOME: POSITIVE_OUTCOME,
@@ -80,13 +79,18 @@ class FairnessEvaluator(object):
         x = data[:, :-2]
         y_pred = data[:, -1]
 
-        model = NearestNeighbors(n_neighbors=k+1, algorithm='kd_tree').fit(x)
-        neighbors = model.kneighbors(x, return_distance=False)[:, 1:]
+        nbrs = NearestNeighbors(n_neighbors=k, algorithm='auto')
 
-        y_pred_knn = y_pred[neighbors]
+        x_sparse = csr_matrix(x)
+        nbrs.fit(x_sparse)
+        indices = nbrs.kneighbors(x_sparse, return_distance=False)
+
+        y_pred_knn = y_pred[indices]
         mean_y_pred_knn = np.mean(y_pred_knn, axis=1)
 
-        return diff(1, ratio(np.sum(np.abs(y_pred - mean_y_pred_knn)), data.shape[0]))
+        consistency = diff(1, ratio(np.sum(np.abs(y_pred - mean_y_pred_knn)), data.shape[0]))
+
+        return consistency
 
     def false_positive_error_rate_balance_score(self):
         return self.__compute_false_error_balance_score(POSITIVE_OUTCOME, NEGATIVE_OUTCOME)
@@ -95,7 +99,6 @@ class FairnessEvaluator(object):
         return self.__compute_false_error_balance_score(NEGATIVE_OUTCOME, POSITIVE_OUTCOME)
 
     def evaluate(self):
-
         result = {
             'fairness_disparate_impact': self.disparate_impact(),
             'fairness_discrimination_score': self.discrimination_score(),
