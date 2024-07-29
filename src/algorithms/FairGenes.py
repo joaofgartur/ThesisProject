@@ -287,8 +287,6 @@ class FairGenes(Algorithm):
         flattened_genotype = self.__flatten_genotype(individual[0])
         self.valid_individuals[flattened_genotype] = True
 
-        print(f'Individual: {individual[0]}')
-
         longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
         if longest_matching_genotype is None:
             genotype_to_decode = individual[0]
@@ -331,10 +329,6 @@ class FairGenes(Algorithm):
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
         self.__save_individual__(individual, transformed_data)
-
-        print(transformed_data.features)
-        print(transformed_data.targets)
-        print(transformed_data.protected_features)
 
         return transformed_data
 
