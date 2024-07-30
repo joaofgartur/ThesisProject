@@ -279,7 +279,7 @@ class FairGenes(Algorithm):
     def __find_longest_genotype_match(self, flattened_genotype) -> str | None:
         sorted_genotypes = sorted(self.evaluated_individuals.keys(), key=len, reverse=True)
         for key in sorted_genotypes:
-            if flattened_genotype.startswith(key):
+            if flattened_genotype.startswith(key) and len(key) < len(flattened_genotype):
                 return str(key)
 
     def __phenotype(self, data: Dataset, individual):
@@ -288,9 +288,7 @@ class FairGenes(Algorithm):
         self.valid_individuals[flattened_genotype] = True
 
         longest_matching_genotype = self.__find_longest_genotype_match(flattened_genotype)
-        if longest_matching_genotype is None:
-            genotype_to_decode = individual[0]
-        else:
+        if longest_matching_genotype is not None and not self.genetic_search_flag:
             match_length = len(self.evaluated_individuals[longest_matching_genotype][0])
 
             if not self.valid_individuals[longest_matching_genotype]:
@@ -299,6 +297,8 @@ class FairGenes(Algorithm):
 
             genotype_to_decode = individual[0][match_length:]
             data = self.__fetch_individual__(self.evaluated_individuals[longest_matching_genotype], data)
+        else:
+            genotype_to_decode = individual[0]
 
         transformed_data = data
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
@@ -387,6 +387,7 @@ class FairGenes(Algorithm):
         return individual
 
     def __evaluate_population(self, dataset, population):
+        population = sorted(population, key=lambda x: len(x[0]))
 
         for j, individual in enumerate(population):
 
