@@ -6,6 +6,7 @@ Last edited: 20-11-2023
 
 import numpy as np
 import pandas as pd
+from memory_profiler import profile
 from scipy.sparse import csr_matrix
 from sklearn.neighbors import NearestNeighbors
 
@@ -76,8 +77,8 @@ class FairnessEvaluator(object):
     def consistency(self, k: int = 3):
         data = self.data.to_numpy()
 
-        x = data[:, :-2]
-        y_pred = data[:, -1]
+        x = np.ascontiguousarray(self.data.drop(columns=[TRUE_OUTCOME, PRED_OUTCOME]).to_numpy())
+        y_pred = self.data.to_numpy()[:, -1]
 
         nbrs = NearestNeighbors(n_neighbors=k, algorithm='ball_tree')
         nbrs.fit(x)

@@ -14,6 +14,10 @@ from helpers import dict_to_dataframe
 from evaluation import FairnessEvaluator
 
 
+from sklearnex import patch_sklearn
+patch_sklearn()
+
+
 def get_classifier_predictions(model: object, train: Dataset, validation: Dataset) -> pd.DataFrame:
 
     pipeline = Pipeline([
