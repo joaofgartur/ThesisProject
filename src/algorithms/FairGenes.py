@@ -8,7 +8,6 @@ import numpy as np
 from random import sample
 
 import pandas as pd
-from memory_profiler import profile
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
@@ -49,7 +48,6 @@ class FairGenes(Algorithm):
         self.verbose = verbose
         self.evaluated_individuals = {}
         self.valid_individuals = {}
-        self.cached = {}
 
     def __do_genetic_search(self):
         num_algorithms = len(self.unbiasing_algorithms_pool)
@@ -146,7 +144,6 @@ class FairGenes(Algorithm):
         self.evaluated_individuals = None
         self.valid_individuals = None
         self.decoder = None
-        self.cached = None
         delete_directory(self.cache_path)
 
     def __compute_population_average_fitness(self, population):
@@ -279,37 +276,17 @@ class FairGenes(Algorithm):
             mate_pool.append(winner)
         return mate_pool
 
-    def __find_longest_genotype_match(self, flattened_genotype) -> str | None:
-        sorted_genotypes = sorted(self.cached.keys(), key=len, reverse=True)
-        for key in sorted_genotypes:
-            if flattened_genotype.startswith(key) and len(key) < len(flattened_genotype):
-                return str(key)
-
     def __phenotype(self, data: Dataset, individual):
 
         flattened_genotype = self.__flatten_genotype(individual[0])
         self.valid_individuals[flattened_genotype] = True
 
-        longest_match = self.__find_longest_genotype_match(flattened_genotype)
-        start_point = 0
-        if longest_match:
-            start_point = len(self.cached[longest_match])
-            data = self.__fetch_individual__([self.cached[longest_match], {}, {}], data)
-
         transformed_data = data
         dummy_values = transformed_data.get_dummy_protected_feature(self.sensitive_attribute)
         dimensions = transformed_data.features.shape
 
-        if self.sensitive_attribute not in transformed_data.features.columns:
-            previous_value = self.cached[longest_match][0][-1][0]
-            sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[previous_value]]})
-            transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
-
-        for i in range(start_point, len(individual[0])):
-
+        for i in range(0, len(individual[0])):
             protected_group, algorithm = individual[0][i][0], individual[0][i][1]
-            key = self.__flatten_genotype(individual[0][:i + 1])
-
             transformed_data.set_feature(self.sensitive_attribute, dummy_values[self.decoder[protected_group]])
             unbiasing_algorithm = self.unbiasing_algorithms_pool[algorithm]
 
@@ -318,7 +295,6 @@ class FairGenes(Algorithm):
                 transformed_data = unbiasing_algorithm.transform(transformed_data)
             except ValueError:
                 self.valid_individuals[flattened_genotype] = False
-                self.cached[key] = individual[0][:i + 1]
                 raise ValueError(f'[FairGenes] Invalid individual: {individual[0]}.')
 
             if transformed_data.features.shape[0] != dimensions[0]:
@@ -329,11 +305,7 @@ class FairGenes(Algorithm):
                 sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[protected_group]]})
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
-            if not self.cached.get(key, False):
-                self.__save_individual__([individual[0][:i+1], {}, {}], transformed_data)
-                self.cached[key] = individual[0][:i + 1]
-
-        # self.__save_individual__(individual, transformed_data)
+        self.__save_individual__(individual, transformed_data)
 
         return transformed_data
 
@@ -354,7 +326,6 @@ class FairGenes(Algorithm):
         for metric in numerical_columns:
             result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
-
 
     def __fitness(self, data: Dataset, individual):
 
@@ -397,8 +368,7 @@ class FairGenes(Algorithm):
         population = sorted(population, key=lambda x: len(x[0]))
 
         for j, individual in enumerate(population):
-
-            if self.verbose and not self.genetic_search_flag:
+            if self.verbose:
                 logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
             restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
             population[j] = self.__fitness(dataset, individual)
@@ -497,7 +467,6 @@ class FairGenes(Algorithm):
         self.population = self.__generate_population()
         self.evaluated_individuals = {}
         self.valid_individuals = {}
-        self.cached = {}
         self.cache_path = f'{self.algorithm_name}_{data.name}_{get_seed()}_{self.sensitive_attribute}'
 
     def transform(self, dataset: Dataset) -> Dataset:
