@@ -1,13 +1,11 @@
-
-import gc
 import os
-from itertools import product, combinations_with_replacement
-from math import factorial
 
 import numpy as np
-from random import sample
-
 import pandas as pd
+
+from random import sample
+from itertools import product, combinations_with_replacement
+from math import factorial
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
@@ -276,6 +274,7 @@ class FairGenes(Algorithm):
             mate_pool.append(winner)
         return mate_pool
 
+
     def __phenotype(self, data: Dataset, individual):
 
         flattened_genotype = self.__flatten_genotype(individual[0])
@@ -327,6 +326,7 @@ class FairGenes(Algorithm):
             result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
 
+
     def __fitness(self, data: Dataset, individual):
 
         flattened_genotype = self.__flatten_genotype(individual[0])
@@ -372,8 +372,6 @@ class FairGenes(Algorithm):
                 logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
             restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
             population[j] = self.__fitness(dataset, individual)
-
-            gc.collect()
 
         return population
 

@@ -6,7 +6,7 @@ import pandas as pd
 from algorithms.Algorithm import Algorithm
 from constants import NUM_DECIMALS
 from datasets import Dataset
-from helpers import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed
+from helpers import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed, ResourceManager
 from .assessment import classifier_assessment
 
 
@@ -173,6 +173,8 @@ class Pipeline:
     def run(self) -> None:
         try:
             logger.info("[PIPELINE] Start.")
+            resource_manager = ResourceManager()
+            resource_manager.start()
 
             for sensitive_attribute in self.dataset.protected_features_names:
 
@@ -193,6 +195,7 @@ class Pipeline:
                     self.__bias_reduction__(self.train_set, self.validation_set, unbiasing_algorithm,
                                             sensitive_attribute)
 
+            resource_manager.stop()
             logger.info("[PIPELINE] End.")
 
         except Exception as e:

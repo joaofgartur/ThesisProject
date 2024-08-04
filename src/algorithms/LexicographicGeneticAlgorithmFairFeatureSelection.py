@@ -15,8 +15,6 @@ from datasets import Dataset
 from evaluation import FairnessEvaluator
 from evaluation.ModelEvaluator import ModelEvaluator
 from helpers import get_generator, get_seed, logger
-from sklearnex import patch_sklearn
-patch_sklearn()
 
 
 class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
