@@ -1,6 +1,6 @@
 import pandas as pd
 
-from helpers import logger
+from utils import logger
 
 
 def bold(string: str) -> str:

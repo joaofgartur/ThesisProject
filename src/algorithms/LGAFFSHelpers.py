@@ -1,4 +1,4 @@
-from helpers import get_seed, is_gpu_enabled, GPU_LIMIT
+from utils import get_seed, is_gpu_enabled, GPU_LIMIT
 
 
 def get_random_forest(data_size: int):

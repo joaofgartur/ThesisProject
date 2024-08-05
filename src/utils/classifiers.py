@@ -1,4 +1,4 @@
-from helpers import logger, get_seed, extract_filename
+from utils import logger, get_seed, extract_filename
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import GaussianNB
@@ -62,14 +62,16 @@ def set_gpu_allocated_memory(memory: int):
 
 # ---- CPU/GPU classifiers ----
 
+surrogate_classifiers = []
+
+
 def get_surrogate_classifiers() -> list[object]:
-    return [
-        LogisticRegression(random_state=get_seed()),
-        SVC(random_state=get_seed()),
-        GaussianNB(),
-        DecisionTreeClassifier(random_state=get_seed()),
-        RandomForestClassifier(random_state=get_seed()),
-    ]
+    return surrogate_classifiers
+
+
+def set_surrogate_classifiers(classifiers: list[object]):
+    global surrogate_classifiers
+    surrogate_classifiers = classifiers
 
 
 def get_test_classifier() -> object:

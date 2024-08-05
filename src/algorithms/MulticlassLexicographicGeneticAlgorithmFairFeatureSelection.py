@@ -4,11 +4,11 @@ import pandas as pd
 from constants import NUM_DECIMALS
 from datasets import Dataset
 
-from algorithms import LexicographicGeneticAlgorithmFairFeatureSelection
+from algorithms.LexicographicGeneticAlgorithmFairFeatureSelection import LexicographicGeneticAlgorithmFairFeatureSelection
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from evaluation import FairnessEvaluator
-from helpers import dict_to_dataframe
+from utils import dict_to_dataframe
 
 
 class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):

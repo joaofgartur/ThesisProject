@@ -6,7 +6,7 @@ import pandas as pd
 from algorithms.Algorithm import Algorithm
 from constants import NUM_DECIMALS
 from datasets import Dataset
-from helpers import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed, ResourceManager
+from utils import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed, ResourceManager
 from .assessment import classifier_assessment
 
 

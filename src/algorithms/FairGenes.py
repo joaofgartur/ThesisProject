@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 import numpy as np
 import pandas as pd
@@ -9,9 +10,10 @@ from math import factorial
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
+from algorithms.utils import AlgorithmOptions, get_unbiasing_algorithm
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, read_csv_to_dataframe, \
+from utils import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, read_csv_to_dataframe, \
     delete_directory, get_seed, restore_dataset, backup_dataset
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
@@ -19,7 +21,7 @@ from protocol.assessment import get_classifier_predictions, fairness_assessment
 class FairGenes(Algorithm):
 
     def __init__(self, genetic_parameters: GeneticBasicParameters,
-                 unbiasing_algorithms_pool: [Algorithm],
+                 unbiasing_algorithms_pool: dict,
                  surrogate_models_pool: [object],
                  threshold_k: int,
                  verbose: bool = False):
@@ -274,7 +276,6 @@ class FairGenes(Algorithm):
             mate_pool.append(winner)
         return mate_pool
 
-
     def __phenotype(self, data: Dataset, individual):
 
         flattened_genotype = self.__flatten_genotype(individual[0])
@@ -286,8 +287,10 @@ class FairGenes(Algorithm):
 
         for i in range(0, len(individual[0])):
             protected_group, algorithm = individual[0][i][0], individual[0][i][1]
+
             transformed_data.set_feature(self.sensitive_attribute, dummy_values[self.decoder[protected_group]])
-            unbiasing_algorithm = self.unbiasing_algorithms_pool[algorithm]
+            unbiasing_algorithm = decode_mapping(algorithm, self.unbiasing_algorithms_pool)
+            unbiasing_algorithm = get_unbiasing_algorithm(unbiasing_algorithm, verbosity=False)
 
             try:
                 unbiasing_algorithm.fit(transformed_data, self.sensitive_attribute)
@@ -325,7 +328,6 @@ class FairGenes(Algorithm):
         for metric in numerical_columns:
             result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
-
 
     def __fitness(self, data: Dataset, individual):
 
@@ -479,3 +481,18 @@ class FairGenes(Algorithm):
         self.__clean_cache__()
 
         return transformed_dataset
+
+
+def decode_mapping(algorithm: int, unbiasing_algorithms: dict) -> Enum:
+
+    match unbiasing_algorithms[algorithm]:
+        case 'MSG':
+            return AlgorithmOptions.Massaging
+        case 'REW':
+            return AlgorithmOptions.Reweighing
+        case 'DIR':
+            return AlgorithmOptions.DisparateImpactRemover
+        case 'LGAFFS':
+            return AlgorithmOptions.LGAFFS
+        case _:
+            raise ValueError('Algorithm option unknown!')

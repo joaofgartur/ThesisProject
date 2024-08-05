@@ -8,8 +8,8 @@ import pandas as pd
 from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
 
 from algorithms.Algorithm import Algorithm
-from datasets import Dataset
-from helpers import convert_to_standard_dataset, get_generator
+from datasets import Dataset, convert_to_standard_dataset
+from utils import get_generator
 from constants import PRIVILEGED, UNPRIVILEGED
 
 

@@ -10,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from constants import PRED_OUTCOME
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from helpers import dict_to_dataframe
+from utils import dict_to_dataframe
 from evaluation import FairnessEvaluator
 
 

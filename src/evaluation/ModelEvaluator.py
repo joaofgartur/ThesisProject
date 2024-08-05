@@ -4,7 +4,7 @@ from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_s
     matthews_corrcoef, roc_curve, auc
 
 from constants import POSITIVE_OUTCOME, NEGATIVE_OUTCOME
-from helpers import dict_to_dataframe
+from utils import dict_to_dataframe
 
 
 class ModelEvaluator(object):

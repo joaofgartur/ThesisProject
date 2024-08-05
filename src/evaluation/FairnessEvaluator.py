@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 
-from helpers import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
+from utils import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
                        TRUE_OUTCOME, PRED_OUTCOME)
 

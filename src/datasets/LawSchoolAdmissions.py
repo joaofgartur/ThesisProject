@@ -1,7 +1,7 @@
 import pandas as pd
 
-from datasets import Dataset, DatasetConfig
-from helpers import extract_filename, logger
+from datasets import Dataset
+from utils import extract_filename, logger, DatasetConfig
 
 
 class LawSchoolAdmissions(Dataset):

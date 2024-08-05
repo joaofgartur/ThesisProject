@@ -1,8 +1,7 @@
 from aif360.algorithms.preprocessing import DisparateImpactRemover as DIR
 
 from algorithms.Algorithm import Algorithm
-from datasets import Dataset
-from helpers import convert_to_standard_dataset
+from datasets import Dataset, convert_to_standard_dataset
 
 
 class DisparateImpactRemover(Algorithm):
