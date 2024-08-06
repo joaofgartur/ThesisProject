@@ -8,7 +8,6 @@ from typing import Tuple
 
 import numpy as np
 import pandas as pd
-from sklearn.naive_bayes import GaussianNB
 
 from algorithms.Algorithm import Algorithm
 from datasets import Dataset
@@ -103,6 +102,8 @@ class Massaging(Algorithm):
         error_check_dataset(dataset)
 
         try:
+            from sklearn.naive_bayes import GaussianNB
+
             model = GaussianNB()
             features = dataset.features.to_numpy()
             targets = dataset.targets.to_numpy().ravel()

@@ -3,8 +3,6 @@ import copy
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import KBinsDiscretizer
 
 from utils import DatasetConfig
 from utils.logging import logger
@@ -190,6 +188,7 @@ class Dataset(metaclass=abc.ABCMeta):
         Splits the dataset into train, validation, and test sets. The split datasets are returned as separate Dataset
         objects. The split is stratified based on the protected attributes and the target.
         """
+        from sklearn.model_selection import train_test_split
 
         # split into train and validation/test sets
         if sensitive_attributes is None:
@@ -278,6 +277,8 @@ class Dataset(metaclass=abc.ABCMeta):
         n_bins : int, optional
             The number of bins to divide each numerical feature into. The default is 4.
         """
+        from sklearn.preprocessing import KBinsDiscretizer
+
         numerical_data = self.features.select_dtypes(include=['number'])
         numerical_data = numerical_data.drop(columns=self.protected_features_names, errors='ignore')
         categorical_data = self.features.drop(numerical_data, axis=1)

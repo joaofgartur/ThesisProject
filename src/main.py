@@ -5,6 +5,8 @@ Last edited: 30-11-2023
 """
 import argparse
 
+from sklearnex import unpatch_sklearn, patch_sklearn
+
 from datasets import Dataset, GermanCredit, AdultIncome, LawSchoolAdmissions
 
 from utils import Configs, get_seed, set_global_configs
@@ -45,6 +47,8 @@ def run_pipeline(seed, args, configs: Configs):
 
 
 if __name__ == '__main__':
+    unpatch_sklearn(global_unpatch=True)
+
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 
     parser = argparse.ArgumentParser(description='Run the pipeline for the thesis.')

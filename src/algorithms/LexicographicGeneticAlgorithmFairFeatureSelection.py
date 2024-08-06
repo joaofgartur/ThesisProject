@@ -5,7 +5,6 @@ from random import sample
 
 import numpy as np
 import pandas as pd
-from sklearn.model_selection import KFold, cross_val_predict
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
@@ -130,7 +129,8 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
             'false_negative_error_rate_balance_score': false_negative_error_rate_balance_score
         }
 
-    def __fitness(self, data: Dataset, individual, folds: KFold):
+    def __fitness(self, data: Dataset, individual, folds):
+        from sklearn.model_selection import cross_val_predict
 
         genotype = tuple(individual[0])
         if genotype in self.evaluated_individuals:
@@ -155,7 +155,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
 
         return individual
 
-    def __evaluate_population(self, data: Dataset, population, folds: KFold):
+    def __evaluate_population(self, data: Dataset, population, folds):
 
         for i, individual in enumerate(population):
             population[i] = self.__fitness(data, individual, folds)
@@ -181,6 +181,7 @@ class LexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.population = None
 
     def transform(self, data: Dataset) -> Dataset:
+        from sklearn.model_selection import KFold
 
         folds = KFold(n_splits=self.n_splits, shuffle=True, random_state=get_seed())
         best_individual = []

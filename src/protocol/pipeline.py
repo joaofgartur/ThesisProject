@@ -172,6 +172,9 @@ class Pipeline:
 
     def run(self) -> None:
         try:
+            # patch_sklearn(global_patch=True)
+            # unpatch_sklearn(global_unpatch=True)
+
             logger.info("[PIPELINE] Start.")
             resource_manager = ResourceManager()
             resource_manager.start()

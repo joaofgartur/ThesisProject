@@ -5,7 +5,7 @@ Last edited: 20-11-2023
 """
 import numpy as np
 import pandas as pd
-from sklearn.pipeline import Pipeline
+
 
 from constants import PRED_OUTCOME
 from datasets import Dataset
@@ -15,6 +15,7 @@ from evaluation import FairnessEvaluator
 
 
 def get_classifier_predictions(model: object, train: Dataset, validation: Dataset) -> pd.DataFrame:
+    from sklearn.pipeline import Pipeline
 
     pipeline = Pipeline([
         ('classifier', model)

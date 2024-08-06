@@ -6,7 +6,6 @@ Last edited: 20-11-2023
 
 import numpy as np
 import pandas as pd
-from sklearn.neighbors import NearestNeighbors
 
 from utils import ratio, diff, abs_diff, conditional_probability, dict_to_dataframe
 from constants import (PRIVILEGED, UNPRIVILEGED, POSITIVE_OUTCOME, NEGATIVE_OUTCOME,
@@ -73,6 +72,7 @@ class FairnessEvaluator(object):
         return abs_diff(1, self.__compute_rate_difference(POSITIVE_OUTCOME, POSITIVE_OUTCOME))
 
     def consistency(self, k: int = 3):
+        from sklearn.neighbors import NearestNeighbors
         data = self.data.to_numpy()
 
         x = np.ascontiguousarray(self.data.drop(columns=[TRUE_OUTCOME, PRED_OUTCOME]).to_numpy())

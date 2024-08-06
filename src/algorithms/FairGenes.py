@@ -1,12 +1,16 @@
 import os
+from concurrent.futures import ProcessPoolExecutor
 from enum import Enum
 
 import numpy as np
 import pandas as pd
+import multiprocessing as mp
 
 from random import sample
 from itertools import product, combinations_with_replacement
 from math import factorial
+
+from sklearnex import patch_sklearn, unpatch_sklearn
 
 from algorithms.Algorithm import Algorithm
 from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
@@ -311,7 +315,7 @@ class FairGenes(Algorithm):
 
         return transformed_data
 
-    def __performance_fitness(self, data: Dataset, predictions: pd.DataFrame):
+    def _performance_fitness(self, data: Dataset, predictions: pd.DataFrame):
         performance_evaluator = ModelEvaluator(data.targets, predictions)
 
         return {
@@ -320,7 +324,7 @@ class FairGenes(Algorithm):
             'performance_auc': performance_evaluator.auc()
         }
 
-    def __fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
+    def _fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
         metrics = fairness_assessment(data, predictions, self.sensitive_attribute)
 
         result = {}
@@ -329,12 +333,14 @@ class FairGenes(Algorithm):
             result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
 
-    def __fitness(self, data: Dataset, individual):
+    def _fitness(self, data: Dataset, individual, evaluated_individuals, valid_individuals):
+        patch_sklearn(global_patch=True)
 
         flattened_genotype = self.__flatten_genotype(individual[0])
-        if flattened_genotype in self.evaluated_individuals:
-            return self.evaluated_individuals[flattened_genotype]
+        if flattened_genotype in evaluated_individuals:
+            return evaluated_individuals[flattened_genotype], valid_individuals[flattened_genotype]
 
+        valid = True
         try:
             if len(individual[0]) > 2 * self.num_classes:
                 raise ValueError(f'[FairGenes] Invalid individual: {individual[0]}.')
@@ -342,6 +348,7 @@ class FairGenes(Algorithm):
             transformed_data = self.__phenotype(data, individual)
 
         except ValueError:
+            valid = False
             for model in self.surrogate_models_pool:
 
                 individual[1][model.__class__.__name__] = {'performance_accuracy': 0.0,
@@ -357,23 +364,32 @@ class FairGenes(Algorithm):
         else:
             for model in self.surrogate_models_pool:
                 model_predictions = get_classifier_predictions(model, transformed_data, self.auxiliary_data)
-                individual[1].update({model.__class__.__name__: self.__performance_fitness(self.auxiliary_data,
-                                                                                           model_predictions)})
-                individual[2].update({model.__class__.__name__: self.__fairness_fitness(self.auxiliary_data,
-                                                                                        model_predictions)})
+                individual[1].update({model.__class__.__name__: self._performance_fitness(self.auxiliary_data,
+                                                                                          model_predictions)})
+                individual[2].update({model.__class__.__name__: self._fairness_fitness(self.auxiliary_data,
+                                                                                       model_predictions)})
 
         self.evaluated_individuals[flattened_genotype] = individual
 
-        return individual
+        return individual, valid
 
     def __evaluate_population(self, dataset, population):
         population = sorted(population, key=lambda x: len(x[0]))
 
         for j, individual in enumerate(population):
-            if self.verbose:
-                logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
-            restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
-            population[j] = self.__fitness(dataset, individual)
+
+            with ProcessPoolExecutor(max_workers=1, mp_context=mp.get_context('fork')) as executor:
+                if self.verbose:
+                    logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
+
+                restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
+                population[j], valid = executor.submit(self._fitness, dataset, individual, self.evaluated_individuals,
+                                                       self.valid_individuals).result()
+
+                genotype = self.__flatten_genotype(individual[0])
+
+                self.evaluated_individuals[genotype] = individual
+                self.valid_individuals[genotype] = valid
 
         return population
 

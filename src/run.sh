@@ -14,7 +14,7 @@ for ((i=0; i<N; i++)); do
     tmux new-session -d -s "${DATASET}_${SEED}"
     
     # Construct the Python command
-    PYTHON_COMMAND="python main.py -dataset ${DATASET} -configs configs/configs.cfg -all -runs 1 -seed $SEED >> log_seed_${SEED}.out 2>&1"
+    PYTHON_COMMAND="python main.py -dataset ${DATASET} -configs ../configs.cfg -all -seed $SEED >> log_seed_${SEED}.out 2>&1"
     
     # Send command to the session
     tmux send-keys -t "${DATASET}_${SEED}" "$PYTHON_COMMAND" Enter

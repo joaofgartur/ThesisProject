@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from sklearn.utils import check_random_state
+
 
 numpy_generator = None
 random_seed = None
@@ -15,6 +15,8 @@ def get_generator():
 
 
 def set_seed(seed: int):
+    from sklearn.utils import check_random_state
+
     global random_seed
     global numpy_generator
 
