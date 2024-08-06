@@ -472,7 +472,7 @@ class FairGenes(Algorithm):
 
     def __save_fitness_evolution(self, fitness_evolution: pd.DataFrame, dataset_name: str):
         save_path = os.path.join('best_individuals', f'{dataset_name}', f'{self.iteration_number}_iteration')
-        filename = f'{self.algorithm_name}_{self.sensitive_attribute}_fitness_evolution'
+        filename = f'{self.algorithm_name}_{self.sensitive_attribute}_fitness_evolution_seed_{get_seed()}.csv'
         write_dataframe_to_csv(fitness_evolution, filename, save_path)
 
     def fit(self, data: Dataset, sensitive_attribute: str):
