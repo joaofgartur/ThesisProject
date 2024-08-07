@@ -32,6 +32,8 @@ def concatenate_results(base_directory, base_seed, num_runs, algorithms, attribu
 
                 seed_df = pd.concat([seed_df, algorithm_df], ignore_index=True)
 
+            seed_df = seed_df.rename(columns={'class': 'group', 'num_iterations': 'iteration'})
+
             seed_df.to_csv(f'{base_directory}/German Credit_{seed}_{attribute_name}.csv', index=False)
         except FileNotFoundError:
             continue

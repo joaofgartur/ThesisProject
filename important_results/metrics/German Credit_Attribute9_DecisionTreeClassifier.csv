@@ -1,0 +1,27 @@
+dataset,attribute,group,algorithm,set,iteration,error,classifier_type,value,fairness_disparate_impact,fairness_discrimination_score,fairness_true_positive_rate_diff,fairness_false_positive_rate_diff,fairness_false_positive_error_rate_balance_score,fairness_false_negative_error_rate_balance_score,fairness_consistency,performance_accuracy,performance_f1_score,performance_auc
+German Credit,Attribute9,nan,nan,Test,0,False,Surrogate,Female,0.9526,0.4991,0.5925,1.0892,1.0892,0.5925,3.4081,0.6922,0.7777,0.6394
+German Credit,Attribute9,Female,Massaging,Test,1,False,Surrogate,Female,0.5188,0.2311,0.4251,1.1101,1.1101,0.4251,3.7520,0.6774,0.7655,0.6260
+German Credit,Attribute9,Female,Massaging,Test,2,False,Surrogate,Female,0.5188,0.2311,0.4251,1.1101,1.1101,0.4251,3.7520,0.6774,0.7655,0.6260
+German Credit,Attribute9,Female,Reweighing,Test,1,False,Surrogate,Female,1.1974,0.4099,0.4908,0.9539,0.9539,0.4908,3.8695,0.6722,0.7558,0.6354
+German Credit,Attribute9,Female,Reweighing,Test,2,False,Surrogate,Female,0.4247,0.1985,0.3225,0.7096,0.7096,0.3225,3.8736,0.6785,0.7636,0.6353
+German Credit,Attribute9,Female,DisparateImpactRemover,Test,1,False,Surrogate,Female,0.9298,0.3352,0.4599,1.0749,1.0749,0.4599,3.6056,0.6763,0.7622,0.6302
+German Credit,Attribute9,Female,DisparateImpactRemover,Test,2,False,Surrogate,Female,0.9298,0.3352,0.4599,1.0749,1.0749,0.4599,3.6056,0.6763,0.7622,0.6302
+German Credit,Attribute9,Female,LexicographicGeneticAlgorithmFairFeatureSelection,Test,1,False,Surrogate,Female,0.5321,0.2240,0.3742,0.5898,0.5898,0.3742,3.3551,0.6759,0.7638,0.6257
+German Credit,Attribute9,Female,LexicographicGeneticAlgorithmFairFeatureSelection,Test,2,False,Surrogate,Female,0.5256,0.2214,0.3574,0.8083,0.8083,0.3574,3.3639,0.6752,0.7630,0.6255
+German Credit,Attribute9,Attribute9,MulticlassLexicographicGeneticAlgorithmFairFeatureSelection,Test,1,False,Surrogate,Female,0.8781,0.4281,0.4960,0.6857,0.6857,0.4960,3.4097,0.6822,0.7690,0.6319
+German Credit,Attribute9,Attribute9,MulticlassLexicographicGeneticAlgorithmFairFeatureSelection,Test,2,False,Surrogate,Female,0.9555,0.4546,0.4768,0.8536,0.8536,0.4768,3.3088,0.6711,0.7589,0.6219
+German Credit,Attribute9,Attribute9,FairGenes,Test,1,False,Surrogate,Female,0.7519,0.3770,0.4693,0.8214,0.8214,0.4693,3.4321,0.6681,0.7565,0.6187
+German Credit,Attribute9,Attribute9,FairGenes,Test,2,False,Surrogate,Female,1.1942,0.5287,0.5967,0.7194,0.7194,0.5967,3.2360,0.6670,0.7588,0.6087
+German Credit,Attribute9,nan,nan,Test,0,False,Surrogate,Male,1.6883,0.4991,0.5925,1.0892,1.0892,0.5925,3.4081,0.6922,0.7777,0.6394
+German Credit,Attribute9,Male,Massaging,Test,1,False,Surrogate,Male,1.6883,0.4991,0.5925,1.0892,1.0892,0.5925,3.4081,0.6922,0.7777,0.6394
+German Credit,Attribute9,Male,Massaging,Test,2,False,Surrogate,Male,1.6883,0.4991,0.5925,1.0892,1.0892,0.5925,3.4081,0.6922,0.7777,0.6394
+German Credit,Attribute9,Male,Reweighing,Test,1,False,Surrogate,Male,0.7784,0.2676,0.3680,0.6616,0.6616,0.3680,3.3397,0.6844,0.7720,0.6310
+German Credit,Attribute9,Male,Reweighing,Test,2,False,Surrogate,Male,0.6757,0.2499,0.2718,0.5708,0.5708,0.2718,3.1262,0.6774,0.7667,0.6221
+German Credit,Attribute9,Male,DisparateImpactRemover,Test,1,False,Surrogate,Male,1.6883,0.4991,0.5925,1.0892,1.0892,0.5925,3.4081,0.6922,0.7777,0.6394
+German Credit,Attribute9,Male,DisparateImpactRemover,Test,2,False,Surrogate,Male,1.6883,0.4991,0.5925,1.0892,1.0892,0.5925,3.4081,0.6922,0.7777,0.6394
+German Credit,Attribute9,Male,LexicographicGeneticAlgorithmFairFeatureSelection,Test,1,False,Surrogate,Male,0.8050,0.2736,0.4425,0.8169,0.8169,0.4425,3.4666,0.6656,0.7552,0.6161
+German Credit,Attribute9,Male,LexicographicGeneticAlgorithmFairFeatureSelection,Test,2,False,Surrogate,Male,0.8876,0.3746,0.5960,0.8696,0.8696,0.5960,3.3573,0.6533,0.7452,0.6032
+German Credit,Attribute9,Attribute9,MulticlassLexicographicGeneticAlgorithmFairFeatureSelection,Test,1,False,Surrogate,Male,1.5916,0.4281,0.4960,0.6857,0.6857,0.4960,3.4097,0.6822,0.7690,0.6319
+German Credit,Attribute9,Attribute9,MulticlassLexicographicGeneticAlgorithmFairFeatureSelection,Test,2,False,Surrogate,Male,1.6244,0.4546,0.4768,0.8536,0.8536,0.4768,3.3088,0.6711,0.7589,0.6219
+German Credit,Attribute9,Attribute9,FairGenes,Test,1,False,Surrogate,Male,1.3367,0.3770,0.4693,0.8214,0.8214,0.4693,3.4321,0.6681,0.7565,0.6187
+German Credit,Attribute9,Attribute9,FairGenes,Test,2,False,Surrogate,Male,1.9578,0.5287,0.5967,0.7194,0.7194,0.5967,3.2360,0.6670,0.7588,0.6087
