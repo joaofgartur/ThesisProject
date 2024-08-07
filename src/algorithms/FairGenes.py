@@ -228,7 +228,12 @@ class FairGenes(Algorithm):
 
         def sort_population(_population, objective: tuple):
             index, model, metric = objective
-            _population.sort(key=lambda x: x[index][model][metric], reverse=reverse)
+            try:
+                _population.sort(key=lambda x: x[index][model][metric], reverse=reverse)
+            except KeyError:
+                print(population)
+                raise KeyError(f'Invalid key: {model} {metric}')
+
             return _population
 
         def select_top_individuals(_population, objective: tuple, epsilon):
@@ -243,6 +248,7 @@ class FairGenes(Algorithm):
 
         def lexicographic_selection(_population, objective: tuple):
             index, model = objective
+            print(f'Individual: {_population[0][0]} Valid: {self.valid_individuals[self.__flatten_genotype(_population[0][0])]} Evaluated: {_population[0][index]}')
             metrics = rng.permutation([key for key in _population[0][index][model].keys()])
 
             for metric in metrics:
@@ -333,7 +339,7 @@ class FairGenes(Algorithm):
             result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
 
-    def _fitness(self, data: Dataset, individual, evaluated_individuals, valid_individuals):
+    def _fitness(self, data: Dataset, individual, evaluated_individuals, valid_individuals, surrogate_models_pool):
         patch_sklearn(global_patch=True)
 
         flattened_genotype = self.__flatten_genotype(individual[0])
@@ -349,12 +355,12 @@ class FairGenes(Algorithm):
 
         except ValueError:
             valid = False
-            for model in self.surrogate_models_pool:
-
-                individual[1][model.__class__.__name__] = {'performance_accuracy': 0.0,
+            for model in surrogate_models_pool:
+                model_name = model.__class__.__name__
+                individual[1][model_name] = {'performance_accuracy': 0.0,
                                                            'performance_f1_score': 0.0,
                                                            'performance_auc': 0.0}
-                individual[2][model.__class__.__name__] = {'fairness_disparate_impact': np.inf,
+                individual[2][model_name] = {'fairness_disparate_impact': np.inf,
                                                            'fairness_discrimination_score': np.inf,
                                                            'fairness_true_positive_rate_diff': np.inf,
                                                            'fairness_false_positive_rate_diff': np.inf,
@@ -362,14 +368,11 @@ class FairGenes(Algorithm):
                                                            'fairness_false_negative_error_rate_balance_score': np.inf,
                                                            'fairness_consistency': np.inf}
         else:
-            for model in self.surrogate_models_pool:
+            for model in surrogate_models_pool:
+                model_name = model.__class__.__name__
                 model_predictions = get_classifier_predictions(model, transformed_data, self.auxiliary_data)
-                individual[1].update({model.__class__.__name__: self._performance_fitness(self.auxiliary_data,
-                                                                                          model_predictions)})
-                individual[2].update({model.__class__.__name__: self._fairness_fitness(self.auxiliary_data,
-                                                                                       model_predictions)})
-
-        self.evaluated_individuals[flattened_genotype] = individual
+                individual[1][model_name] = self._performance_fitness(self.auxiliary_data, model_predictions)
+                individual[2][model_name] = self._fairness_fitness(self.auxiliary_data, model_predictions)
 
         return individual, valid
 
@@ -384,7 +387,7 @@ class FairGenes(Algorithm):
 
                 restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
                 population[j], valid = executor.submit(self._fitness, dataset, individual, self.evaluated_individuals,
-                                                       self.valid_individuals).result()
+                                                       self.valid_individuals, self.surrogate_models_pool).result()
 
                 genotype = self.__flatten_genotype(individual[0])
 
