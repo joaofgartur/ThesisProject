@@ -228,11 +228,7 @@ class FairGenes(Algorithm):
 
         def sort_population(_population, objective: tuple):
             index, model, metric = objective
-            try:
-                _population.sort(key=lambda x: x[index][model][metric], reverse=reverse)
-            except KeyError:
-                print(population)
-                raise KeyError(f'Invalid key: {model} {metric}')
+            _population.sort(key=lambda x: x[index][model][metric], reverse=reverse)
 
             return _population
 
@@ -248,7 +244,6 @@ class FairGenes(Algorithm):
 
         def lexicographic_selection(_population, objective: tuple):
             index, model = objective
-            print(f'Individual: {_population[0][0]} Valid: {self.valid_individuals[self.__flatten_genotype(_population[0][0])]} Evaluated: {_population[0][index]}')
             metrics = rng.permutation([key for key in _population[0][index][model].keys()])
 
             for metric in metrics:
@@ -389,10 +384,10 @@ class FairGenes(Algorithm):
                 population[j], valid = executor.submit(self._fitness, dataset, individual, self.evaluated_individuals,
                                                        self.valid_individuals, self.surrogate_models_pool).result()
 
-                genotype = self.__flatten_genotype(individual[0])
-
-                self.evaluated_individuals[genotype] = individual
-                self.valid_individuals[genotype] = valid
+                genotype = self.__flatten_genotype(population[j][0])
+                if genotype not in self.evaluated_individuals:
+                    self.evaluated_individuals[genotype] = population[j]
+                    self.valid_individuals[genotype] = valid
 
         return population
 
