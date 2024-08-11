@@ -1,3 +1,4 @@
+import copy
 import os
 from concurrent.futures import ProcessPoolExecutor
 from enum import Enum
@@ -17,8 +18,7 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from algorithms.utils import AlgorithmOptions, get_unbiasing_algorithm
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from utils import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, read_csv_to_dataframe, \
-    delete_directory, get_seed, restore_dataset, backup_dataset
+from utils import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, get_seed
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -107,48 +107,11 @@ class FairGenes(Algorithm):
 
         return decoded_individual
 
-    def __save_individual__(self, individual, transformed_dataset: Dataset):
-        genome = self.__flatten_genotype(individual[0])
-        seed = get_seed()
-
-        features_file = f'{seed}_features_{genome}.csv'
-        write_dataframe_to_csv(df=transformed_dataset.features, filename=features_file, path=self.cache_path)
-
-        targets_file = f'{seed}_targets_{genome}.csv'
-        write_dataframe_to_csv(df=transformed_dataset.targets, filename=targets_file, path=self.cache_path)
-
-        protected_features_file = f'{seed}_protected_features_{genome}.csv'
-        write_dataframe_to_csv(df=transformed_dataset.protected_features, filename=protected_features_file,
-                               path=self.cache_path)
-
-    def __fetch_individual__(self, individual: list[list], dataset: Dataset):
-        genome = self.__flatten_genotype(individual[0])
-        seed = get_seed()
-
-        features_file = f'{seed}_features_{genome}.csv'
-        dataset.features = read_csv_to_dataframe(features_file, self.cache_path)
-
-        targets_file = f'{seed}_targets_{genome}.csv'
-        dataset.targets = read_csv_to_dataframe(targets_file, self.cache_path)
-
-        protected_features_file = f'{seed}_protected_features_{genome}.csv'
-        dataset.protected_features = read_csv_to_dataframe(protected_features_file, self.cache_path)
-
-        return dataset
-
-    def __mount_individual(self, individual: list[list], dataset: Dataset) -> Dataset:
-        genotype = self.__flatten_genotype(individual[0])
-        individual_dataset = self.__fetch_individual__(individual, dataset)
-        individual_dataset.error_flag = not self.valid_individuals[genotype]
-
-        return individual_dataset
-
     def __clean_cache__(self):
         self.population = None
         self.evaluated_individuals = None
         self.valid_individuals = None
         self.decoder = None
-        delete_directory(self.cache_path)
 
     def __compute_population_average_fitness(self, population):
 
@@ -312,8 +275,6 @@ class FairGenes(Algorithm):
                 sensitive_attribute = pd.DataFrame({self.sensitive_attribute: dummy_values[self.decoder[protected_group]]})
                 transformed_data.features = pd.concat([transformed_data.features, sensitive_attribute], axis=1)
 
-        self.__save_individual__(individual, transformed_data)
-
         return transformed_data
 
     def _performance_fitness(self, data: Dataset, predictions: pd.DataFrame):
@@ -380,8 +341,8 @@ class FairGenes(Algorithm):
                 if self.verbose:
                     logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
 
-                restore_dataset(dataset, self.cache_path)  # Restore dataset to original state
-                population[j], valid = executor.submit(self._fitness, dataset, individual, self.evaluated_individuals,
+                transformation_data = copy.deepcopy(dataset)
+                population[j], valid = executor.submit(self._fitness, transformation_data, individual, self.evaluated_individuals,
                                                        self.valid_individuals, self.surrogate_models_pool).result()
 
                 genotype = self.__flatten_genotype(population[j][0])
@@ -450,7 +411,7 @@ class FairGenes(Algorithm):
 
         self.__save_fitness_evolution(evolution, dataset.name)
 
-        return self.__mount_individual(best_individual, dataset)
+        return self.__phenotype(dataset, best_individual)
 
     def __extensive_search(self, dataset: Dataset) -> Dataset:
 
@@ -466,7 +427,7 @@ class FairGenes(Algorithm):
 
         self.__save_fitness_evolution(evolution, dataset.name)
 
-        return self.__mount_individual(best_individual, dataset)
+        return self.__phenotype(dataset, best_individual)
 
     def __save_fitness_evolution(self, fitness_evolution: pd.DataFrame, dataset_name: str):
         save_path = os.path.join('best_individuals', f'{dataset_name}', f'{self.iteration_number}_iteration')
@@ -484,8 +445,6 @@ class FairGenes(Algorithm):
         self.cache_path = f'{self.algorithm_name}_{data.name}_{get_seed()}_{self.sensitive_attribute}'
 
     def transform(self, dataset: Dataset) -> Dataset:
-
-        backup_dataset(dataset, self.cache_path)
 
         if self.genetic_search_flag:
             transformed_dataset = self.__genetic_search(dataset)
