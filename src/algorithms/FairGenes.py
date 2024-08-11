@@ -307,7 +307,8 @@ class FairGenes(Algorithm):
             if len(individual[0]) > 2 * self.num_classes:
                 raise ValueError(f'[FairGenes] Invalid individual: {individual[0]}.')
 
-            transformed_data = self.__phenotype(data, individual)
+            transformed_data = copy.deepcopy(data)
+            transformed_data = self.__phenotype(transformed_data, individual)
 
         except ValueError:
             valid = False
@@ -341,8 +342,7 @@ class FairGenes(Algorithm):
                 if self.verbose:
                     logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
 
-                transformation_data = copy.deepcopy(dataset)
-                population[j], valid = executor.submit(self._fitness, transformation_data, individual, self.evaluated_individuals,
+                population[j], valid = executor.submit(self._fitness, dataset, individual, self.evaluated_individuals,
                                                        self.valid_individuals, self.surrogate_models_pool).result()
 
                 genotype = self.__flatten_genotype(population[j][0])
