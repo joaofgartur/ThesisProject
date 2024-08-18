@@ -89,7 +89,7 @@ class FairGenes(Algorithm):
 
     def __decode_individual(self, individual) -> pd.DataFrame:
         genome = [[self.decoder[val],
-                   self.unbiasing_algorithms_pool[algo].__class__.__name__] for val, algo in individual[0]]
+                   self.unbiasing_algorithms_pool[algo]] for val, algo in individual[0]]
 
         metrics = {}
         models = individual[1].keys()
