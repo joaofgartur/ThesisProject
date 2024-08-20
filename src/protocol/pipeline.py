@@ -2,11 +2,13 @@ import copy
 import os
 
 import pandas as pd
+from sklearnex import patch_sklearn
 
 from algorithms.Algorithm import Algorithm
 from constants import NUM_DECIMALS
 from datasets import Dataset
-from utils import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed, ResourceManager
+from utils import logger, write_dataframe_to_csv, dict_to_dataframe, round_df, get_seed, ResourceManager, gpu_device_id, \
+    disable_gpu_acceleration
 from .assessment import classifier_assessment
 
 
@@ -172,8 +174,11 @@ class Pipeline:
 
     def run(self) -> None:
         try:
-            # patch_sklearn(global_patch=True)
+            patch_sklearn(global_patch=True)
             # unpatch_sklearn(global_unpatch=True)
+
+            if gpu_device_id is not None:
+                disable_gpu_acceleration()
 
             logger.info("[PIPELINE] Start.")
             resource_manager = ResourceManager()

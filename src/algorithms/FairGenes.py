@@ -18,7 +18,8 @@ from algorithms.GeneticAlgorithmHelpers import GeneticBasicParameters
 from algorithms.utils import AlgorithmOptions, get_unbiasing_algorithm
 from datasets import Dataset
 from evaluation.ModelEvaluator import ModelEvaluator
-from utils import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, get_seed
+from utils import write_dataframe_to_csv, get_generator, dict_to_dataframe, logger, get_seed, enable_gpu_acceleration, \
+    get_global_configs, set_global_configs, set_seed, set_gpu_device
 from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
@@ -295,8 +296,15 @@ class FairGenes(Algorithm):
             result[metric] = np.sum((metrics[metric] - 1.0) ** 2)
         return result
 
-    def _fitness(self, data: Dataset, individual, evaluated_individuals, valid_individuals, surrogate_models_pool):
+    def _fitness(self, data: Dataset, individual, evaluated_individuals, valid_individuals, surrogate_models_pool, configs, seed):
+        set_global_configs(configs)
+        set_seed(seed)
+
         patch_sklearn(global_patch=True)
+        if configs.gpu_device_id is not None:
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(configs.gpu_device_id)
+            set_gpu_device(configs.gpu_device_id)
+            enable_gpu_acceleration()
 
         flattened_genotype = self.__flatten_genotype(individual[0])
         if flattened_genotype in evaluated_individuals:
@@ -338,12 +346,12 @@ class FairGenes(Algorithm):
 
         for j, individual in enumerate(population):
 
-            with ProcessPoolExecutor(max_workers=1, mp_context=mp.get_context('fork')) as executor:
+            with ProcessPoolExecutor(max_workers=1, mp_context=mp.get_context('spawn')) as executor:
                 if self.verbose:
-                    logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}.')
+                    logger.info(f'\t[FairGenes] Individual {j + 1}/{len(population)}: {population[j]}.')
 
                 population[j], valid = executor.submit(self._fitness, dataset, individual, self.evaluated_individuals,
-                                                       self.valid_individuals, self.surrogate_models_pool).result()
+                                                       self.valid_individuals, self.surrogate_models_pool, get_global_configs(), get_seed()).result()
 
                 genotype = self.__flatten_genotype(population[j][0])
                 if genotype not in self.evaluated_individuals:

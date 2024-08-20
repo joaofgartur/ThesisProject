@@ -4,6 +4,7 @@ Project: Master's Thesis
 Last edited: 30-11-2023
 """
 import argparse
+import multiprocessing
 
 from sklearnex import unpatch_sklearn, patch_sklearn
 
@@ -47,7 +48,7 @@ def run_pipeline(seed, args, configs: Configs):
 
 
 if __name__ == '__main__':
-    unpatch_sklearn(global_unpatch=True)
+    patch_sklearn(global_patch=True)
 
     logger.info(f'[{extract_filename(__file__)}] Initializing.')
 

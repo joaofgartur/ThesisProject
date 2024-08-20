@@ -18,6 +18,7 @@ class Configs(object):
 
         self.num_runs = 0
         self.num_iterations = 0
+        self.gpu_device_id = None
 
         self.__parse_global_configs_file()
 
@@ -78,7 +79,9 @@ class Configs(object):
 
         if enable_gpu:
             enable_gpu_acceleration()
-            set_gpu_device(parser.getint(header, 'device_id'))
+            device_id = parser.getint(header, 'device_id')
+            set_gpu_device(device_id)
+            self.gpu_device_id = device_id
             gpu_allocated_memory = parser.getint(header, 'allocated_memory')
             set_gpu_allocated_memory(gpu_allocated_memory)
         else:
