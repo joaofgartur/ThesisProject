@@ -175,10 +175,6 @@ class Pipeline:
     def run(self) -> None:
         try:
             patch_sklearn(global_patch=True)
-            # unpatch_sklearn(global_unpatch=True)
-
-            if gpu_device_id is not None:
-                disable_gpu_acceleration()
 
             logger.info("[PIPELINE] Start.")
             resource_manager = ResourceManager()
