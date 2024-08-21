@@ -61,8 +61,58 @@ def colour_analysis(directory, dataset, attribute, classifier):
     with open(f'{directory}/table_{dataset}_{attribute}_{classifier}.tex', 'w') as file:
         file.write(latex_table)
 
-if __name__ == '__main__':
 
+def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
+    df = pd.DataFrame()
+
+    for classifier in classifiers:
+        classifier_df = pd.read_csv(f'{directory}/{dataset}_{attribute}_{classifier}.csv', index_col=0)
+        df = pd.concat([df, classifier_df])
+    df = df[df['iteration'] > 0]
+
+    results = pd.DataFrame()
+    protected_groups = df['value'].unique()
+    algorithms = df['algorithm'].unique()
+
+    combinations = [(algorithm, value) for algorithm in algorithms for value in protected_groups]
+
+    for comb in combinations:
+        algorithm, value = comb
+        algorithm_df = df[(df['algorithm'] == algorithm) & (df['value'] == value)]
+        try:
+            first_iteration = algorithm_df[algorithm_df['iteration'] == 1].iloc[0]
+            second_iteration = algorithm_df[algorithm_df['iteration'] == 2].iloc[0]
+
+            first_iter_fairness = first_iteration[[col for col in first_iteration.index if 'fairness' in col]]
+            second_iter_fairness = second_iteration[[col for col in second_iteration.index if 'fairness' in col]]
+
+            fairness_variation = second_iter_fairness - first_iter_fairness
+            num_increases = (fairness_variation > 0).sum()
+            num_decreases = (fairness_variation < 0).sum()
+            num_no_change = (fairness_variation == 0).sum()
+            algorithm_df = pd.DataFrame({'algorithm': algorithm, 'group': value, 'num_increases': num_increases, 'num_decreases': num_decreases, 'num_no_change': num_no_change}, index=[0])
+            results = pd.concat([results, algorithm_df])
+
+        except ValueError as e:
+            continue
+
+    total_increases = results['num_increases'].sum()
+    total_decreases = results['num_decreases'].sum()
+    total_no_change = results['num_no_change'].sum()
+
+    results = pd.concat([results, pd.DataFrame({'algorithm': 'Total', 'num_increases': total_increases, 'num_decreases': total_decreases, 'num_no_change': total_no_change}, index=[0])])
+
+    numerics = ['int16', 'int32', 'int64']
+    results = results.sort_values(by=['group'], kind='mergesort')
+    results = results.select_dtypes(include=numerics)
+
+    latex_table = results.to_latex(index=False, float_format="%.3f")
+    with open(f'{directory}/table_{dataset}_{attribute}_multiple_iterations.tex', 'w') as file:
+        file.write(latex_table)
+
+
+if __name__ == '__main__':
+    
     dataset = 'German Credit'
     attribute = 'Attribute9'
     directory = 'metrics'
@@ -70,3 +120,5 @@ if __name__ == '__main__':
 
     for classifier in classifiers:
         colour_analysis(directory, dataset, attribute, classifier)
+
+    multiple_iterations_analysis(directory, dataset, attribute, classifiers)

@@ -1,0 +1,41 @@
+\begin{table}[h!]
+        \begin{center}
+            \caption{Fairness metrics for Logistic Regression for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+            \label{tab::german_credit::sex::lr}
+            \begin{adjustbox}{width=\textwidth}
+                \begin{tabular}{|c|c|r|r|r|}
+                    \hline
+                    \multirow{2}{*}{Attr} & \multirow{2}{*}{Corr} & \multicolumn{1}{c|}{Increase} & \multicolumn{1}{c|}{No Variation} & \multicolumn{1}{c|}{Decrease}
+                    \hline
+                    \multirow{6}{*}{FML} & MSG &  0 & 0 & 7 \\
+                    \cline{2-5}
+                        & REW &  0 & 7 & 0 \\
+                    \cline{4-5}
+                        & DIR &  0 & 0 & 7 \\
+                    \cline{4-5}
+                        & FFS &  5 & 2 & 0 \\
+                    \cline{4-5}
+                        & MFS &  4 & 3 & 0 \\
+                    \cline{4-5}
+                        & FGE &  2 & 5 & 0 \\
+                    \cline{4-5}
+
+                    \multirow{6}{*}{MLE} & MSG & 0 & 0 & 7 \\
+                    \cline{2-5}
+                        & REW & 2 & 5 & 0 \\
+                    \cline{4-5}
+                        & DIR & 0 & 0 & 7 \\
+                    \cline{4-5}
+                        & FFS & 6 & 1 & 0 \\
+                    \cline{4-5}
+                        & MFS & 4 & 3 & 0 \\
+                    \cline{4-5}
+                        & FGE & 2 & 5 & 0 \\
+                    \cline{4-5}
+
+                    \multicolumn{3}{c|}{Total} & 25 & 31 & 28 \\
+                    \hline
+                \end{tabular}
+            \end{adjustbox}
+        \end{center}
+    \end{table}
