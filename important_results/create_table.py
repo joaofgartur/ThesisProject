@@ -19,7 +19,7 @@ def create_global_csv(directory, dataset, attribute):
 
     global_table = pd.read_csv(f'{directory}/{dataset}_{attribute}.csv', index_col=0)
 
-    first_part = global_table[global_table['iteration'] == 0]
+    first_part = global_table[global_table['iterations'] == 0]
     first_part.loc[:, 'group'] = first_part['value']
     binary_part = global_table[(global_table['algorithm'].isin(binary_algorithms)) & (global_table['group'] == global_table['value'])]
     multiclass_part = global_table[(global_table['algorithm'].isin(multiclass_algorithms))]
@@ -45,8 +45,8 @@ def create_classifiers_csvs(global_table, exclude_validation=False):
 
 if __name__ == '__main__':
 
-    dataset = 'German Credit'
-    attribute = 'Attribute9'
+    dataset = 'Law School Admission Bar Passage'
+    attribute = 'race1'
     directory = 'metrics'
     exclude_validation = True
 

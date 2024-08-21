@@ -14,6 +14,36 @@ ticks_font_size = 12
 font_name = 'Times New Roman'
 show_plot = True
 
+def line_plot(df, x_axis, y_axis, title, hue=None, style=None):
+    plt.figure(figsize=(12, 8))
+
+    palette = sns.color_palette(palette_collection, len(df))
+
+    sns.lineplot(
+        x=x_axis,
+        y=y_axis,
+        data=df,
+        palette=palette,
+        hue=hue if hue else None,
+        style=style if style else None
+    )
+
+    plt.xlabel(x_axis, fontsize=label_font_size, fontname=font_name)
+    plt.ylabel(y_axis, fontsize=label_font_size, fontname=font_name)
+    plt.title(title, fontsize=label_font_size, fontweight='bold', fontname=font_name)
+
+    plt.xticks(fontsize=ticks_font_size, rotation=45)
+    plt.yticks(fontsize=ticks_font_size)
+
+    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
+
+    sns.despine()
+
+    plt.savefig(f'{title}.svg', format='svg', dpi=300, bbox_inches='tight')
+
+    if show_plot:
+        plt.show()
+
 def cat_plot(df, x_axis, y_axis, title, hue=None):
     plt.figure(figsize=(12, 8))
 
@@ -78,15 +108,19 @@ def bar_plot(df, x_axis, y_axis, title, hue=None):
     if show_plot:
         plt.show()
 
-def compute_global_df(base_directory, base_seed, num_runs, dataset, attribute, head_size, ignore_second_iteration=True):
+def compute_global_df(base_directory, base_seed, num_runs, dataset, attribute, head_size=0, tail_size=0):
 
     global_df = pd.DataFrame()
     for seed in range(base_seed, base_seed + num_runs):
         try:
-            seed_df = pd.read_csv(f'{base_directory}/{dataset}/FairGenes_{attribute}_fitness_evolution_seed_{seed}.csv')
+            file = f'{base_directory}/{dataset}/FairGenes_{attribute}_fitness_evolution_seed_{seed}.csv'
+            seed_df = pd.read_csv(file)
 
-            if ignore_second_iteration:
+            if head_size > 0:
                 seed_df = seed_df.head(head_size)
+
+            if tail_size > 0:
+                seed_df = seed_df.tail(tail_size)
 
             global_df = pd.concat([global_df, seed_df], ignore_index=True)
         except FileNotFoundError:
@@ -139,7 +173,7 @@ def compute_average(df):
     return result
 
 
-def compute_agregated_metrics(directory, dataset, attribute, base_seed, num_runs, head_size=1):
+def compute_agregated_metrics(directory, dataset, attribute, base_seed, num_runs, head_size=0):
 
     first_file = f'{directory}/{dataset}/FairGenes_{attribute}_fitness_evolution_seed_{base_seed}.csv'
     final_df = pd.read_csv(first_file, index_col=0)
@@ -153,8 +187,12 @@ def compute_agregated_metrics(directory, dataset, attribute, base_seed, num_runs
 
     for seed in range(base_seed, base_seed + num_runs):
         try:
-            seed_df = pd.read_csv(f'{directory}/{dataset}/FairGenes_{attribute}_fitness_evolution_seed_{seed}.csv', index_col=0)
-            seed_df = seed_df.head(head_size)
+            file = f'{directory}/{dataset}/FairGenes_{attribute}_fitness_evolution_seed_{seed}.csv'
+            seed_df = pd.read_csv(file, index_col=0)
+
+            if head_size > 0:
+                seed_df = seed_df.head(head_size)
+
             seed_df = seed_df.reset_index(drop=True)
             fairness_df = pd.concat([fairness_df, seed_df[seed_df.columns.intersection(fairness_columns)]], axis=1)
             performance_df = pd.concat([performance_df, seed_df[seed_df.columns.intersection(performance_columns)]], axis=1)
@@ -191,7 +229,15 @@ def best_vs_population_analysis(global_df, classifiers, metrics, metric_type='fa
             best_df = global_df[[f'{classifier}_{metric_type}_{metric}']].rename(columns={f'{classifier}_{metric_type}_{metric}': f'Best_{classifier_mapping[classifier]}'})
             mean_df = global_df[[f'{classifier}_{metric_type}_{metric}mean']].rename(columns={f'{classifier}_{metric_type}_{metric}mean': f'Population_{classifier_mapping[classifier]}'})
 
+            mean_df = mean_df.reset_index(drop=True)
+            best_df = best_df.reset_index(drop=True)
+
             metric_df = pd.concat([metric_df, best_df, mean_df], axis=1)
+            # metric_df = metric_df.set_index('Generation')
+            metric_df.reset_index(drop=True, inplace=True)
+            generation = range(len(metric_df))
+            metric_df['Generation'] = generation
+            metric_df.set_index('Generation', inplace=True)
 
         metrics_df[metric] = metric_df
 
@@ -202,22 +248,26 @@ if __name__ == '__main__':
 
     base_seed = 42
     num_runs = 30
-    dataset = 'German Credit'
+    dataset = 'Law School Admission Bar Passage'
+    attribute = 'race1'
     base_directory = 'best_individuals'
     classifiers = ['LogisticRegression', 'SVC', 'GaussianNB', 'DecisionTreeClassifier', 'RandomForestClassifier']
     metrics = ['disparate_impact', 'discrimination_score', 'true_positive_rate_diff', 'false_positive_rate_diff',
                'false_positive_error_rate_balance_score', 'false_negative_error_rate_balance_score', 'consistency']
+    head_size = 1 if 'German' in dataset else 0
+    tail_size = 1 if 'Law' in dataset else 0
+    line = True if 'Law' in dataset else False
 
     show_plot = False
 
-    global_df = compute_global_df(base_directory, base_seed, num_runs, dataset, 'Attribute9', head_size=1)
+    global_df = compute_global_df(base_directory, base_seed, num_runs, dataset, attribute, head_size=head_size, tail_size=tail_size)
     frequency_df = frequency_analysis(global_df)
     mapped_genotypes, frequency_df = map_genotypes(frequency_df)
     mapped_genotypes.to_latex(f'{dataset}_mapped_genotypes.tex', index_names=False, index=False)
     bar_plot(frequency_df, title=f'Genotype Frequency Analysis for {dataset}', x_axis='Genotype', y_axis='Frequency')
 
 
-    aggregated_df = compute_agregated_metrics(base_directory, dataset, 'Attribute9', base_seed, num_runs)
+    aggregated_df = compute_agregated_metrics(base_directory, dataset, attribute, base_seed, num_runs, head_size)
     metrics_dfs = best_vs_population_analysis(aggregated_df, classifiers, metrics)
 
     for metric, df in metrics_dfs.items():
@@ -226,5 +276,11 @@ if __name__ == '__main__':
         df_melted['Classifier'] = df_melted['Classifier'].apply(
             lambda x: x.replace('Best_', '').replace('Population_', ''))
 
-        cat_plot(df_melted, title=f'{dataset} - {metric}', x_axis='Classifier', y_axis='Performance', hue='Type')
+        print(df_melted)
+
+        if line:
+            df_melted['Generation'] = df_melted.index % 30
+            line_plot(df_melted, title=f'{dataset} - {metric}', x_axis='Generation', y_axis='Performance', hue='Classifier', style='Type')
+        else:
+            cat_plot(df_melted, title=f'{dataset} - {metric}', x_axis='Classifier', y_axis='Performance', hue='Type')
 

@@ -36,9 +36,9 @@ def colour_analysis(directory, dataset, attribute, classifier):
 
     colored_df = pd.DataFrame()
     for value in protected_groups:
-        baseline = df[(df['value'] == value) & (df['iteration'] == 0)].iloc[0]
+        baseline = df[(df['value'] == value) & (df['iterations'] == 0)].iloc[0]
 
-        rows_to_color = df[(df['value'] == value) & (df['iteration'] > 0)].copy()
+        rows_to_color = df[(df['value'] == value) & (df['iterations'] > 0)].copy()
 
         fairness_columns = [col for col in rows_to_color.columns if 'fairness' in col]
         performance_columns = [col for col in rows_to_color.columns if 'performance' in col]
@@ -68,7 +68,7 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
     for classifier in classifiers:
         classifier_df = pd.read_csv(f'{directory}/{dataset}_{attribute}_{classifier}.csv', index_col=0)
         df = pd.concat([df, classifier_df])
-    df = df[df['iteration'] > 0]
+    df = df[df['iterations'] > 0]
 
     results = pd.DataFrame()
     protected_groups = df['value'].unique()
@@ -80,8 +80,8 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
         algorithm, value = comb
         algorithm_df = df[(df['algorithm'] == algorithm) & (df['value'] == value)]
         try:
-            first_iteration = algorithm_df[algorithm_df['iteration'] == 1].iloc[0]
-            second_iteration = algorithm_df[algorithm_df['iteration'] == 2].iloc[0]
+            first_iteration = algorithm_df[algorithm_df['iterations'] == 1].iloc[0]
+            second_iteration = algorithm_df[algorithm_df['iterations'] == 2].iloc[0]
 
             first_iter_fairness = first_iteration[[col for col in first_iteration.index if 'fairness' in col]]
             second_iter_fairness = second_iteration[[col for col in second_iteration.index if 'fairness' in col]]
@@ -93,7 +93,7 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
             algorithm_df = pd.DataFrame({'algorithm': algorithm, 'group': value, 'num_increases': num_increases, 'num_decreases': num_decreases, 'num_no_change': num_no_change}, index=[0])
             results = pd.concat([results, algorithm_df])
 
-        except ValueError as e:
+        except IndexError as e:
             continue
 
     total_increases = results['num_increases'].sum()
@@ -113,8 +113,8 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
 
 if __name__ == '__main__':
     
-    dataset = 'German Credit'
-    attribute = 'Attribute9'
+    dataset = 'Law School Admission Bar Passage'
+    attribute = 'race1'
     directory = 'metrics'
     classifiers = ['LogisticRegression', 'SVC', 'GaussianNB', 'DecisionTreeClassifier', 'RandomForestClassifier', 'XGBClassifier']
 

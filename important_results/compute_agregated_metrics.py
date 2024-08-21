@@ -57,5 +57,7 @@ if __name__ == '__main__':
     directory = 'metrics'
     base_seed = 42
     num_runs = 30
+    dataset = 'Law School Admission Bar Passage'
+    attribute = 'race1'
 
-    compute_agregated_metrics(directory, 'German Credit', 'Attribute9', base_seed, num_runs)
+    compute_agregated_metrics(directory, dataset, attribute, base_seed, num_runs)
