@@ -1,6 +1,6 @@
 \begin{table}[h!]
     \begin{center}
-        \caption{Fairness metrics for Logistic Regression for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+        \caption{Metrics for Logistic Regression for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
         \label{tab::german_credit::sex::lr}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
@@ -31,7 +31,7 @@
                 \cline{4-14}
                    & & & 2 & \green 0.475 & \yellow 0.290 & \red 0.476 & \yellow 0.848 & \yellow 0.848 & \red 0.476 & \yellow 0.957 & \red 0.738 & \red 0.824 & \red 0.646 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FGE} & 1 & \green 0.389 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \red 0.996 & \red 0.734 & \red 0.823 & \red 0.634 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.389 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \red 0.996 & \red 0.734 & \red 0.823 & \red 0.634 \\
                 \cline{4-14}
                    & & & 2 & \green 0.354 & \yellow 0.238 & \red 0.328 & \yellow 0.469 & \yellow 0.469 & \red 0.328 & \yellow 0.823 & \red 0.731 & \red 0.824 & \red 0.618 \\
                 \cline{1-14}
@@ -58,7 +58,7 @@
                 \cline{4-14}
                    & & & 2 & \green 0.900 & \yellow 0.290 & \red 0.476 & \yellow 0.848 & \yellow 0.848 & \red 0.476 & \yellow 0.957 & \red 0.738 & \red 0.824 & \red 0.646 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FGE} & 1 & \green 0.591 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \red 0.996 & \red 0.734 & \red 0.823 & \red 0.634 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.591 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \red 0.996 & \red 0.734 & \red 0.823 & \red 0.634 \\
                 \cline{4-14}
                    & & & 2 & \green 0.515 & \yellow 0.238 & \red 0.328 & \yellow 0.469 & \yellow 0.469 & \red 0.328 & \yellow 0.823 & \red 0.731 & \red 0.824 & \red 0.618 \\
                 \hline
@@ -66,10 +66,10 @@
         \end{adjustbox}
     \end{center}
 \end{table}
-
+    
 \begin{table}[h!]
     \begin{center}
-        \caption{Fairness metrics for Gaussian Naive Bayes for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+        \caption{Metrics for Gaussian Naive Bayes for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
         \label{tab::german_credit::sex::gnb}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
@@ -100,7 +100,7 @@
                 \cline{4-14}
                    & & & 2 & \green 1.117 & \yellow 0.460 & \red 0.705 & \yellow 0.442 & \yellow 0.442 & \red 0.705 & \yellow 1.363 & \red 0.721 & \green 0.792 & \red 0.688 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FGE} & 1 & \green 1.064 & \yellow 0.481 & \yellow 0.487 & \red 0.916 & \red 0.916 & \yellow 0.487 & \yellow 1.526 & \red 0.721 & \green 0.797 & \red 0.676 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 1.064 & \yellow 0.481 & \yellow 0.487 & \red 0.916 & \red 0.916 & \yellow 0.487 & \yellow 1.526 & \red 0.721 & \green 0.797 & \red 0.676 \\
                 \cline{4-14}
                    & & & 2 & \green 0.842 & \yellow 0.401 & \yellow 0.449 & \yellow 0.779 & \yellow 0.779 & \yellow 0.449 & \yellow 1.406 & \red 0.713 & \green 0.794 & \red 0.652 \\
                 \cline{1-14}
@@ -127,7 +127,7 @@
                 \cline{4-14}
                    & & & 2 & \yellow 3.655 & \yellow 0.460 & \red 0.705 & \yellow 0.442 & \yellow 0.442 & \red 0.705 & \yellow 1.363 & \red 0.721 & \green 0.792 & \red 0.688 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FGE} & 1 & \yellow 2.197 & \yellow 0.481 & \yellow 0.487 & \red 0.916 & \red 0.916 & \yellow 0.487 & \yellow 1.526 & \red 0.721 & \green 0.797 & \red 0.676 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \yellow 2.197 & \yellow 0.481 & \yellow 0.487 & \red 0.916 & \red 0.916 & \yellow 0.487 & \yellow 1.526 & \red 0.721 & \green 0.797 & \red 0.676 \\
                 \cline{4-14}
                    & & & 2 & \yellow 1.622 & \yellow 0.401 & \yellow 0.449 & \yellow 0.779 & \yellow 0.779 & \yellow 0.449 & \yellow 1.406 & \red 0.713 & \green 0.794 & \red 0.652 \\
                 \hline
@@ -135,10 +135,10 @@
         \end{adjustbox}
     \end{center}
 \end{table}
-
+    
 \begin{table}[h!]
     \begin{center}
-        \caption{Fairness metrics for Support Vector Machine for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+        \caption{Metrics for Support Vector Machine for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
         \label{tab::german_credit::sex::svm}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
@@ -204,10 +204,10 @@
         \end{adjustbox}
     \end{center}
 \end{table}
-
+    
 \begin{table}[h!]
     \begin{center}
-        \caption{Fairness metrics for Decision Tree for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+        \caption{Metrics for Decision Tree for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
         \label{tab::german_credit::sex::dt}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
@@ -273,10 +273,10 @@
         \end{adjustbox}
     \end{center}
 \end{table}
-
+    
 \begin{table}[h!]
     \begin{center}
-        \caption{Fairness metrics for Random Forest for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+        \caption{Metrics for Random Forest for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
         \label{tab::german_credit::sex::rf}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
@@ -342,10 +342,10 @@
         \end{adjustbox}
     \end{center}
 \end{table}
-
+    
 \begin{table}[h!]
     \begin{center}
-        \caption{Fairness metrics for XGBoost for sensitive attribute \textit{Sex}. Regarding the colouring of the cells, the criteria differs based on being being a fairness or a performance metric. In case of the fairness metrics, a green coloured cell signifies a total bias reduction, yellow corresponds to a partial reduction, and red means a non-decrease of bias. In terms of performance, green is used for an increase, red for decrease, and yellow for when the value remains the same. For further reference, consult tables \ref{tab::reference} and \ref{tab::german_credit::reference}.}
+        \caption{Metrics for XGBoost for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
         \label{tab::german_credit::sex::xgb}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
@@ -411,4 +411,3 @@
         \end{adjustbox}
     \end{center}
 \end{table}
-s

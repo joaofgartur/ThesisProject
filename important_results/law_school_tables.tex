@@ -1,0 +1,845 @@
+\begin{table}[h!]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Logistic Regression for sensitive attribute \textit{Race}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \label{tab::law_shool::race::lr}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 0.001 & 0.001 & 0.000 & 0.029 & 0.029 & 0.000 & 0.000 & 0.950 & 0.974 & 0.506 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.002 & \green 0.002 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.505 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.002 & \green 0.002 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.505 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.000 & \green 0.950 & \green 0.974 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.000 & \green 0.950 & \green 0.974 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.028 & \green 0.028 & \green 0.001 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.028 & \green 0.028 & \green 0.001 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 0.002 & 0.002 & 0.001 & 0.017 & 0.017 & 0.001 & 0.000 & 0.950 & 0.974 & 0.506 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.033 & \green 0.027 & \green 0.027 & \red 0.414 & \red 0.414 & \green 0.027 & \green 0.002 & \red 0.891 & \red 0.942 & \green 0.592 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.033 & \green 0.027 & \green 0.027 & \red 0.414 & \red 0.414 & \green 0.027 & \green 0.002 & \red 0.891 & \red 0.942 & \green 0.592 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.027 & \green 0.022 & \green 0.023 & \red 0.339 & \red 0.339 & \green 0.023 & \green 0.002 & \red 0.891 & \red 0.942 & \green 0.590 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.027 & \green 0.022 & \green 0.023 & \red 0.339 & \red 0.339 & \green 0.023 & \green 0.002 & \red 0.891 & \red 0.942 & \green 0.590 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.001 & \green 0.001 & \green 0.001 & \green 0.007 & \green 0.007 & \green 0.001 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.007 & \green 0.007 & \green 0.001 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.002 & 0.002 & 0.000 & 0.000 & 0.950 & 0.974 & 0.506 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.008 & \green 0.008 & \green 0.000 & \green 0.000 & \red 0.947 & \red 0.973 & \green 0.509 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.008 & \green 0.008 & \green 0.000 & \green 0.000 & \red 0.947 & \red 0.973 & \green 0.509 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.006 & \green 0.006 & \green 0.000 & \green 0.000 & \red 0.947 & \red 0.973 & \green 0.512 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.006 & \green 0.006 & \green 0.000 & \green 0.000 & \red 0.947 & \red 0.973 & \green 0.512 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.000 & \green 0.000 & \green 0.000 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.001 & 0.001 & 0.000 & 0.000 & 0.950 & 0.974 & 0.506 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.004 & \green 0.004 & \green 0.003 & \red 0.100 & \red 0.100 & \green 0.003 & \green 0.000 & \red 0.948 & \red 0.973 & \green 0.508 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.004 & \green 0.003 & \red 0.100 & \red 0.100 & \green 0.003 & \green 0.000 & \red 0.948 & \red 0.973 & \green 0.508 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.005 & \green 0.005 & \green 0.004 & \red 0.093 & \red 0.093 & \green 0.004 & \green 0.000 & \red 0.948 & \red 0.973 & \green 0.507 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.005 & \green 0.005 & \green 0.004 & \red 0.093 & \red 0.093 & \green 0.004 & \green 0.000 & \red 0.948 & \red 0.973 & \green 0.507 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.000 & \green 0.000 & \green 0.000 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.006 & 0.006 & 0.000 & 0.000 & 0.950 & 0.974 & 0.506 \\
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.002 & \green 0.002 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.503 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.008 & \green 0.008 & \green 0.005 & \red 0.311 & \red 0.311 & \green 0.005 & \green 0.001 & \red 0.923 & \red 0.960 & \green 0.551 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.003 & \green 0.003 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.003 & \green 0.003 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \yellow 0.974 & \red 0.500 \\
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Gaussian Naive Bayes for sensitive attribute \textit{Race}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \label{tab::law_shool::race::gnb}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 1.421 & 0.948 & 0.940 & 0.424 & 0.424 & 0.940 & 0.002 & 0.817 & 0.895 & 0.746 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.146 & \green 0.052 & \green 0.049 & \yellow 0.421 & \yellow 0.421 & \green 0.049 & \green 0.002 & \red 0.636 & \red 0.766 & \red 0.720 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.146 & \green 0.052 & \green 0.049 & \yellow 0.421 & \yellow 0.421 & \green 0.049 & \green 0.002 & \red 0.636 & \red 0.766 & \red 0.720 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \red 4878.869 & \red 2.227 & \red 2.404 & \red 0.660 & \red 0.660 & \red 2.404 & \green 0.000 & \red 0.093 & \red 0.091 & \red 0.499 \\
+                \cline{4-14}
+                    & & & 2 & \red 912.325 & \red 1.098 & \red 1.176 & \red 0.597 & \red 0.597 & \red 1.176 & \green 0.001 & \red 0.298 & \red 0.380 & \red 0.598 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \red 12063.932 & \red 2.315 & \red 2.479 & \red 0.812 & \red 0.812 & \red 2.479 & \green 0.000 & \red 0.086 & \red 0.077 & \red 0.499 \\
+                \cline{4-14}
+                   & & & 2 & \red 12063.932 & \red 2.315 & \red 2.479 & \red 0.812 & \red 0.812 & \red 2.479 & \green 0.000 & \red 0.086 & \red 0.077 & \red 0.499 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \red 4643.535 & \red 1.059 & \red 1.125 & \yellow 0.414 & \yellow 0.414 & \red 1.125 & \green 0.002 & \red 0.538 & \red 0.578 & \red 0.640 \\
+                \cline{4-14}
+                   & & & 2 & \red 4643.535 & \red 1.059 & \red 1.125 & \yellow 0.414 & \yellow 0.414 & \red 1.125 & \green 0.002 & \red 0.538 & \red 0.578 & \red 0.640 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \red 1.514 & \red 1.149 & \red 1.110 & \red 0.968 & \red 0.968 & \red 1.110 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{4-14}
+                   & & & 2 & \red 1.514 & \red 1.149 & \red 1.110 & \red 0.968 & \red 0.968 & \red 1.110 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \red 485.956 & \yellow 0.546 & \yellow 0.575 & \yellow 0.364 & \yellow 0.364 & \yellow 0.575 & \green 0.002 & \red 0.622 & \red 0.688 & \red 0.652 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 2.852 & 1.999 & 1.899 & 0.593 & 0.593 & 1.899 & 0.002 & 0.817 & 0.895 & 0.746 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.106 & \yellow 0.097 & \green 0.045 & \yellow 0.133 & \yellow 0.133 & \green 0.045 & \green 0.001 & \green 0.929 & \green 0.963 & \red 0.611 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.106 & \yellow 0.097 & \green 0.045 & \yellow 0.133 & \yellow 0.133 & \green 0.045 & \green 0.001 & \green 0.929 & \green 0.963 & \red 0.611 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \red 58.325 & \green 0.057 & \yellow 0.087 & \green 0.005 & \green 0.005 & \yellow 0.087 & \green 0.000 & \red 0.084 & \red 0.072 & \red 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \red 86.200 & \yellow 0.093 & \yellow 0.135 & \green 0.016 & \green 0.016 & \yellow 0.135 & \green 0.000 & \red 0.087 & \red 0.078 & \red 0.499 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \red 40.883 & \green 0.038 & \green 0.057 & \green 0.005 & \green 0.005 & \green 0.057 & \green 0.000 & \red 0.082 & \red 0.068 & \red 0.498 \\
+                \cline{4-14}
+                   & & & 2 & \red 40.883 & \green 0.038 & \green 0.057 & \green 0.005 & \green 0.005 & \green 0.057 & \green 0.000 & \red 0.082 & \red 0.068 & \red 0.498 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \red 16.669 & \green 0.019 & \green 0.030 & \green 0.006 & \green 0.006 & \green 0.030 & \green 0.000 & \red 0.084 & \red 0.073 & \red 0.494 \\
+                \cline{4-14}
+                   & & & 2 & \red 16.669 & \green 0.019 & \green 0.030 & \green 0.006 & \green 0.006 & \green 0.030 & \green 0.000 & \red 0.084 & \red 0.073 & \red 0.494 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \yellow 2.844 & \red 2.269 & \red 2.138 & \red 1.081 & \red 1.081 & \red 2.138 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{4-14}
+                   & & & 2 & \yellow 2.844 & \red 2.269 & \red 2.138 & \red 1.081 & \red 1.081 & \red 2.138 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \red 16.356 & \yellow 0.480 & \yellow 0.400 & \yellow 0.173 & \yellow 0.173 & \yellow 0.400 & \green 0.002 & \red 0.622 & \red 0.688 & \red 0.652 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 0.882 & 0.586 & 0.542 & 0.118 & 0.118 & 0.542 & 0.002 & 0.817 & 0.895 & 0.746 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.482 & \yellow 0.295 & \yellow 0.246 & \green 0.073 & \green 0.073 & \yellow 0.246 & \green 0.003 & \red 0.791 & \red 0.879 & \green 0.748 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.482 & \yellow 0.295 & \yellow 0.246 & \green 0.073 & \green 0.073 & \yellow 0.246 & \green 0.003 & \red 0.791 & \red 0.879 & \green 0.748 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \red 8.566 & \green 0.013 & \green 0.020 & \green 0.009 & \green 0.009 & \green 0.020 & \green 0.000 & \red 0.087 & \red 0.077 & \red 0.502 \\
+                \cline{4-14}
+                    & & & 2 & \red 35.401 & \green 0.059 & \yellow 0.076 & \green 0.030 & \green 0.030 & \yellow 0.076 & \green 0.000 & \red 0.090 & \red 0.085 & \red 0.496 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \red 5.000 & \green 0.007 & \green 0.007 & \green 0.009 & \green 0.009 & \green 0.007 & \green 0.000 & \red 0.082 & \red 0.068 & \red 0.499 \\
+                \cline{4-14}
+                   & & & 2 & \red 5.000 & \green 0.007 & \green 0.007 & \green 0.009 & \green 0.009 & \green 0.007 & \green 0.000 & \red 0.082 & \red 0.068 & \red 0.499 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \red 5.000 & \green 0.007 & \green 0.007 & \green 0.012 & \green 0.012 & \green 0.007 & \green 0.000 & \red 0.082 & \red 0.069 & \red 0.497 \\
+                \cline{4-14}
+                   & & & 2 & \red 5.000 & \green 0.007 & \green 0.007 & \green 0.012 & \green 0.012 & \green 0.007 & \green 0.000 & \red 0.082 & \red 0.069 & \red 0.497 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.716 & \yellow 0.533 & \yellow 0.463 & \red 0.354 & \red 0.354 & \yellow 0.463 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.716 & \yellow 0.533 & \yellow 0.463 & \red 0.354 & \red 0.354 & \yellow 0.463 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \red 17.107 & \yellow 0.201 & \yellow 0.204 & \red 0.169 & \red 0.169 & \yellow 0.204 & \green 0.002 & \red 0.622 & \red 0.688 & \red 0.652 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 0.194 & 0.126 & 0.094 & 0.373 & 0.373 & 0.094 & 0.002 & 0.817 & 0.895 & 0.746 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \red 7.289 & \yellow 0.108 & \red 0.140 & \green 0.021 & \green 0.021 & \red 0.140 & \green 0.002 & \red 0.210 & \red 0.290 & \red 0.554 \\
+                \cline{4-14}
+                   & & & 2 & \red 7.289 & \yellow 0.108 & \red 0.140 & \green 0.021 & \green 0.021 & \red 0.140 & \green 0.002 & \red 0.210 & \red 0.290 & \red 0.554 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \red 5.000 & \green 0.006 & \green 0.006 & \green 0.007 & \green 0.007 & \green 0.006 & \green 0.000 & \red 0.080 & \red 0.064 & \red 0.498 \\
+                \cline{4-14}
+                    & & & 2 & \red 4.019 & \green 0.010 & \green 0.013 & \green 0.021 & \green 0.021 & \green 0.013 & \green 0.001 & \red 0.162 & \red 0.182 & \red 0.533 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \red 5.000 & \green 0.005 & \green 0.005 & \green 0.005 & \green 0.005 & \green 0.005 & \green 0.000 & \red 0.078 & \red 0.059 & \red 0.501 \\
+                \cline{4-14}
+                   & & & 2 & \red 5.000 & \green 0.005 & \green 0.005 & \green 0.005 & \green 0.005 & \green 0.005 & \green 0.000 & \red 0.078 & \red 0.059 & \red 0.501 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \red 4.032 & \green 0.024 & \green 0.015 & \yellow 0.126 & \yellow 0.126 & \green 0.015 & \green 0.001 & \red 0.223 & \red 0.225 & \red 0.549 \\
+                \cline{4-14}
+                   & & & 2 & \red 4.032 & \green 0.024 & \green 0.015 & \yellow 0.126 & \yellow 0.126 & \green 0.015 & \green 0.001 & \red 0.223 & \red 0.225 & \red 0.549 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.094 & \green 0.068 & \green 0.064 & \yellow 0.104 & \yellow 0.104 & \green 0.064 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.094 & \green 0.068 & \green 0.064 & \yellow 0.104 & \yellow 0.104 & \green 0.064 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \red 16.384 & \green 0.066 & \green 0.075 & \yellow 0.078 & \yellow 0.078 & \green 0.075 & \green 0.002 & \red 0.622 & \red 0.688 & \red 0.652 \\
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 9.367 & 1.291 & 1.142 & 0.836 & 0.836 & 1.142 & 0.002 & 0.817 & 0.895 & 0.746 \\
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.122 & \green 0.023 & \green 0.055 & \green 0.056 & \green 0.056 & \green 0.055 & \green 0.003 & \red 0.420 & \red 0.563 & \red 0.657 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.122 & \green 0.023 & \green 0.055 & \green 0.056 & \green 0.056 & \green 0.055 & \green 0.003 & \red 0.420 & \red 0.563 & \red 0.657 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.083 & \green 0.015 & \green 0.041 & \green 0.051 & \green 0.051 & \green 0.041 & \green 0.003 & \red 0.424 & \red 0.567 & \red 0.658 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.018 & \green 0.004 & \green 0.007 & \green 0.038 & \green 0.038 & \green 0.007 & \green 0.003 & \red 0.484 & \red 0.629 & \red 0.683 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.122 & \green 0.023 & \green 0.055 & \green 0.056 & \green 0.056 & \green 0.055 & \green 0.003 & \red 0.420 & \red 0.563 & \red 0.657 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.122 & \green 0.023 & \green 0.055 & \green 0.056 & \green 0.056 & \green 0.055 & \green 0.003 & \red 0.420 & \red 0.563 & \red 0.657 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \yellow 1.813 & \yellow 0.543 & \yellow 0.565 & \yellow 0.338 & \yellow 0.338 & \yellow 0.565 & \green 0.002 & \red 0.521 & \red 0.622 & \red 0.646 \\
+                \cline{4-14}
+                   & & & 2 & \yellow 1.813 & \yellow 0.543 & \yellow 0.565 & \yellow 0.338 & \yellow 0.338 & \yellow 0.565 & \green 0.002 & \red 0.521 & \red 0.622 & \red 0.646 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \yellow 8.398 & \red 1.387 & \red 1.205 & \red 1.521 & \red 1.521 & \red 1.205 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{4-14}
+                   & & & 2 & \yellow 8.398 & \red 1.387 & \red 1.205 & \red 1.521 & \red 1.521 & \red 1.205 & \green 0.002 & \green 0.859 & \green 0.922 & \red 0.716 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \yellow 1.627 & \yellow 0.325 & \yellow 0.310 & \yellow 0.165 & \yellow 0.165 & \yellow 0.310 & \green 0.002 & \red 0.622 & \red 0.688 & \red 0.652 \\
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Support Vector Machine for sensitive attribute \textit{Race}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \label{tab::law_shool::race::svm}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.950 & 0.974 & 0.500 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.950 & 0.974 & 0.500 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.949 & \red 0.974 & \red 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.949 & \red 0.974 & \red 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.950 & 0.974 & 0.500 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.950 & 0.974 & 0.500 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.950 & 0.974 & 0.500 \\
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \yellow 0.950 & \yellow 0.974 & \yellow 0.500 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.000 & \red 0.950 & \red 0.974 & \red 0.500 \\
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \captionsetup{font=scriptsize}
+    \begin{center}
+        \caption{Metrics for Decision Tree for sensitive attribute \textit{Race}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \label{tab::law_shool::race::dt}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 0.024 & 0.022 & 0.021 & 0.037 & 0.037 & 0.021 & 0.006 & 0.926 & 0.961 & 0.564 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.004 & \green 0.003 & \green 0.004 & \green 0.070 & \green 0.070 & \green 0.004 & \green 0.007 & \red 0.907 & \red 0.951 & \red 0.536 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.003 & \green 0.004 & \green 0.070 & \green 0.070 & \green 0.004 & \green 0.007 & \red 0.907 & \red 0.951 & \red 0.536 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.006 & \green 0.005 & \green 0.004 & \red 0.170 & \red 0.170 & \green 0.004 & \green 0.010 & \red 0.901 & \red 0.948 & \green 0.566 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \red 0.174 & \red 0.174 & \green 0.002 & \green 0.009 & \red 0.907 & \red 0.951 & \green 0.569 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.010 & \green 0.008 & \green 0.007 & \red 0.316 & \red 0.316 & \green 0.007 & \green 0.011 & \red 0.896 & \red 0.945 & \green 0.589 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.010 & \green 0.008 & \green 0.007 & \red 0.316 & \red 0.316 & \green 0.007 & \green 0.011 & \red 0.896 & \red 0.945 & \green 0.589 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.004 & \green 0.003 & \green 0.003 & \red 0.161 & \red 0.161 & \green 0.003 & \green 0.006 & \red 0.919 & \red 0.957 & \red 0.553 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.003 & \green 0.003 & \red 0.161 & \red 0.161 & \green 0.003 & \green 0.006 & \red 0.919 & \red 0.957 & \red 0.553 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.014 & \green 0.013 & \green 0.015 & \green 0.037 & \green 0.037 & \green 0.015 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.014 & \green 0.013 & \green 0.015 & \green 0.037 & \green 0.037 & \green 0.015 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.009 & \green 0.008 & \green 0.008 & \green 0.054 & \green 0.054 & \green 0.008 & \green 0.007 & \red 0.900 & \red 0.947 & \red 0.519 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 0.148 & 0.139 & 0.124 & 0.090 & 0.090 & 0.124 & 0.006 & 0.926 & 0.961 & 0.564 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.003 & \green 0.002 & \green 0.002 & \green 0.021 & \green 0.021 & \green 0.002 & \green 0.008 & \red 0.888 & \red 0.940 & \red 0.501 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.003 & \green 0.002 & \green 0.002 & \green 0.021 & \green 0.021 & \green 0.002 & \green 0.008 & \red 0.888 & \red 0.940 & \red 0.501 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.042 & \green 0.038 & \green 0.036 & \green 0.020 & \green 0.020 & \green 0.036 & \green 0.009 & \red 0.902 & \red 0.948 & \red 0.547 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.023 & \green 0.021 & \green 0.023 & \green 0.025 & \green 0.025 & \green 0.023 & \green 0.008 & \red 0.907 & \red 0.951 & \red 0.538 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.120 & \yellow 0.104 & \yellow 0.087 & \yellow 0.088 & \yellow 0.088 & \yellow 0.087 & \green 0.013 & \red 0.893 & \red 0.943 & \green 0.571 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.120 & \yellow 0.104 & \yellow 0.087 & \yellow 0.088 & \yellow 0.088 & \yellow 0.087 & \green 0.013 & \red 0.893 & \red 0.943 & \green 0.571 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.095 & \yellow 0.084 & \green 0.062 & \red 0.112 & \red 0.112 & \green 0.062 & \green 0.010 & \red 0.900 & \red 0.947 & \green 0.568 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.095 & \yellow 0.084 & \green 0.062 & \red 0.112 & \red 0.112 & \green 0.062 & \green 0.010 & \red 0.900 & \red 0.947 & \green 0.568 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.121 & \yellow 0.117 & \yellow 0.096 & \red 0.139 & \red 0.139 & \yellow 0.096 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.121 & \yellow 0.117 & \yellow 0.096 & \red 0.139 & \red 0.139 & \yellow 0.096 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.011 & \green 0.011 & \green 0.010 & \green 0.027 & \green 0.027 & \green 0.010 & \green 0.007 & \red 0.900 & \red 0.947 & \red 0.519 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 0.086 & 0.081 & 0.067 & 0.170 & 0.170 & 0.067 & 0.006 & 0.926 & 0.961 & 0.564 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.004 & \green 0.003 & \green 0.006 & \green 0.036 & \green 0.036 & \green 0.006 & \green 0.009 & \red 0.894 & \red 0.944 & \red 0.518 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.003 & \green 0.006 & \green 0.036 & \green 0.036 & \green 0.006 & \green 0.009 & \red 0.894 & \red 0.944 & \red 0.518 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.023 & \green 0.020 & \green 0.014 & \yellow 0.090 & \yellow 0.090 & \green 0.014 & \green 0.013 & \red 0.891 & \red 0.942 & \red 0.559 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.012 & \green 0.011 & \green 0.012 & \green 0.035 & \green 0.035 & \green 0.012 & \green 0.011 & \red 0.894 & \red 0.944 & \red 0.544 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.027 & \green 0.022 & \green 0.019 & \yellow 0.092 & \yellow 0.092 & \green 0.019 & \green 0.017 & \red 0.880 & \red 0.935 & \green 0.576 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.027 & \green 0.022 & \green 0.019 & \yellow 0.092 & \yellow 0.092 & \green 0.019 & \green 0.017 & \red 0.880 & \red 0.935 & \green 0.576 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.035 & \green 0.029 & \green 0.024 & \yellow 0.121 & \yellow 0.121 & \green 0.024 & \green 0.015 & \red 0.883 & \red 0.937 & \green 0.575 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.035 & \green 0.029 & \green 0.024 & \yellow 0.121 & \yellow 0.121 & \green 0.024 & \green 0.015 & \red 0.883 & \red 0.937 & \green 0.575 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.066 & \green 0.063 & \green 0.054 & \yellow 0.122 & \yellow 0.122 & \green 0.054 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.066 & \green 0.063 & \green 0.054 & \yellow 0.122 & \yellow 0.122 & \green 0.054 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.011 & \green 0.010 & \green 0.008 & \yellow 0.093 & \yellow 0.093 & \green 0.008 & \green 0.007 & \red 0.900 & \red 0.947 & \red 0.519 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 0.025 & 0.023 & 0.012 & 0.371 & 0.371 & 0.012 & 0.006 & 0.926 & 0.961 & 0.564 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.013 & \green 0.012 & \green 0.013 & \yellow 0.159 & \yellow 0.159 & \green 0.013 & \green 0.006 & \red 0.906 & \red 0.950 & \red 0.540 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.013 & \green 0.012 & \green 0.013 & \yellow 0.159 & \yellow 0.159 & \green 0.013 & \green 0.006 & \red 0.906 & \red 0.950 & \red 0.540 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.021 & \green 0.018 & \green 0.014 & \yellow 0.115 & \yellow 0.115 & \green 0.014 & \green 0.008 & \red 0.904 & \red 0.949 & \green 0.574 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.017 & \green 0.015 & \green 0.013 & \yellow 0.079 & \yellow 0.079 & \green 0.013 & \green 0.008 & \red 0.908 & \red 0.951 & \green 0.584 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.013 & \green 0.011 & \green 0.010 & \green 0.051 & \green 0.051 & \green 0.010 & \green 0.010 & \red 0.898 & \red 0.946 & \green 0.593 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.013 & \green 0.011 & \green 0.010 & \green 0.051 & \green 0.051 & \green 0.010 & \green 0.010 & \red 0.898 & \red 0.946 & \green 0.593 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.023 & \green 0.020 & \green 0.020 & \green 0.062 & \green 0.062 & \green 0.020 & \green 0.008 & \red 0.908 & \red 0.951 & \green 0.578 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.023 & \green 0.020 & \green 0.020 & \green 0.062 & \green 0.062 & \green 0.020 & \green 0.008 & \red 0.908 & \red 0.951 & \green 0.578 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.065 & \green 0.062 & \green 0.048 & \red 0.459 & \red 0.459 & \green 0.048 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.065 & \green 0.062 & \green 0.048 & \red 0.459 & \red 0.459 & \green 0.048 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.006 & \green 0.006 & \green 0.004 & \yellow 0.101 & \yellow 0.101 & \green 0.004 & \green 0.007 & \red 0.900 & \red 0.947 & \red 0.519 \\
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 0.113 & 0.082 & 0.064 & 0.194 & 0.194 & 0.064 & 0.006 & 0.926 & 0.961 & 0.564 \\
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.059 & \green 0.045 & \green 0.027 & \yellow 0.193 & \yellow 0.193 & \green 0.027 & \green 0.004 & \green 0.929 & \green 0.963 & \red 0.563 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.059 & \green 0.045 & \green 0.027 & \yellow 0.193 & \yellow 0.193 & \green 0.027 & \green 0.004 & \green 0.929 & \green 0.963 & \red 0.563 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.051 & \green 0.039 & \green 0.026 & \yellow 0.113 & \yellow 0.113 & \green 0.026 & \green 0.005 & \red 0.925 & \red 0.961 & \red 0.562 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.056 & \green 0.043 & \green 0.031 & \yellow 0.107 & \yellow 0.107 & \green 0.031 & \green 0.005 & \red 0.924 & \red 0.960 & \red 0.561 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.059 & \green 0.045 & \green 0.027 & \yellow 0.193 & \yellow 0.193 & \green 0.027 & \green 0.004 & \green 0.929 & \green 0.963 & \red 0.563 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.059 & \green 0.045 & \green 0.027 & \yellow 0.193 & \yellow 0.193 & \green 0.027 & \green 0.004 & \green 0.929 & \green 0.963 & \red 0.563 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.029 & \green 0.024 & \green 0.015 & \yellow 0.104 & \yellow 0.104 & \green 0.015 & \green 0.002 & \green 0.934 & \green 0.966 & \red 0.543 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.029 & \green 0.024 & \green 0.015 & \yellow 0.104 & \yellow 0.104 & \green 0.015 & \green 0.002 & \green 0.934 & \green 0.966 & \red 0.543 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.096 & \green 0.072 & \green 0.057 & \yellow 0.175 & \yellow 0.175 & \green 0.057 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.096 & \green 0.072 & \green 0.057 & \yellow 0.175 & \yellow 0.175 & \green 0.057 & \green 0.003 & \green 0.934 & \green 0.965 & \red 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.007 & \green 0.005 & \green 0.005 & \green 0.016 & \green 0.016 & \green 0.005 & \green 0.007 & \red 0.900 & \red 0.947 & \red 0.519 \\
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Random Forest for sensitive attribute \textit{Race}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \label{tab::law_shool::race::rf}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 0.002 & 0.002 & 0.001 & 0.028 & 0.028 & 0.001 & 0.002 & 0.940 & 0.969 & 0.545 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.004 & \green 0.003 & \green 0.004 & \green 0.034 & \green 0.034 & \green 0.004 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.515 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.003 & \green 0.004 & \green 0.034 & \green 0.034 & \green 0.004 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.515 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.002 & \green 0.002 & \green 0.001 & \red 0.086 & \red 0.086 & \green 0.001 & \green 0.002 & \red 0.936 & \red 0.967 & \green 0.547 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.003 & \green 0.002 & \green 0.004 & \red 0.102 & \red 0.102 & \green 0.004 & \green 0.002 & \red 0.935 & \red 0.966 & \green 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.002 & \green 0.002 & \green 0.003 & \red 0.106 & \red 0.106 & \green 0.003 & \green 0.001 & \red 0.939 & \red 0.969 & \green 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.003 & \red 0.106 & \red 0.106 & \green 0.003 & \green 0.001 & \red 0.939 & \red 0.969 & \green 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.002 & \green 0.002 & \green 0.003 & \green 0.061 & \green 0.061 & \green 0.003 & \green 0.001 & \green 0.943 & \green 0.970 & \red 0.534 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.003 & \green 0.061 & \green 0.061 & \green 0.003 & \green 0.001 & \green 0.943 & \green 0.970 & \red 0.534 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.004 & \green 0.004 & \green 0.003 & \green 0.033 & \green 0.033 & \green 0.003 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.004 & \green 0.003 & \green 0.033 & \green 0.033 & \green 0.003 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.001 & \green 0.001 & \green 0.002 & \green 0.019 & \green 0.019 & \green 0.002 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.519 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 0.082 & 0.080 & 0.061 & 0.101 & 0.101 & 0.061 & 0.002 & 0.940 & 0.969 & 0.545 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.003 & \green 0.003 & \green 0.000 & \green 0.001 & \red 0.927 & \red 0.962 & \red 0.501 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.000 & \green 0.000 & \green 0.000 & \green 0.003 & \green 0.003 & \green 0.000 & \green 0.001 & \red 0.927 & \red 0.962 & \red 0.501 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.030 & \green 0.028 & \green 0.028 & \green 0.036 & \green 0.036 & \green 0.028 & \green 0.002 & \red 0.932 & \red 0.965 & \red 0.526 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.025 & \green 0.024 & \green 0.022 & \green 0.027 & \green 0.027 & \green 0.022 & \green 0.002 & \red 0.935 & \red 0.967 & \red 0.526 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.069 & \green 0.066 & \green 0.048 & \red 0.110 & \red 0.110 & \green 0.048 & \green 0.003 & \red 0.930 & \red 0.963 & \red 0.539 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.069 & \green 0.066 & \green 0.048 & \red 0.110 & \red 0.110 & \green 0.048 & \green 0.003 & \red 0.930 & \red 0.963 & \red 0.539 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.057 & \green 0.054 & \green 0.035 & \yellow 0.084 & \yellow 0.084 & \green 0.035 & \green 0.003 & \red 0.932 & \red 0.964 & \green 0.546 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.057 & \green 0.054 & \green 0.035 & \yellow 0.084 & \yellow 0.084 & \green 0.035 & \green 0.003 & \red 0.932 & \red 0.964 & \green 0.546 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.056 & \green 0.054 & \green 0.033 & \red 0.128 & \red 0.128 & \green 0.033 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.056 & \green 0.054 & \green 0.033 & \red 0.128 & \red 0.128 & \green 0.033 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.005 & \green 0.005 & \green 0.002 & \green 0.023 & \green 0.023 & \green 0.002 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.519 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 0.022 & 0.021 & 0.014 & 0.112 & 0.112 & 0.014 & 0.002 & 0.940 & 0.969 & 0.545 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.010 & \green 0.010 & \green 0.001 & \green 0.001 & \green 0.941 & \green 0.970 & \red 0.507 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.010 & \green 0.010 & \green 0.001 & \green 0.001 & \green 0.941 & \green 0.970 & \red 0.507 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.006 & \green 0.006 & \green 0.003 & \green 0.041 & \green 0.041 & \green 0.003 & \green 0.002 & \red 0.932 & \red 0.965 & \red 0.540 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.004 & \green 0.004 & \green 0.003 & \green 0.026 & \green 0.026 & \green 0.003 & \green 0.002 & \red 0.931 & \red 0.964 & \red 0.529 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.018 & \green 0.017 & \green 0.011 & \green 0.067 & \green 0.067 & \green 0.011 & \green 0.002 & \red 0.934 & \red 0.966 & \green 0.556 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.018 & \green 0.017 & \green 0.011 & \green 0.067 & \green 0.067 & \green 0.011 & \green 0.002 & \red 0.934 & \red 0.966 & \green 0.556 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.012 & \green 0.012 & \green 0.005 & \red 0.114 & \red 0.114 & \green 0.005 & \green 0.002 & \red 0.933 & \red 0.965 & \green 0.557 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.012 & \green 0.012 & \green 0.005 & \red 0.114 & \red 0.114 & \green 0.005 & \green 0.002 & \red 0.933 & \red 0.965 & \green 0.557 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.018 & \green 0.018 & \green 0.013 & \green 0.070 & \green 0.070 & \green 0.013 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.018 & \green 0.018 & \green 0.013 & \green 0.070 & \green 0.070 & \green 0.013 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.008 & \green 0.008 & \green 0.008 & \green 0.023 & \green 0.023 & \green 0.008 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.519 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 0.003 & 0.003 & 0.003 & 0.065 & 0.065 & 0.003 & 0.002 & 0.940 & 0.969 & 0.545 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.017 & \green 0.017 & \green 0.001 & \green 0.000 & \green 0.945 & \green 0.972 & \red 0.520 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.017 & \green 0.017 & \green 0.001 & \green 0.000 & \green 0.945 & \green 0.972 & \red 0.520 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.004 & \green 0.003 & \green 0.003 & \green 0.047 & \green 0.047 & \green 0.003 & \green 0.002 & \red 0.937 & \red 0.967 & \green 0.549 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.010 & \green 0.010 & \green 0.007 & \red 0.093 & \red 0.093 & \green 0.007 & \green 0.002 & \red 0.938 & \red 0.968 & \green 0.553 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.011 & \green 0.011 & \green 0.008 & \green 0.066 & \green 0.066 & \green 0.008 & \green 0.001 & \green 0.941 & \green 0.970 & \green 0.558 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.011 & \green 0.011 & \green 0.008 & \green 0.066 & \green 0.066 & \green 0.008 & \green 0.001 & \green 0.941 & \green 0.970 & \green 0.558 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.011 & \green 0.011 & \green 0.008 & \red 0.080 & \red 0.080 & \green 0.008 & \green 0.001 & \red 0.940 & \red 0.969 & \green 0.551 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.011 & \green 0.011 & \green 0.008 & \red 0.080 & \red 0.080 & \green 0.008 & \green 0.001 & \red 0.940 & \red 0.969 & \green 0.551 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.011 & \green 0.010 & \green 0.007 & \red 0.129 & \red 0.129 & \green 0.007 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.011 & \green 0.010 & \green 0.007 & \red 0.129 & \red 0.129 & \green 0.007 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.018 & \green 0.018 & \green 0.001 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.519 \\
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 0.030 & 0.025 & 0.016 & 0.086 & 0.086 & 0.016 & 0.002 & 0.940 & 0.969 & 0.545 \\
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.013 & \green 0.012 & \green 0.008 & \green 0.036 & \green 0.036 & \green 0.008 & \green 0.001 & \green 0.941 & \green 0.969 & \red 0.528 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.013 & \green 0.012 & \green 0.008 & \green 0.036 & \green 0.036 & \green 0.008 & \green 0.001 & \green 0.941 & \green 0.969 & \red 0.528 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.027 & \green 0.023 & \green 0.014 & \yellow 0.082 & \yellow 0.082 & \green 0.014 & \green 0.002 & \red 0.936 & \red 0.967 & \green 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.026 & \green 0.022 & \green 0.013 & \red 0.093 & \red 0.093 & \green 0.013 & \green 0.003 & \red 0.934 & \red 0.966 & \green 0.549 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.013 & \green 0.012 & \green 0.008 & \green 0.036 & \green 0.036 & \green 0.008 & \green 0.001 & \green 0.941 & \green 0.969 & \red 0.528 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.013 & \green 0.012 & \green 0.008 & \green 0.036 & \green 0.036 & \green 0.008 & \green 0.001 & \green 0.941 & \green 0.969 & \red 0.528 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.013 & \green 0.011 & \green 0.007 & \green 0.058 & \green 0.058 & \green 0.007 & \green 0.001 & \green 0.942 & \green 0.970 & \red 0.529 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.013 & \green 0.011 & \green 0.007 & \green 0.058 & \green 0.058 & \green 0.007 & \green 0.001 & \green 0.942 & \green 0.970 & \red 0.529 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.025 & \green 0.022 & \green 0.012 & \red 0.118 & \red 0.118 & \green 0.012 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.025 & \green 0.022 & \green 0.012 & \red 0.118 & \red 0.118 & \green 0.012 & \green 0.001 & \green 0.943 & \green 0.971 & \red 0.539 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.004 & \green 0.003 & \green 0.002 & \green 0.010 & \green 0.010 & \green 0.002 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.519 \\
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[h!]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for XGBoost for sensitive attribute \textit{Race}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \label{tab::law_shool::race::xgb}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 0.002 & 0.002 & 0.001 & 0.103 & 0.103 & 0.001 & 0.000 & 0.947 & 0.973 & 0.527 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.007 & \green 0.007 & \green 0.001 & \green 0.001 & \red 0.940 & \red 0.969 & \red 0.509 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.007 & \green 0.007 & \green 0.001 & \green 0.001 & \red 0.940 & \red 0.969 & \red 0.509 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.035 & \green 0.035 & \green 0.002 & \green 0.002 & \red 0.932 & \red 0.965 & \green 0.527 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.047 & \green 0.047 & \green 0.002 & \green 0.002 & \red 0.930 & \red 0.964 & \green 0.532 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.043 & \green 0.043 & \green 0.002 & \green 0.001 & \red 0.936 & \red 0.967 & \green 0.530 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.043 & \green 0.043 & \green 0.002 & \green 0.001 & \red 0.936 & \red 0.967 & \green 0.530 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.011 & \green 0.011 & \green 0.001 & \green 0.000 & \red 0.944 & \red 0.971 & \red 0.513 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.011 & \green 0.011 & \green 0.001 & \green 0.000 & \red 0.944 & \red 0.971 & \red 0.513 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.004 & \green 0.004 & \green 0.003 & \green 0.032 & \green 0.032 & \green 0.003 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.004 & \green 0.003 & \green 0.032 & \green 0.032 & \green 0.003 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.008 & \green 0.008 & \green 0.000 & \green 0.001 & \red 0.939 & \red 0.968 & \red 0.512 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 0.030 & 0.029 & 0.017 & 0.068 & 0.068 & 0.017 & 0.000 & 0.947 & 0.973 & 0.527 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.004 & \green 0.004 & \green 0.001 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.504 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.004 & \green 0.004 & \green 0.001 & \green 0.001 & \red 0.938 & \red 0.968 & \red 0.504 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.007 & \green 0.007 & \green 0.006 & \green 0.009 & \green 0.009 & \green 0.006 & \green 0.001 & \red 0.942 & \red 0.970 & \red 0.519 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.004 & \green 0.004 & \green 0.001 & \green 0.015 & \green 0.015 & \green 0.001 & \green 0.000 & \red 0.944 & \red 0.971 & \red 0.515 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.030 & \green 0.029 & \green 0.018 & \green 0.042 & \green 0.042 & \green 0.018 & \green 0.002 & \red 0.935 & \red 0.967 & \green 0.537 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.030 & \green 0.029 & \green 0.018 & \green 0.042 & \green 0.042 & \green 0.018 & \green 0.002 & \red 0.935 & \red 0.967 & \green 0.537 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.019 & \green 0.018 & \green 0.011 & \green 0.046 & \green 0.046 & \green 0.011 & \green 0.002 & \red 0.935 & \red 0.966 & \green 0.536 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.019 & \green 0.018 & \green 0.011 & \green 0.046 & \green 0.046 & \green 0.011 & \green 0.002 & \red 0.935 & \red 0.966 & \green 0.536 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.026 & \green 0.025 & \green 0.014 & \red 0.078 & \red 0.078 & \green 0.014 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.026 & \green 0.025 & \green 0.014 & \red 0.078 & \red 0.078 & \green 0.014 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.004 & \green 0.004 & \green 0.002 & \green 0.012 & \green 0.012 & \green 0.002 & \green 0.001 & \red 0.939 & \red 0.968 & \red 0.512 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 0.005 & 0.005 & 0.005 & 0.024 & 0.024 & 0.005 & 0.000 & 0.947 & 0.973 & 0.527 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.012 & \green 0.012 & \green 0.002 & \green 0.001 & \red 0.935 & \red 0.966 & \red 0.506 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.012 & \green 0.012 & \green 0.002 & \green 0.001 & \red 0.935 & \red 0.966 & \red 0.506 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.006 & \green 0.006 & \green 0.005 & \green 0.043 & \green 0.043 & \green 0.005 & \green 0.001 & \red 0.936 & \red 0.967 & \green 0.529 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.014 & \green 0.014 & \green 0.001 & \green 0.001 & \red 0.936 & \red 0.967 & \red 0.514 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.009 & \green 0.009 & \green 0.006 & \green 0.023 & \green 0.023 & \green 0.006 & \green 0.001 & \red 0.937 & \red 0.967 & \green 0.538 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.009 & \green 0.009 & \green 0.006 & \green 0.023 & \green 0.023 & \green 0.006 & \green 0.001 & \red 0.937 & \red 0.967 & \green 0.538 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.013 & \green 0.012 & \green 0.007 & \green 0.046 & \green 0.046 & \green 0.007 & \green 0.001 & \red 0.935 & \red 0.966 & \green 0.541 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.013 & \green 0.012 & \green 0.007 & \green 0.046 & \green 0.046 & \green 0.007 & \green 0.001 & \red 0.935 & \red 0.966 & \green 0.541 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.003 & \green 0.003 & \green 0.003 & \green 0.015 & \green 0.015 & \green 0.003 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.003 & \green 0.003 & \green 0.003 & \green 0.015 & \green 0.015 & \green 0.003 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.018 & \green 0.018 & \green 0.002 & \green 0.001 & \red 0.939 & \red 0.968 & \red 0.512 \\
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 0.003 & 0.003 & 0.004 & 0.086 & 0.086 & 0.004 & 0.000 & 0.947 & 0.973 & 0.527 \\
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.010 & \green 0.010 & \green 0.002 & \green 0.000 & \red 0.943 & \red 0.971 & \red 0.513 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.010 & \green 0.010 & \green 0.002 & \green 0.000 & \red 0.943 & \red 0.971 & \red 0.513 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.010 & \green 0.010 & \green 0.009 & \green 0.054 & \green 0.054 & \green 0.009 & \green 0.001 & \red 0.939 & \red 0.968 & \green 0.541 \\
+                \cline{4-14}
+                    & & & 2 & \green 0.003 & \green 0.003 & \green 0.004 & \green 0.064 & \green 0.064 & \green 0.004 & \green 0.001 & \red 0.938 & \red 0.968 & \green 0.541 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.004 & \green 0.003 & \green 0.002 & \green 0.075 & \green 0.075 & \green 0.002 & \green 0.001 & \red 0.941 & \red 0.969 & \green 0.548 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.003 & \green 0.002 & \green 0.075 & \green 0.075 & \green 0.002 & \green 0.001 & \red 0.941 & \red 0.969 & \green 0.548 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.010 & \green 0.009 & \green 0.009 & \yellow 0.075 & \yellow 0.075 & \green 0.009 & \green 0.001 & \red 0.941 & \red 0.969 & \green 0.545 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.010 & \green 0.009 & \green 0.009 & \yellow 0.075 & \yellow 0.075 & \green 0.009 & \green 0.001 & \red 0.941 & \red 0.969 & \green 0.545 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.004 & \green 0.004 & \green 0.004 & \yellow 0.086 & \yellow 0.086 & \green 0.004 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.004 & \green 0.004 & \green 0.004 & \yellow 0.086 & \yellow 0.086 & \green 0.004 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.005 & \green 0.004 & \green 0.005 & \green 0.008 & \green 0.008 & \green 0.005 & \green 0.001 & \red 0.939 & \red 0.968 & \red 0.512 \\
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 0.012 & 0.011 & 0.006 & 0.058 & 0.058 & 0.006 & 0.000 & 0.947 & 0.973 & 0.527 \\
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.008 & \green 0.008 & \green 0.002 & \green 0.000 & \green 0.948 & \green 0.974 & \red 0.509 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.008 & \green 0.008 & \green 0.002 & \green 0.000 & \green 0.948 & \green 0.974 & \red 0.509 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.004 & \green 0.003 & \green 0.002 & \green 0.017 & \green 0.017 & \green 0.002 & \green 0.000 & \red 0.944 & \red 0.971 & \red 0.515 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.014 & \green 0.012 & \green 0.007 & \green 0.051 & \green 0.051 & \green 0.007 & \green 0.001 & \red 0.943 & \red 0.970 & \green 0.535 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.008 & \green 0.008 & \green 0.002 & \green 0.000 & \green 0.948 & \green 0.974 & \red 0.509 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.002 & \green 0.002 & \green 0.002 & \green 0.008 & \green 0.008 & \green 0.002 & \green 0.000 & \green 0.948 & \green 0.974 & \red 0.509 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.507 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.507 \\
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.009 & \green 0.008 & \green 0.005 & \green 0.048 & \green 0.048 & \green 0.005 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{4-14}
+                   & & & 2 & \green 0.009 & \green 0.008 & \green 0.005 & \green 0.048 & \green 0.048 & \green 0.005 & \green 0.000 & \green 0.948 & \green 0.973 & \red 0.524 \\
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.001 & \green 0.001 & \green 0.001 & \green 0.011 & \green 0.011 & \green 0.001 & \green 0.001 & \red 0.939 & \red 0.968 & \red 0.512 \\
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}

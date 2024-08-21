@@ -276,8 +276,6 @@ if __name__ == '__main__':
         df_melted['Classifier'] = df_melted['Classifier'].apply(
             lambda x: x.replace('Best_', '').replace('Population_', ''))
 
-        print(df_melted)
-
         if line:
             df_melted['Generation'] = df_melted.index % 30
             line_plot(df_melted, title=f'{dataset} - {metric}', x_axis='Generation', y_axis='Performance', hue='Classifier', style='Type')
