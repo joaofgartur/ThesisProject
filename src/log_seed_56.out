@@ -4848,3 +4848,39 @@ Intel(R) Extension for Scikit-learn* enabled (https://github.com/intel/scikit-le
 pip install 'aif360[AdversarialDebiasing]'
 2024-08-21 16:31:06 LAPTOP-ME5LFJTV root[32541] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
 pip install 'aif360[AdversarialDebiasing]'
+Scikit-learn was successfully globally patched by Intel(R) Extension for Scikit-learn
+2024-08-21 16:37:02 LAPTOP-ME5LFJTV utils.logging[5771] INFO 	[FairGenes] Individual 3/30: [[[3, 2], [2, 0], [2, 3], [0, 0], [4, 3]], {}, {}].
+2024-08-21 16:37:04 LAPTOP-ME5LFJTV root[32584] WARNING No module named 'tempeh': LawSchoolGPADataset will be unavailable. To install, run:
+pip install 'aif360[LawSchoolGPA]'
+Intel(R) Extension for Scikit-learn* enabled (https://github.com/intel/scikit-learn-intelex)
+2024-08-21 16:37:04 LAPTOP-ME5LFJTV root[32584] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+2024-08-21 16:37:05 LAPTOP-ME5LFJTV root[32584] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+Scikit-learn was successfully globally patched by Intel(R) Extension for Scikit-learn
+2024-08-21 16:39:28 LAPTOP-ME5LFJTV utils.logging[5771] INFO 	[FairGenes] Individual 4/30: [[[2, 0], [2, 1], [2, 3], [3, 0], [2, 3]], {}, {}].
+2024-08-21 16:39:29 LAPTOP-ME5LFJTV root[32626] WARNING No module named 'tempeh': LawSchoolGPADataset will be unavailable. To install, run:
+pip install 'aif360[LawSchoolGPA]'
+Intel(R) Extension for Scikit-learn* enabled (https://github.com/intel/scikit-learn-intelex)
+2024-08-21 16:39:30 LAPTOP-ME5LFJTV root[32626] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+2024-08-21 16:39:30 LAPTOP-ME5LFJTV root[32626] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+Scikit-learn was successfully globally patched by Intel(R) Extension for Scikit-learn
+2024-08-21 16:44:20 LAPTOP-ME5LFJTV utils.logging[5771] INFO 	[FairGenes] Individual 5/30: [[[3, 2], [0, 3], [2, 3], [0, 3], [1, 2]], {}, {}].
+2024-08-21 16:44:21 LAPTOP-ME5LFJTV root[32668] WARNING No module named 'tempeh': LawSchoolGPADataset will be unavailable. To install, run:
+pip install 'aif360[LawSchoolGPA]'
+Intel(R) Extension for Scikit-learn* enabled (https://github.com/intel/scikit-learn-intelex)
+2024-08-21 16:44:21 LAPTOP-ME5LFJTV root[32668] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+2024-08-21 16:44:22 LAPTOP-ME5LFJTV root[32668] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+Scikit-learn was successfully globally patched by Intel(R) Extension for Scikit-learn
+2024-08-21 16:48:28 LAPTOP-ME5LFJTV utils.logging[5771] INFO 	[FairGenes] Individual 6/30: [[[0, 1], [2, 1], [4, 0], [0, 0], [2, 3]], {}, {}].
+2024-08-21 16:48:29 LAPTOP-ME5LFJTV root[32710] WARNING No module named 'tempeh': LawSchoolGPADataset will be unavailable. To install, run:
+pip install 'aif360[LawSchoolGPA]'
+Intel(R) Extension for Scikit-learn* enabled (https://github.com/intel/scikit-learn-intelex)
+2024-08-21 16:48:29 LAPTOP-ME5LFJTV root[32710] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
+2024-08-21 16:48:30 LAPTOP-ME5LFJTV root[32710] WARNING No module named 'tensorflow': AdversarialDebiasing will be unavailable. To install, run:
+pip install 'aif360[AdversarialDebiasing]'
