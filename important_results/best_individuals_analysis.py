@@ -17,9 +17,10 @@ title_font_size = 16
 ticks_font_size = 12
 font_name = 'Times New Roman'
 show_plot = True
+fig_size = (8, 6)
 
 def line_plot(df, x_axis, y_axis, title, hue=None, style=None):
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=fig_size)
 
     palette = sns.color_palette(palette_collection, len(df))
 
@@ -49,7 +50,7 @@ def line_plot(df, x_axis, y_axis, title, hue=None, style=None):
         plt.show()
 
 def cat_plot(df, x_axis, y_axis, title, hue=None):
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=fig_size)
 
     palette = sns.color_palette(palette_collection, len(df))
 
@@ -82,7 +83,7 @@ def cat_plot(df, x_axis, y_axis, title, hue=None):
         plt.show()
 
 def bar_plot(df, x_axis, y_axis, title, hue=None):
-    plt.figure(figsize=(12, 8))
+    plt.figure(figsize=fig_size)
 
     palette = sns.color_palette(palette_collection, len(df))
 
@@ -269,8 +270,8 @@ def best_vs_population_analysis(global_df, classifiers, metrics, metric_type='fa
 
 if __name__ == '__main__':
 
-    #dataset = 'Law School Admission Bar Passage'
-    #attribute = 'race1'
+    # dataset = 'Law School Admission Bar Passage'
+    # attribute = 'race1'
 
     dataset = 'German Credit'
     attribute = 'Attribute9'

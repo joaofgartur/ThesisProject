@@ -1,79 +1,43 @@
-\begin{tabular}{rrr}
+\begin{tabular}{lllrrr}
 \toprule
-num_increases & num_decreases & num_no_change \\
+classifier & algorithm & group & num_increases & num_decreases & num_no_change \\
 \midrule
-0 & 0 & 7 \\
-0 & 7 & 0 \\
-0 & 0 & 7 \\
-5 & 2 & 0 \\
-4 & 3 & 0 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-5 & 2 & 0 \\
-0 & 0 & 7 \\
-3 & 4 & 0 \\
-1 & 6 & 0 \\
-3 & 4 & 0 \\
-0 & 0 & 7 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-0 & 7 & 0 \\
-6 & 1 & 0 \\
-0 & 7 & 0 \\
-0 & 0 & 7 \\
-0 & 7 & 0 \\
-0 & 0 & 7 \\
-3 & 4 & 0 \\
-4 & 3 & 0 \\
-4 & 3 & 0 \\
-0 & 0 & 7 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-7 & 0 & 0 \\
-2 & 5 & 0 \\
-3 & 4 & 0 \\
-0 & 0 & 7 \\
-1 & 6 & 0 \\
-0 & 0 & 7 \\
-5 & 2 & 0 \\
-0 & 7 & 0 \\
-5 & 2 & 0 \\
-0 & 0 & 7 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-6 & 1 & 0 \\
-4 & 3 & 0 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-5 & 2 & 0 \\
-0 & 0 & 7 \\
-3 & 4 & 0 \\
-1 & 6 & 0 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-0 & 7 & 0 \\
-0 & 0 & 7 \\
-7 & 0 & 0 \\
-6 & 1 & 0 \\
-0 & 7 & 0 \\
-0 & 0 & 7 \\
-2 & 5 & 0 \\
-0 & 0 & 7 \\
-6 & 1 & 0 \\
-4 & 3 & 0 \\
-4 & 3 & 0 \\
-0 & 0 & 7 \\
-4 & 3 & 0 \\
-0 & 0 & 7 \\
-0 & 7 & 0 \\
-1 & 6 & 0 \\
-3 & 4 & 0 \\
-0 & 0 & 7 \\
-6 & 1 & 0 \\
-0 & 0 & 7 \\
-2 & 5 & 0 \\
-0 & 7 & 0 \\
-5 & 2 & 0 \\
-142 & 194 & 168 \\
+LogisticRegression & Massaging & FemaleMale & 0 & 0 & 14 \\
+LogisticRegression & Reweighing & FemaleMale & 2 & 12 & 0 \\
+LogisticRegression & DisparateImpactRemover & FemaleMale & 0 & 0 & 14 \\
+LogisticRegression & LexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 11 & 3 & 0 \\
+LogisticRegression & MulticlassLexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 8 & 6 & 0 \\
+LogisticRegression & FairGenes & FemaleMale & 4 & 10 & 0 \\
+GaussianNB & Massaging & FemaleMale & 0 & 0 & 14 \\
+GaussianNB & Reweighing & FemaleMale & 2 & 12 & 0 \\
+GaussianNB & DisparateImpactRemover & FemaleMale & 0 & 0 & 14 \\
+GaussianNB & LexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 7 & 7 & 0 \\
+GaussianNB & MulticlassLexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 12 & 2 & 0 \\
+GaussianNB & FairGenes & FemaleMale & 0 & 14 & 0 \\
+SVC & Massaging & FemaleMale & 0 & 0 & 14 \\
+SVC & Reweighing & FemaleMale & 10 & 4 & 0 \\
+SVC & DisparateImpactRemover & FemaleMale & 0 & 0 & 14 \\
+SVC & LexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 6 & 8 & 0 \\
+SVC & MulticlassLexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 2 & 12 & 0 \\
+SVC & FairGenes & FemaleMale & 5 & 9 & 0 \\
+DecisionTreeClassifier & Massaging & FemaleMale & 0 & 0 & 14 \\
+DecisionTreeClassifier & Reweighing & FemaleMale & 2 & 12 & 0 \\
+DecisionTreeClassifier & DisparateImpactRemover & FemaleMale & 0 & 0 & 14 \\
+DecisionTreeClassifier & LexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 9 & 5 & 0 \\
+DecisionTreeClassifier & MulticlassLexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 8 & 6 & 0 \\
+DecisionTreeClassifier & FairGenes & FemaleMale & 8 & 6 & 0 \\
+RandomForestClassifier & Massaging & FemaleMale & 0 & 0 & 14 \\
+RandomForestClassifier & Reweighing & FemaleMale & 6 & 8 & 0 \\
+RandomForestClassifier & DisparateImpactRemover & FemaleMale & 0 & 0 & 14 \\
+RandomForestClassifier & LexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 7 & 7 & 0 \\
+RandomForestClassifier & MulticlassLexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 3 & 11 & 0 \\
+RandomForestClassifier & FairGenes & FemaleMale & 6 & 8 & 0 \\
+XGBClassifier & Massaging & FemaleMale & 0 & 0 & 14 \\
+XGBClassifier & Reweighing & FemaleMale & 7 & 7 & 0 \\
+XGBClassifier & DisparateImpactRemover & FemaleMale & 0 & 0 & 14 \\
+XGBClassifier & LexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 7 & 7 & 0 \\
+XGBClassifier & MulticlassLexicographicGeneticAlgorithmFairFeatureSelection & FemaleMale & 0 & 14 & 0 \\
+XGBClassifier & FairGenes & FemaleMale & 10 & 4 & 0 \\
+NaN & Total & NaN & 142 & 194 & 168 \\
 \bottomrule
 \end{tabular}

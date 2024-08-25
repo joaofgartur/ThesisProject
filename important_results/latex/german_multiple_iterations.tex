@@ -1,0 +1,92 @@
+\begin{table}[htbp]
+    \begin{center}
+        \caption{Count of times that a second iteration of the algorithm resulted in an increase of the bias for the German Credit dataset, an increase and that did not produce any alterations. For further reference, see the legend in table \ref{tab::reference}.}
+        \label{tab::german_credit::sex::multiple_iterations}
+            \begin{tabular}{|c|c|r|r|r|}
+                \hline
+                \multirow{1}{*}{Classifier} & \multirow{1}{*}{Algorithm} & \multicolumn{1}{c|}{Increase} & \multicolumn{1}{c|}{Decrease} & \multicolumn{1}{c|}{No variation} \\
+                \hline
+
+                \multirow{6}{*}{LGR} & MSG & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & REW & 2 & 12 & 0 \\
+                \cline{2-5}
+                    & DIR & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & FFS & 11 & 3 & 0 \\
+                \cline{2-5}
+                    & MFS & 8 & 6 & 0 \\
+                \cline{2-5}
+                    & FGE & 4 & 10 & 0 \\
+                \cline{1-5}
+
+                \multirow{6}{*}{GNB} & MSG & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & REW & 2 & 12 & 0 \\
+                \cline{2-5}
+                    & DIR & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & FFS & 7 & 7 & 0 \\
+                \cline{2-5}
+                    & MFS & 12 & 2 & 0 \\
+                \cline{2-5}
+                    & FGE & 0 & 14 & 0 \\
+                \cline{1-5}
+
+                \multirow{6}{*}{SVM} & MSG & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & REW & 10 & 4 & 0 \\
+                \cline{2-5}
+                    & DIR & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & FFS & 6 & 8 & 0 \\
+                \cline{2-5}
+                    & MFS & 2 & 12 & 0 \\
+                \cline{2-5}
+                    & FGE & 5 & 9 & 0 \\
+                \cline{1-5}
+
+                \multirow{6}{*}{DT} & MSG & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & REW & 2 & 12 & 0 \\
+                \cline{2-5}
+                    & DIR & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & FFS & 9 & 5 & 0 \\
+                \cline{2-5}
+                    & MFS & 8 & 6 & 0 \\
+                \cline{2-5}
+                    & FGE & 8 & 6 & 0 \\
+                \cline{1-5}
+
+                \multirow{6}{*}{RF} & MSG & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & REW & 6 & 8 & 0 \\
+                \cline{2-5}
+                    & DIR & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & FFS & 7 & 7 & 0 \\
+                \cline{2-5}
+                    & MFS & 3 & 11 & 0 \\
+                \cline{2-5}
+                    & FGE & 6 & 8 & 0 \\
+                \cline{1-5}
+                
+                \multirow{6}{*}{XGB} & MSG & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & REW & 7 & 7 & 0 \\
+                \cline{2-5}
+                    & DIR & 0 & 0 & 14 \\
+                \cline{2-5}
+                    & FFS & 7 & 7 & 0 \\
+                \cline{2-5}
+                    & MFS & 0 & 14 & 0 \\
+                \cline{2-5}
+                    & FGE & 10 & 4 & 0 \\
+                \cline{1-5}
+                
+                \multicolumn{2}{|c|}{Total} & 142 & 194 & 168 \\
+                \hline
+            \end{tabular}
+    \end{center}
+\end{table}

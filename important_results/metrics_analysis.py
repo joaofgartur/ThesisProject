@@ -193,11 +193,21 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
             first_iter_fairness = first_iteration[[col for col in first_iteration.index if 'fairness' in col]]
             second_iter_fairness = second_iteration[[col for col in second_iteration.index if 'fairness' in col]]
 
+            print("*" * 10)
+            print(f'{classifier} - {algorithm} - {value}')
+            print('first iteration fairness', first_iter_fairness)
+            print('second iteration fairness', second_iter_fairness)
+
             fairness_variation = second_iter_fairness - first_iter_fairness
 
             num_increases = (fairness_variation > 0).sum()
             num_decreases = (fairness_variation < 0).sum()
             num_no_change = (fairness_variation == 0).sum()
+
+            print('num_increases', num_increases)
+            print('num_decreases', num_decreases)
+            print('num_no_change', num_no_change)
+
             algorithm_df = pd.DataFrame({'classifier': classifier, 'algorithm': algorithm, 'group': value,
                                          'num_increases': num_increases, 'num_decreases': num_decreases,
                                          'num_no_change': num_no_change}, index=[0])
@@ -206,15 +216,21 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
         except IndexError as e:
             continue
 
+    results = results.groupby(['classifier', 'algorithm']).sum().reset_index()
+
     total_increases = results['num_increases'].sum()
     total_decreases = results['num_decreases'].sum()
     total_no_change = results['num_no_change'].sum()
 
     results = pd.concat([results, pd.DataFrame({'algorithm': 'Total', 'num_increases': total_increases, 'num_decreases': total_decreases, 'num_no_change': total_no_change}, index=[0])])
 
+    print(results)
+
     numerics = ['int16', 'int32', 'int64']
     results = results.sort_values(by=['group'], kind='mergesort')
-    results = results.select_dtypes(include=numerics)
+    # results = results.select_dtypes(include=numerics)
+
+    print(results)
 
     latex_table = results.to_latex(index=False, float_format="%.3f")
     with open(f'{directory}/table_{dataset}_{attribute}_multiple_iterations.tex', 'w') as file:
@@ -223,8 +239,8 @@ def multiple_iterations_analysis(directory, dataset, attribute, classifiers):
 
 if __name__ == '__main__':
     
-    # dataset = 'Law School Admission Bar Passage'
-    # attribute = 'race1'
+    #dataset = 'Law School Admission Bar Passage'
+    #attribute = 'race1'
     dataset = 'German Credit'
     attribute = 'Attribute9'
     iterations_column = 'iteration' if dataset == 'German Credit' else 'iterations'
