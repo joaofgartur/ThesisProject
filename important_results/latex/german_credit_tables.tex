@@ -1,66 +1,66 @@
 \begin{table}[h!]
     \begin{center}
-        \caption{Metrics for Logistic Regression for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \caption{Metrics for Logistic Regression for sensitive attribute \textit{Sex}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
         \label{tab::german_credit::sex::lr}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
                 \hline
-                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
                 \cline{5-14}
                 & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
                 \hline
-                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.706 & 0.473 & 0.303 & 1.758 & 1.758 & 0.303 & 0.978 & 0.751 & 0.831 & 0.667 \\
+                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.706 & \red 0.473 & \red 0.303 & \red 1.758 & \red 1.758 & \red 0.303 & \red 0.978 & 0.751 & 0.831 & 0.667 \\
                 \cline{2-14}
-                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.316 & \yellow 0.229 & \yellow 0.210 & \yellow 0.911 & \yellow 0.911 & \yellow 0.210 & \yellow 0.906 & \red 0.730 & \red 0.822 & \red 0.623 \\
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.316 & \yellow 0.229 & \yellow 0.210 & \yellow 0.911 & \yellow 0.911 & \yellow 0.210 & \yellow 0.906 & \orange 0.730 & \orange 0.822 & \orange 0.623 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.316 & \yellow 0.229 & \yellow 0.210 & \yellow 0.911 & \yellow 0.911 & \yellow 0.210 & \yellow 0.906 & \red 0.730 & \red 0.822 & \red 0.623 \\
+                   & & & 2 & \green 0.316 & \yellow 0.229 & \yellow 0.210 & \yellow 0.911 & \yellow 0.911 & \yellow 0.210 & \yellow 0.906 & \orange 0.730 & \orange 0.822 & \orange 0.623 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.374 & \yellow 0.198 & \red 0.341 & \yellow 1.080 & \yellow 1.080 & \red 0.341 & \red 1.153 & \red 0.743 & \red 0.823 & \green 0.668 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.374 & \yellow 0.198 & \orange 0.341 & \yellow 1.080 & \yellow 1.080 & \orange 0.341 & \orange 1.153 & \orange 0.743 & \orange 0.823 & \green 0.668 \\
                 \cline{4-14}
-                    & & & 2 & \green 0.286 & \yellow 0.162 & \yellow 0.298 & \yellow 0.825 & \yellow 0.825 & \yellow 0.298 & \red 1.100 & \red 0.744 & \red 0.824 & \red 0.666 \\
+                    & & & 2 & \green 0.286 & \yellow 0.162 & \yellow 0.298 & \yellow 0.825 & \yellow 0.825 & \yellow 0.298 & \orange 1.100 & \orange 0.744 & \orange 0.824 & \orange 0.666 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.281 & \yellow 0.148 & \red 0.332 & \yellow 0.728 & \yellow 0.728 & \red 0.332 & \red 1.140 & \red 0.745 & \red 0.824 & \green 0.673 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.281 & \yellow 0.148 & \orange 0.332 & \yellow 0.728 & \yellow 0.728 & \orange 0.332 & \orange 1.140 & \orange 0.745 & \orange 0.824 & \green 0.673 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.281 & \yellow 0.148 & \red 0.332 & \yellow 0.728 & \yellow 0.728 & \red 0.332 & \red 1.140 & \red 0.745 & \red 0.824 & \green 0.673 \\
+                   & & & 2 & \green 0.281 & \yellow 0.148 & \orange 0.332 & \yellow 0.728 & \yellow 0.728 & \orange 0.332 & \orange 1.140 & \orange 0.745 & \orange 0.824 & \green 0.673 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.295 & \yellow 0.168 & \yellow 0.300 & \yellow 0.736 & \yellow 0.736 & \yellow 0.300 & \red 1.079 & \red 0.745 & \red 0.826 & \red 0.663 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.295 & \yellow 0.168 & \yellow 0.300 & \yellow 0.736 & \yellow 0.736 & \yellow 0.300 & \orange 1.079 & \orange 0.745 & \orange 0.826 & \orange 0.663 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.255 & \yellow 0.139 & \yellow 0.302 & \yellow 0.778 & \yellow 0.778 & \yellow 0.302 & \red 1.080 & \red 0.741 & \red 0.823 & \red 0.658 \\
+                   & & & 2 & \green 0.255 & \yellow 0.139 & \yellow 0.302 & \yellow 0.778 & \yellow 0.778 & \yellow 0.302 & \orange 1.080 & \orange 0.741 & \orange 0.823 & \orange 0.658 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.329 & \yellow 0.212 & \yellow 0.293 & \yellow 0.858 & \yellow 0.858 & \yellow 0.293 & \red 0.993 & \red 0.744 & \red 0.828 & \red 0.655 \\
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.329 & \yellow 0.212 & \yellow 0.293 & \yellow 0.858 & \yellow 0.858 & \yellow 0.293 & \orange 0.993 & \orange 0.744 & \orange 0.828 & \orange 0.655 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.475 & \yellow 0.290 & \red 0.476 & \yellow 0.848 & \yellow 0.848 & \red 0.476 & \yellow 0.957 & \red 0.738 & \red 0.824 & \red 0.646 \\
+                   & & & 2 & \green 0.475 & \yellow 0.290 & \orange 0.476 & \yellow 0.848 & \yellow 0.848 & \orange 0.476 & \yellow 0.957 & \orange 0.738 & \orange 0.824 & \orange 0.646 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.389 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \red 0.996 & \red 0.734 & \red 0.823 & \red 0.634 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.389 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \orange 0.996 & \orange 0.734 & \orange 0.823 & \orange 0.634 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.354 & \yellow 0.238 & \red 0.328 & \yellow 0.469 & \yellow 0.469 & \red 0.328 & \yellow 0.823 & \red 0.731 & \red 0.824 & \red 0.618 \\
+                   & & & 2 & \green 0.354 & \yellow 0.238 & \orange 0.328 & \yellow 0.469 & \yellow 0.469 & \orange 0.328 & \yellow 0.823 & \orange 0.731 & \orange 0.824 & \orange 0.618 \\
                 \cline{1-14}
     
-                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 1.243 & 0.473 & 0.303 & 1.758 & 1.758 & 0.303 & 0.978 & 0.751 & 0.831 & 0.667 \\
+                \multirow{15}{*}{MLE} & Pre & N/A & 0 & \red 1.243 & \red 0.473 & \red 0.303 & \red 1.758 & \red 1.758 & \red 0.303 & \red 0.978 & 0.751 & 0.831 & 0.667 \\
                 \cline{2-14}
-                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \red 1.243 & \red 0.473 & \red 0.303 & \red 1.758 & \red 1.758 & \red 0.303 & \red 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \orange 1.243 & \orange 0.473 & \orange 0.303 & \orange 1.758 & \orange 1.758 & \orange 0.303 & \orange 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \red 1.243 & \red 0.473 & \red 0.303 & \red 1.758 & \red 1.758 & \red 0.303 & \red 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
+                   & & & 2 & \orange 1.243 & \orange 0.473 & \orange 0.303 & \orange 1.758 & \orange 1.758 & \orange 0.303 & \orange 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 1.069 & \yellow 0.404 & \yellow 0.287 & \yellow 1.494 & \yellow 1.494 & \yellow 0.287 & \red 1.079 & \red 0.748 & \red 0.828 & \yellow 0.667 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 1.069 & \yellow 0.404 & \yellow 0.287 & \yellow 1.494 & \yellow 1.494 & \yellow 0.287 & \orange 1.079 & \orange 0.748 & \orange 0.828 & \yellow 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.971 & \yellow 0.351 & \red 0.306 & \yellow 1.290 & \yellow 1.290 & \red 0.306 & \red 1.032 & \red 0.748 & \red 0.828 & \red 0.666 \\
+                   & & & 2 & \green 0.971 & \yellow 0.351 & \orange 0.306 & \yellow 1.290 & \yellow 1.290 & \orange 0.306 & \orange 1.032 & \orange 0.748 & \orange 0.828 & \orange 0.666 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \red 1.243 & \red 0.473 & \red 0.303 & \red 1.758 & \red 1.758 & \red 0.303 & \red 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \orange 1.243 & \orange 0.473 & \orange 0.303 & \orange 1.758 & \orange 1.758 & \orange 0.303 & \orange 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \red 1.243 & \red 0.473 & \red 0.303 & \red 1.758 & \red 1.758 & \red 0.303 & \red 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
+                   & & & 2 & \orange 1.243 & \orange 0.473 & \orange 0.303 & \orange 1.758 & \orange 1.758 & \orange 0.303 & \orange 0.978 & \yellow 0.751 & \yellow 0.831 & \yellow 0.667 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.960 & \yellow 0.351 & \red 0.332 & \yellow 1.203 & \yellow 1.203 & \red 0.332 & \red 1.057 & \red 0.740 & \red 0.824 & \red 0.652 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.960 & \yellow 0.351 & \orange 0.332 & \yellow 1.203 & \yellow 1.203 & \orange 0.332 & \orange 1.057 & \orange 0.740 & \orange 0.824 & \orange 0.652 \\
                 \cline{4-14}
-                   & & & 2 & \red 1.403 & \yellow 0.448 & \red 0.495 & \yellow 1.236 & \yellow 1.236 & \red 0.495 & \red 1.018 & \red 0.736 & \red 0.821 & \red 0.649 \\
+                   & & & 2 & \orange 1.403 & \yellow 0.448 & \orange 0.495 & \yellow 1.236 & \yellow 1.236 & \orange 0.495 & \orange 1.018 & \orange 0.736 & \orange 0.821 & \orange 0.649 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.496 & \yellow 0.212 & \yellow 0.293 & \yellow 0.858 & \yellow 0.858 & \yellow 0.293 & \red 0.993 & \red 0.744 & \red 0.828 & \red 0.655 \\
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.496 & \yellow 0.212 & \yellow 0.293 & \yellow 0.858 & \yellow 0.858 & \yellow 0.293 & \orange 0.993 & \orange 0.744 & \orange 0.828 & \orange 0.655 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.900 & \yellow 0.290 & \red 0.476 & \yellow 0.848 & \yellow 0.848 & \red 0.476 & \yellow 0.957 & \red 0.738 & \red 0.824 & \red 0.646 \\
+                   & & & 2 & \green 0.900 & \yellow 0.290 & \orange 0.476 & \yellow 0.848 & \yellow 0.848 & \orange 0.476 & \yellow 0.957 & \orange 0.738 & \orange 0.824 & \orange 0.646 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.591 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \red 0.996 & \red 0.734 & \red 0.823 & \red 0.634 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.591 & \yellow 0.241 & \yellow 0.223 & \yellow 0.672 & \yellow 0.672 & \yellow 0.223 & \orange 0.996 & \orange 0.734 & \orange 0.823 & \orange 0.634 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.516 & \yellow 0.238 & \red 0.328 & \yellow 0.469 & \yellow 0.469 & \red 0.328 & \yellow 0.823 & \red 0.731 & \red 0.824 & \red 0.618 \\
+                   & & & 2 & \green 0.516 & \yellow 0.238 & \orange 0.328 & \yellow 0.469 & \yellow 0.469 & \orange 0.328 & \yellow 0.823 & \orange 0.731 & \orange 0.824 & \orange 0.618 \\
                 \hline
             \end{tabular}
         \end{adjustbox}
@@ -69,67 +69,67 @@
     
 \begin{table}[h!]
     \begin{center}
-        \caption{Metrics for Gaussian Naive Bayes for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \caption{Metrics for Gaussian Naive Bayes for sensitive attribute \textit{Sex}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
         \label{tab::german_credit::sex::gnb}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
                 \hline
-                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
                 \cline{5-14}
                 & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
                 \hline
-                \multirow{15}{*}{FML} & Pre & N/A & 0 & 1.494 & 0.624 & 0.628 & 0.887 & 0.887 & 0.628 & 1.594 & 0.724 & 0.789 & 0.713 \\
+                \multirow{15}{*}{FML} & Pre & N/A & 0 & \red 1.494 & \red 0.624 & \red 0.628 & \red 0.887 & \red 0.887 & \red 0.628 & \red 1.594 & 0.724 & 0.789 & 0.713 \\
                 \cline{2-14}
-                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.359 & \yellow 0.209 & \yellow 0.330 & \yellow 0.822 & \yellow 0.822 & \yellow 0.330 & \yellow 1.463 & \red 0.712 & \green 0.804 & \red 0.623 \\
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.359 & \yellow 0.209 & \yellow 0.330 & \yellow 0.822 & \yellow 0.822 & \yellow 0.330 & \yellow 1.463 & \orange 0.712 & \green 0.804 & \orange 0.623 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.359 & \yellow 0.209 & \yellow 0.330 & \yellow 0.822 & \yellow 0.822 & \yellow 0.330 & \yellow 1.463 & \red 0.712 & \green 0.804 & \red 0.623 \\
+                   & & & 2 & \green 0.359 & \yellow 0.209 & \yellow 0.330 & \yellow 0.822 & \yellow 0.822 & \yellow 0.330 & \yellow 1.463 & \orange 0.712 & \green 0.804 & \orange 0.623 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.997 & \yellow 0.311 & \yellow 0.574 & \yellow 0.723 & \yellow 0.723 & \yellow 0.574 & \red 1.681 & \red 0.717 & \red 0.779 & \green 0.716 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.997 & \yellow 0.311 & \yellow 0.574 & \yellow 0.723 & \yellow 0.723 & \yellow 0.574 & \orange 1.681 & \orange 0.717 & \orange 0.779 & \green 0.716 \\
                 \cline{4-14}
-                    & & & 2 & \green 0.995 & \yellow 0.305 & \yellow 0.613 & \yellow 0.679 & \yellow 0.679 & \yellow 0.613 & \red 1.617 & \red 0.715 & \red 0.778 & \red 0.712 \\
+                    & & & 2 & \green 0.995 & \yellow 0.305 & \yellow 0.613 & \yellow 0.679 & \yellow 0.679 & \yellow 0.613 & \orange 1.617 & \orange 0.715 & \orange 0.778 & \orange 0.712 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \yellow 1.256 & \yellow 0.386 & \red 0.700 & \yellow 0.703 & \yellow 0.703 & \red 0.700 & \red 1.660 & \red 0.718 & \red 0.780 & \green 0.717 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \yellow 1.256 & \yellow 0.386 & \orange 0.700 & \yellow 0.703 & \yellow 0.703 & \orange 0.700 & \orange 1.660 & \orange 0.718 & \orange 0.780 & \green 0.717 \\
                 \cline{4-14}
-                   & & & 2 & \yellow 1.256 & \yellow 0.386 & \red 0.700 & \yellow 0.703 & \yellow 0.703 & \red 0.700 & \red 1.660 & \red 0.718 & \red 0.780 & \green 0.717 \\
+                   & & & 2 & \yellow 1.256 & \yellow 0.386 & \orange 0.700 & \yellow 0.703 & \yellow 0.703 & \orange 0.700 & \orange 1.660 & \orange 0.718 & \orange 0.780 & \green 0.717 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.591 & \yellow 0.233 & \yellow 0.402 & \yellow 0.682 & \yellow 0.682 & \yellow 0.402 & \yellow 1.342 & \green 0.729 & \green 0.798 & \red 0.698 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.591 & \yellow 0.233 & \yellow 0.402 & \yellow 0.682 & \yellow 0.682 & \yellow 0.402 & \yellow 1.342 & \green 0.729 & \green 0.798 & \orange 0.698 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.512 & \yellow 0.192 & \yellow 0.377 & \yellow 0.584 & \yellow 0.584 & \yellow 0.377 & \yellow 1.302 & \green 0.728 & \green 0.799 & \red 0.694 \\
+                   & & & 2 & \green 0.512 & \yellow 0.192 & \yellow 0.377 & \yellow 0.584 & \yellow 0.584 & \yellow 0.377 & \yellow 1.302 & \green 0.728 & \green 0.799 & \orange 0.694 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.853 & \yellow 0.339 & \yellow 0.560 & \yellow 0.375 & \yellow 0.375 & \yellow 0.560 & \yellow 1.403 & \red 0.720 & \green 0.790 & \red 0.696 \\
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.853 & \yellow 0.339 & \yellow 0.560 & \yellow 0.375 & \yellow 0.375 & \yellow 0.560 & \yellow 1.403 & \orange 0.720 & \green 0.790 & \orange 0.696 \\
                 \cline{4-14}
-                   & & & 2 & \green 1.117 & \yellow 0.460 & \red 0.705 & \yellow 0.442 & \yellow 0.442 & \red 0.705 & \yellow 1.364 & \red 0.721 & \green 0.792 & \red 0.688 \\
+                   & & & 2 & \green 1.117 & \yellow 0.460 & \orange 0.705 & \yellow 0.442 & \yellow 0.442 & \orange 0.705 & \yellow 1.364 & \orange 0.721 & \green 0.792 & \orange 0.688 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 1.064 & \yellow 0.481 & \yellow 0.487 & \red 0.916 & \red 0.916 & \yellow 0.487 & \yellow 1.526 & \red 0.721 & \green 0.797 & \red 0.676 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 1.064 & \yellow 0.481 & \yellow 0.487 & \orange 0.916 & \orange 0.916 & \yellow 0.487 & \yellow 1.526 & \orange 0.721 & \green 0.797 & \orange 0.676 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.842 & \yellow 0.401 & \yellow 0.449 & \yellow 0.779 & \yellow 0.779 & \yellow 0.449 & \yellow 1.406 & \red 0.713 & \green 0.794 & \red 0.652 \\
+                   & & & 2 & \green 0.842 & \yellow 0.401 & \yellow 0.449 & \yellow 0.779 & \yellow 0.779 & \yellow 0.449 & \yellow 1.406 & \orange 0.713 & \green 0.794 & \orange 0.652 \\
                 \cline{1-14}
     
-                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 3.724 & 0.624 & 0.628 & 0.887 & 0.887 & 0.628 & 1.594 & 0.724 & 0.789 & 0.713 \\
+                \multirow{15}{*}{MLE} & Pre & N/A & 0 & \red 3.724 & \red 0.624 & \red 0.628 & \red 0.887 & \red 0.887 & \red 0.628 & \red 1.594 & 0.724 & 0.789 & 0.713 \\
                 \cline{2-14}
-                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \red 3.724 & \red 0.624 & \red 0.628 & \red 0.887 & \red 0.887 & \red 0.628 & \red 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \orange 3.724 & \orange 0.624 & \orange 0.628 & \orange 0.887 & \orange 0.887 & \orange 0.628 & \orange 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
                 \cline{4-14}
-                   & & & 2 & \red 3.724 & \red 0.624 & \red 0.628 & \red 0.887 & \red 0.887 & \red 0.628 & \red 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
+                   & & & 2 & \orange 3.724 & \orange 0.624 & \orange 0.628 & \orange 0.887 & \orange 0.887 & \orange 0.628 & \orange 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \yellow 3.647 & \yellow 0.604 & \red 0.701 & \red 0.937 & \red 0.937 & \red 0.701 & \red 1.650 & \red 0.723 & \red 0.788 & \red 0.712 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \yellow 3.647 & \yellow 0.604 & \orange 0.701 & \orange 0.937 & \orange 0.937 & \orange 0.701 & \orange 1.650 & \orange 0.723 & \orange 0.788 & \orange 0.712 \\
                 \cline{4-14}
-                   & & & 2 & \yellow 3.273 & \yellow 0.495 & \yellow 0.621 & \yellow 0.835 & \yellow 0.835 & \yellow 0.621 & \red 1.646 & \red 0.720 & \red 0.785 & \red 0.709 \\
+                   & & & 2 & \yellow 3.273 & \yellow 0.495 & \yellow 0.621 & \yellow 0.835 & \yellow 0.835 & \yellow 0.621 & \orange 1.646 & \orange 0.720 & \orange 0.785 & \orange 0.709 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \red 3.724 & \red 0.624 & \red 0.628 & \red 0.887 & \red 0.887 & \red 0.628 & \red 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \orange 3.724 & \orange 0.624 & \orange 0.628 & \orange 0.887 & \orange 0.887 & \orange 0.628 & \orange 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
                 \cline{4-14}
-                   & & & 2 & \red 3.724 & \red 0.624 & \red 0.628 & \red 0.887 & \red 0.887 & \red 0.628 & \red 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
+                   & & & 2 & \orange 3.724 & \orange 0.624 & \orange 0.628 & \orange 0.887 & \orange 0.887 & \orange 0.628 & \orange 1.594 & \yellow 0.724 & \yellow 0.789 & \yellow 0.713 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \yellow 1.819 & \yellow 0.360 & \yellow 0.520 & \yellow 0.608 & \yellow 0.608 & \yellow 0.520 & \yellow 1.398 & \red 0.721 & \green 0.792 & \red 0.693 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \yellow 1.819 & \yellow 0.360 & \yellow 0.520 & \yellow 0.608 & \yellow 0.608 & \yellow 0.520 & \yellow 1.398 & \orange 0.721 & \green 0.792 & \orange 0.693 \\
                 \cline{4-14}
-                   & & & 2 & \red 4.347 & \yellow 0.585 & \red 0.897 & \yellow 0.615 & \yellow 0.615 & \red 0.897 & \yellow 1.426 & \red 0.714 & \red 0.785 & \red 0.688 \\
+                   & & & 2 & \orange 4.347 & \yellow 0.585 & \orange 0.897 & \yellow 0.615 & \yellow 0.615 & \orange 0.897 & \yellow 1.426 & \orange 0.714 & \orange 0.785 & \orange 0.688 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 & \yellow 1.472 & \yellow 0.339 & \yellow 0.560 & \yellow 0.375 & \yellow 0.375 & \yellow 0.560 & \yellow 1.403 & \red 0.720 & \green 0.790 & \red 0.696 \\
+                    &  & \multirow{2}{*}{MFS} & 1 & \yellow 1.472 & \yellow 0.339 & \yellow 0.560 & \yellow 0.375 & \yellow 0.375 & \yellow 0.560 & \yellow 1.403 & \orange 0.720 & \green 0.790 & \orange 0.696 \\
                 \cline{4-14}
-                   & & & 2 & \yellow 3.655 & \yellow 0.460 & \red 0.705 & \yellow 0.442 & \yellow 0.442 & \red 0.705 & \yellow 1.364 & \red 0.721 & \green 0.792 & \red 0.688 \\
+                   & & & 2 & \yellow 3.655 & \yellow 0.460 & \orange 0.705 & \yellow 0.442 & \yellow 0.442 & \orange 0.705 & \yellow 1.364 & \orange 0.721 & \green 0.792 & \orange 0.688 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \yellow 2.197 & \yellow 0.481 & \yellow 0.487 & \red 0.916 & \red 0.916 & \yellow 0.487 & \yellow 1.526 & \red 0.721 & \green 0.797 & \red 0.676 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \yellow 2.197 & \yellow 0.481 & \yellow 0.487 & \orange 0.916 & \orange 0.916 & \yellow 0.487 & \yellow 1.526 & \orange 0.721 & \green 0.797 & \orange 0.676 \\
                 \cline{4-14}
-                   & & & 2 &\yellow 1.622 & \yellow 0.401 & \yellow 0.449 & \yellow 0.779 & \yellow 0.779 & \yellow 0.449 & \yellow 1.406 & \red 0.713 & \green 0.794 & \red 0.652 \\
+                   & & & 2 & \yellow 1.622 & \yellow 0.401 & \yellow 0.449 & \yellow 0.779 & \yellow 0.779 & \yellow 0.449 & \yellow 1.406 & \orange 0.713 & \green 0.794 & \orange 0.652 \\
                 \hline
             \end{tabular}
         \end{adjustbox}
@@ -138,67 +138,67 @@
     
 \begin{table}[h!]
     \begin{center}
-        \caption{Metrics for Support Vector Machine for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \caption{Metrics for Support Vector Machine for sensitive attribute \textit{Sex}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
         \label{tab::german_credit::sex::svm}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
                 \hline
-                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
                 \cline{5-14}
                 & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
                 \hline
-                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.437 & 0.288 & 0.265 & 1.080 & 1.080 & 0.265 & 0.867 & 0.755 & 0.835 & 0.667 \\
+                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.437 & \red 0.288 & \red 0.265 & \red 1.080 & \red 1.080 & \red 0.265 & \red 0.867 & 0.755 & 0.835 & 0.667 \\
                 \cline{2-14}
-                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.123 & \yellow 0.095 & \yellow 0.141 & \yellow 0.681 & \yellow 0.681 & \yellow 0.141 & \yellow 0.521 & \red 0.732 & \red 0.828 & \red 0.605 \\
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.123 & \yellow 0.095 & \yellow 0.141 & \yellow 0.681 & \yellow 0.681 & \yellow 0.141 & \yellow 0.521 & \orange 0.732 & \orange 0.828 & \orange 0.605 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.123 & \yellow 0.095 & \yellow 0.141 & \yellow 0.681 & \yellow 0.681 & \yellow 0.141 & \yellow 0.521 & \red 0.732 & \red 0.828 & \red 0.605 \\
+                   & & & 2 & \green 0.123 & \yellow 0.095 & \yellow 0.141 & \yellow 0.681 & \yellow 0.681 & \yellow 0.141 & \yellow 0.521 & \orange 0.732 & \orange 0.828 & \orange 0.605 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.268 & \yellow 0.153 & \red 0.313 & \yellow 1.066 & \yellow 1.066 & \red 0.313 & \red 0.992 & \yellow 0.755 & \red 0.833 & \green 0.677 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.268 & \yellow 0.153 & \orange 0.313 & \yellow 1.066 & \yellow 1.066 & \orange 0.313 & \orange 0.992 & \yellow 0.755 & \orange 0.833 & \green 0.677 \\
                 \cline{4-14}
-                    & & & 2 & \green 0.398 & \yellow 0.213 & \red 0.345 & \yellow 1.015 & \yellow 1.015 & \red 0.345 & \red 1.004 & \red 0.754 & \red 0.831 & \green 0.681 \\
+                    & & & 2 & \green 0.398 & \yellow 0.213 & \orange 0.345 & \yellow 1.015 & \yellow 1.015 & \orange 0.345 & \orange 1.004 & \orange 0.754 & \orange 0.831 & \green 0.681 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.330 & \yellow 0.185 & \yellow 0.235 & \red 1.118 & \red 1.118 & \yellow 0.235 & \red 0.875 & \red 0.754 & \red 0.833 & \green 0.671 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.330 & \yellow 0.185 & \yellow 0.235 & \orange 1.118 & \orange 1.118 & \yellow 0.235 & \orange 0.875 & \orange 0.754 & \orange 0.833 & \green 0.671 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.330 & \yellow 0.185 & \yellow 0.235 & \red 1.118 & \red 1.118 & \yellow 0.235 & \red 0.875 & \red 0.754 & \red 0.833 & \green 0.671 \\
+                   & & & 2 & \green 0.330 & \yellow 0.185 & \yellow 0.235 & \orange 1.118 & \orange 1.118 & \yellow 0.235 & \orange 0.875 & \orange 0.754 & \orange 0.833 & \green 0.671 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.266 & \yellow 0.163 & \red 0.308 & \red 1.166 & \red 1.166 & \red 0.308 & \red 0.903 & \red 0.753 & \red 0.833 & \red 0.666 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.266 & \yellow 0.163 & \orange 0.308 & \orange 1.166 & \orange 1.166 & \orange 0.308 & \orange 0.903 & \orange 0.753 & \orange 0.833 & \orange 0.666 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.256 & \yellow 0.158 & \yellow 0.264 & \red 1.242 & \red 1.242 & \yellow 0.264 & \red 0.911 & \red 0.751 & \red 0.832 & \red 0.662 \\
+                   & & & 2 & \green 0.256 & \yellow 0.158 & \yellow 0.264 & \orange 1.242 & \orange 1.242 & \yellow 0.264 & \orange 0.911 & \orange 0.751 & \orange 0.832 & \orange 0.662 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.263 & \yellow 0.168 & \red 0.336 & \yellow 0.819 & \yellow 0.819 & \red 0.336 & \yellow 0.860 & \red 0.752 & \red 0.834 & \red 0.662 \\
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.263 & \yellow 0.168 & \orange 0.336 & \yellow 0.819 & \yellow 0.819 & \orange 0.336 & \yellow 0.860 & \orange 0.752 & \orange 0.834 & \orange 0.662 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.251 & \yellow 0.162 & \red 0.298 & \yellow 0.781 & \yellow 0.781 & \red 0.298 & \red 0.894 & \red 0.744 & \red 0.829 & \red 0.649 \\
+                   & & & 2 & \green 0.251 & \yellow 0.162 & \orange 0.298 & \yellow 0.781 & \yellow 0.781 & \orange 0.298 & \orange 0.894 & \orange 0.744 & \orange 0.829 & \orange 0.649 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.226 & \yellow 0.145 & \yellow 0.181 & \yellow 0.971 & \yellow 0.971 & \yellow 0.181 & \red 0.871 & \red 0.743 & \red 0.829 & \red 0.645 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.226 & \yellow 0.145 & \yellow 0.181 & \yellow 0.971 & \yellow 0.971 & \yellow 0.181 & \orange 0.871 & \orange 0.743 & \orange 0.829 & \orange 0.645 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.237 & \yellow 0.131 & \red 0.266 & \yellow 0.874 & \yellow 0.874 & \red 0.266 & \yellow 0.829 & \red 0.732 & \red 0.823 & \red 0.624 \\
+                   & & & 2 & \green 0.237 & \yellow 0.131 & \orange 0.266 & \yellow 0.874 & \yellow 0.874 & \orange 0.266 & \yellow 0.829 & \orange 0.732 & \orange 0.823 & \orange 0.624 \\
                 \cline{1-14}
     
-                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 0.673 & 0.288 & 0.265 & 1.080 & 1.080 & 0.265 & 0.867 & 0.755 & 0.835 & 0.667 \\
+                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 0.673 & \red 0.288 & \red 0.265 & \red 1.080 & \red 1.080 & \red 0.265 & \red 0.867 & 0.755 & 0.835 & 0.667 \\
                 \cline{2-14}
-                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.673 & \red 0.288 & \red 0.265 & \red 1.080 & \red 1.080 & \red 0.265 & \red 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.673 & \orange 0.288 & \orange 0.265 & \orange 1.080 & \orange 1.080 & \orange 0.265 & \orange 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.673 & \red 0.288 & \red 0.265 & \red 1.080 & \red 1.080 & \red 0.265 & \red 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
+                   & & & 2 & \green 0.673 & \orange 0.288 & \orange 0.265 & \orange 1.080 & \orange 1.080 & \orange 0.265 & \orange 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.583 & \yellow 0.241 & \red 0.284 & \yellow 0.875 & \yellow 0.875 & \red 0.284 & \red 0.919 & \yellow 0.755 & \red 0.834 & \green 0.673 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.583 & \yellow 0.241 & \orange 0.284 & \yellow 0.875 & \yellow 0.875 & \orange 0.284 & \orange 0.919 & \yellow 0.755 & \orange 0.834 & \green 0.673 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.616 & \yellow 0.250 & \red 0.337 & \yellow 0.717 & \yellow 0.717 & \red 0.337 & \red 0.980 & \red 0.751 & \red 0.830 & \green 0.673 \\
+                   & & & 2 & \green 0.616 & \yellow 0.250 & \orange 0.337 & \yellow 0.717 & \yellow 0.717 & \orange 0.337 & \orange 0.980 & \orange 0.751 & \orange 0.830 & \green 0.673 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.673 & \red 0.288 & \red 0.265 & \red 1.080 & \red 1.080 & \red 0.265 & \red 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.673 & \orange 0.288 & \orange 0.265 & \orange 1.080 & \orange 1.080 & \orange 0.265 & \orange 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.673 & \red 0.288 & \red 0.265 & \red 1.080 & \red 1.080 & \red 0.265 & \red 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
+                   & & & 2 & \green 0.673 & \orange 0.288 & \orange 0.265 & \orange 1.080 & \orange 1.080 & \orange 0.265 & \orange 0.867 & \yellow 0.755 & \yellow 0.835 & \yellow 0.667 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.354 & \yellow 0.161 & \red 0.300 & \yellow 0.737 & \yellow 0.737 & \red 0.300 & \yellow 0.847 & \yellow 0.755 & \yellow 0.835 & \red 0.664 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.354 & \yellow 0.161 & \orange 0.300 & \yellow 0.737 & \yellow 0.737 & \orange 0.300 & \yellow 0.847 & \yellow 0.755 & \yellow 0.835 & \orange 0.664 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.368 & \yellow 0.169 & \red 0.279 & \yellow 0.602 & \yellow 0.602 & \red 0.279 & \red 0.885 & \red 0.751 & \red 0.833 & \red 0.657 \\
+                   & & & 2 & \green 0.368 & \yellow 0.169 & \orange 0.279 & \yellow 0.602 & \yellow 0.602 & \orange 0.279 & \orange 0.885 & \orange 0.751 & \orange 0.833 & \orange 0.657 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.340 & \yellow 0.168 & \red 0.336 & \yellow 0.819 & \yellow 0.819 & \red 0.336 & \yellow 0.860 & \red 0.752 & \red 0.834 & \red 0.662 \\
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.340 & \yellow 0.168 & \orange 0.336 & \yellow 0.819 & \yellow 0.819 & \orange 0.336 & \yellow 0.860 & \orange 0.752 & \orange 0.834 & \orange 0.662 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.338 & \yellow 0.162 & \red 0.298 & \yellow 0.781 & \yellow 0.781 & \red 0.298 & \red 0.894 & \red 0.744 & \red 0.829 & \red 0.649 \\
+                   & & & 2 & \green 0.338 & \yellow 0.162 & \orange 0.298 & \yellow 0.781 & \yellow 0.781 & \orange 0.298 & \orange 0.894 & \orange 0.744 & \orange 0.829 & \orange 0.649 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.265 & \yellow 0.145 & \yellow 0.181 & \yellow 0.971 & \yellow 0.971 & \yellow 0.181 & \red 0.871 & \red 0.743 & \red 0.829 & \red 0.645 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.265 & \yellow 0.145 & \yellow 0.181 & \yellow 0.971 & \yellow 0.971 & \yellow 0.181 & \orange 0.871 & \orange 0.743 & \orange 0.829 & \orange 0.645 \\
                 \cline{4-14}
-                   & & & 2 &\green 0.222 & \yellow 0.131 & \red 0.266 & \yellow 0.874 & \yellow 0.874 & \red 0.266 & \yellow 0.829 & \red 0.732 & \red 0.823 & \red 0.624 \\
+                   & & & 2 & \green 0.222 & \yellow 0.131 & \orange 0.266 & \yellow 0.874 & \yellow 0.874 & \orange 0.266 & \yellow 0.829 & \orange 0.732 & \orange 0.823 & \orange 0.624 \\
                 \hline
             \end{tabular}
         \end{adjustbox}
@@ -207,67 +207,67 @@
     
 \begin{table}[h!]
     \begin{center}
-        \caption{Metrics for Decision Tree for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \caption{Metrics for Decision Tree for sensitive attribute \textit{Sex}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
         \label{tab::german_credit::sex::dt}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
                 \hline
-                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
                 \cline{5-14}
                 & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
                 \hline
-                \multirow{15}{*}{FML} & Pre & N/A & 0 & 1.177 & 0.594 & 0.764 & 1.114 & 1.114 & 0.764 & 3.581 & 0.688 & 0.774 & 0.636 \\
+                \multirow{15}{*}{FML} & Pre & N/A & 0 & 1.177 & \red 0.594 & \red 0.764 & \red 1.114 & \red 1.114 & \red 0.764 & \red 3.581 & 0.688 & 0.774 & 0.636 \\
                 \cline{2-14}
-                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.548 & \yellow 0.245 & \yellow 0.445 & \red 1.171 & \red 1.171 & \yellow 0.445 & \red 3.928 & \red 0.676 & \red 0.765 & \red 0.624 \\
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.548 & \yellow 0.245 & \yellow 0.445 & \orange 1.171 & \orange 1.171 & \yellow 0.445 & \orange 3.928 & \orange 0.676 & \orange 0.765 & \orange 0.624 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.548 & \yellow 0.245 & \yellow 0.445 & \red 1.171 & \red 1.171 & \yellow 0.445 & \red 3.928 & \red 0.676 & \red 0.765 & \red 0.624 \\
+                   & & & 2 & \green 0.548 & \yellow 0.245 & \yellow 0.445 & \orange 1.171 & \orange 1.171 & \yellow 0.445 & \orange 3.928 & \orange 0.676 & \orange 0.765 & \orange 0.624 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \red 1.254 & \yellow 0.438 & \yellow 0.501 & \yellow 1.020 & \yellow 1.020 & \yellow 0.501 & \red 4.045 & \red 0.669 & \red 0.753 & \red 0.631 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \orange 1.254 & \yellow 0.438 & \yellow 0.501 & \yellow 1.020 & \yellow 1.020 & \yellow 0.501 & \orange 4.045 & \orange 0.669 & \orange 0.753 & \orange 0.631 \\
                 \cline{4-14}
-                    & & & 2 & \green 0.543 & \yellow 0.236 & \yellow 0.371 & \yellow 0.780 & \yellow 0.780 & \yellow 0.371 & \red 4.030 & \red 0.676 & \red 0.762 & \red 0.632 \\
+                    & & & 2 & \green 0.543 & \yellow 0.236 & \yellow 0.371 & \yellow 0.780 & \yellow 0.780 & \yellow 0.371 & \orange 4.030 & \orange 0.676 & \orange 0.762 & \orange 0.632 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 1.135 & \yellow 0.400 & \yellow 0.584 & \yellow 1.097 & \yellow 1.097 & \yellow 0.584 & \red 3.808 & \red 0.672 & \red 0.758 & \red 0.627 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 1.135 & \yellow 0.400 & \yellow 0.584 & \yellow 1.097 & \yellow 1.097 & \yellow 0.584 & \orange 3.808 & \orange 0.672 & \orange 0.758 & \orange 0.627 \\
                 \cline{4-14}
-                   & & & 2 & \green 1.135 & \yellow 0.400 & \yellow 0.584 & \yellow 1.097 & \yellow 1.097 & \yellow 0.584 & \red 3.808 & \red 0.672 & \red 0.758 & \red 0.627 \\
+                   & & & 2 & \green 1.135 & \yellow 0.400 & \yellow 0.584 & \yellow 1.097 & \yellow 1.097 & \yellow 0.584 & \orange 3.808 & \orange 0.672 & \orange 0.758 & \orange 0.627 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.615 & \yellow 0.245 & \yellow 0.391 & \yellow 0.725 & \yellow 0.725 & \yellow 0.391 & \yellow 3.556 & \red 0.673 & \red 0.760 & \red 0.625 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.615 & \yellow 0.245 & \yellow 0.391 & \yellow 0.725 & \yellow 0.725 & \yellow 0.391 & \yellow 3.556 & \orange 0.673 & \orange 0.760 & \orange 0.625 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.545 & \yellow 0.229 & \yellow 0.364 & \yellow 0.907 & \yellow 0.907 & \yellow 0.364 & \yellow 3.580 & \red 0.674 & \red 0.761 & \red 0.627 \\
+                   & & & 2 & \green 0.545 & \yellow 0.229 & \yellow 0.364 & \yellow 0.907 & \yellow 0.907 & \yellow 0.364 & \yellow 3.580 & \orange 0.674 & \orange 0.761 & \orange 0.627 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.886 & \yellow 0.431 & \yellow 0.545 & \yellow 0.758 & \yellow 0.758 & \yellow 0.545 & \red 3.666 & \red 0.675 & \red 0.763 & \red 0.626 \\
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.886 & \yellow 0.431 & \yellow 0.545 & \yellow 0.758 & \yellow 0.758 & \yellow 0.545 & \orange 3.666 & \orange 0.675 & \orange 0.763 & \orange 0.626 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.959 & \yellow 0.456 & \yellow 0.506 & \yellow 0.916 & \yellow 0.916 & \yellow 0.506 & \yellow 3.484 & \red 0.669 & \red 0.758 & \red 0.619 \\
+                   & & & 2 & \green 0.959 & \yellow 0.456 & \yellow 0.506 & \yellow 0.916 & \yellow 0.916 & \yellow 0.506 & \yellow 3.484 & \orange 0.669 & \orange 0.758 & \orange 0.619 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.771 & \yellow 0.388 & \yellow 0.471 & \yellow 0.884 & \yellow 0.884 & \yellow 0.471 & \yellow 3.535 & \red 0.670 & \red 0.759 & \red 0.618 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.771 & \yellow 0.388 & \yellow 0.471 & \yellow 0.884 & \yellow 0.884 & \yellow 0.471 & \yellow 3.535 & \orange 0.670 & \orange 0.759 & \orange 0.618 \\
                 \cline{4-14}
-                   & & & 2 & \red 1.260 & \yellow 0.566 & \yellow 0.679 & \yellow 0.816 & \yellow 0.816 & \yellow 0.679 & \yellow 3.385 & \red 0.664 & \red 0.757 & \red 0.604 \\
+                   & & & 2 & \orange 1.260 & \yellow 0.566 & \yellow 0.679 & \yellow 0.816 & \yellow 0.816 & \yellow 0.679 & \yellow 3.385 & \orange 0.664 & \orange 0.757 & \orange 0.604 \\
                 \cline{1-14}
     
-                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 2.088 & 0.594 & 0.764 & 1.114 & 1.114 & 0.764 & 3.581 & 0.688 & 0.774 & 0.636 \\
+                \multirow{15}{*}{MLE} & Pre & N/A & 0 & \red 2.088 & \red 0.594 & \red 0.764 & \red 1.114 & \red 1.114 & \red 0.764 & \red 3.581 & 0.688 & 0.774 & 0.636 \\
                 \cline{2-14}
-                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \red 2.088 & \red 0.594 & \red 0.764 & \red 1.114 & \red 1.114 & \red 0.764 & \red 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \orange 2.088 & \orange 0.594 & \orange 0.764 & \orange 1.114 & \orange 1.114 & \orange 0.764 & \orange 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
                 \cline{4-14}
-                   & & & 2 & \red 2.088 & \red 0.594 & \red 0.764 & \red 1.114 & \red 1.114 & \red 0.764 & \red 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
+                   & & & 2 & \orange 2.088 & \orange 0.594 & \orange 0.764 & \orange 1.114 & \orange 1.114 & \orange 0.764 & \orange 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.837 & \yellow 0.286 & \yellow 0.381 & \yellow 0.757 & \yellow 0.757 & \yellow 0.381 & \yellow 3.540 & \red 0.681 & \red 0.769 & \red 0.627 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.837 & \yellow 0.286 & \yellow 0.381 & \yellow 0.757 & \yellow 0.757 & \yellow 0.381 & \yellow 3.540 & \orange 0.681 & \orange 0.769 & \orange 0.627 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.888 & \yellow 0.298 & \yellow 0.316 & \yellow 0.625 & \yellow 0.625 & \yellow 0.316 & \yellow 3.303 & \red 0.675 & \red 0.764 & \red 0.621 \\
+                   & & & 2 & \green 0.888 & \yellow 0.298 & \yellow 0.316 & \yellow 0.625 & \yellow 0.625 & \yellow 0.316 & \yellow 3.303 & \orange 0.675 & \orange 0.764 & \orange 0.621 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \red 2.088 & \red 0.594 & \red 0.764 & \red 1.114 & \red 1.114 & \red 0.764 & \red 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \orange 2.088 & \orange 0.594 & \orange 0.764 & \orange 1.114 & \orange 1.114 & \orange 0.764 & \orange 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
                 \cline{4-14}
-                   & & & 2 & \red 2.088 & \red 0.594 & \red 0.764 & \red 1.114 & \red 1.114 & \red 0.764 & \red 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
+                   & & & 2 & \orange 2.088 & \orange 0.594 & \orange 0.764 & \orange 1.114 & \orange 1.114 & \orange 0.764 & \orange 3.581 & \yellow 0.688 & \yellow 0.774 & \yellow 0.636 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \yellow 1.278 & \yellow 0.367 & \yellow 0.501 & \yellow 1.051 & \yellow 1.051 & \yellow 0.501 & \red 3.684 & \red 0.663 & \red 0.753 & \red 0.615 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \yellow 1.278 & \yellow 0.367 & \yellow 0.501 & \yellow 1.051 & \yellow 1.051 & \yellow 0.501 & \orange 3.684 & \orange 0.663 & \orange 0.753 & \orange 0.615 \\
                 \cline{4-14}
-                   & & & 2 & \yellow 1.360 & \yellow 0.468 & \yellow 0.654 & \yellow 1.103 & \yellow 1.103 & \yellow 0.654 & \yellow 3.574 & \red 0.652 & \red 0.744 & \red 0.603 \\
+                   & & & 2 & \yellow 1.360 & \yellow 0.468 & \yellow 0.654 & \yellow 1.103 & \yellow 1.103 & \yellow 0.654 & \yellow 3.574 & \orange 0.652 & \orange 0.744 & \orange 0.603 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 & \yellow 1.601 & \yellow 0.431 & \yellow 0.545 & \yellow 0.758 & \yellow 0.758 & \yellow 0.545 & \red 3.666 & \red 0.675 & \red 0.763 & \red 0.626 \\
+                    &  & \multirow{2}{*}{MFS} & 1 & \yellow 1.601 & \yellow 0.431 & \yellow 0.545 & \yellow 0.758 & \yellow 0.758 & \yellow 0.545 & \orange 3.666 & \orange 0.675 & \orange 0.763 & \orange 0.626 \\
                 \cline{4-14}
-                   & & & 2 & \yellow 1.628 & \yellow 0.456 & \yellow 0.506 & \yellow 0.916 & \yellow 0.916 & \yellow 0.506 & \yellow 3.484 & \red 0.669 & \red 0.758 & \red 0.619 \\
+                   & & & 2 & \yellow 1.628 & \yellow 0.456 & \yellow 0.506 & \yellow 0.916 & \yellow 0.916 & \yellow 0.506 & \yellow 3.484 & \orange 0.669 & \orange 0.758 & \orange 0.619 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \yellow 1.361 & \yellow 0.388 & \yellow 0.471 & \yellow 0.884 & \yellow 0.884 & \yellow 0.471 & \yellow 3.535 & \red 0.670 & \red 0.759 & \red 0.618 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \yellow 1.361 & \yellow 0.388 & \yellow 0.471 & \yellow 0.884 & \yellow 0.884 & \yellow 0.471 & \yellow 3.535 & \orange 0.670 & \orange 0.759 & \orange 0.618 \\
                 \cline{4-14}
-                   & & & 2 &\yellow 2.029 & \yellow 0.566 & \yellow 0.679 & \yellow 0.816 & \yellow 0.816 & \yellow 0.679 & \yellow 3.385 & \red 0.664 & \red 0.757 & \red 0.604 \\
+                   & & & 2 & \yellow 2.029 & \yellow 0.566 & \yellow 0.679 & \yellow 0.816 & \yellow 0.816 & \yellow 0.679 & \yellow 3.385 & \orange 0.664 & \orange 0.757 & \orange 0.604 \\
                 \hline
             \end{tabular}
         \end{adjustbox}
@@ -276,67 +276,67 @@
     
 \begin{table}[h!]
     \begin{center}
-        \caption{Metrics for Random Forest for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \caption{Metrics for Random Forest for sensitive attribute \textit{Sex}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
         \label{tab::german_credit::sex::rf}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
                 \hline
-                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
                 \cline{5-14}
                 & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
                 \hline
-                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.327 & 0.224 & 0.255 & 0.705 & 0.705 & 0.255 & 1.389 & 0.768 & 0.842 & 0.690 \\
+                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.327 & \red 0.224 & \red 0.255 & \red 0.705 & \red 0.705 & \red 0.255 & \red 1.389 & 0.768 & 0.842 & 0.690 \\
                 \cline{2-14}
-                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.246 & \yellow 0.172 & \yellow 0.209 & \red 0.760 & \red 0.760 & \yellow 0.209 & \red 1.495 & \red 0.748 & \red 0.832 & \red 0.651 \\
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.246 & \yellow 0.172 & \yellow 0.209 & \orange 0.760 & \orange 0.760 & \yellow 0.209 & \orange 1.495 & \orange 0.748 & \orange 0.832 & \orange 0.651 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.246 & \yellow 0.172 & \yellow 0.209 & \red 0.760 & \red 0.760 & \yellow 0.209 & \red 1.495 & \red 0.748 & \red 0.832 & \red 0.651 \\
+                   & & & 2 & \green 0.246 & \yellow 0.172 & \yellow 0.209 & \orange 0.760 & \orange 0.760 & \yellow 0.209 & \orange 1.495 & \orange 0.748 & \orange 0.832 & \orange 0.651 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.260 & \yellow 0.152 & \red 0.384 & \yellow 0.660 & \yellow 0.660 & \red 0.384 & \red 1.569 & \red 0.757 & \red 0.833 & \red 0.683 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.260 & \yellow 0.152 & \orange 0.384 & \yellow 0.660 & \yellow 0.660 & \orange 0.384 & \orange 1.569 & \orange 0.757 & \orange 0.833 & \orange 0.683 \\
                 \cline{4-14}
-                    & & & 2 & \green 0.222 & \yellow 0.131 & \red 0.273 & \yellow 0.664 & \yellow 0.664 & \red 0.273 & \red 1.547 & \red 0.759 & \red 0.835 & \red 0.685 \\
+                    & & & 2 & \green 0.222 & \yellow 0.131 & \orange 0.273 & \yellow 0.664 & \yellow 0.664 & \orange 0.273 & \orange 1.547 & \orange 0.759 & \orange 0.835 & \orange 0.685 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.365 & \yellow 0.214 & \red 0.365 & \red 0.766 & \red 0.766 & \red 0.365 & \red 1.524 & \red 0.760 & \red 0.835 & \red 0.687 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.365 & \yellow 0.214 & \orange 0.365 & \orange 0.766 & \orange 0.766 & \orange 0.365 & \orange 1.524 & \orange 0.760 & \orange 0.835 & \orange 0.687 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.365 & \yellow 0.214 & \red 0.365 & \red 0.766 & \red 0.766 & \red 0.365 & \red 1.524 & \red 0.760 & \red 0.835 & \red 0.687 \\
+                   & & & 2 & \green 0.365 & \yellow 0.214 & \orange 0.365 & \orange 0.766 & \orange 0.766 & \orange 0.365 & \orange 1.524 & \orange 0.760 & \orange 0.835 & \orange 0.687 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.398 & \yellow 0.216 & \red 0.348 & \red 0.874 & \red 0.874 & \red 0.348 & \red 2.009 & \red 0.746 & \red 0.823 & \red 0.680 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.398 & \yellow 0.216 & \orange 0.348 & \orange 0.874 & \orange 0.874 & \orange 0.348 & \orange 2.009 & \orange 0.746 & \orange 0.823 & \orange 0.680 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.430 & \red 0.239 & \red 0.358 & \red 0.999 & \red 0.999 & \red 0.358 & \red 2.051 & \red 0.741 & \red 0.820 & \red 0.674 \\
+                   & & & 2 & \green 0.430 & \orange 0.239 & \orange 0.358 & \orange 0.999 & \orange 0.999 & \orange 0.358 & \orange 2.051 & \orange 0.741 & \orange 0.820 & \orange 0.674 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.558 & \red 0.347 & \red 0.437 & \red 0.862 & \red 0.862 & \red 0.437 & \red 1.995 & \red 0.742 & \red 0.822 & \red 0.667 \\
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.558 & \orange 0.347 & \orange 0.437 & \orange 0.862 & \orange 0.862 & \orange 0.437 & \orange 1.995 & \orange 0.742 & \orange 0.822 & \orange 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.562 & \red 0.349 & \red 0.422 & \red 0.825 & \red 0.825 & \red 0.422 & \red 1.947 & \red 0.732 & \red 0.815 & \red 0.653 \\
+                   & & & 2 & \green 0.562 & \orange 0.349 & \orange 0.422 & \orange 0.825 & \orange 0.825 & \orange 0.422 & \orange 1.947 & \orange 0.732 & \orange 0.815 & \orange 0.653 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.269 & \yellow 0.185 & \red 0.276 & \red 0.830 & \red 0.830 & \red 0.276 & \red 1.571 & \red 0.744 & \red 0.827 & \red 0.656 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.269 & \yellow 0.185 & \orange 0.276 & \orange 0.830 & \orange 0.830 & \orange 0.276 & \orange 1.571 & \orange 0.744 & \orange 0.827 & \orange 0.656 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.266 & \yellow 0.168 & \red 0.301 & \yellow 0.686 & \yellow 0.686 & \red 0.301 & \red 1.769 & \red 0.730 & \red 0.817 & \red 0.641 \\
+                   & & & 2 & \green 0.266 & \yellow 0.168 & \orange 0.301 & \yellow 0.686 & \yellow 0.686 & \orange 0.301 & \orange 1.769 & \orange 0.730 & \orange 0.817 & \orange 0.641 \\
                 \cline{1-14}
     
-                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 0.502 & 0.224 & 0.255 & 0.705 & 0.705 & 0.255 & 1.389 & 0.768 & 0.842 & 0.690 \\
+                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 0.502 & \red 0.224 & \red 0.255 & \red 0.705 & \red 0.705 & \red 0.255 & \red 1.389 & 0.768 & 0.842 & 0.690 \\
                 \cline{2-14}
-                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.502 & \red 0.224 & \red 0.255 & \red 0.705 & \red 0.705 & \red 0.255 & \red 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.502 & \orange 0.224 & \orange 0.255 & \orange 0.705 & \orange 0.705 & \orange 0.255 & \orange 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.502 & \red 0.224 & \red 0.255 & \red 0.705 & \red 0.705 & \red 0.255 & \red 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
+                   & & & 2 & \green 0.502 & \orange 0.224 & \orange 0.255 & \orange 0.705 & \orange 0.705 & \orange 0.255 & \orange 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.501 & \red 0.226 & \yellow 0.252 & \yellow 0.568 & \yellow 0.568 & \yellow 0.252 & \red 1.506 & \green 0.770 & \green 0.843 & \green 0.694 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.501 & \orange 0.226 & \yellow 0.252 & \yellow 0.568 & \yellow 0.568 & \yellow 0.252 & \orange 1.506 & \green 0.770 & \green 0.843 & \green 0.694 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.400 & \yellow 0.188 & \red 0.288 & \red 0.888 & \red 0.888 & \red 0.288 & \red 1.476 & \yellow 0.768 & \yellow 0.842 & \green 0.691 \\
+                   & & & 2 & \green 0.400 & \yellow 0.188 & \orange 0.288 & \orange 0.888 & \orange 0.888 & \orange 0.288 & \orange 1.476 & \yellow 0.768 & \yellow 0.842 & \green 0.691 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.502 & \red 0.224 & \red 0.255 & \red 0.705 & \red 0.705 & \red 0.255 & \red 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.502 & \orange 0.224 & \orange 0.255 & \orange 0.705 & \orange 0.705 & \orange 0.255 & \orange 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.502 & \red 0.224 & \red 0.255 & \red 0.705 & \red 0.705 & \red 0.255 & \red 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
+                   & & & 2 & \green 0.502 & \orange 0.224 & \orange 0.255 & \orange 0.705 & \orange 0.705 & \orange 0.255 & \orange 1.389 & \yellow 0.768 & \yellow 0.842 & \yellow 0.690 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.609 & \red 0.260 & \red 0.352 & \red 0.767 & \red 0.767 & \red 0.352 & \red 1.890 & \red 0.748 & \red 0.826 & \red 0.676 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.609 & \orange 0.260 & \orange 0.352 & \orange 0.767 & \orange 0.767 & \orange 0.352 & \orange 1.890 & \orange 0.748 & \orange 0.826 & \orange 0.676 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.588 & \red 0.250 & \red 0.299 & \yellow 0.681 & \yellow 0.681 & \red 0.299 & \red 1.877 & \red 0.740 & \red 0.821 & \red 0.666 \\
+                   & & & 2 & \green 0.588 & \orange 0.250 & \orange 0.299 & \yellow 0.681 & \yellow 0.681 & \orange 0.299 & \orange 1.877 & \orange 0.740 & \orange 0.821 & \orange 0.666 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.823 & \red 0.347 & \red 0.437 & \red 0.862 & \red 0.862 & \red 0.437 & \red 1.995 & \red 0.742 & \red 0.822 & \red 0.667 \\
+                    &  & \multirow{2}{*}{MFS} & 1 & \green 0.823 & \orange 0.347 & \orange 0.437 & \orange 0.862 & \orange 0.862 & \orange 0.437 & \orange 1.995 & \orange 0.742 & \orange 0.822 & \orange 0.667 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.822 & \red 0.349 & \red 0.423 & \red 0.825 & \red 0.825 & \red 0.422 & \red 1.947 & \red 0.732 & \red 0.815 & \red 0.653 \\
+                   & & & 2 & \green 0.822 & \orange 0.349 & \orange 0.423 & \orange 0.825 & \orange 0.825 & \orange 0.422 & \orange 1.947 & \orange 0.732 & \orange 0.815 & \orange 0.653 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.383 & \yellow 0.185 & \red 0.276 & \red 0.830 & \red 0.830 & \red 0.276 & \red 1.571 & \red 0.744 & \red 0.827 & \red 0.656 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.383 & \yellow 0.185 & \orange 0.276 & \orange 0.830 & \orange 0.830 & \orange 0.276 & \orange 1.571 & \orange 0.744 & \orange 0.827 & \orange 0.656 \\
                 \cline{4-14}
-                   & & & 2 &\green 0.347 & \yellow 0.168 & \red 0.301 & \yellow 0.686 & \yellow 0.686 & \red 0.301 & \red 1.769 & \red 0.730 & \red 0.817 & \red 0.641 \\
+                   & & & 2 & \green 0.347 & \yellow 0.168 & \orange 0.301 & \yellow 0.686 & \yellow 0.686 & \orange 0.301 & \orange 1.769 & \orange 0.730 & \orange 0.817 & \orange 0.641 \\
                 \hline
             \end{tabular}
         \end{adjustbox}
@@ -345,67 +345,67 @@
     
 \begin{table}[h!]
     \begin{center}
-        \caption{Metrics for XGBoost for sensitive attribute \textit{Sex}. For fairness metrics, a green cell means total bias reduction, yellow is a partial reduction, and red means a non-decrease of bias. For performance metrics, green is an increase, red is a decrease, and yellow is when value remains the same. For further reference, see table \ref{tab::reference}.}
+        \caption{Metrics for XGBoost for sensitive attribute \textit{Sex}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
         \label{tab::german_credit::sex::xgb}
         \begin{adjustbox}{width=\textwidth}
             \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
                 \hline
-                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Corr} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
                 \cline{5-14}
                 & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
                 \hline
-                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.525 & 0.308 & 0.357 & 0.871 & 0.871 & 0.357 & 2.249 & 0.753 & 0.827 & 0.693 \\
+                \multirow{15}{*}{FML} & Pre & N/A & 0 & 0.525 & \red 0.308 & \red 0.357 & \red 0.871 & \red 0.871 & \red 0.357 & \red 2.249 & 0.753 & 0.827 & 0.693 \\
                 \cline{2-14}
-                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.442 & \yellow 0.281 & \red 0.497 & \red 1.194 & \red 1.194 & \red 0.497 & \red 2.483 & \red 0.728 & \red 0.812 & \red 0.655 \\
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.442 & \yellow 0.281 & \orange 0.497 & \orange 1.194 & \orange 1.194 & \orange 0.497 & \orange 2.483 & \orange 0.728 & \orange 0.812 & \orange 0.655 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.442 & \yellow 0.281 & \red 0.497 & \red 1.194 & \red 1.194 & \red 0.497 & \red 2.483 & \red 0.728 & \red 0.812 & \red 0.655 \\
+                   & & & 2 & \green 0.442 & \yellow 0.281 & \orange 0.497 & \orange 1.194 & \orange 1.194 & \orange 0.497 & \orange 2.483 & \orange 0.728 & \orange 0.812 & \orange 0.655 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.463 & \yellow 0.238 & \red 0.458 & \red 0.930 & \red 0.930 & \red 0.458 & \red 2.265 & \red 0.742 & \red 0.819 & \red 0.684 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.463 & \yellow 0.238 & \orange 0.458 & \orange 0.930 & \orange 0.930 & \orange 0.458 & \orange 2.265 & \orange 0.742 & \orange 0.819 & \orange 0.684 \\
                 \cline{4-14}
-                    & & & 2 & \green 0.345 & \yellow 0.182 & \red 0.404 & \yellow 0.663 & \yellow 0.663 & \red 0.404 & \red 2.329 & \red 0.741 & \red 0.818 & \red 0.680 \\
+                    & & & 2 & \green 0.345 & \yellow 0.182 & \orange 0.404 & \yellow 0.663 & \yellow 0.663 & \orange 0.404 & \orange 2.329 & \orange 0.741 & \orange 0.818 & \orange 0.680 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.239 & \yellow 0.130 & \red 0.368 & \yellow 0.724 & \yellow 0.724 & \red 0.369 & \red 2.338 & \red 0.743 & \red 0.819 & \red 0.684 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.239 & \yellow 0.130 & \orange 0.368 & \yellow 0.724 & \yellow 0.724 & \orange 0.369 & \orange 2.338 & \orange 0.743 & \orange 0.819 & \orange 0.684 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.239 & \yellow 0.130 & \red 0.368 & \yellow 0.724 & \yellow 0.724 & \red 0.369 & \red 2.338 & \red 0.743 & \red 0.819 & \red 0.684 \\
+                   & & & 2 & \green 0.239 & \yellow 0.130 & \orange 0.368 & \yellow 0.724 & \yellow 0.724 & \orange 0.369 & \orange 2.338 & \orange 0.743 & \orange 0.819 & \orange 0.684 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.339 & \yellow 0.178 & \red 0.462 & \yellow 0.702 & \yellow 0.702 & \red 0.462 & \red 2.358 & \red 0.721 & \red 0.803 & \red 0.659 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \green 0.339 & \yellow 0.178 & \orange 0.462 & \yellow 0.702 & \yellow 0.702 & \orange 0.462 & \orange 2.358 & \orange 0.721 & \orange 0.803 & \orange 0.659 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.418 & \yellow 0.226 & \red 0.446 & \yellow 0.830 & \yellow 0.830 & \red 0.446 & \red 2.433 & \red 0.722 & \red 0.803 & \red 0.663 \\
+                   & & & 2 & \green 0.418 & \yellow 0.226 & \orange 0.446 & \yellow 0.830 & \yellow 0.830 & \orange 0.446 & \orange 2.433 & \orange 0.722 & \orange 0.803 & \orange 0.663 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.651 & \red 0.387 & \red 0.405 & \red 0.972 & \red 0.972 & \red 0.405 & \red 2.427 & \red 0.729 & \red 0.811 & \red 0.660 \\
+                    &  & \multirow{2}{*}{MFS} & 1 &  \green 0.651 & \orange 0.387 & \orange 0.405 & \orange 0.972 & \orange 0.972 & \orange 0.405 & \orange 2.427 & \orange 0.729 & \orange 0.811 & \orange 0.660 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.605 & \red 0.345 & \red 0.372 & \red 0.968 & \red 0.968 & \red 0.372 & \red 2.416 & \red 0.717 & \red 0.800 & \red 0.649 \\
+                   & & & 2 & \green 0.605 & \orange 0.345 & \orange 0.372 & \orange 0.968 & \orange 0.968 & \orange 0.372 & \orange 2.416 & \orange 0.717 & \orange 0.800 & \orange 0.649 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.470 & \yellow 0.269 & \yellow 0.330 & \red 1.197 & \red 1.197 & \yellow 0.330 & \red 2.290 & \red 0.724 & \red 0.809 & \red 0.653 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.470 & \yellow 0.269 & \yellow 0.330 & \orange 1.197 & \orange 1.197 & \yellow 0.330 & \orange 2.290 & \orange 0.724 & \orange 0.809 & \orange 0.653 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.572 & \red 0.327 & \red 0.471 & \yellow 0.821 & \yellow 0.821 & \red 0.471 & \red 2.309 & \red 0.713 & \red 0.801 & \red 0.635 \\
+                   & & & 2 & \green 0.572 & \orange 0.327 & \orange 0.471 & \yellow 0.821 & \yellow 0.821 & \orange 0.471 & \orange 2.309 & \orange 0.713 & \orange 0.801 & \orange 0.635 \\
                 \cline{1-14}
     
-                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 0.790 & 0.308 & 0.357 & 0.871 & 0.871 & 0.357 & 2.249 & 0.753 & 0.827 & 0.693 \\
+                \multirow{15}{*}{MLE} & Pre & N/A & 0 & 0.790 & \red 0.308 & \red 0.357 & \red 0.871 & \red 0.871 & \red 0.357 & \red 2.249 & 0.753 & 0.827 & 0.693 \\
                 \cline{2-14}
-                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.790 & \red 0.308 & \red 0.357 & \red 0.871 & \red 0.871 & \red 0.357 & \red 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & \green 0.790 & \orange 0.308 & \orange 0.357 & \orange 0.871 & \orange 0.871 & \orange 0.357 & \orange 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.790 & \red 0.308 & \red 0.357 & \red 0.871 & \red 0.871 & \red 0.357 & \red 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
+                   & & & 2 & \green 0.790 & \orange 0.308 & \orange 0.357 & \orange 0.871 & \orange 0.871 & \orange 0.357 & \orange 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{REW} & 1 & \green 0.774 & \yellow 0.278 & \yellow 0.274 & \yellow 0.794 & \yellow 0.794 & \yellow 0.274 & \yellow 2.190 & \red 0.750 & \red 0.825 & \red 0.688 \\
+                    &  & \multirow{2}{*}{REW} & 1 & \green 0.774 & \yellow 0.278 & \yellow 0.274 & \yellow 0.794 & \yellow 0.794 & \yellow 0.274 & \yellow 2.190 & \orange 0.750 & \orange 0.825 & \orange 0.688 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.760 & \yellow 0.304 & \yellow 0.328 & \red 0.942 & \red 0.942 & \yellow 0.328 & \red 2.256 & \red 0.748 & \red 0.824 & \red 0.685 \\
+                   & & & 2 & \green 0.760 & \yellow 0.304 & \yellow 0.328 & \orange 0.942 & \orange 0.942 & \yellow 0.328 & \orange 2.256 & \orange 0.748 & \orange 0.824 & \orange 0.685 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.790 & \red 0.308 & \red 0.357 & \red 0.871 & \red 0.871 & \red 0.357 & \red 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
+                    &  & \multirow{2}{*}{DIR} & 1 & \green 0.790 & \orange 0.308 & \orange 0.357 & \orange 0.871 & \orange 0.871 & \orange 0.357 & \orange 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
                 \cline{4-14}
-                   & & & 2 & \green 0.790 & \red 0.308 & \red 0.357 & \red 0.871 & \red 0.871 & \red 0.357 & \red 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
+                   & & & 2 & \green 0.790 & \orange 0.308 & \orange 0.357 & \orange 0.871 & \orange 0.871 & \orange 0.357 & \orange 2.249 & \yellow 0.753 & \yellow 0.827 & \yellow 0.693 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{FFS} & 1 & \red 1.250 & \red 0.410 & \red 0.444 & \yellow 0.715 & \yellow 0.715 & \red 0.444 & \red 2.560 & \red 0.727 & \red 0.808 & \red 0.664 \\
+                    &  & \multirow{2}{*}{FFS} & 1 & \orange 1.250 & \orange 0.410 & \orange 0.444 & \yellow 0.715 & \yellow 0.715 & \orange 0.444 & \orange 2.560 & \orange 0.727 & \orange 0.808 & \orange 0.664 \\
                 \cline{4-14}
-                   & & & 2 & \green 1.178 & \red 0.386 & \red 0.454 & \yellow 0.577 & \yellow 0.577 & \red 0.454 & \red 2.559 & \red 0.714 & \red 0.798 & \red 0.651 \\
+                   & & & 2 & \green 1.178 & \orange 0.386 & \orange 0.454 & \yellow 0.577 & \yellow 0.577 & \orange 0.454 & \orange 2.559 & \orange 0.714 & \orange 0.798 & \orange 0.651 \\
                 \cline{3-14}
-                    &  & \multirow{2}{*}{MFS} & 1 & \red 1.289 & \red 0.387 & \red 0.405 & \red 0.972 & \red 0.972 & \red 0.405 & \red 2.427 & \red 0.729 & \red 0.811 & \red 0.660 \\
+                    &  & \multirow{2}{*}{MFS} & 1 & \orange 1.289 & \orange 0.387 & \orange 0.405 & \orange 0.972 & \orange 0.972 & \orange 0.405 & \orange 2.427 & \orange 0.729 & \orange 0.811 & \orange 0.660 \\
                 \cline{4-14}
-                   & & & 2 & \green 1.191 & \red 0.345 & \red 0.372 & \red 0.968 & \red 0.968 & \red 0.372 & \red 2.416 & \red 0.717 & \red 0.800 & \red 0.649 \\
+                   & & & 2 & \green 1.191 & \orange 0.345 & \orange 0.372 & \orange 0.968 & \orange 0.968 & \orange 0.372 & \orange 2.416 & \orange 0.717 & \orange 0.800 & \orange 0.649 \\
                 \cline{3-14}
-                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.570 & \yellow 0.269 & \yellow 0.330 & \red 1.197 & \red 1.197 & \yellow 0.330 & \red 2.290 & \red 0.724 & \red 0.809 & \red 0.653 \\
+                    &  & \multirow{1}{*}{FGE} & 1 & \green 0.570 & \yellow 0.269 & \yellow 0.330 & \orange 1.197 & \orange 1.197 & \yellow 0.330 & \orange 2.290 & \orange 0.724 & \orange 0.809 & \orange 0.653 \\
                 \cline{4-14}
-                   & & & 2 &\green 0.761 & \red 0.327 & \red 0.471 & \yellow 0.821 & \yellow 0.821 & \red 0.471 & \red 2.309 & \red 0.713 & \red 0.801 & \red 0.635 \\
+                   & & & 2 & \green 0.761 & \orange 0.327 & \orange 0.471 & \yellow 0.821 & \yellow 0.821 & \orange 0.471 & \orange 2.309 & \orange 0.713 & \orange 0.801 & \orange 0.635 \\
                 \hline
             \end{tabular}
         \end{adjustbox}
