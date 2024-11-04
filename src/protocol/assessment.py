@@ -1,7 +1,7 @@
 """
+Project Name: Bias Correction in Datasets
 Author: João Artur
-Project: Master's Thesis
-Last edited: 20-11-2023
+Date of Modification: 2024-04-11
 """
 import numpy as np
 import pandas as pd
@@ -15,6 +15,24 @@ from evaluation import FairnessEvaluator
 
 
 def get_classifier_predictions(model: object, train: Dataset, validation: Dataset) -> pd.DataFrame:
+    """
+    Get predictions from a classifier model.
+
+    Parameters
+    ----------
+    model : object
+        The classifier model.
+    train : Dataset
+        The training dataset.
+    validation : Dataset
+        The validation dataset.
+
+    Returns
+    -------
+    pd.DataFrame
+        The predictions as a DataFrame.
+    """
+
     from sklearn.pipeline import Pipeline
 
     pipeline = Pipeline([
@@ -40,6 +58,24 @@ def get_classifier_predictions(model: object, train: Dataset, validation: Datase
 
 
 def fairness_assessment(data: Dataset, predictions: pd.DataFrame, sensitive_attribute: str) -> pd.DataFrame:
+    """
+    Assess fairness metrics for the given data and predictions.
+
+    Parameters
+    ----------
+    data : Dataset
+        The dataset.
+    predictions : pd.DataFrame
+        The predictions.
+    sensitive_attribute : str
+        The sensitive attribute.
+
+    Returns
+    -------
+    pd.DataFrame
+        The fairness metrics as a DataFrame.
+    """
+
     dummy_values = data.get_dummy_protected_feature(sensitive_attribute)
     metrics = pd.DataFrame()
     for value in dummy_values:
@@ -52,6 +88,25 @@ def fairness_assessment(data: Dataset, predictions: pd.DataFrame, sensitive_attr
 
 
 def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predictions: pd.DataFrame, protected_attribute: str = 'NA') -> pd.DataFrame:
+    """
+    Assess the distribution of the protected attribute in the training, predicted, and prediction sets.
+
+    Parameters
+    ----------
+    train_data : Dataset
+        The training dataset.
+    predicted_data : Dataset
+        The predicted dataset.
+    predictions : pd.DataFrame
+        The predictions.
+    protected_attribute : str, optional
+        The protected attribute (default is 'NA').
+
+    Returns
+    -------
+    pd.DataFrame
+        The distribution metrics as a DataFrame.
+    """
 
     def get_value_counts(df: pd.DataFrame) -> pd.DataFrame:
         ratios = df.value_counts(normalize=True).reset_index()
@@ -87,6 +142,27 @@ def distribution_assessment(train_data: Dataset, predicted_data: Dataset, predic
 
 def classifier_assessment(classifier: object, train_data: Dataset, validation_data: Dataset,
                           sensitive_attribute: str = 'NA') -> (pd.Series, pd.DataFrame):
+    """
+    Assess the classifier's performance and fairness.
+
+    Parameters
+    ----------
+    classifier : object
+        The classifier model.
+    train_data : Dataset
+        The training dataset.
+    validation_data : Dataset
+        The validation dataset.
+    sensitive_attribute : str, optional
+        The sensitive attribute (default is 'NA').
+
+    Returns
+    -------
+    pd.Series
+        The predictions.
+    pd.DataFrame
+        The combined metrics and distribution as a DataFrame.
+    """
 
     predictions = get_classifier_predictions(classifier, train_data, validation_data)
 

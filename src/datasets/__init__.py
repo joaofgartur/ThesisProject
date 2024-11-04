@@ -1,7 +1,7 @@
 """
+Project Name: Bias Correction in Datasets
 Author: João Artur
-Project: Master's Thesis
-Last edited: 20-11-2023
+Date of Modification: 2024-04-11
 """
 
 from .Dataset import *
