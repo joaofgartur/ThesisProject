@@ -1,3 +1,9 @@
+"""
+Project Name: Bias Correction in Datasets
+Author: João Artur
+Date of Modification: 2024-04-11
+"""
+
 from configparser import ConfigParser, NoSectionError, NoOptionError
 
 from .DatasetConfigs import DatasetConfig
@@ -10,8 +16,60 @@ global_configs = None
 
 
 class Configs(object):
+    """
+    Class to manage the configuration settings for the bias correction project.
+
+    Attributes
+    ----------
+    global_configs_file : str
+        Path to the global configuration file.
+    algorithms_configs_file : str
+        Path to the algorithms configuration file.
+    dataset_configs_file : str
+        Path to the dataset configuration file.
+    num_runs : int
+        Number of runs for the algorithms.
+    num_iterations : int
+        Number of iterations for the algorithms.
+    gpu_device_id : int
+        ID of the GPU device to be used.
+
+    Methods
+    -------
+    __init__(configs_file: str):
+        Initializes the Configs object with the provided configuration file.
+    __parse_global_configs_file():
+        Parses the global configuration file.
+    __config_surrogate_classifiers(parser: ConfigParser):
+        Configures the surrogate classifiers.
+    __config_gpu_acceleration(parser: ConfigParser):
+        Configures GPU acceleration settings.
+    set_global_configs_file(configurations_file: str):
+        Sets the global configuration file.
+    set_algorithms_configs_file(configurations_file: str):
+        Sets the algorithms configuration file.
+    set_dataset_configs_file(configurations_file: str):
+        Sets the dataset configuration file.
+    get_global_configs_file() -> str:
+        Gets the global configuration file path.
+    get_algorithms_configs_file() -> str:
+        Gets the algorithms configuration file path.
+    get_dataset_configs_file() -> str:
+        Gets the dataset configuration file path.
+    get_dataset_configs(dataset: str) -> DatasetConfig:
+        Gets the dataset configuration for the specified dataset.
+    """
 
     def __init__(self, configs_file: str):
+        """
+        Initializes the Configs object with the provided configuration file.
+
+        Parameters
+        ----------
+        configs_file : str
+            Path to the global configuration file.
+        """
+
         self.global_configs_file = configs_file
         self.algorithms_configs_file = None
         self.dataset_configs_file = None
@@ -23,6 +81,10 @@ class Configs(object):
         self.__parse_global_configs_file()
 
     def __parse_global_configs_file(self):
+        """
+        Parses the global configuration file.
+        """
+
         try:
             parser = ConfigParser()
             parser.read(self.global_configs_file)
@@ -48,6 +110,14 @@ class Configs(object):
             raise ValueError
 
     def __config_surrogate_classifiers(self, parser: ConfigParser):
+        """
+        Configures the surrogate classifiers.
+
+        Parameters
+        ----------
+        parser : ConfigParser
+            The configuration parser.
+        """
         header = 'surrogate_classifiers'
         surrogate_classifiers = []
 
@@ -74,6 +144,15 @@ class Configs(object):
         set_surrogate_classifiers(surrogate_classifiers)
 
     def __config_gpu_acceleration(self, parser: ConfigParser):
+        """
+        Configures GPU acceleration settings.
+
+        Parameters
+        ----------
+        parser : ConfigParser
+            The configuration parser.
+        """
+
         header = 'gpu'
         enable_gpu = parser.getboolean(header, 'enable')
 
@@ -88,24 +167,85 @@ class Configs(object):
             disable_gpu_acceleration()
 
     def set_global_configs_file(self, configurations_file: str):
+        """
+        Sets the global configuration file.
+
+        Parameters
+        ----------
+        configurations_file : str
+            Path to the global configuration file.
+        """
         self.global_configs_file = configurations_file
 
     def set_algorithms_configs_file(self, configurations_file: str):
+        """
+        Sets the algorithms configuration file.
+
+        Parameters
+        ----------
+        configurations_file : str
+            Path to the algorithms configuration file.
+        """
         self.algorithms_configs_file = configurations_file
 
     def set_dataset_configs_file(self, configurations_file: str):
+        """
+        Sets the dataset configuration file.
+
+        Parameters
+        ----------
+        configurations_file : str
+            Path to the dataset configuration file.
+        """
         self.dataset_configs_file = configurations_file
 
     def get_global_configs_file(self):
+        """
+        Gets the global configuration file path.
+
+        Returns
+        -------
+        str
+            Path to the global configuration file.
+        """
         return self.global_configs_file
 
     def get_algorithms_configs_file(self):
+        """
+        Gets the algorithms configuration file path.
+
+        Returns
+        -------
+        str
+            Path to the algorithms configuration file.
+        """
         return self.algorithms_configs_file
 
     def get_dataset_configs_file(self):
+        """
+        Gets the dataset configuration file path.
+
+        Returns
+        -------
+        str
+            Path to the dataset configuration file.
+        """
         return self.dataset_configs_file
 
     def get_dataset_configs(self, dataset: str):
+        """
+        Gets the dataset configuration for the specified dataset.
+
+        Parameters
+        ----------
+        dataset : str
+            The name of the dataset.
+
+        Returns
+        -------
+        DatasetConfig
+            The dataset configuration.
+        """
         parser = ConfigParser()
         parser.read(self.dataset_configs_file)
 
@@ -118,9 +258,25 @@ class Configs(object):
 
 
 def set_global_configs(configs: Configs):
+    """
+    Sets the global configuration object.
+
+    Parameters
+    ----------
+    configs : Configs
+        The global configuration object.
+    """
     global global_configs
     global_configs = configs
 
 
 def get_global_configs():
+    """
+    Gets the global configuration object.
+
+    Returns
+    -------
+    Configs
+        The global configuration object.
+    """
     return global_configs
