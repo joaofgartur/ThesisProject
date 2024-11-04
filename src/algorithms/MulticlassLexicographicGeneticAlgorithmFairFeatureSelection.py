@@ -1,3 +1,9 @@
+"""
+Project Name: Bias Correction in Datasets
+Author: João Artur
+Date of Modification: 2024-04-11
+"""
+
 import numpy as np
 import pandas as pd
 
@@ -12,10 +18,58 @@ from utils import dict_to_dataframe
 
 
 class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
+    """
+    Class representing a multiclass lexicographic genetic algorithm for fair feature selection.
+
+    Attributes
+    ----------
+    epsilon : float
+        The epsilon value for lexicographic selection.
+    is_binary : bool
+        Flag indicating if the algorithm is binary.
+    algorithm : LexicographicGeneticAlgorithmFairFeatureSelection
+        The underlying lexicographic genetic algorithm.
+    sensitive_attribute : str
+        The sensitive attribute used by the algorithm.
+    population : list
+        The current population of individuals.
+
+    Methods
+    -------
+    __init__(genetic_parameters: GeneticBasicParameters, min_feature_prob: float = 0.0, max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01, verbose: bool = False):
+        Initializes the MulticlassLexicographicGeneticAlgorithmFairFeatureSelection object with the specified parameters.
+    __fitness_metrics(data: Dataset, predictions: pd.DataFrame, sensitive_attribute):
+        Computes the fitness metrics for the predictions.
+    __fairness_fitness(data: Dataset, predictions: pd.DataFrame):
+        Computes the fairness fitness of the predictions.
+    fit(data: Dataset, sensitive_attribute: str):
+        Fits the algorithm to the data.
+    transform(dataset: Dataset) -> Dataset:
+        Transforms the dataset using the fitted algorithm.
+    """
 
     def __init__(self, genetic_parameters: GeneticBasicParameters, min_feature_prob: float = 0.0,
                  max_feature_prob: float = 1.0, n_splits: int = 5, epsilon: float = 0.01,
                  verbose: bool = False):
+        """
+        Initializes the MulticlassLexicographicGeneticAlgorithmFairFeatureSelection object with the specified parameters.
+
+        Parameters
+        ----------
+        genetic_parameters : GeneticBasicParameters
+            The basic parameters for the genetic algorithm.
+        min_feature_prob : float, optional
+            The minimum feature probability (default is 0.0).
+        max_feature_prob : float, optional
+            The maximum feature probability (default is 1.0).
+        n_splits : int, optional
+            The number of splits for cross-validation (default is 5).
+        epsilon : float, optional
+            The epsilon value for lexicographic selection (default is 0.01).
+        verbose : bool, optional
+            Flag to enable verbose logging (default is False).
+        """
+
         super().__init__()
 
         # genetic parameters
@@ -35,6 +89,24 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         self.population = None
 
     def __fitness_metrics(self, data: Dataset, predictions: pd.DataFrame, sensitive_attribute):
+        """
+        Computes the fitness metrics for the predictions.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to compute the fitness metrics for.
+        predictions : pd.DataFrame
+            The predictions to compute the fitness metrics for.
+        sensitive_attribute : str
+            The sensitive attribute used by the algorithm.
+
+        Returns
+        -------
+        dict
+            The fitness metrics.
+        """
+
         fairness_evaluator = FairnessEvaluator(data.features, data.targets, predictions, sensitive_attribute)
 
         ds = fairness_evaluator.discrimination_score()
@@ -52,6 +124,21 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         }
 
     def __fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
+        """
+        Computes the fairness fitness of the predictions.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to compute the fairness fitness for.
+        predictions : pd.DataFrame
+            The predictions to compute the fairness fitness for.
+
+        Returns
+        -------
+        dict
+            The fairness fitness.
+        """
 
         original_attribute_values = data.protected_features[self.sensitive_attribute]
 
@@ -77,8 +164,31 @@ class MulticlassLexicographicGeneticAlgorithmFairFeatureSelection(Algorithm):
         return result
 
     def fit(self, data: Dataset, sensitive_attribute: str):
+        """
+        Fits the algorithm to the data.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to fit the algorithm to.
+        sensitive_attribute : str
+            The sensitive attribute used by the algorithm.
+        """
         self.sensitive_attribute = sensitive_attribute
         self.algorithm.fit(data, sensitive_attribute)
 
     def transform(self, dataset: Dataset) -> Dataset:
+        """
+        Transforms the dataset using the fitted algorithm.
+
+        Parameters
+        ----------
+        dataset : Dataset
+            The dataset to be transformed.
+
+        Returns
+        -------
+        Dataset
+            The transformed dataset.
+        """
         return self.algorithm.transform(dataset)

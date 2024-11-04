@@ -1,0 +1,845 @@
+\begin{table}[htbp]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Logistic Regression for sensitive attribute \textit{Race}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
+        \label{tab::law_shool::race::lr}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[htbp]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Gaussian Naive Bayes for sensitive attribute \textit{Race}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
+        \label{tab::law_shool::race::gnb}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[htbp]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Support Vector Machine for sensitive attribute \textit{Race}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
+        \label{tab::law_shool::race::svm}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[htbp]
+    \captionsetup{font=scriptsize}
+    \begin{center}
+        \caption{Metrics for Decision Tree for sensitive attribute \textit{Race}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
+        \label{tab::law_shool::race::dt}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[htbp]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for Random Forest for sensitive attribute \textit{Race}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
+        \label{tab::law_shool::race::rf}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}
+
+\begin{table}[htbp]
+    \begin{center}
+        \captionsetup{font=scriptsize}
+        \caption{Metrics for XGBoost for sensitive attribute \textit{Race}. For further reference, see tables \ref{tab::legend::headers}-\ref{tab::legend::groups}.}
+        \label{tab::law_shool::race::xgb}
+        \begin{adjustbox}{width=\textwidth}
+            \begin{tabular}{|c|c|c|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|r|}
+                \hline
+                \multirow{2}{*}{Attr} & \multirow{2}{*}{Stg} & \multirow{2}{*}{Algo} & \multirow{2}{*}{It} & \multicolumn{1}{c|}{DI} & \multicolumn{1}{c|}{DP} & \multicolumn{1}{c|}{TPD} & \multicolumn{1}{c|}{FPD} & \multicolumn{1}{c|}{FPE} & \multicolumn{1}{c|}{FNE} & \multicolumn{1}{c|}{CON}& \multicolumn{1}{c|}{ACC} & \multicolumn{1}{c|}{F1S} & \multicolumn{1}{c|}{AUC} \\
+                \cline{5-14}
+                & & & & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & SSE $\downarrow$ & AVG $\uparrow$ & AVG $\uparrow$ & AVG $\uparrow$ \\
+                \hline
+                \multirow{15}{*}{ASI} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{BLK} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{HSP} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+
+                \multirow{15}{*}{OTH} & Pre & N/A & 0 & 
+                \cline{2-14}
+                   & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                    & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \cline{1-14}
+    
+                \multirow{15}{*}{WHT} & Pre & N/A & 0 & 
+                \cline{2-14}
+                    & \multirow{12}{*}{Post} & \multirow{2}{*}{MSG} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{REW} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{DIR} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{FFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{2}{*}{MFS} & 1 & 
+                \cline{4-14}
+                   & & & 2 & 
+                \cline{3-14}
+                    &  & \multirow{1}{*}{FGE} & 1 & 
+                \hline
+            \end{tabular}
+        \end{adjustbox}
+    \end{center}
+\end{table}

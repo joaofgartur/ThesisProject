@@ -1,8 +1,9 @@
 """
+Project Name: Bias Correction in Datasets
 Author: João Artur
-Project: Master's Thesis
-Last edited: 20-11-2023
+Date of Modification: 2024-04-11
 """
+
 import numpy as np
 import pandas as pd
 from aif360.algorithms.preprocessing import Reweighing as Aif360Reweighing
@@ -14,13 +15,54 @@ from constants import PRIVILEGED, UNPRIVILEGED
 
 
 class Reweighing(Algorithm):
+    """
+    Class representing the reweighing algorithm for bias correction in datasets.
+
+    Attributes
+    ----------
+    transformer : Aif360Reweighing
+        The reweighing transformer from the AIF360 library.
+    sensitive_attribute : str
+        The sensitive attribute used by the algorithm.
+
+    Methods
+    -------
+    __init__():
+        Initializes the Reweighing object.
+    __resample(data: pd.DataFrame, weights: np.array) -> (np.ndarray, np.ndarray):
+        Resamples the data based on the provided weights.
+    fit(data: Dataset, sensitive_attribute: str):
+        Fits the reweighing transformer to the data.
+    transform(data: Dataset) -> Dataset:
+        Applies the reweighing technique to modify dataset features based on computed weights.
+    """
 
     def __init__(self):
+        """
+        Initializes the Reweighing object.
+        """
         super().__init__()
         self.transformer = None
         self.sensitive_attribute = None
 
     def __resample(self, data: pd.DataFrame, weights: np.array) -> (np.ndarray, np.ndarray):
+        """
+        Resamples the data based on the provided weights.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            The data to be resampled.
+        weights : np.array
+            The weights for resampling.
+
+        Returns
+        -------
+        np.ndarray
+            The resampled data.
+        np.ndarray
+            The indexes of the sampled data.
+        """
 
         privileged_group = data[data[self.sensitive_attribute] == PRIVILEGED]
         unprivileged_group = data[data[self.sensitive_attribute] == UNPRIVILEGED]
@@ -33,6 +75,16 @@ class Reweighing(Algorithm):
         return sampled_data.to_numpy(), sample_indexes
 
     def fit(self, data: Dataset, sensitive_attribute: str):
+        """
+        Fits the reweighing transformer to the data.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to fit the transformer to.
+        sensitive_attribute : str
+            The sensitive attribute used by the algorithm.
+        """
         self.sensitive_attribute = sensitive_attribute
 
         standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
@@ -46,24 +98,24 @@ class Reweighing(Algorithm):
 
     def transform(self, data: Dataset) -> Dataset:
         """
-        Apply reweighing technique to modify dataset features based on computed weights.
+        Applies the reweighing technique to modify dataset features based on computed weights.
 
         Parameters
         ----------
-        data :
-            Original dataset object containing features and targets.
+        data : Dataset
+            The dataset to be transformed.
 
         Returns
         -------
-        new_dataset :
-            Modified dataset with reweighing applied.
+        Dataset
+            The transformed dataset.
 
         Raises
         ------
         ValueError
-            - If an invalid dataset is provided.
-            - If the dataset does not contain both features and targets.
-            - If the sensitive attribute is not present in the dataset.
+            If an invalid dataset is provided.
+            If the dataset does not contain both features and targets.
+            If the sensitive attribute is not present in the dataset.
         """
         standard_data = convert_to_standard_dataset(data, self.sensitive_attribute)
 

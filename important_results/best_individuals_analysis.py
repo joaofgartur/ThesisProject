@@ -273,8 +273,8 @@ if __name__ == '__main__':
     dataset = 'Law School Admission Bar Passage'
     attribute = 'race1'
 
-    dataset = 'German Credit'
-    attribute = 'Attribute9'
+    #dataset = 'German Credit'
+    #attribute = 'Attribute9'
 
 
     base_seed = 42

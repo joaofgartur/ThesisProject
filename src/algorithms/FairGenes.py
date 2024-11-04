@@ -1,3 +1,9 @@
+"""
+Project Name: Bias Correction in Datasets
+Author: João Artur
+Date of Modification: 2024-04-11
+"""
+
 import copy
 import os
 from concurrent.futures import ProcessPoolExecutor
@@ -24,12 +30,115 @@ from protocol.assessment import get_classifier_predictions, fairness_assessment
 
 
 class FairGenes(Algorithm):
+    """
+        FairGenes algorithm for bias correction using genetic algorithms.
+
+        Attributes
+        ----------
+        genetic_search_flag : bool
+            Indicates if genetic search is enabled.
+        is_binary : bool
+            Indicates if the algorithm is binary.
+        needs_auxiliary_data : bool
+            Indicates if the algorithm needs auxiliary data.
+        algorithm_name : str
+            The name of the algorithm.
+        cache_path : str or None
+            The path to the cache.
+        genetic_parameters : GeneticBasicParameters
+            The genetic parameters for the algorithm.
+        num_classes : int
+            The number of classes in the dataset.
+        unbiasing_algorithms_pool : dict
+            The pool of unbiasing algorithms.
+        surrogate_models_pool : list
+            The pool of surrogate models.
+        sensitive_attribute : str
+            The sensitive attribute used by the algorithm.
+        population : list
+            The population of individuals.
+        decoder : dict
+            The decoder for the sensitive attribute.
+        problem_dimension : int
+            The dimension of the problem.
+        threshold_k : int
+            The threshold for the genetic search.
+        verbose : bool
+            Indicates if verbose output is enabled.
+        evaluated_individuals : dict
+            The evaluated individuals.
+        valid_individuals : dict
+            The valid individuals.
+
+        Methods
+        -------
+        __init__(genetic_parameters: GeneticBasicParameters, unbiasing_algorithms_pool: dict, surrogate_models_pool: list, threshold_k: int, verbose: bool = False):
+            Initializes the FairGenes object with the specified parameters.
+        __do_genetic_search() -> bool:
+            Determines if genetic search should be performed.
+        __flatten_genotype(genotype: list) -> str:
+            Flattens the genotype into a string.
+        __generate_individual() -> list:
+            Generates a random individual.
+        __decode_individual(individual) -> pd.DataFrame:
+            Decodes an individual into a DataFrame.
+        __clean_cache__():
+            Cleans the cache.
+        __compute_population_average_fitness(population) -> pd.DataFrame:
+            Computes the average fitness of the population.
+        __generate_population() -> list:
+            Generates the population.
+        __crossover(parent1: list, parent2: list) -> tuple:
+            Performs crossover between two parents.
+        __mutation(individual) -> list:
+            Mutates an individual.
+        __select_best(population) -> list:
+            Selects the best individuals from the population.
+        __tournament(population) -> list:
+            Performs tournament selection on the population.
+        __phenotype(data: Dataset, individual) -> Dataset:
+            Applies the phenotype to the data.
+        _performance_fitness(data: Dataset, predictions: pd.DataFrame) -> dict:
+            Computes the performance fitness of the predictions.
+        _fairness_fitness(data: Dataset, predictions: pd.DataFrame) -> dict:
+            Computes the fairness fitness of the predictions.
+        _fitness(data: Dataset, individual, evaluated_individuals, valid_individuals, surrogate_models_pool, configs, seed) -> tuple:
+            Computes the fitness of an individual.
+        __evaluate_population(dataset: Dataset, population: list) -> list:
+            Evaluates the population.
+        __genetic_search(dataset: Dataset) -> Dataset:
+            Performs genetic search on the dataset.
+        __extensive_search(dataset: Dataset) -> Dataset:
+            Performs extensive search on the dataset.
+        __save_fitness_evolution(fitness_evolution: pd.DataFrame, dataset_name: str):
+            Saves the fitness evolution to a file.
+        fit(data: Dataset, sensitive_attribute: str):
+            Fits the algorithm to the data.
+        transform(dataset: Dataset) -> Dataset:
+            Transforms the dataset using the fitted algorithm.
+        """
 
     def __init__(self, genetic_parameters: GeneticBasicParameters,
                  unbiasing_algorithms_pool: dict,
                  surrogate_models_pool: [object],
                  threshold_k: int,
                  verbose: bool = False):
+        """
+        Initializes the FairGenes object with the specified parameters.
+
+        Parameters
+        ----------
+        genetic_parameters : GeneticBasicParameters
+            The genetic parameters for the algorithm.
+        unbiasing_algorithms_pool : dict
+            The pool of unbiasing algorithms.
+        surrogate_models_pool : list
+            The pool of surrogate models.
+        threshold_k : int
+            The threshold for the genetic search.
+        verbose : bool, optional
+            Indicates if verbose output is enabled (default is False).
+        """
 
         super().__init__()
         self.genetic_search_flag = False
@@ -55,6 +164,14 @@ class FairGenes(Algorithm):
         self.valid_individuals = {}
 
     def __do_genetic_search(self):
+        """
+        Determines if genetic search should be performed.
+
+        Returns
+        -------
+        bool
+            True if genetic search should be performed, False otherwise.
+        """
         num_algorithms = len(self.unbiasing_algorithms_pool)
         max_length = 2 * self.num_classes
         n = self.num_classes * num_algorithms
@@ -66,17 +183,29 @@ class FairGenes(Algorithm):
         return self.problem_dimension >= factorial(self.threshold_k - 1)
 
     def __flatten_genotype(self, genotype: list[(int, int)]) -> str:
+        """
+        Flattens the genotype into a string.
+
+        Parameters
+        ----------
+        genotype : list
+            The genotype to flatten.
+
+        Returns
+        -------
+        str
+            The flattened genotype.
+        """
         return ''.join(f'{gene}{value}' for gene, value in genotype)
 
     def __generate_individual(self) -> list:
         """
-        Function that generates a random individual.
-        Individual has a genotype of the form [[v_i, a_j]...[v_n, a_m]] where v_i is the value of the
-        sensitive attribute and a_j is the index of the unbiasing algorithm.
+        Generates a random individual.
 
         Returns
         -------
-
+        list
+            The generated individual.
         """
         rng = get_generator()
 
@@ -89,6 +218,19 @@ class FairGenes(Algorithm):
         return [genotype, {}, {}]
 
     def __decode_individual(self, individual) -> pd.DataFrame:
+        """
+        Decodes an individual into a DataFrame.
+
+        Parameters
+        ----------
+        individual : list
+            The individual to decode.
+
+        Returns
+        -------
+        pd.DataFrame
+            The decoded individual.
+        """
         genome = [[self.decoder[val],
                    self.unbiasing_algorithms_pool[algo]] for val, algo in individual[0]]
 
@@ -109,12 +251,28 @@ class FairGenes(Algorithm):
         return decoded_individual
 
     def __clean_cache__(self):
+        """
+        Cleans the cache.
+        """
         self.population = None
         self.evaluated_individuals = None
         self.valid_individuals = None
         self.decoder = None
 
     def __compute_population_average_fitness(self, population):
+        """
+        Computes the average fitness of the population.
+
+        Parameters
+        ----------
+        population : list
+            The population to compute the average fitness for.
+
+        Returns
+        -------
+        pd.DataFrame
+            The average fitness of the population.
+        """
 
         decoded_population = pd.DataFrame()
         for individual in population:
@@ -128,6 +286,19 @@ class FairGenes(Algorithm):
         return population_mean
 
     def __generate_population(self):
+        """
+        Computes the average fitness of the population.
+
+        Parameters
+        ----------
+        population : list
+            The population to compute the average fitness for.
+
+        Returns
+        -------
+        pd.DataFrame
+            The average fitness of the population.
+        """
 
         if self.genetic_search_flag:
             return [self.__generate_individual() for _ in range(self.genetic_parameters.population_size)]
@@ -144,6 +315,21 @@ class FairGenes(Algorithm):
         return population
 
     def __crossover(self, parent1: list, parent2: list):
+        """
+        Performs crossover between two parents.
+
+        Parameters
+        ----------
+        parent1 : list
+            The first parent.
+        parent2 : list
+            The second parent.
+
+        Returns
+        -------
+        tuple
+            The offspring generated from the crossover.
+        """
         value = get_generator().random()
         if value < self.genetic_parameters.probability_crossover:
             len1 = len(parent1[0])
@@ -176,6 +362,19 @@ class FairGenes(Algorithm):
         return parent1, parent2
 
     def __mutation(self, individual):
+        """
+        Mutates an individual.
+
+        Parameters
+        ----------
+        individual : list
+            The individual to mutate.
+
+        Returns
+        -------
+        list
+            The mutated individual.
+       """
         genotype = individual[0][:]
 
         mutation_indexes = np.where(get_generator().random(len(genotype))
@@ -189,6 +388,19 @@ class FairGenes(Algorithm):
         return [genotype, {}, {}]
 
     def __select_best(self, population):
+        """
+        Selects the best individuals from the population.
+
+        Parameters
+        ----------
+        population : list
+            The population to select the best individuals from.
+
+        Returns
+        -------
+        list
+            The best individuals.
+        """
 
         def sort_population(_population, objective: tuple):
             index, model, metric = objective
@@ -234,6 +446,19 @@ class FairGenes(Algorithm):
         return population
 
     def __tournament(self, population):
+        """
+        Performs tournament selection on the population.
+
+        Parameters
+        ----------
+        population : list
+            The population to perform tournament selection on.
+
+        Returns
+        -------
+        list
+            The selected individuals.
+        """
 
         def one_tour(local_population):
             pool = sample(local_population, self.genetic_parameters.tournament_size)
@@ -246,6 +471,21 @@ class FairGenes(Algorithm):
         return mate_pool
 
     def __phenotype(self, data: Dataset, individual):
+        """
+        Applies the phenotype to the data.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to apply the phenotype to.
+        individual : list
+            The individual to apply the phenotype.
+
+        Returns
+        -------
+        Dataset
+            The transformed dataset.
+        """
 
         flattened_genotype = self.__flatten_genotype(individual[0])
         self.valid_individuals[flattened_genotype] = True
@@ -279,6 +519,21 @@ class FairGenes(Algorithm):
         return transformed_data
 
     def _performance_fitness(self, data: Dataset, predictions: pd.DataFrame):
+        """
+        Computes the performance fitness of the predictions.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to compute the performance fitness for.
+        predictions : pd.DataFrame
+            The predictions to compute the performance fitness for.
+
+        Returns
+        -------
+        dict
+            The performance fitness.
+        """
         performance_evaluator = ModelEvaluator(data.targets, predictions)
 
         return {
@@ -288,6 +543,22 @@ class FairGenes(Algorithm):
         }
 
     def _fairness_fitness(self, data: Dataset, predictions: pd.DataFrame):
+        """
+        Computes the fairness fitness of the predictions.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to compute the fairness fitness for.
+        predictions : pd.DataFrame
+            The predictions to compute the fairness fitness for.
+
+        Returns
+        -------
+        dict
+            The fairness fitness.
+        """
+
         metrics = fairness_assessment(data, predictions, self.sensitive_attribute)
 
         result = {}
@@ -297,6 +568,32 @@ class FairGenes(Algorithm):
         return result
 
     def _fitness(self, data: Dataset, individual, evaluated_individuals, valid_individuals, surrogate_models_pool, configs, seed):
+        """
+        Computes the fitness of an individual.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to compute the fitness for.
+        individual : list
+            The individual to compute the fitness for.
+        evaluated_individuals : dict
+            The evaluated individuals.
+        valid_individuals : dict
+            The valid individuals.
+        surrogate_models_pool : list
+            The pool of surrogate models.
+        configs : dict
+            The global configurations.
+        seed : int
+            The seed for random number generation.
+
+        Returns
+        -------
+        tuple
+            The fitness of the individual and its validity.
+        """
+
         set_global_configs(configs)
         set_seed(seed)
 
@@ -342,6 +639,22 @@ class FairGenes(Algorithm):
         return individual, valid
 
     def __evaluate_population(self, dataset, population):
+        """
+        Evaluates the population.
+
+        Parameters
+        ----------
+        dataset : Dataset
+            The dataset to evaluate the population on.
+        population : list
+            The population to evaluate.
+
+        Returns
+        -------
+        list
+            The evaluated population.
+        """
+
         population = sorted(population, key=lambda x: len(x[0]))
 
         for j, individual in enumerate(population):
@@ -361,6 +674,19 @@ class FairGenes(Algorithm):
         return population
 
     def __genetic_search(self, dataset: Dataset) -> Dataset:
+        """
+        Performs genetic search on the dataset.
+
+        Parameters
+        ----------
+        dataset : Dataset
+            The dataset to perform genetic search on.
+
+        Returns
+        -------
+        Dataset
+            The transformed dataset.
+        """
 
         if self.verbose:
             logger.info(f'\t[FairGenes] Performing genetic search. Doing '
@@ -422,6 +748,19 @@ class FairGenes(Algorithm):
         return self.__phenotype(dataset, best_individual)
 
     def __extensive_search(self, dataset: Dataset) -> Dataset:
+        """
+        Performs extensive search on the dataset.
+
+        Parameters
+        ----------
+        dataset : Dataset
+            The dataset to perform extensive search on.
+
+        Returns
+        -------
+        Dataset
+            The transformed dataset.
+        """
 
         if self.verbose:
             logger.info(f'\t[FairGenes] Performing extensive search. Testing {self.problem_dimension} combinations.')
@@ -438,11 +777,31 @@ class FairGenes(Algorithm):
         return self.__phenotype(dataset, best_individual)
 
     def __save_fitness_evolution(self, fitness_evolution: pd.DataFrame, dataset_name: str):
+        """
+        Saves the fitness evolution to a file.
+
+        Parameters
+        ----------
+        fitness_evolution : pd.DataFrame
+            The fitness evolution to save.
+        dataset_name : str
+            The name of the dataset.
+        """
         save_path = os.path.join('best_individuals', f'{dataset_name}', f'{self.iteration_number}_iteration')
         filename = f'{self.algorithm_name}_{self.sensitive_attribute}_fitness_evolution_seed_{get_seed()}.csv'
         write_dataframe_to_csv(fitness_evolution, filename, save_path)
 
     def fit(self, data: Dataset, sensitive_attribute: str):
+        """
+        Fits the algorithm to the data.
+
+        Parameters
+        ----------
+        data : Dataset
+            The dataset to fit the algorithm to.
+        sensitive_attribute : str
+            The sensitive attribute used by the algorithm.
+        """
         self.decoder = data.features_mapping[sensitive_attribute]
         self.num_classes = len(data.features_mapping[sensitive_attribute])
         self.sensitive_attribute = sensitive_attribute
@@ -453,6 +812,19 @@ class FairGenes(Algorithm):
         self.cache_path = f'{self.algorithm_name}_{data.name}_{get_seed()}_{self.sensitive_attribute}'
 
     def transform(self, dataset: Dataset) -> Dataset:
+        """
+        Transforms the dataset using the fitted algorithm.
+
+        Parameters
+        ----------
+        dataset : Dataset
+            The dataset to be transformed.
+
+        Returns
+        -------
+        Dataset
+            The transformed dataset.
+        """
 
         if self.genetic_search_flag:
             transformed_dataset = self.__genetic_search(dataset)
